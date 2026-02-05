@@ -1,0 +1,156 @@
+
+:root{
+  --titleMediumFont: 'Roboto', sans-serif;
+
+  --colorsNeutral600: #8E8E8E;
+  --ColorsPrimary500: #472A8C;
+
+  --primary: #9466FF;
+  --primary400: #653BC6;
+  --primary500: #472A8C;
+
+  --titleMediumSize: 16px;
+  --titleMediumLineht: 24px;
+  --titleMediumTracking: 0.15px;
+
+  --titleLargeSize: 16px;
+  --titleLargeLineht: 22px;
+  --titleLargeTracking: 0px;
+
+  --labelLargeSize:14px;
+  --labelLargeLineht:20px;
+  --labelLargeTracking:0.1px;
+}
+.loginContainer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f2f5;
+}
+.loginCard {
+width: 70%;
+  display: flex;
+  border-radius: 24px !important;
+padding:78px 86px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.image{
+  width: 50%;
+      img{
+        width: 168px;
+      }
+}
+
+
+
+.loginForm{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.field {
+  width: 100%;
+      color: var(--ColorsPrimary500);
+
+  margin-bottom: 5rem ;
+
+  .MuiOutlinedInput-root {
+    border-radius: 10px;
+    margin-bottom: 30px;
+
+     padding-left: 10px;
+
+
+    fieldset {
+     padding-left: 15px;
+      border:2px solid var(--primary) !important;
+      color: var(--ColorsPrimary500) !important;
+      font-size: 10px   ;
+
+
+
+    }
+
+    &:hover fieldset {
+      border:2px solid var(--primary500);
+      color: var(--ColorsPrimary500) !important;
+
+
+
+    }
+    .MuiOutlinedInput-input {
+     padding-left: 10px;
+
+      color: var(--ColorsPrimary500);
+
+      font-size: 16px;
+    }
+  }
+
+  .MuiInputLabel-root {
+    padding-left: 10px;
+    text-align: center;
+    font-size: var(--titleLargeSize);
+    font-weight: 400;
+    letter-spacing: var(--titleLargeTracking);
+    line-height: var(--titleLargeLineht);
+    color: var(--colorsNeutral600);
+
+  }
+  &:hover .MuiInputLabel-root{
+    color: var(--ColorsPrimary500);
+  }
+
+  // .Mui-focused {
+  //     color: var(--ColorsPrimary500);
+
+  //   // border-color: var(--primary500);
+  // }
+}
+
+
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.loginButton {
+  width: 100%;
+  background-color: var(--primary500) !important;
+  padding: 12px !important;
+  border-radius: 16px !important;
+
+  &:hover {
+    background-color: var(--primary400) !important;
+  }
+}
+.forgetPassword{
+  text-decoration: none !important;
+  color: var(--primary400) !important;
+  font-size: var(--titleMediumSize) !important;
+  font-weight: bold !important;
+  font-family: var(--titleMediumFont) !important;
+  line-height: var(--titleMediumLineht) !important;
+  letter-spacing: var(--titleMediumTracking) !important;
+
+
+}
+.rememberMe .MuiFormControlLabel-label{
+  color: var(--primary400);
+  font-size: var(--labelLargeSize);
+  font-weight: bold;
+  font-family: var(--titleMediumFont) !important;
+
+  line-height: var(--labelLargeLineht);
+  letter-spacing: var(--labelLargeTracking);
+}
+.rememberMe .Mui-checked {
+  color: var(--primary400)   !important; /* checkbox when checked */
+}
+
