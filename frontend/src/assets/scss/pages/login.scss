@@ -54,43 +54,44 @@ padding:78px 86px;
 .field {
   width: 100%;
       color: var(--ColorsPrimary500);
-
-  margin-bottom: 5rem ;
+    margin-top: 30px !important;
 
   .MuiOutlinedInput-root {
     border-radius: 10px;
-    margin-bottom: 30px;
-
      padding-left: 10px;
 
-
-    fieldset {
+  &.Mui-error{
+           fieldset{
+          border-color: red !important;
+        }
+      }
+      fieldset {
      padding-left: 15px;
       border:2px solid var(--primary) !important;
       color: var(--ColorsPrimary500) !important;
-      font-size: 10px   ;
+
+
 
 
 
     }
 
-    &:hover fieldset {
+        &:hover fieldset {
       border:2px solid var(--primary500);
       color: var(--ColorsPrimary500) !important;
 
 
 
     }
-    .MuiOutlinedInput-input {
+     .MuiOutlinedInput-input {
      padding-left: 10px;
-
       color: var(--ColorsPrimary500);
 
       font-size: 16px;
     }
   }
 
-  .MuiInputLabel-root {
+   .MuiInputLabel-root {
     padding-left: 10px;
     text-align: center;
     font-size: var(--titleLargeSize);
@@ -99,10 +100,24 @@ padding:78px 86px;
     line-height: var(--titleLargeLineht);
     color: var(--colorsNeutral600);
 
+  &.Mui-error{
+        color: var(--colorsNeutral600);
   }
-  &:hover .MuiInputLabel-root{
-    color: var(--ColorsPrimary500);
+
+
+    &.MuiInputLabel-shrink{
+      color: var(--ColorsPrimary500) !important;
+      font-size: var(--titleLargeSize);
+    }
+
   }
+
+// .MuiInputLabel-root.Mui-error {
+//   color: var(--colorsNeutral600) !important; /* your normal color */
+// }
+
+
+
 
   // .Mui-focused {
   //     color: var(--ColorsPrimary500);
