@@ -10,7 +10,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import "../assets/scss/pages/login.scss";
