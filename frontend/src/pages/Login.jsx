@@ -17,11 +17,13 @@ import logo from "../assets/swift-logo.svg";
 
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(true);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
     const onSubmit = (data) => {
       console.log("Valid Data:", data);
     };

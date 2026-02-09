@@ -1,7 +1,9 @@
 *{
-  padding: 0;
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 :root{
   --titleMediumFont: 'Roboto', sans-serif;
   // --titleLargeFont :
@@ -11,6 +13,8 @@
   --colorNeutral1000: #333333;
 
   --primary: #9466FF;
+  --primary100: #CAB2FF;
+  --primary200: #9466FF;
   --primary400: #653BC6;
   --primary500: #472A8C;
 
@@ -52,19 +56,10 @@ padding:78px 86px;
       img{
         width: 168px;
       }
-
-
 }
-
- .outlook{
-        text-decoration: none !important;
-        font-size: var(--titleLargeSize) !important;
-        line-height: var(--titleLargeLineht) !important;
-        letter-spacing: var(--titleLargeTracking) !important  ;
-        font-weight: 400 !important;
-        font-family: var(--titleMediumFont) !important;
-        color: var(--colorNeutral1000) !important;
-      }
+.outlook{
+  text-decoration: none !important;
+}
 
 .loginForm{
   display: flex;
@@ -79,6 +74,7 @@ padding:78px 86px;
 
   .MuiOutlinedInput-root {
     border-radius: 10px;
+
      padding-left: 10px;
 
   &.Mui-error{
@@ -100,14 +96,10 @@ padding:78px 86px;
         &:hover fieldset {
       border:2px solid var(--primary500);
       color: var(--ColorsPrimary500) !important;
-
-
-
     }
      .MuiOutlinedInput-input {
      padding-left: 10px;
       color: var(--ColorsPrimary500);
-
       font-size: 16px;
     }
   }
