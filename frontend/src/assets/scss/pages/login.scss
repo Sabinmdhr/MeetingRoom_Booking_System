@@ -1,9 +1,14 @@
-
+*{
+  padding: 0;
+  margin: 0;
+}
 :root{
   --titleMediumFont: 'Roboto', sans-serif;
+  // --titleLargeFont :
 
   --colorsNeutral600: #8E8E8E;
   --ColorsPrimary500: #472A8C;
+  --colorNeutral1000: #333333;
 
   --primary: #9466FF;
   --primary400: #653BC6;
@@ -27,23 +32,39 @@
   justify-content: center;
   align-items: center;
   background-color: #f0f2f5;
+  // background-color: white;
+
 }
 .loginCard {
 width: 70%;
+background: #fcfcfc;
   display: flex;
   border-radius: 24px !important;
 padding:78px 86px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.image{
+.logo{
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
       img{
         width: 168px;
       }
+
+
 }
 
-
+ .outlook{
+        text-decoration: none !important;
+        font-size: var(--titleLargeSize) !important;
+        line-height: var(--titleLargeLineht) !important;
+        letter-spacing: var(--titleLargeTracking) !important  ;
+        font-weight: 400 !important;
+        font-family: var(--titleMediumFont) !important;
+        color: var(--colorNeutral1000) !important;
+      }
 
 .loginForm{
   display: flex;

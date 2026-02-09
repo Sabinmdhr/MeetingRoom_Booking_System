@@ -31,8 +31,9 @@ export default function LoginCard() {
   return (
     <div className="loginContainer">
       <Card className="loginCard">
-        <div className="image">
+        <div className="logo">
           <img src={logo} alt="" />
+        <Link to='/' className="outlook"><span>Use your outlook acoount</span></Link>
         </div>
         <div className="loginForm">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
