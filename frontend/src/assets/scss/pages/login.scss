@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root{
   --titleMediumFont: 'Roboto', sans-serif;
@@ -6,6 +11,8 @@
   --ColorsPrimary500: #472A8C;
 
   --primary: #9466FF;
+  --primary100: #CAB2FF;
+  --primary200: #9466FF;
   --primary400: #653BC6;
   --primary500: #472A8C;
 
@@ -43,8 +50,6 @@ padding:78px 86px;
       }
 }
 
-
-
 .loginForm{
   display: flex;
   flex-direction: column;
@@ -60,32 +65,21 @@ padding:78px 86px;
   .MuiOutlinedInput-root {
     border-radius: 10px;
     margin-bottom: 30px;
-
-     padding-left: 10px;
-
+    padding-left: 10px;
 
     fieldset {
      padding-left: 15px;
       border:2px solid var(--primary) !important;
       color: var(--ColorsPrimary500) !important;
-      font-size: 10px   ;
-
-
-
     }
 
     &:hover fieldset {
       border:2px solid var(--primary500);
       color: var(--ColorsPrimary500) !important;
-
-
-
     }
     .MuiOutlinedInput-input {
      padding-left: 10px;
-
       color: var(--ColorsPrimary500);
-
       font-size: 16px;
     }
   }

@@ -17,8 +17,6 @@ import logo from "../assets/swift-logo.svg";
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(true);
 
-  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
-  const handleMouseDownPassword = (event) => event.preventDefault();
   return (
     <div className="loginContainer">
       <Card className="loginCard">
