@@ -1,0 +1,57 @@
+.forgot-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 46px;
+  background: #f6f6f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo-image{
+  width: 100%;
+      img{
+        width: 120px;
+      }
+}
+
+.topbar-right {
+  display: flex;
+  gap: 15px;
+}
+
+.topbar-field {
+    width: 240px;
+    right: 2%;
+}
+
+.topbar-btn {
+    background: var(--primary400) !important;
+    text-transform: none !important;
+    width: 120px;
+    border-radius: 16px !important;
+}
+
+.topbar-btn:hover {
+    background: var(--primary200) !important;
+}
+
+.topbar-field {
+
+  & .MuiOutlinedInput-root {
+      border-radius: 10px !important;
+      background-color: white;
+
+    fieldset {
+      border:1px solid var(--primary100) !important;
+
+    }
+
+    &:hover fieldset {
+      border:2px solid var(--primary400) !important;
+    }
+
+    &.Mui-focused fieldset {
+      border:2px solid var(--primary400) !important; 
+    }
+  }
+}

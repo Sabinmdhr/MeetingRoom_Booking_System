@@ -15,7 +15,7 @@ function App() {
       <Route path='/create-password' element={<CreatePassword/>} />
     </Routes>
    </BrowserRouter>
-  );
+  )
 }
 
 export default App
