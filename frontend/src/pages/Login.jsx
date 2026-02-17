@@ -10,7 +10,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import "../assets/scss/pages/login.scss";
@@ -24,6 +23,7 @@ export default function LoginCard() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
     const onSubmit = (data) => {
       console.log("Valid Data:", data);
     };
@@ -32,8 +32,9 @@ export default function LoginCard() {
   return (
     <div className="loginContainer">
       <Card className="loginCard">
-        <div className="image">
+        <div className="logo">
           <img src={logo} alt="" />
+        <Link to='/' className="outlook"><span>Use your outlook acoount</span></Link>
         </div>
         <div className="loginForm">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
