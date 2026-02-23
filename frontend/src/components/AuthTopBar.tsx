@@ -1,4 +1,3 @@
-import React from "react";
 import "../assets/scss/pages/AuthTopBar.scss"
 import { TextField, Button } from "@mui/material";
 import logo from "../assets/swift-logo.svg";

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Card, Typography, TextField, Button} from "@mui/material"
 import "../assets/scss/pages/CreatePassword.scss"
 
@@ -22,7 +21,7 @@ const CreatePassword = () => {
                     <TextField className="create-field" 
                         variant='outlined'
                         size='small'
-                        FullWidth
+                        fullWidth
                     />
                     <Typography className="create-input" variant='body2'>
                         Confirm Password
@@ -30,12 +29,12 @@ const CreatePassword = () => {
                     <TextField className="create-field" 
                         variant='outlined'
                         size='small'
-                        FullWidth
+                        fullWidth
                     />
                     <Button className="confirm-btn"
                     type='submit'
                     variant='contained'
-                    FullWidth
+                    fullWidth
                     >
                         Confirm
                     </Button>

@@ -1,11 +1,9 @@
-import React from "react";
 import {
   Card,
   TextField,
   Button,
   Checkbox,
   FormControlLabel,
-  Link,
   InputAdornment,
   IconButton,
 } from "@mui/material";
@@ -14,6 +12,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import "../assets/scss/pages/login.scss";
 import logo from "../assets/swift-logo.svg";
+import { Link } from "react-router-dom";
 
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(true);
@@ -24,7 +23,9 @@ export default function LoginCard() {
     formState: { errors },
   } = useForm();
   
-    const onSubmit = (data) => {
+
+  
+    const onSubmit = (data:any) => {
       console.log("Valid Data:", data);
     };
   // const handleClickShowPassword = () => setShowPassword((prev) => !prev);
@@ -34,7 +35,7 @@ export default function LoginCard() {
       <Card className="loginCard">
         <div className="logo">
           <img src={logo} alt="" />
-        <Link to='/' className="outlook"><span>Use your outlook acoount</span></Link>
+        <Link to={{pathname:"/"}} className="outlook"><span>Use your outlook acoount</span></Link>
         </div>
         <div className="loginForm">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
@@ -51,7 +52,7 @@ export default function LoginCard() {
                 },
               })}
               error={!!errors.email}
-              helperText={errors.email?.message}
+              helperText={errors.email?.message as String}
             />
             <TextField
               className="field"
@@ -80,10 +81,10 @@ export default function LoginCard() {
                 },
               })}
               error={!!errors.password}
-              helperText={errors.password?.message}
+              helperText={errors.password?.message as String}
             />
             <div className="actions">
-              <Link href="/forgot-password" className="forgetPassword">
+              <Link to="/forgot-password" className="forgetPassword">
                 Forgot Password
               </Link>
               <FormControlLabel

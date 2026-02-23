@@ -1,13 +1,13 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Box, Card, Typography, TextField, Button} from "@mui/material"
 import "../assets/scss/pages/VerifyPassword.scss"
 import AuthTopBar from '../components/AuthTopBar'
 
 const VerifyPassword = () => {
     const[otp,setOtp] = useState(new Array(6).fill(""))
-    const inputRefs = useRef([])
+    const inputRefs = useRef<any>([])
 
-    const handleChange = (value, index) => {
+    const handleChange = (value:any, index:any) => {
         if (!/^\d?$/.test(value)) return
 
         const newOtp = [...otp]
@@ -19,7 +19,7 @@ const VerifyPassword = () => {
         }
     }
 
-    const handleKeyDown = (e, index) =>{
+    const handleKeyDown = (e:any, index:any) =>{
         if(e.key === "Backspace" && !otp[index] && index > 0){
             inputRefs.current[index - 1].focus()
         }
