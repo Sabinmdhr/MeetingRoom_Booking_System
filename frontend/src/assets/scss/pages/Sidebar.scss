@@ -1,0 +1,78 @@
+/* Drawer paper */
+.sidebar-paper {
+  position: relative !important;
+  background-color: #f2edff !important;
+  border-right: none !important;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
+
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Width states */
+.sidebar-paper.open {
+  width: 240px;
+}
+
+.sidebar-paper.closed {
+  width: 96px;
+}
+
+/* Header */
+.sidebar-header {
+  padding: 12px;
+  display: flex;
+}
+
+.sidebar-paper.open .sidebar-header {
+  justify-content: flex-end;
+}
+
+.sidebar-paper.closed .sidebar-header {
+  justify-content: center;
+}
+
+/* Toggle button */
+.toggle-button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Menu items */
+.sidebar-item {
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-item .MuiListItemIcon-root {
+  min-width: 56px !important;
+  justify-content: center;
+  display: flex;
+}
+
+/* Text animation */
+.sidebar-text {
+  white-space: nowrap;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sidebar-text.hide {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+.sidebar-paper::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-paper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -22,23 +22,32 @@ export default function LoginCard() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  
 
-  
-    const onSubmit = (data:any) => {
-      console.log("Valid Data:", data);
-    };
+  const onSubmit = (data: any) => {
+    console.log("Valid Data:", data);
+  };
   // const handleClickShowPassword = () => setShowPassword((prev) => !prev);
   // const handleMouseDownPassword = (event) => event.preventDefault();
   return (
     <div className="loginContainer">
       <Card className="loginCard">
         <div className="logo">
-          <img src={logo} alt="" />
-        <Link to={{pathname:"/"}} className="outlook"><span>Use your outlook acoount</span></Link>
+          <img
+            src={logo}
+            alt=""
+          />
+          <Link
+            to={{ pathname: "/" }}
+            className="outlook"
+          >
+            <span>Use your outlook acoount</span>
+          </Link>
         </div>
         <div className="loginForm">
-          <form action="" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            action=""
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <TextField
               label="Email"
               className="field"
@@ -84,7 +93,10 @@ export default function LoginCard() {
               helperText={errors.password?.message as String}
             />
             <div className="actions">
-              <Link to="/forgot-password" className="forgetPassword">
+              <Link
+                to="/forgot-password"
+                className="forgetPassword"
+              >
                 Forgot Password
               </Link>
               <FormControlLabel
@@ -93,7 +105,11 @@ export default function LoginCard() {
                 label="Remember Me"
               />
             </div>
-            <Button type="submit" className="loginButton" variant="contained">
+            <Button
+              type="submit"
+              className="loginButton"
+              variant="contained"
+            >
               Login
             </Button>
           </form>
