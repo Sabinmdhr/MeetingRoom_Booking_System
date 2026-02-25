@@ -3,6 +3,7 @@ import Toolbar from "@mui/material/Toolbar";
 import "../assets/scss/pages/TopNavbar.scss";
 
 import logo from "../assets/swift-logo.svg";
+import Dropdown from "./Navbar/Dropdown";
 
 export default function TopNavbar() {
   return (
@@ -18,6 +19,7 @@ export default function TopNavbar() {
             alt="Logo"
           />
         </div>
+        <Dropdown/>
       </Toolbar>
     </AppBar>
   );
