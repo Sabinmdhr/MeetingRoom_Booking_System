@@ -59,6 +59,7 @@ padding:78px 86px;
 }
 .outlook{
   text-decoration: none !important;
+  font-family: var(--titleMediumFont) !important;
 }
 
 .loginForm{
@@ -184,3 +185,11 @@ padding:78px 86px;
   color: var(--primary400)   !important; /* checkbox when checked */
 }
 
+
+
+
+.dash{
+display: flex !important;
+justify-content: center !important;
+align-items: center !important;
+}
