@@ -3,9 +3,9 @@ import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import CreatePassword from './pages/CreatePassword';
 import VerifyPassword from './pages/VerifyPassword';
-import Dashboard from "./pages/Dashboard";
-function App() {
+import Dashboard from "./components/Dashboard";
 
+function App() {
   return (
     <BrowserRouter>
       <Routes>
@@ -17,6 +17,8 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
+   
+
 }
 
-export default App
+export default App;

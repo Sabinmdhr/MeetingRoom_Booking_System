@@ -50,8 +50,16 @@ type LoginFormInputs = {
     <div className="loginContainer">
       <Card className="loginCard">
         <div className="logo">
-          <img src={logo} alt="" />
-        <Link to={{pathname:"/"}} className="outlook"><span>Use your outlook acoount</span></Link>
+          <img
+            src={logo}
+            alt=""
+          />
+          <Link
+            to={{ pathname: "/" }}
+            className="outlook"
+          >
+            <span>Use your outlook acoount</span>
+          </Link>
         </div>
         <div className="loginForm">
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -100,7 +108,10 @@ type LoginFormInputs = {
               helperText={errors.password?.message as String}
             />
             <div className="actions">
-              <Link to="/forgot-password" className="forgetPassword">
+              <Link
+                to="/forgot-password"
+                className="forgetPassword"
+              >
                 Forgot Password
               </Link>
               <FormControlLabel
@@ -109,7 +120,11 @@ type LoginFormInputs = {
                 label="Remember Me"
               />
             </div>
-            <Button type="submit" className="loginButton" variant="contained">
+            <Button
+              type="submit"
+              className="loginButton"
+              variant="contained"
+            >
               Login
             </Button>
           </form>

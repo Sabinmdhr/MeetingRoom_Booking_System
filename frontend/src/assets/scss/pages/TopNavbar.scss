@@ -1,0 +1,13 @@
+.topbar {
+  height: 84px;
+  background-color: #f2edff !important;
+  z-index: 1300;
+}
+
+.topbar-toolbar {
+//   height: 102px;
+  padding: 12px 0 12px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
