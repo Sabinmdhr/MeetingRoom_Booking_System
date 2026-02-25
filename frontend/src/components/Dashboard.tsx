@@ -2,6 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Sidebar from "../components/Sidebar";
 import TopNavbar from "../components/TopNavbar";
 import "../assets/scss/pages/Dashboard.scss";
+import HeroCalendar from "./HeroCalendar";
 
 export default function Dashboard() {
   return (
@@ -14,7 +15,7 @@ export default function Dashboard() {
         <Sidebar />
 
         <main className="dashboard-content">
-          <h2>Main Content Here</h2>
+          <HeroCalendar />
         </main>
       </div>
     </div>
