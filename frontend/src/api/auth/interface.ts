@@ -1,8 +1,6 @@
 export interface IForgotPasswordRequest{
-email:string
+    email:string
 }
-
-
 
 export interface IForgotPasswordResponse{
     otp:string

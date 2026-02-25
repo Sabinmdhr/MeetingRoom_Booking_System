@@ -44,3 +44,16 @@ const forgotSlice= createSlice({
 })
 
 export default forgotSlice.reducer
+
+interface SumInput{
+    a:number;
+    b:number;
+}
+
+
+
+export const calculateSum=({a,b}:SumInput)=>{
+    return (a+b)
+}
+
+calculateSum({a:1,b:1,c:{key1:false}})
