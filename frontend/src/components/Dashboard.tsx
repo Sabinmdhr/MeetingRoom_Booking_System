@@ -14,7 +14,6 @@ export default function Dashboard() {
         <Sidebar />
 
         <main className="dashboard-content">
-          <h2>Main Content Here</h2>
         </main>
       </div>
     </div>
