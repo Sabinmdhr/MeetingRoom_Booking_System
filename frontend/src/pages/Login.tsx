@@ -15,9 +15,11 @@ import "../assets/scss/pages/login.scss";
 import logo from "../assets/swift-logo.svg";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(true);
+  const navigate = useNavigate();
 
 const {
   register,
@@ -33,15 +35,16 @@ type LoginFormInputs = {
 
    const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
      try {
-       const response = await axiosInstance.post("api/v1/login", data);
+       const response = await axiosInstance.post("/api/v1/login", data, {
+         headers: { "Content-Type": "application/json" },
+       });
 
        console.log("Login Success:", response.data);
-       // you can store token
-       localStorage.setItem("token", response.data.token);
+    localStorage.setItem("token", response.data.token);
+    navigate("/dashboard");
      } catch (error: any) {
 
-       console.error("Login Failed:", error.response?.data);
-       alert("Invalid email or password");
+      console.error("Login Failed:", error);
      }
    };
   // const handleClickShowPassword = () => setShowPassword((prev) => !prev);
@@ -50,14 +53,8 @@ type LoginFormInputs = {
     <div className="loginContainer">
       <Card className="loginCard">
         <div className="logo">
-          <img
-            src={logo}
-            alt=""
-          />
-          <Link
-            to={{ pathname: "/" }}
-            className="outlook"
-          >
+          <img src={logo} alt="" />
+          <Link to={{ pathname: "/" }} className="outlook">
             <span>Use your outlook acoount</span>
           </Link>
         </div>
@@ -108,10 +105,7 @@ type LoginFormInputs = {
               helperText={errors.password?.message as String}
             />
             <div className="actions">
-              <Link
-                to="/forgot-password"
-                className="forgetPassword"
-              >
+              <Link to="/forgot-password" className="forgetPassword">
                 Forgot Password
               </Link>
               <FormControlLabel
@@ -120,13 +114,11 @@ type LoginFormInputs = {
                 label="Remember Me"
               />
             </div>
-            <Button
-              type="submit"
-              className="loginButton"
-              variant="contained"
-            >
-              Login
-            </Button>
+
+              <Button type="submit" className="loginButton" variant="contained">
+                Login
+              </Button>
+
           </form>
         </div>
       </Card>

@@ -5,9 +5,24 @@
 }
 
 .topbar-toolbar {
-//   height: 102px;
+  //   height: 102px;
   padding: 12px 0 12px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 54px;
+}
+.notification-icon {
+height: 48px;
+width: 48px;
+  color:black;
+  font-weight: lighter;
+  cursor: pointer;
+}
+.dropdown {
+  width: 256px;
 }

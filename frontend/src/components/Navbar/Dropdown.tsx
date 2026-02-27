@@ -14,7 +14,7 @@ export default function BasicSelect() {
   };
 
   return (
-    <Box sx={{ width: 256 }}>
+    <Box className="dropdown">
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Choose your meeitng room</InputLabel>
         <Select
