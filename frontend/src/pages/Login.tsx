@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
-import { useForm, type SubmitHandler } from "react-hook-form";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
@@ -28,11 +27,7 @@ const {
   handleSubmit,
   formState: { errors },
 } = useForm<LoginFormInputs>();
-const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = useForm<LoginFormInputs>();
+
 
 type LoginFormInputs = {
   email: string;
@@ -66,7 +61,6 @@ type LoginFormInputs = {
           </Link>
         </div>
         <div className="loginForm">
-          <form onSubmit={handleSubmit(onSubmit)}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               label="Email"

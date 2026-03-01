@@ -3,8 +3,7 @@ import "../assets/scss/pages/ForgotPassword.scss";
 import AuthTopBar from "../components/AuthTopBar";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { forgotPassword } from "../redux/forgotSlice";
-import type { RootState, AppDispatch } from "../redux/store";
+
 import { useNavigate } from "react-router-dom";
 import { getLocalStorage, setLocalStorage } from "../helper";
 
@@ -14,14 +13,14 @@ const ForgotPassword = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error } = useSelector((state: RootState) => state.forgot);
   const forgotEmail = getLocalStorage("forgot-email")
-  
+
   useEffect(() =>{
-  
+
     if(forgotEmail){
       navigate("/verify-password")
     }
   },[forgotEmail])
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("comment",e)
     e.preventDefault();
