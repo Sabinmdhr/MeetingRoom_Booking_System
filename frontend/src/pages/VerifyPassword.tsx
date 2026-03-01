@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../redux/store";
 import { verifyOtp } from "../redux/verifyOtpSlice";
-import { getLocalStorage, setLocalStorage } from "../helper";
+import { fixedValues, getLocalStorage, setLocalStorage } from "../helper";
 
 const VerifyPassword = () => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
@@ -17,12 +17,12 @@ const VerifyPassword = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { loading } = useSelector((state: RootState) => state.verifyOtp);
-  const forgotEmail = getLocalStorage("forgot-email");
+  const forgotEmail = getLocalStorage(fixedValues.forgotEmail);
 
   // Safe access to email (won't crash if page refreshed)
   const email = location.state?.email || forgotEmail;
 
-  const refId = getLocalStorage("reference-id");
+  const refId = getLocalStorage(fixedValues.refId);
 
    useEffect(() => {
     if (refId) {
@@ -73,7 +73,7 @@ const VerifyPassword = () => {
 
     if (res?.payload?.success) {
       const newReferenceId = res.payload.data.referenceId;
-      setLocalStorage("reference-id", newReferenceId);
+      setLocalStorage(fixedValues.refId, newReferenceId);
       navigate("/create-password");
     }
   }

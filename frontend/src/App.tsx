@@ -4,6 +4,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import CreatePassword from './pages/CreatePassword';
 import VerifyPassword from './pages/VerifyPassword';
 import Dashboard from "./components/Dashboard";
+import BookRoom from "./components/BookRoom";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/verify-password" element={<VerifyPassword />} />
         <Route path="/create-password" element={<CreatePassword />} />
+        <Route path="/book-room" element={<BookRoom />} />
       </Routes>
     </BrowserRouter>
   );

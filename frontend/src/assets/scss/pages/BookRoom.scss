@@ -1,0 +1,103 @@
+.bookroom {
+  min-height: 100vh;
+  background: #f4f5f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+
+  .bookroom-card {
+    width: 100%;
+    max-width: 1050px;
+    padding: 28px 32px;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  }
+
+  .bookroom-header {
+    margin-bottom: 2px;
+
+    .title {
+      font-weight: 500;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #8a8f98;
+    }
+  }
+
+  .bookroom-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .bookroom-left{
+    display: flex;
+    flex-direction: column;
+  }
+  .bookroom-right {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2f2f2f;
+  }
+
+  .time {
+    display: flex;
+    gap: 16px;
+
+    .field {
+      flex: 1;
+    }
+  }
+
+  .room-preview {
+    height: 150px;
+    border: 1px solid #e3e6ea;
+    border-radius: 10px;
+    background: #fafbfc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    p {
+      font-size: 13px;
+      color: #9aa0a6;
+    }
+  }
+
+  .book-btn {
+    margin-top: 5px;
+    background-color: #6d6f75 !important;
+    text-transform: none !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    padding: 10px 0 !important;
+
+    &:hover {
+      background-color: #5a5c61 !important;
+    }
+  }
+
+  .reqd-text {
+    font-size: 12px;
+    color: #9aa0a6;
+    text-align: center;
+    margin-top: -8px;
+  }
+}

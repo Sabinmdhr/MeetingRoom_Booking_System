@@ -11,3 +11,8 @@ export const removeLocalStorage =(key:string)=>{
 export const getLocalStorage =(key:string):string|null=>{
     return localStorage.getItem(key)
 }
+
+export const  fixedValues= {
+  forgotEmail : "forgot-email",
+  refId : "reference-id",
+} as const
