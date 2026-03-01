@@ -33,7 +33,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
         </div>
         <div className="nav-items">
           <Dropdown />
-       
+
            <Bell className="notification-icon" />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -71,8 +71,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
             window.location.href = "/";
           }}>Logout</button>
         </div>
-        <Dropdown/>
-        <Dropdown/>
+       
       </Toolbar>
     </AppBar>
   );
