@@ -41,7 +41,7 @@ export default function TopNavbar() {
         <div className="nav-items">
           <Dropdown />
 
-          <Bell className="notification-icon" />
+           <Bell className="notification-icon" />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton
@@ -83,6 +83,7 @@ export default function TopNavbar() {
             </Menu>
           </Box>
         </div>
+
       </Toolbar>
     </AppBar>
   );
