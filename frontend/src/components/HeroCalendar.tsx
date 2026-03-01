@@ -1,34 +1,23 @@
 import { useState } from "react";
+
 import dayjs from "dayjs";
 import "../assets/scss/pages/HeroCalendar.scss";
 
 const HeroCalendar = () => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
 
-  const startOfMonth = currentMonth.startOf("month");
   const endOfMonth = currentMonth.endOf("month");
 
   const daysInMonth = endOfMonth.date();
-  const startDay = startOfMonth.day(); // 0-6
 
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const emptyStartCells = Array.from({ length: startDay });
-
-  const totalUsedCells = days.length + emptyStartCells.length;
-
-  const rowsNeeded = Math.ceil(totalUsedCells / 7);
-  const totalCells = rowsNeeded * 7;
-
-  const emptyEndCells = Array.from({
-    length: totalCells - totalUsedCells,
-  });
-
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
     <section className="hero">
+      {/* TOP BAR */}
       <div className="hero__topbar">
-        <div>
+        <div className="topbar-left">
           <button
             onClick={() => setCurrentMonth(currentMonth.subtract(1, "month"))}
           >
@@ -40,16 +29,18 @@ const HeroCalendar = () => {
           </button>
         </div>
 
-        <div>{currentMonth.format("MMMM YYYY")}</div>
-      </div>
+        <div className="topbar-center">{currentMonth.format("MMMM YYYY")}</div>
 
+        <div className="topbar-right">
+          <button>Month</button>
+          <button>Week</button>
+          <button>Day</button>
+        </div>
+      </div>
+      {/* FULL MONTH GRID */}
       <div className="hero__calendar">
-        <div
-          className="calendar-grid"
-          style={{
-            gridTemplateRows: `50px repeat(${rowsNeeded}, 1fr)`,
-          }}
-        >
+        <div className="calendar-grid">
+          {/* Weekday Headers */}
           {weekDays.map((day) => (
             <div
               key={day}
@@ -59,32 +50,18 @@ const HeroCalendar = () => {
             </div>
           ))}
 
-          {emptyStartCells.map((_, i) => (
-            <div
-              key={`start-${i}`}
-              className="calendar-cell empty"
-            />
-          ))}
-
+          {/* Month Days */}
           {days.map((day) => (
             <div
               key={day}
               className="calendar-cell"
             >
-              <span className="date-number">{day}</span>
+              {day}
             </div>
-          ))}
-
-          {emptyEndCells.map((_, i) => (
-            <div
-              key={`end-${i}`}
-              className="calendar-cell empty"
-            />
           ))}
         </div>
       </div>
     </section>
   );
 };
-
 export default HeroCalendar;

@@ -39,7 +39,7 @@
   height: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  // grid-template-rows: 50px repeat(6, 1fr);
+  grid-template-rows: 50px repeat(6, 1fr);
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   overflow: hidden;
@@ -60,8 +60,8 @@
 /* Date cells */
 .calendar-cell {
   position: relative;
-  border-right: 1px solid #e8e8e8;
-  border-bottom: 1px solid #e8e8e8;
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
   padding: 8px;
   display: flex;
   align-items: flex-start;
