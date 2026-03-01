@@ -3,7 +3,8 @@ import "../assets/scss/pages/ForgotPassword.scss";
 import AuthTopBar from "../components/AuthTopBar";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { forgotPassword } from "../redux/forgotSlice";
+import type { RootState, AppDispatch } from "../redux/store";
 import { useNavigate } from "react-router-dom";
 import { getLocalStorage, setLocalStorage } from "../helper";
 
