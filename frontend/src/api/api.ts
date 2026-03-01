@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const BASE_URL = "http://10.7.1.198:8081/";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const axiosInstance= axios.create({
-    baseURL: BASE_URL,
-    headers: {
-        "Content-Type": "application/json"
-    },
-
-})
+export const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, type SerializedError } from "@reduxjs/toolkit";
 import { forgotPassApi } from "../api/auth/forgotApi";
-import type { IForgotPasswordRequest } from "../api/auth/interface";
+import type { IForgotPasswordRequest, IForgotPasswordResponse } from "../api/auth/interface";
+import type { IBackendResponse } from "../api/interface";
 
 interface ForgotState{
     loading: boolean;
@@ -11,10 +12,13 @@ interface ForgotState{
 const initialState: ForgotState={
     loading: false,
     success: false,
-    error:null,
+    error: null,
 }
 
-export const forgotPassword = createAsyncThunk(
+export const forgotPassword = createAsyncThunk<
+  IBackendResponse<IForgotPasswordResponse>, // Return type
+  string                  // Argument type
+>(
     "forgot/password",
     async(email:string) =>{
         const res = await forgotPassApi<IForgotPasswordRequest>({email});
@@ -31,6 +35,7 @@ const forgotSlice= createSlice({
         .addCase(forgotPassword.pending,(state) => {
             state.loading= true;
             state.error= null;
+            state.success = false;
         })
         .addCase(forgotPassword.fulfilled,(state) =>{
             state.loading= false;
@@ -38,7 +43,7 @@ const forgotSlice= createSlice({
         })
         .addCase(forgotPassword.rejected,(state, action)=>{
             state.loading= false;
-            state.error= action.error
+            state.error= action.error;
         })
     }
 })
