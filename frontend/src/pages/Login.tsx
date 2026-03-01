@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import "../assets/scss/pages/login.scss";
@@ -22,42 +21,44 @@ export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(true);
   const navigate = useNavigate();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormInputs>();
 
-const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = useForm<LoginFormInputs>();
+  type LoginFormInputs = {
+    email: string;
+    password: string;
+  };
 
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      const response = await axiosInstance.post("/api/v1/login", data, {
+        headers: { "Content-Type": "application/json" },
+      });
 
-type LoginFormInputs = {
-  email: string;
-  password: string;
-};
-
-
-   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-     try {
-       const response = await axiosInstance.post("/api/v1/login", data, {
-         headers: { "Content-Type": "application/json" },
-       });
-
-       console.log("Login Success:", response.data);
-    localStorage.setItem("token", response.data.token);
-    navigate("/dashboard");
-     } catch (error: any) {
-
+      console.log("Login Success:", response.data);
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
+    } catch (error: any) {
       console.error("Login Failed:", error);
-     }
-   };
+    }
+  };
   // const handleClickShowPassword = () => setShowPassword((prev) => !prev);
   // const handleMouseDownPassword = (event) => event.preventDefault();
   return (
     <div className="loginContainer">
       <Card className="loginCard">
         <div className="logo">
-          <img src={logo} alt="" />
-          <Link to={{ pathname: "/" }} className="outlook">
+          <img
+            src={logo}
+            alt=""
+          />
+          <Link
+            to={{ pathname: "/" }}
+            className="outlook"
+          >
             <span>Use your outlook acoount</span>
           </Link>
         </div>
@@ -116,7 +117,10 @@ type LoginFormInputs = {
               helperText={errors.password?.message as String}
             />
             <div className="actions">
-              <Link to="/forgot-password" className="forgetPassword">
+              <Link
+                to="/forgot-password"
+                className="forgetPassword"
+              >
                 Forgot Password
               </Link>
               <FormControlLabel
@@ -126,10 +130,13 @@ type LoginFormInputs = {
               />
             </div>
 
-              <Button type="submit" className="loginButton" variant="contained">
-                Login
-              </Button>
-
+            <Button
+              type="submit"
+              className="loginButton"
+              variant="contained"
+            >
+              Login
+            </Button>
           </form>
         </div>
       </Card>

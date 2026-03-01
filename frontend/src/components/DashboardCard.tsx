@@ -7,13 +7,12 @@ import CardActionArea from "@mui/material/CardActionArea";
 import { Building2 } from "lucide-react";
 import { Calendar } from "lucide-react";
 
-
 const cards = [
   {
     id: 1,
     title: "Total Rooms",
     description: "Total number of rooms available.",
-    icon: <Building2  />,
+    icon: <Building2 />,
   },
   {
     id: 2,
@@ -21,7 +20,6 @@ const cards = [
     description: "Number of meetings scheduled for today.",
     icon: <Calendar />,
   },
-
 ];
 
 function SelectActionCard() {
@@ -51,10 +49,16 @@ function SelectActionCard() {
             }}
           >
             <CardContent sx={{ height: "100%" }}>
-              <Typography variant="h5" component="div">
-          {card.icon}      {card.title}
+              <Typography
+                variant="h5"
+                component="div"
+              >
+                {card.icon} {card.title}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant="body2"
+                color="text.secondary"
+              >
                 {card.description}
               </Typography>
             </CardContent>

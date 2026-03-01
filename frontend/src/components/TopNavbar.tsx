@@ -14,31 +14,44 @@ import Avatar from "@mui/material/Avatar";
 import { Bell } from "lucide-react";
 
 export default function TopNavbar() {
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+  const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   );
-   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-     setAnchorElUser(event.currentTarget);
-   };
-    const handleCloseUserMenu = () => {
-      setAnchorElUser(null);
-    };
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   return (
-    <AppBar position="static" className="topbar" elevation={0}>
+    <AppBar
+      position="static"
+      className="topbar"
+      elevation={0}
+    >
       <Toolbar className="topbar-toolbar">
         <div className="logo-wrapper">
-          <img src={logo} alt="Logo" />
+          <img
+            src={logo}
+            alt="Logo"
+          />
         </div>
         <div className="nav-items">
           <Dropdown />
-       
-           <Bell className="notification-icon" />
+
+          <Bell className="notification-icon" />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton
+                onClick={handleOpenUserMenu}
+                sx={{ p: 0 }}
+              >
+                <Avatar
+                  alt="Remy Sharp"
+                  src="/static/images/avatar/2.jpg"
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -58,7 +71,10 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={handleCloseUserMenu}
+                >
                   <Typography sx={{ textAlign: "center" }}>
                     {setting}
                   </Typography>
@@ -66,13 +82,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
               ))}
             </Menu>
           </Box>
-          <button onClick={() => {
-            localStorage.removeItem("token");
-            window.location.href = "/";
-          }}>Logout</button>
         </div>
-        <Dropdown/>
-        <Dropdown/>
       </Toolbar>
     </AppBar>
   );

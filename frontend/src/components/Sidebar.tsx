@@ -8,25 +8,57 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import MenuIcon from "@mui/icons-material/Menu";
-// import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import ArrowBackIosNewTwoToneIcon from "@mui/icons-material/ArrowBackIosNewTwoTone";
+import {
+  LayoutDashboard,
+  Calendar,
+  DoorOpen,
+  Building2,
+  Megaphone,
+  FileText,
+  Users,
+  Settings,
+  Menu,
+  ChevronLeft,
+  LogOut,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const menuItems = [
+  {
+    text: "Dashboard",
+    icon: <LayoutDashboard size={20} />,
+    path: "/dashboard",
+  },
+  { text: "Calendar", icon: <Calendar size={20} />, path: "/calendar" },
+  { text: "Book Room", icon: <DoorOpen size={20} />, path: "/book-room" },
+  {
+    text: "Meeting Rooms",
+    icon: <Building2 size={20} />,
+    path: "/meeting-rooms",
+  },
+  {
+    text: "Announcements",
+    icon: <Megaphone size={20} />,
+    path: "/announcements",
+  },
+  { text: "Report", icon: <FileText size={20} />, path: "/report" },
+  { text: "Participants", icon: <Users size={20} />, path: "/participants" },
+  { text: "Settings", icon: <Settings size={20} />, path: "/settings" },
+];
+
+const logoutItem = {
+  text: "Logout",
+  icon: <LogOut size={20} />,
+};
+
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
 
-  const menuItems = [
-    "Lorem Ipsum",
-    "+ Calendar",
-    "Lorem Ipsum",
-    "Lorem Ipsum",
-    "Lorem Ipsum",
-    "Lorem Ipsum",
-    "Lorem Ipsum",
-    "Lorem Ipsum",
-    "Lorem Ipsum",
-  ];
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <Drawer
@@ -36,38 +68,55 @@ export default function Sidebar() {
         className: open ? "sidebar-paper open" : "sidebar-paper closed",
       }}
     >
-      {/* Toggle Header */}
+      {/* Header */}
       <div className="sidebar-header">
         <div
           className="toggle-button"
           onClick={() => setOpen(!open)}
         >
-          {open ? (
-            <ArrowBackIosNewTwoToneIcon className="icon" />
-          ) : (
-            <MenuIcon />
-          )}
+          {open ? <ChevronLeft size={20} /> : <Menu size={20} />}
         </div>
       </div>
 
-      <List>
-        {menuItems.map((text, index) => (
-          <ListItem
-            key={text}
-            disablePadding
-          >
-            <ListItemButton className="sidebar-item">
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
+      {/* Menu Content Wrapper */}
+      <div className="sidebar-content">
+        {/* Top Items */}
+        <List>
+          {menuItems.map((item) => (
+            <ListItem
+              key={item.text}
+              disablePadding
+            >
+              <ListItemButton
+                className="sidebar-item"
+                onClick={() => navigate(item.path)}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  className={`sidebar-text ${open ? "show" : "hide"}`}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+
+        {/* Logout Bottom */}
+        <List className="logout-section">
+          <ListItem disablePadding>
+            <ListItemButton
+              className="sidebar-item logout"
+              onClick={handleLogout}
+            >
+              <ListItemIcon>{logoutItem.icon}</ListItemIcon>
               <ListItemText
-                primary={text}
+                primary={logoutItem.text}
                 className={`sidebar-text ${open ? "show" : "hide"}`}
-              />{" "}
+              />
             </ListItemButton>
           </ListItem>
-        ))}
-      </List>
+        </List>
+      </div>
     </Drawer>
   );
 }

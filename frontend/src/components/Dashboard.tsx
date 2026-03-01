@@ -20,7 +20,7 @@ export default function Dashboard() {
         <Sidebar />
 
         <main className="dashboard-content">
-<DashboardCard />
+          <DashboardCard />
         </main>
       </div>
     </div>
