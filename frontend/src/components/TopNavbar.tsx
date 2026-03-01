@@ -72,6 +72,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
             window.location.href = "/";
           }}>Logout</button>
         </div>
+        <Dropdown/>
       </Toolbar>
     </AppBar>
   );

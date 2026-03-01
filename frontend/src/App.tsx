@@ -3,7 +3,12 @@ import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import CreatePassword from './pages/CreatePassword';
 import VerifyPassword from './pages/VerifyPassword';
+import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
+import CreatePassword from './pages/CreatePassword';
+import VerifyPassword from './pages/VerifyPassword';
 import Dashboard from "./components/Dashboard";
+
 
 function App() {
   return (

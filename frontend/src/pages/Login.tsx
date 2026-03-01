@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
+import { useForm, type SubmitHandler } from "react-hook-form";
+
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import "../assets/scss/pages/login.scss";
@@ -21,6 +23,11 @@ export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(true);
   const navigate = useNavigate();
 
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+} = useForm<LoginFormInputs>();
 const {
   register,
   handleSubmit,
@@ -60,6 +67,7 @@ type LoginFormInputs = {
         </div>
         <div className="loginForm">
           <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               label="Email"
               className="field"
@@ -67,6 +75,10 @@ type LoginFormInputs = {
               fullWidth
               {...register("email", {
                 required: "Email is required",
+                // pattern: {
+                //   value: /\S+@\S+\.\S+/,
+                //   message: "Invalid Email",
+                // },
                 // pattern: {
                 //   value: /\S+@\S+\.\S+/,
                 //   message: "Invalid Email",
@@ -96,6 +108,10 @@ type LoginFormInputs = {
               }}
               {...register("password", {
                 required: "Password is required",
+                // minLength: {
+                //   value: 6,
+                //   message: "Min 6 characters",
+                // },
                 // minLength: {
                 //   value: 6,
                 //   message: "Min 6 characters",
