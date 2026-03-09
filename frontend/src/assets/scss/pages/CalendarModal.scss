@@ -19,7 +19,32 @@
 
 .modal-category {
   font-size: 13px;
-  color: #777;
+  // color: #777;
+  &.client {
+    margin: 3px;
+    padding: 4px 8px;
+    border: 2px solid #f17713;
+    border-radius: 10px;
+    background-color: #e5b287;
+    opacity: 2;
+  }
+  &.internal {
+    margin: 3px;
+    padding: 4px 8px;
+    border: 2px solid #050661;
+    border-radius: 10px;
+    background-color: #9e9fe3;
+    opacity: 2;
+  }
+  &.executive {
+    // color: white;
+    margin: 3px;
+    padding: 4px 8px;
+    border: 2px solid #19046d;
+    border-radius: 10px;
+    background-color: #946eeb;
+    opacity: 2;
+  }
 }
 
 .calendar-modal-content {
@@ -39,7 +64,6 @@
   margin-bottom: 14px;
 
   .close-button {
-    
     font-size: small !important;
     text-transform: capitalize;
     color: black;

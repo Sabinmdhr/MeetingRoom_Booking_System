@@ -17,7 +17,7 @@ export const useCalendarViewModel = () => {
       id: 1,
       title: "Board Meeting",
       category: "Executive",
-      date: "2026-02-10",
+      date: "2026-03-11",
       startTime: "10:00 AM",
       endTime: "12:00 PM",
       location: "Board Room 5A",
@@ -29,7 +29,7 @@ export const useCalendarViewModel = () => {
     {
       id: 2,
       title: "Frontend Dev Meeting",
-      category: "Engineering",
+      category: "Internal",
       date: "2026-03-10",
       startTime: "10:00 AM",
       endTime: "12:00 PM",

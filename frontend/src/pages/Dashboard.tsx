@@ -1,4 +1,4 @@
-import CssBaseline from "@mui/material/CssBaseline";
+// import CssBaseline from "@mui/material/CssBaseline";
 
 import "../assets/scss/pages/Dashboard.scss";
 import DashboardCard from "../components/DashboardCard";
@@ -11,7 +11,7 @@ export default function Dashboard() {
   }
   return (
     <div className="dashboard-container">
-      <CssBaseline />
+      {/* <CssBaseline /> */}
 
       <div className="dashboard-body">
         <main className="dashboard-content">

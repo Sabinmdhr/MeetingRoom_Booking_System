@@ -45,34 +45,38 @@ const Calendar = () => {
         <div className="topbar-center">{currentMonth.format("MMMM YYYY")}</div>
 
         <div className="topbar-right">
-          <Tabs
-            value={view}
-            onChange={(_, value) => setView(value)}
-            className="calendar-tabs"
-          >
-            <Tab
-              label="Day"
-              value="day"
-            />
-            <Tab
-              label="Week"
-              value="week"
-            />
-            <Tab
-              label="Month"
-              value="month"
-            />
-          </Tabs>
-        </div>
-
-        <div>
-          <Button
-            onClick={() => {
-              navigate("/book-room");
-            }}
-          >
-            + New Meeting
-          </Button>
+          <div className="topbar-right-section">
+            <Tabs
+              value={view}
+              onChange={(_, value) => setView(value)}
+              className="calendar-tabs"
+            >
+              <Tab
+                label="Day"
+                value="day"
+              />
+              {}
+              <Tab
+                label="Week"
+                value="week"
+              />
+              <Tab
+                label="Month"
+                value="month"
+              />
+            </Tabs>
+            <div>
+              <Button
+                variant="text"
+                className="meeting-button"
+                onClick={() => {
+                  navigate("/book-room");
+                }}
+              >
+                + New Meeting
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -122,7 +126,7 @@ const Calendar = () => {
                     {cellEvents.map((event) => (
                       <div
                         key={event.id}
-                        className="week-event"
+                        className={`week-event ${event.category == "Executive" ? `executive` : event.category == "Client" ? `client` : `internal`}`}
                         onClick={() => openEvent(event)}
                       >
                         {event.title}
@@ -162,7 +166,7 @@ const Calendar = () => {
                       .map((event) => (
                         <div
                           key={event.id}
-                          className="calendar-event"
+                          className={`calendar-event ${event.category == "Executive" ? `executive` : event.category == "Client" ? `client` : `internal`}`}
                           onClick={() => openEvent(event)}
                         >
                           {event.title}

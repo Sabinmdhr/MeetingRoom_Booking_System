@@ -28,7 +28,11 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
     >
       <DialogTitle className="calendar-modal-title">
         <h2 className="modal-title">{event.title}</h2>
-        <span className="modal-category">{event.category}</span>
+        <span
+          className={`modal-category ${event.category == "Client" ? `client ` : event.category == "Internal" ? "internal" : "executive"}`}
+        >
+          {event.category}
+        </span>
       </DialogTitle>
 
       <DialogContent className="calendar-modal-content">
