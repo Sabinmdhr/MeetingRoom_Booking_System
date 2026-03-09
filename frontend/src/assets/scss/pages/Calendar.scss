@@ -1,0 +1,354 @@
+.hero {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+/* ============================= */
+/* TOPBAR */
+/* ============================= */
+
+.hero__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.hero__topbar button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.hero__topbar button:hover {
+  background: #f3f4f6;
+}
+
+/* Left */
+.topbar-left {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+/* Center */
+.topbar-center {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Right */
+.topbar-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ============================= */
+/* CALENDAR CONTAINER */
+/* ============================= */
+
+.hero__calendar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  min-height: 0;
+}
+
+/* ============================= */
+/* WEEK HEADER */
+/* ============================= */
+
+.calendar-header-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 50px;
+
+  background: #f9fafb; /* same as hover */
+  border: 1px solid #e5e7eb;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 600;
+  font-size: 14px;
+
+  border-right: 1px solid #e5e7eb;
+}
+
+.calendar-header:last-child {
+  border-right: none;
+}
+
+/* ============================= */
+/* CALENDAR GRID */
+/* ============================= */
+
+.calendar-grid {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+
+  overflow: hidden;
+}
+
+/* ============================= */
+/* DATE CELLS */
+/* ============================= */
+
+.calendar-cell {
+  position: relative;
+
+  padding: 8px;
+
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  transition: background 0.15s ease;
+}
+
+.calendar-cell:hover {
+  background: #f9fafb;
+}
+
+/* Remove right border on last column */
+.calendar-cell:nth-child(7n) {
+  border-right: none;
+}
+
+/* Empty cells (no date) */
+.calendar-cell.empty {
+  background: #f9fafb; /* same as hover */
+}
+
+/* Date number */
+.date-number {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* ============================= */
+/* EVENTS */
+/* ============================= */
+
+.calendar-event {
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 4px 6px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  background: #e0e7ff;
+  color: #4338ca;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  transition: all 0.15s ease;
+}
+
+.calendar-event:hover {
+  background: #c7d2fe;
+}
+
+/* ============================= */
+/* MUI TABS STYLING */
+/* ============================= */
+
+/* CUSTOM MUI TABS (Segmented) */
+.calendar-tabs {
+  min-height: 40px !important;
+
+  background: #f3f4f6; /* pill background */
+  border-radius: 999px;
+  padding: 4px;
+
+  /* Remove default underline */
+  .MuiTabs-indicator {
+    display: none;
+  }
+
+  /* Flex spacing */
+  .MuiTabs-flexContainer {
+    gap: 4px;
+  }
+
+  /* Tab styles */
+  .MuiTab-root {
+    min-height: 32px !important;
+    min-width: 90px !important;
+
+    border-radius: 999px;
+    text-transform: none;
+    font-size: 13px;
+    font-weight: 500;
+
+    background: transparent;
+    color: #6b7280; /* gray text */
+
+    transition: all 0.2s ease;
+  }
+
+  /* Remove hover background */
+  .MuiTab-root:hover {
+    background: transparent;
+  }
+
+  /* Active tab */
+  .MuiTab-root.Mui-selected {
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Remove ripple effect visually */
+  .MuiTouchRipple-root {
+    display: none;
+  }
+}
+
+/* ============================= */
+/* WEEK VIEW GRID */
+/* ============================= */
+
+/* Overall week view grid */
+.week-view {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr); /* 80px for time column, 7 days */
+  grid-auto-rows: 60px; /* each hour row height */
+  gap: 1px;
+  background: #e5e7eb;
+  overflow-y: auto; /* scroll if needed */
+  flex: 1; /* take remaining height */
+}
+
+/* Header row */
+.week-header {
+  display: contents; /* so child divs align in grid columns */
+}
+
+.week-header-corner {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.week-day {
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
+}
+
+/* Time column */
+.week-hour {
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 13px;
+  border-bottom: 1px solid #e5e7eb;
+}
+/* Weekday and hour grid cells */
+.week-cell {
+  background: #fff;
+  border-left: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+  padding: 2px;
+}
+
+.week-event {
+  background: #e0e7ff;
+  color: #4338ca;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+}
+
+.week-event:hover {
+  background: #c7d2fe;
+}
+/* Hover effect for each cell */
+.week-cell:hover {
+  background: #f9fafb;
+}
+
+/* Remove right border for the last column */
+.week-cell:last-child {
+  border-right: none;
+}
+
+/* Empty cells (no events) */
+.week-cell.empty {
+  background: #f9fafb; /* same as hover background */
+}
+
+/* Add space for events inside week cells */
+.week-cell .week-event {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: #e0e7ff;
+  color: #4338ca;
+  border-radius: 6px;
+  padding: 2px 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.week-cell .week-event:hover {
+  background: #c7d2fe;
+}

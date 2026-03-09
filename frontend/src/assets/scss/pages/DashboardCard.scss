@@ -1,0 +1,70 @@
+.dashboard {
+  width: 100%;
+
+  &__header {
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+  }
+
+  &__grid {
+    margin-top: 20px;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  &__card {
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+    }
+  }
+
+  &__card-action {
+    height: 100%;
+    padding: 16px;
+
+    &.active {
+      background-color: #eef2ff; // soft blue highlight
+    }
+  }
+
+  &__card-content {
+    height: 100%;
+  }
+
+  &__card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  &__card-description {
+    font-size: 14px;
+    color: #6b7280;
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  color: #4f46e5;
+}

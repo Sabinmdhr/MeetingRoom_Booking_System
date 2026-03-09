@@ -21,7 +21,7 @@ import {
   ChevronLeft,
   LogOut,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const menuItems = [
   {
@@ -52,12 +52,13 @@ const logoutItem = {
 };
 
 export default function Sidebar() {
+  const location = useLocation();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -88,7 +89,10 @@ export default function Sidebar() {
               disablePadding
             >
               <ListItemButton
-                className="sidebar-item"
+                disableRipple
+                className={`sidebar-item ${
+                  location.pathname === item.path ? "active" : ""
+                }`}
                 onClick={() => navigate(item.path)}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>

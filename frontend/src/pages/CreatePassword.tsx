@@ -15,23 +15,35 @@ const CreatePassword = () => {
   }, [referenceId]);
 
   // handleSubmit(()=>{
-    
+
   // })
 
   return (
     <Box className="create-password">
-      <Card className="create-card" elevation={3}>
+      <Card
+        className="create-card"
+        elevation={3}
+      >
         <div className="create-grid">
           <div className="create-left">
-            <Typography className="create-title" variant="h6">
+            <Typography
+              className="create-title"
+              variant="h6"
+            >
               Create New Password
             </Typography>
-            <Typography className="create-subtitle" variant="body2">
+            <Typography
+              className="create-subtitle"
+              variant="body2"
+            >
               Your new password should be different from previous password.
             </Typography>
           </div>
           <form className="create-right">
-            <Typography className="create-input" variant="body2">
+            <Typography
+              className="create-input"
+              variant="body2"
+            >
               New Password
             </Typography>
             <TextField
@@ -40,7 +52,10 @@ const CreatePassword = () => {
               size="small"
               fullWidth
             />
-            <Typography className="create-input" variant="body2">
+            <Typography
+              className="create-input"
+              variant="body2"
+            >
               Confirm Password
             </Typography>
             <TextField
@@ -61,7 +76,7 @@ const CreatePassword = () => {
         </div>
       </Card>
     </Box>
-  )
-}
+  );
+};
 
-export default CreatePassword
+export default CreatePassword;
