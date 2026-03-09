@@ -2,15 +2,16 @@
 export interface LoginRequest {
   email: string;
   password: string;
+
 }
 
 export interface LoginResponse {
-  token: string;
-  user?: {
-    id: string;
-    email: string;
-    name?: string;
-  };
+ data: {
+  accesstoken: string;
+  refreshtoken: string;
+}
+ success: boolean;
+ messsage: string;
 }
 
 // Optional: Form input type can be same as LoginRequest

@@ -16,7 +16,8 @@ export const useLoginViewModel = () => {
 
       const result = await loginService(data);
 
-      localStorage.setItem("token", result.token);
+      localStorage.setItem("accesstoken", result.data.accesstoken);
+      localStorage.setItem("refreshtoken", result.data.refreshtoken);
       console.log("Login Success:", result);
 
       navigate("/dashboard"); // navigate after login

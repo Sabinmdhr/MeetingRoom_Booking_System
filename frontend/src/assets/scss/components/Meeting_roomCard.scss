@@ -1,0 +1,106 @@
+.Meeting-Card{
+  padding: 0 ;
+  display: flex;
+  // max-width:500px !important;
+}
+.Meeting-title{
+  font-size: var(--titleSmallSize) !important;
+  font-weight: 600 !important;
+  letter-spacing: var(--titleSmallTracking) !important;
+  line-height: var(--titleSmallLineht) !important;
+  color: black !important;
+}
+.Meeting-Card--content{
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+}
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 0.8px solid #DDE5FD;
+}
+.TimeCapacity{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+
+  .Time, .Capacity{
+  // color: var(--colors-Red-200);
+  color: #4A5565;
+  font-weight: 400;
+    font-size: var(--bodySmallSize);
+  line-height: var(--bodySmallLineht);
+  letter-spacing: var(--bodySmallTracking);
+  }
+
+
+}
+.Features-Tabs{
+  display:flex;
+gap: 4px;
+margin-top: 8px;
+align-items: center ;
+justify-content: start;
+
+}
+.Meeitng_room-Feature{
+  display: flex;
+  background-color: #e1dbdb;
+  border-radius: 4px;
+  padding: 2px 4px;
+  gap: 4px;
+  text-align: center;
+  // align-items: center;
+
+   .Feature-title{
+   font-size: var(--bodySmallSize);
+   letter-spacing: var(--bodySmallTracking);
+   line-height: var(--bodySmallLineht);
+   color: #4A5565;
+   }
+
+
+
+}
+.Meeting_room-Available{
+  padding: 4px 17px;
+  border-radius:8px;
+  // font-size: 12px !important;
+  font-size: var(--labelSmallSize) !important;
+  line-height: var(--labelSmallLineht) !important;
+  letter-spacing: var(--labelSmallTracking) !important;
+  &.Available {
+    color: green;
+    background-color: #c8e6c9;
+  }
+  &.Unavailable {
+    color: var(--colors-Yellow-200);
+    background-color: var(--colors-Yellow-Alpha-10);
+  }
+}
+.Meeting_room-Book{
+  padding: 8px 24px;
+  border-radius:10px;
+  border: 1px solid var(--colorNeutral300);
+  background-color: #1976d2;
+  color: white;
+  cursor: pointer;
+
+ &.Available {
+    background-color: black;
+  }
+  &.Unavailable {
+    background-color: var(--colorNeutral200);
+    color: black;
+    &:hover {
+       background-color: #e0e0e0;
+    }
+  }
+}

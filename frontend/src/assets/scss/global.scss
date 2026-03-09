@@ -1,0 +1,53 @@
+:root {
+  --titleMediumFont: "Roboto", sans-serif;
+  // --titleLargeFont :
+
+  --colorsNeutral600: #8e8e8e;
+  --colorNeutral1000: #333333;
+  --colorNeutral300: #D2D2D2;
+  --colorNeutral200: #E8E8E8;
+
+  --ColorsPrimary500: #472a8c;
+  --ColorsPrimary100: #CAB2FF;
+  --ColorsPrimary300: #824DFF;
+  --ColorsPrimary500: #472A8C;
+
+  --primary: #9466ff;
+  --primary100: #cab2ff;
+  --primary200: #9466ff;
+  --primary400: #653bc6;
+  --primary500: #472a8c;
+
+  --titleSmallSize: 14px;
+  --titleSmallLineht: 20px;
+  --titleSmallTracking: 0.1px;
+
+  --titleMediumSize: 16px;
+  --titleMediumLineht: 24px;
+  --titleMediumTracking: 0.15px;
+
+  --titleLargeSize: 16px;
+  --titleLargeLineht: 22px;
+  --titleLargeTracking: 0px;
+
+  --labelLargeSize: 14px;
+  --labelLargeLineht: 20px;
+  --labelLargeTracking: 0.1px;
+
+  --labelSmallSize:11px;
+  --labelSmallLineht:16px;
+  --labelSmallTracking:0.5px;
+
+  --bodySmallSize: 12px ;
+  --bodySmallLineht: 16px;
+  --bodySmallTracking: 0.4px;
+
+
+  --colors-Green-Alpha-10: #1FC16B1A;
+  --colors-Yellow-Alpha-10: #FFDB431A;
+  --colors-Red-Alpha-10: #FB37481A;
+
+  --colors-Green-200: #1FC16B;
+  --colors-Yellow-200: #DFB400;
+  --colors-Red-200: #D00416;
+}

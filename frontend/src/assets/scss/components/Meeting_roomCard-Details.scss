@@ -1,0 +1,78 @@
+
+
+// .meeting-details-container{
+//   width: 400px;
+//   max-width: none;
+//   background-color: #FAF5FF;
+
+// }
+
+.meeting_room-title{
+
+  display: flex;
+  background-color: #FAF5FF;
+  padding: 8px 16px;
+  justify-content: space-between;
+  align-items: center;
+
+
+}
+.title-left{
+    display: flex;
+    font-size: smaller;
+    flex-direction: column;
+    gap: 10px;
+    .title{
+      font-size: var(--titleMediumSize) !important;
+      font-weight: 600 !important;
+      letter-spacing: var(--titleMediumTracking) !important;
+      line-height: var(--titleMediumLineht) !important;
+      color: var(--ColorsPrimary500) !important;
+      gap: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+  }
+.container{
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.meeting_room-status{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 80px;
+  background-color: #F9FAFB;
+  padding:  24px !important;
+
+
+  .left{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 4px;
+
+  }
+
+  .right{
+    padding: 6px 12px;
+    border-radius: 8px;
+       &.available{
+         background-color: #E6F4EA;
+        color: #34A853;
+      }
+      &.booked{
+        background-color: #FCE8E6;
+        color: #EA4335;
+      }
+  }
+
+  }
+
+.timeSlots{
+  padding: 12px 24px;
+}
