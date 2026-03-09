@@ -130,6 +130,8 @@ const Calendar = () => {
                         onClick={() => openEvent(event)}
                       >
                         {event.title}
+                        <br />
+                        {event.startTime}
                       </div>
                     ))}
                   </div>
@@ -170,6 +172,8 @@ const Calendar = () => {
                           onClick={() => openEvent(event)}
                         >
                           {event.title}
+                          <br />
+                          {event.startTime}{" "}
                         </div>
                       ))}
                   </>
