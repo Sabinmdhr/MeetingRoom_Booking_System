@@ -26,9 +26,10 @@ const ForgotPassword = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await dispatch<any>(forgotPassword(email));
-    if (res?.payload?.success) { // If API returns a payload (success)
+    if (res?.payload?.success) {
+      // If API returns a payload (success)
 
-      setLocalStorage("forgot-email",email)
+      setLocalStorage("forgot-email", email);
       navigate("/verify-password", {
         state: {
           email,
@@ -41,12 +42,24 @@ const ForgotPassword = () => {
   return (
     <Box className="forgot-password">
       <AuthTopBar />
-      <Card className="forgot-card" elevation={3}>
-        <form className="forgot-form" onSubmit={handleSubmit}>
-          <Typography variant="h6" className="forgot-title">
+      <Card
+        className="forgot-card"
+        elevation={3}
+      >
+        <form
+          className="forgot-form"
+          onSubmit={handleSubmit}
+        >
+          <Typography
+            variant="h6"
+            className="forgot-title"
+          >
             Verification
           </Typography>
-          <Typography variant="body2" className="forgot-subtitle">
+          <Typography
+            variant="body2"
+            className="forgot-subtitle"
+          >
             Please enter the valid email to find your account
           </Typography>
           <TextField
@@ -63,13 +76,14 @@ const ForgotPassword = () => {
             type="submit"
             variant="contained"
             fullWidth
-            loading={loading}>
+            loading={loading}
+          >
             Confirm
           </Button>
         </form>
       </Card>
     </Box>
-  )
-}
+  );
+};
 
-export default ForgotPassword
+export default ForgotPassword;

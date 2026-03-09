@@ -99,3 +99,12 @@
 .logout:hover {
   background-color: rgba(211, 47, 47, 0.08);
 }
+
+.sidebar-item {
+  transition: none !important;
+}
+
+.sidebar-item.active {
+  background-color: #ad95ea !important;
+  color: black;
+}

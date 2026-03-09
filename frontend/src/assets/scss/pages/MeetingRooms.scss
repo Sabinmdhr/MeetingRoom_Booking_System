@@ -1,0 +1,12 @@
+.MeetingRooms{
+  display: flex;
+  gap: 48px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  margin:  16px 80px ;
+  justify-content: center;
+}
+.MeetingRooms > *{
+  flex: 0 0 45%
+}

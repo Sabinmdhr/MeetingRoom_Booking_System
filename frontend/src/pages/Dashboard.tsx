@@ -1,8 +1,10 @@
+
 import "../assets/scss/pages/Dashboard.scss";
-import DashboardCard from "../components/DashboardCard"
+import DashboardCard from "../components/DashboardCard";
+
 export default function Dashboard() {
-  const token = localStorage.getItem("token");
-  if (!token) {
+  const accesstoken = localStorage.getItem("accesstoken");
+  if (!accesstoken) {
     window.location.href = "/";
     return null;
   }
@@ -10,13 +12,9 @@ export default function Dashboard() {
     <div className="dashboard-container">
 
 
-      <div className="dashboard-body">
-       
-
         <main className="dashboard-content">
-          <DashboardCard/>
+          <DashboardCard />
         </main>
-      </div>
     </div>
   );
 }

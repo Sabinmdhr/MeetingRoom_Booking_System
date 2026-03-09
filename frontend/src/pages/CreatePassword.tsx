@@ -55,7 +55,10 @@ const CreatePassword = () => {
           <Typography className="create-title" variant="h6">
               Create New Password
             </Typography>
-            <Typography className="create-subtitle" variant="body2">
+            <Typography
+              className="create-subtitle"
+              variant="body2"
+            >
               Your new password should be different from previous password.
             </Typography>
             <Typography className="create-input" variant="body2">
@@ -70,7 +73,10 @@ const CreatePassword = () => {
               fullWidth
               onChange={(e) => setNewPassword(e.target.value)}
             />
-            <Typography className="create-input" variant="body2">
+            <Typography
+              className="create-input"
+              variant="body2"
+            >
               Confirm Password
             </Typography>
             <TextField
@@ -93,7 +99,7 @@ const CreatePassword = () => {
         </form>
       </Card>
     </Box>
-  )
-}
+  );
+};
 
-export default CreatePassword
+export default CreatePassword;
