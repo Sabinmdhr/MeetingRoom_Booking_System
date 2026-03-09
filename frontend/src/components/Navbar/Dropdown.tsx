@@ -16,9 +16,7 @@ export default function BasicSelect() {
   return (
     <Box className="dropdown">
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">
-          Choose your meeting room
-        </InputLabel>
+        <InputLabel id="demo-simple-select-label">Choose a Meeting Room</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"

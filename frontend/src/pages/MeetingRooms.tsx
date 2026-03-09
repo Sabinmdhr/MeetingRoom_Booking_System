@@ -1,5 +1,11 @@
-const MeetingRooms = () => {
-  return <div>MeetingRooms</div>;
-};
+import React from 'react'
 
-export default MeetingRooms;
+const MeetingRooms = () => {
+  return (
+    <div>
+      <h1>Room Availability</h1>
+    </div>
+  )
+}
+
+export default MeetingRooms

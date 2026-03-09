@@ -6,10 +6,8 @@ import "../assets/scss/layout/DashboardLayout.scss";
 export default function DashboardLayout() {
   return (
     <div className="dashboard-layout">
-      {/* Navbar at top */}
       <TopNavbar />
 
-      {/* Sidebar + Content below navbar */}
       <div className="dashboard-body">
         <Sidebar />
         <div className="page-content">
