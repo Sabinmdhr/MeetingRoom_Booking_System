@@ -21,4 +21,6 @@ const MeetingRooms = () => {
   );
 };
 
-export default MeetingRooms;
+
+
+export default MeetingRooms

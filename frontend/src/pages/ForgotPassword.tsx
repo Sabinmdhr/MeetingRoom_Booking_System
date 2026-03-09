@@ -13,16 +13,17 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error } = useSelector((state: RootState) => state.forgot);
-  const forgotEmail = getLocalStorage("forgot-email");
 
-  useEffect(() => {
-    if (forgotEmail) {
-      navigate("/verify-password");
+  const forgotEmail = getLocalStorage("forgot-email")
+  useEffect(() =>{
+
+    if(forgotEmail){
+      navigate("/verify-password")
     }
-  }, [forgotEmail]);
+  
+  },[forgotEmail])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("comment", e);
     e.preventDefault();
     const res = await dispatch<any>(forgotPassword(email));
     if (res?.payload?.success) {

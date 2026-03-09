@@ -1,0 +1,126 @@
+.settings{
+    padding: 0px 10px;
+
+.settings-title{
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.settings-subtitle{
+    color: #4A5565;
+    margin-bottom: 22px !important;
+}
+
+.settings-card{
+    width: 100%;
+    padding: 22px;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+.settings-header{
+    font-size: 18px;
+    font-weight: 300px;
+}
+
+.name{
+    display: flex;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.field-label {
+    font-size: 15px;
+    font-weight: 300;
+    color: black;
+}
+
+.settings-btn{
+    background-color: black;
+    color: white;
+    margin-top: 15px;
+    border-radius: 8px;
+}
+
+.MuiTextField-root{
+    background: #F3F3F5;
+    border-radius: 8px;
+
+    .MuiOutlinedInput-root{
+      border-radius: 8px;
+
+      fieldset{
+        border-color: #F3F3F5 !important;
+      }
+      &:hover fieldset{
+        border: #d5d9de !important;
+      }
+      &.Mui-focused fieldset {
+        border:3px  solid #d5d9de!important;
+      }
+      input,
+      textarea {
+        padding: 8px 10px !important;
+        color: #2f2f2f !important;
+      }
+    }
+}
+
+.second-card{
+    width: 100%;
+    padding: 22px;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    margin-top: 30px;
+}
+
+.second-header{
+    font-size: 20px;
+    font-weight: 300px;
+    display: flex;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+.settings-notification{
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.notification-icon {
+  margin-top: 8px;
+  color: #6A7282;
+}
+
+.email {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #777;
+}
+
+.settings-notification hr {
+  border: none;
+  height: 1px;
+  background-color: #d5d9de;
+  margin: 4px 0;
+}
+}
