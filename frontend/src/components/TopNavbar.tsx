@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import { Bell } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function TopNavbar() {
   const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -33,15 +34,17 @@ export default function TopNavbar() {
     >
       <Toolbar className="topbar-toolbar">
         <div className="logo-wrapper">
-          <img
-            src={logo}
-            alt="Logo"
-          />
+          <Link to={"/dashboard"}>
+            <img
+              src={logo}
+              alt="Logo"
+            />
+          </Link>
         </div>
         <div className="nav-items">
           <Dropdown />
 
-           <Bell className="notification-icon" />
+          <Bell className="notification-icon" />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton
@@ -83,7 +86,6 @@ export default function TopNavbar() {
             </Menu>
           </Box>
         </div>
-
       </Toolbar>
     </AppBar>
   );

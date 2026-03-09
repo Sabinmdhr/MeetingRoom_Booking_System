@@ -6,12 +6,12 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
- data: {
-  accesstoken: string;
-  refreshtoken: string;
-}
- success: boolean;
- messsage: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+  success: boolean;
+  message: string;
 }
 
 // Optional: Form input type can be same as LoginRequest

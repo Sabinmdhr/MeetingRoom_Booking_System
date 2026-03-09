@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import type { LoginFormInputs } from "../models/auth.model";
 import { loginService } from "../services/auth.service";
 
-
 export const useLoginViewModel = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -16,11 +15,11 @@ export const useLoginViewModel = () => {
 
       const result = await loginService(data);
 
-      localStorage.setItem("accesstoken", result.data.accesstoken);
-      localStorage.setItem("refreshtoken", result.data.refreshtoken);
-      console.log("Login Success:", result);
+      localStorage.setItem("accesstoken", result.data.accessToken);
+      localStorage.setItem("refreshToken", result.data.refreshToken);
 
-      navigate("/dashboard"); // navigate after login
+      console.log("Login Success:", result);
+      navigate("/dashboard");
       return result;
     } catch (err: any) {
       setError(err.response?.data?.message || "Login Failed");
