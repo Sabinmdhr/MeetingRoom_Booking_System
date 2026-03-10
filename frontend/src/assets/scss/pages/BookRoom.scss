@@ -55,7 +55,9 @@
     font-weight: 500;
     color: #2f2f2f;
   }
-
+.select-room{
+  background: #F3F3F5;
+}
   .time {
     display: flex;
     gap: 16px;
@@ -67,9 +69,9 @@
 
   .MuiTextField-root {
     background: #F3F3F5;
+    border-radius: 8px;
 
     .MuiOutlinedInput-root {
-      border-radius: 8px;
 
     .MuiOutlinedInput-root:not(.MuiOutlinedInput-multiline) {
       height: 34px;
@@ -111,6 +113,7 @@
     justify-content: center;
     color: black;
     border: 1px solid #e3e6ea;
+    border-radius: 8px;
   }
   .participants-box{
     margin-top: 10px;

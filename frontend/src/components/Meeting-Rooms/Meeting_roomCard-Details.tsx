@@ -4,7 +4,6 @@ import { Calendar, Users, X} from "lucide-react";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import "../../assets/scss/components/Meeting_roomCard-Details.scss";
 
-
  interface Meeting_roomCardDetailsProps {
   meetingId: string;
   open: boolean;

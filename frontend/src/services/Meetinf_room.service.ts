@@ -3,7 +3,7 @@ import type { Meeting_room } from "../models/Meeting_room.model";
 const meetingRooms: Meeting_room[] = [
   {
     id: "1",
-    title: "Conference Room A",
+    title: "Manang",
     participants: ["Sabin", "Suman"],
     capacity: 10,
     available: true,
@@ -13,7 +13,7 @@ const meetingRooms: Meeting_room[] = [
   },
   {
     id: "2",
-    title: "Conference Room B",
+    title: "Mustang",
     participants: ["Sabin", "Sumanss"],
     capacity: 10,
     available: false,
@@ -23,7 +23,7 @@ const meetingRooms: Meeting_room[] = [
   },
   {
     id: "3",
-    title: "Conference Room C",
+    title: "Ghandruk",
     participants: ["Sabin", "Sumanss"],
     capacity: 1,
     available: false,
@@ -32,6 +32,11 @@ const meetingRooms: Meeting_room[] = [
     next_booking_time: "5:00PM",  
   },
 ];
+
+export const getMeetingRooms = async(): Promise<Meeting_room[]> =>{
+  await new Promise((resolve) => setTimeout(resolve, 300))
+  return meetingRooms;
+}
 
 export const getMeetingRoomById = async (id: string): Promise<Meeting_room> => {
   await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate network delay
