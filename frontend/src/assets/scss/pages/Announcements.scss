@@ -1,0 +1,89 @@
+.announcement {
+  border-radius: 12px !important;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  &__title-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__subtitle {
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  &__button {
+    font-size: 13px !important;
+    text-transform: none !important;
+    color: white !important;
+    border-radius: 8px !important;
+    background: black !important;
+    padding: 6px 12px !important;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__card {
+    border-radius: 12px !important;
+    border: 1px solid #dab2ff !important;
+    background-color: #faf5ff !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  &__card-title {
+    font-weight: 600;
+  }
+
+  &__tags {
+    display: flex;
+    gap: 6px !important;
+    .chip__one {
+      background-color: #d4183d;
+      color: white;
+    }
+    .chip__two {
+      background-color: #9810fa;
+      color: white;
+    }
+  }
+
+  &__description {
+    color: #4b5563;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  &__date {
+    color: #9ca3af;
+    font-size: 12px;
+  }
+}

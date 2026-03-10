@@ -19,30 +19,30 @@
 
 .modal-category {
   font-size: 13px;
-  // color: #777;
+  color: #fff;
   &.client {
     margin: 3px;
     padding: 4px 8px;
-    border: 2px solid #f17713;
+    border: 2px solid rgb(104, 49, 4);
     border-radius: 10px;
-    background-color: #e5b287;
+    background-color: #ff6900;
     opacity: 2;
   }
   &.internal {
     margin: 3px;
     padding: 4px 8px;
-    border: 2px solid #050661;
+    border: 2px solid rgb(6, 7, 35);
     border-radius: 10px;
-    background-color: #9e9fe3;
+    background-color: #2b7fff;
     opacity: 2;
   }
   &.executive {
     // color: white;
     margin: 3px;
     padding: 4px 8px;
-    border: 2px solid #19046d;
+    border: 2px solid #3c0569;
     border-radius: 10px;
-    background-color: #946eeb;
+    background-color: #ad46ff;
     opacity: 2;
   }
 }
@@ -87,4 +87,8 @@
     // background-color: red;
     padding: 4px 8px !important;
   }
+}
+
+.MuiDialog-root {
+  z-index: 1500 !important;
 }

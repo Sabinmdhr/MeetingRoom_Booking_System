@@ -36,46 +36,55 @@ const Calendar = () => {
     <section className="hero">
       {/* TOP BAR */}
       <div className="hero__topbar">
-        <div className="topbar-left">
-          <button onClick={goToPrev}>{"<"}</button>
-          <button onClick={goToToday}>Today</button>
-          <button onClick={goToNext}>{">"}</button>
+        <div className="topbar-main">
+          <div className="topbar-left">
+            <button onClick={goToPrev}>{"<"}</button>
+            <button onClick={goToToday}>Today</button>
+            <button onClick={goToNext}>{">"}</button>
+          </div>
+
+          <div className="topbar-center">
+            {currentMonth.format("MMMM YYYY")}
+          </div>
+
+          <Tabs
+            value={view}
+            onChange={(_, value) => setView(value)}
+            className="calendar-tabs"
+          >
+            <Tab
+              label="Day"
+              value="day"
+            />
+            <Tab
+              label="Week"
+              value="week"
+            />
+            <Tab
+              label="Month"
+              value="month"
+            />
+          </Tabs>
         </div>
 
-        <div className="topbar-center">{currentMonth.format("MMMM YYYY")}</div>
+        <div className="topbar-right-section">
+          <Button
+            variant="text"
+            className="meeting-button"
+            onClick={() => navigate("/book-room")}
+          >
+            + New Meeting
+          </Button>
 
-        <div className="topbar-right">
-          <div className="topbar-right-section">
-            <Tabs
-              value={view}
-              onChange={(_, value) => setView(value)}
-              className="calendar-tabs"
-            >
-              <Tab
-                label="Day"
-                value="day"
-              />
-              {}
-              <Tab
-                label="Week"
-                value="week"
-              />
-              <Tab
-                label="Month"
-                value="month"
-              />
-            </Tabs>
-            <div>
-              <Button
-                variant="text"
-                className="meeting-button"
-                onClick={() => {
-                  navigate("/book-room");
-                }}
-              >
-                + New Meeting
-              </Button>
-            </div>
+          <div className="meeting-category">
+            <div className="category internal"></div>
+            <span>Internal</span>
+
+            <div className="category client"></div>
+            <span>Client</span>
+
+            <div className="category executive"></div>
+            <span>Executive</span>
           </div>
         </div>
       </div>
@@ -130,6 +139,8 @@ const Calendar = () => {
                         onClick={() => openEvent(event)}
                       >
                         {event.title}
+                        <br />
+                        {event.startTime}
                       </div>
                     ))}
                   </div>
@@ -170,6 +181,8 @@ const Calendar = () => {
                           onClick={() => openEvent(event)}
                         >
                           {event.title}
+                          <br />
+                          {event.startTime}{" "}
                         </div>
                       ))}
                   </>

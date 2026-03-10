@@ -15,7 +15,7 @@ const meetingRooms: Meeting_room[] = [
     id: "2",
     title: "Mustang",
     participants: ["Sabin", "Sumanss"],
-    capacity: 1,
+    capacity: 10,
     available: false,
     features: ["Projector", "Whiteboard", "Video Conferencing", "Wi-Fi"],
     next_available_time: null,
@@ -23,7 +23,7 @@ const meetingRooms: Meeting_room[] = [
   },
   {
     id: "3",
-    title: "Ghnadruk",
+    title: "Ghandruk",
     participants: ["Sabin", "Sumanss"],
     capacity: 1,
     available: false,
@@ -33,6 +33,11 @@ const meetingRooms: Meeting_room[] = [
   },
 ];
 
+export const getMeetingRooms = async(): Promise<Meeting_room[]> =>{
+  await new Promise((resolve) => setTimeout(resolve, 300))
+  return meetingRooms;
+}
+
 export const getMeetingRoomById = async (id: string): Promise<Meeting_room> => {
   await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate network delay
   const room = meetingRooms.find((room) => room.id === id);
@@ -40,4 +45,4 @@ export const getMeetingRoomById = async (id: string): Promise<Meeting_room> => {
     throw new Error("Meeting room not found");
   }
   return room;
-}
+};
