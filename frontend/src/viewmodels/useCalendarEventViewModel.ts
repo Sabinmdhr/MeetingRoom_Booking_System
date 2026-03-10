@@ -41,7 +41,7 @@ export const useCalendarViewModel = () => {
     },
     {
       id: 3,
-      title: "DevOps Meeting",
+      title: "Frontend Dev Meeting",
       category: "Client",
       date: "2026-03-10",
       startTime: "10:00 AM",
@@ -49,8 +49,8 @@ export const useCalendarViewModel = () => {
       location: "Board Room 6A",
       organizer: "Sabin Manandhar",
       participants: [],
-      description: "Devops sync meeting.",
-      department: "Sales",
+      description: "Frontend sync meeting.",
+      department: "Engineering",
     },
   ];
 

@@ -25,6 +25,8 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
       onClose={onClose}
       fullWidth
       maxWidth="xs"
+      container={document.body}
+      disableScrollLock
     >
       <DialogTitle className="calendar-modal-title">
         <h2 className="modal-title">{event.title}</h2>

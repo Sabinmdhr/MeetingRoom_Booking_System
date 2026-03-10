@@ -1,0 +1,36 @@
+.meeting-table {
+    margin-top: 20px;
+  border-radius: 15px !important;
+
+  &__header {
+    padding-bottom: 12px;
+  }
+
+  &__subtitle {
+    color: #6b7280;
+    margin-top: 4px;
+  }
+
+  &__paper {
+    margin-top: 30px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &__container {
+    max-height: 440px;
+  }
+
+  &__head {
+    font-weight: 600;
+    background-color: #e5e7eb !important;
+  }
+
+  .MuiTableRow-root:hover {
+    background-color: #f8fafc;
+  }
+
+  .MuiTableCell-root {
+    font-size: 14px;
+  }
+}

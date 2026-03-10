@@ -15,7 +15,7 @@ const meetingRooms: Meeting_room[] = [
     id: "2",
     title: "Conference Room B",
     participants: ["Sabin", "Sumanss"],
-    capacity: 1,
+    capacity: 10,
     available: false,
     features: ["Projector", "Whiteboard", "Video Conferencing", "Wi-Fi"],
     next_available_time: null,
@@ -29,7 +29,7 @@ const meetingRooms: Meeting_room[] = [
     available: false,
     features: ["Projector", "Whiteboard", "Video Conferencing"],
     next_available_time: null,
-    next_booking_time: "5:00PM",
+    next_booking_time: "5:00PM",  
   },
 ];
 
@@ -40,4 +40,4 @@ export const getMeetingRoomById = async (id: string): Promise<Meeting_room> => {
     throw new Error("Meeting room not found");
   }
   return room;
-}
+};
