@@ -1,0 +1,18 @@
+.name-Col{
+  display: flex;
+  flex-direction: column;
+
+  .fullname{
+    // color: red;
+    font-weight: 400;
+  }
+  .role{
+    color: #957282;
+    font-size: var(--labelSmallSize) !important;
+  }
+}
+
+.department-chip{
+  background-color: transparent !important;
+  border: 0.1px solid #E5E5E5 !important;
+}

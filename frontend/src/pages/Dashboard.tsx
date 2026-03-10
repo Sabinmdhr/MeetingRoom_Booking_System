@@ -3,8 +3,8 @@ import "../assets/scss/pages/Dashboard.scss";
 import DashboardCard from "../components/DashboardCard";
 
 export default function Dashboard() {
-  const accesstoken = localStorage.getItem("accesstoken");
-  if (!accesstoken) {
+  const accessToken = localStorage.getItem("accesstoken");
+  if (!accessToken) {
     window.location.href = "/";
     return null;
   }
