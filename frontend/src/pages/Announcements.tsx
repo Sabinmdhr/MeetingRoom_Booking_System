@@ -3,6 +3,7 @@ import { Megaphone } from "lucide-react";
 import "../assets/scss/pages/Announcements.scss";
 import { useState } from "react";
 import AnnouncementModal from "../components/AnnouncementModal";
+import "../assets/scss/global.scss";
 
 const announcements = [
   {
@@ -35,7 +36,7 @@ const Announcements = () => {
   const handleClose = () => setOpen(false);
 
   return (
-    <div>
+    <div className="announcement__main">
       <Card className="announcement">
         {/* Main Card Header */}
         <CardContent className="announcement__header">

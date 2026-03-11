@@ -1,66 +1,67 @@
-.settings{
-    padding: 0px 10px;
+.settings {
+  padding: 0px 10px;
+  font-family: var(--titleMediumFont);
 
-.settings-title{
+  .settings-title {
     font-weight: 600;
-    font-family: Arial, Helvetica, sans-serif;
-}
+    // font-family: Arial, Helvetica, sans-serif;
+  }
 
-.settings-subtitle{
-    color: #4A5565;
+  .settings-subtitle {
+    color: #4a5565;
     margin-bottom: 22px !important;
-}
+  }
 
-.settings-card{
+  .settings-card {
     width: 100%;
     padding: 22px;
     border-radius: 14px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-}
+  }
 
-.settings-header{
+  .settings-header {
     font-size: 18px;
     font-weight: 300px;
-}
+  }
 
-.name{
+  .name {
     display: flex;
     gap: 20px;
-}
+  }
 
-.field {
+  .field {
     display: flex;
     flex-direction: column;
     gap: 4px;
-}
-.field-label {
+  }
+  .field-label {
     font-size: 15px;
     font-weight: 300;
     color: black;
-}
+  }
 
-.settings-btn{
+  .settings-btn {
     background-color: black;
     color: white;
     margin-top: 15px;
     border-radius: 8px;
-}
+  }
 
-.MuiTextField-root{
-    background: #F3F3F5;
+  .MuiTextField-root {
+    background: #f3f3f5;
     border-radius: 8px;
 
-    .MuiOutlinedInput-root{
+    .MuiOutlinedInput-root {
       border-radius: 8px;
 
-      fieldset{
-        border-color: #F3F3F5 !important;
+      fieldset {
+        border-color: #f3f3f5 !important;
       }
-      &:hover fieldset{
+      &:hover fieldset {
         border: #d5d9de !important;
       }
       &.Mui-focused fieldset {
-        border:3px  solid #d5d9de!important;
+        border: 3px solid #d5d9de !important;
       }
       input,
       textarea {
@@ -68,59 +69,59 @@
         color: #2f2f2f !important;
       }
     }
-}
+  }
 
-.second-card{
+  .second-card {
     width: 100%;
     padding: 22px;
     border-radius: 14px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
     margin-top: 30px;
-}
+  }
 
-.second-header{
+  .second-header {
     font-size: 20px;
     font-weight: 300px;
     display: flex;
     gap: 6px;
     margin-bottom: 15px;
-}
+  }
 
-.settings-notification{
+  .settings-notification {
     display: flex;
     flex-direction: column;
-}
+  }
 
-.notification-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 0;
-}
+  .notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+  }
 
-.notification-icon {
-  margin-top: 8px;
-  color: #6A7282;
-}
+  .notification-icon {
+    margin-top: 8px;
+    color: #6a7282;
+  }
 
-.email {
-  display: flex;
-  flex-direction: column;
-}
+  .email {
+    display: flex;
+    flex-direction: column;
+  }
 
-.title {
-  font-weight: 600;
-}
+  .title {
+    font-weight: 600;
+  }
 
-.subtitle {
-  font-size: 14px;
-  color: #777;
-}
+  .subtitle {
+    font-size: 14px;
+    color: #777;
+  }
 
-.settings-notification hr {
-  border: none;
-  height: 1px;
-  background-color: #d5d9de;
-  margin: 4px 0;
-}
+  .settings-notification hr {
+    border: none;
+    height: 1px;
+    background-color: #d5d9de;
+    margin: 4px 0;
+  }
 }

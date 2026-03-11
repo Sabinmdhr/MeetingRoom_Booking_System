@@ -26,7 +26,9 @@ import SelectTimeCard from "../components/BookingRooms/SelectTimeCard";
 
 const BookRoom = () => {
   const [meetingType, setMeetingType] = useState<string>("");
-  const [participantType, setParticipantType] = useState<"internal" | "external" | null >(null);
+  const [participantType, setParticipantType] = useState<
+    "internal" | "external" | null
+  >(null);
   const menuItemOptions = [
     { value: "Internal", label: "Internal" },
     { value: "Client", label: "Client" },
@@ -36,28 +38,28 @@ const BookRoom = () => {
   const [roomId, setRoomId] = useState("");
   const [selectedRoom, setSelectedRoom] = useState<Meeting_room | null>(null);
   const [openTime, setOpenTime] = useState(false);
-  const [startTime, setStartTime]= useState("");
-  const [endTime, setEndTime]= useState<string | null >(null);
-  const [timeType, setTimeType] = useState< "start" | "end" | null>(null)
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState<string | null>(null);
+  const [timeType, setTimeType] = useState<"start" | "end" | null>(null);
 
   const handleInternalClick = () => {
     setParticipantType((prev) => (prev === "internal" ? null : "internal"));
-  }
+  };
   const handleExternalClick = () => {
     setParticipantType((prev) => (prev === "external" ? null : "external"));
-  }
+  };
 
-  const handleSelectTime = (time:string) =>{
-    if(timeType === "start"){
+  const handleSelectTime = (time: string) => {
+    if (timeType === "start") {
       setStartTime(time);
       setEndTime("");
     }
 
-    if(timeType === "end"){
+    if (timeType === "end") {
       setEndTime(time);
     }
     setOpenTime(false);
-  }
+  };
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -80,7 +82,10 @@ const BookRoom = () => {
       <form className="bookroom-form">
         <Card className="bookroom-card">
           <div className="bookroom-header">
-            <Typography variant="h6" className="title">
+            <Typography
+              variant="h6"
+              className="title"
+            >
               Book a Meeting Room
             </Typography>
             <Typography className="subtitle">
@@ -100,7 +105,11 @@ const BookRoom = () => {
               </div>
               <div className="field">
                 <p className="field-label">Date *</p>
-                <TextField type="date" fullWidth size="small" />
+                <TextField
+                  type="date"
+                  fullWidth
+                  size="small"
+                />
               </div>
               <div className="time">
                 <div className="field">
@@ -110,13 +119,13 @@ const BookRoom = () => {
                     fullWidth
                     size="small"
                     value={startTime}
-                    onClick={() =>
-                      {setTimeType("start");
+                    onClick={() => {
+                      setTimeType("start");
                       setOpenTime(true);
                     }}
                     slotProps={{
                       htmlInput: {
-                        readOnly: true, 
+                        readOnly: true,
                       },
                       input: {
                         endAdornment: (
@@ -135,13 +144,13 @@ const BookRoom = () => {
                     fullWidth
                     size="small"
                     value={endTime || ""}
-                    onClick={() =>{
+                    onClick={() => {
                       setTimeType("end");
                       setOpenTime(true);
                     }}
                     slotProps={{
                       htmlInput: {
-                        readOnly: true, 
+                        readOnly: true,
                       },
                       input: {
                         endAdornment: (
@@ -155,13 +164,12 @@ const BookRoom = () => {
                 </div>
               </div>
 
-            
-              <SelectTimeCard 
-              open= {openTime}
-              onClose={() => setOpenTime(false)}
-              onSelectTime= {handleSelectTime}
-              startTime={startTime}
-              type={timeType}
+              <SelectTimeCard
+                open={openTime}
+                onClose={() => setOpenTime(false)}
+                onSelectTime={handleSelectTime}
+                startTime={startTime}
+                type={timeType}
               />
 
               <div className="field">
@@ -240,7 +248,10 @@ const BookRoom = () => {
             <div className="bookroom-right">
               <div className="field">
                 <p className="field-label">Select Room *</p>
-                <FormControl fullWidth size="small">
+                <FormControl
+                  fullWidth
+                  size="small"
+                >
                   <Select
                     className="select-room"
                     displayEmpty
@@ -255,7 +266,10 @@ const BookRoom = () => {
                     }}
                   >
                     {rooms.map((room) => (
-                      <MenuItem key={room.id} value={room.id}>
+                      <MenuItem
+                        key={room.id}
+                        value={room.id}
+                      >
                         {room.title}
                       </MenuItem>
                     ))}

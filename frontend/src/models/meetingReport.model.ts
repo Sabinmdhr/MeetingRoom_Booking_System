@@ -7,6 +7,8 @@ export interface Meeting {
   duration: string;
   user: string;
   department: string;
+  createdVia: string;
+  createdAt: string;
 }
 
 export interface Column {
@@ -18,6 +20,8 @@ export interface Column {
     | "end"
     | "duration"
     | "user"
-    | "department";
+    | "department"
+    | "createdVia"
+    | "createdAt";
   label: string;
 }

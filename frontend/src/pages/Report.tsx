@@ -12,15 +12,20 @@ import {
   TableRow,
   Typography,
   Chip,
+  Button,
 } from "@mui/material";
 
 import { useMeetingTableViewModel } from "../viewmodels/useMeetingReportViewModel";
 
 import "../assets/scss/pages/Report.scss";
+import { Settings2 } from "lucide-react";
+import ReportColumns from "../components/ReportColumns";
+import { useState } from "react";
 
 export default function MeetingTable() {
+  const [value, setValue] = useState(false);
   const vm = useMeetingTableViewModel();
-
+  // console.log(vm.columns);
   return (
     <div>
       <div>
@@ -33,15 +38,30 @@ export default function MeetingTable() {
         </Typography>
       </div>
       <Card className="meeting-table">
-        <CardContent className="meeting-table__header">
-          <Typography variant="h6">Report Data</Typography>
+        <CardContent>
+          <div className="meeting-table__header">
+            <div>
+              <Typography variant="h6">Report Data</Typography>
 
-          <Typography
-            variant="body2"
-            className="meeting-table__subtitle"
-          >
-            2026-01-01 to 2026-01-31 • {vm.rows.length} results
-          </Typography>
+              <Typography
+                variant="body2"
+                className="meeting-table__subtitle"
+              >
+                2026-01-01 to 2026-01-31 • {vm.rows.length} results
+              </Typography>
+            </div>
+
+            <Button
+              onClick={() => setValue(!value)}
+              variant="contained"
+              className="meeting-table__button"
+            >
+              <Settings2 />
+              Columns
+            </Button>
+          </div>
+
+          {value ? <ReportColumns /> : ""}
         </CardContent>
 
         <Divider />
@@ -63,10 +83,10 @@ export default function MeetingTable() {
               </TableHead>
 
               <TableBody>
-                {vm.paginatedRows.map((row, index) => (
+                {vm.paginatedRows.map((row) => (
                   <TableRow
                     hover
-                    key={index}
+                    key={`${row.title}-${row.start}`}
                   >
                     {vm.columns.map((column) => {
                       const value = row[column.id];
