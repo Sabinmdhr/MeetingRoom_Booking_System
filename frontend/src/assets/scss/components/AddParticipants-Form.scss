@@ -1,0 +1,39 @@
+.addParticipants-Form__Container{
+  margin: 20px 0 !important;
+  border-radius: 16px !important;
+  border: 2px solid #BEDBFF   ;
+}
+.add-btn{
+  background-color: black !important;
+  color: white !important;
+  text-transform: none !important;
+  font-weight: 500;
+  display: flex;
+  gap: 8px;
+    border-radius: 8px !important;
+
+  margin-left: 18px !important;
+}
+
+.customTextField{
+  margin-top: 8px !important;
+  // border: ;
+    // margin-top: 8px;
+    // border-radius: 12px;
+       input{
+        padding: 8px 12px;
+        border-radius: 12px;
+    background-color: #F3F3F5;
+       }
+       fieldset{
+        outline: none;
+        border-radius: 12px;
+    border: none !important;
+
+       }
+        input:focus + fieldset,
+  &:focus-within fieldset {
+    border: 1px solid #A1A1A1 ;
+    box-shadow: 0 0 0 2px #CFCFCF;
+  }
+}

@@ -1,4 +1,4 @@
-import { CircularProgress, Dialog, DialogContent,  DialogTitle, Typography, } from "@mui/material";
+import {  Dialog, DialogContent,  DialogTitle, Typography, } from "@mui/material";
 import TimeSlotsCard from "../Meeting-Rooms/TimeSlotsCard"
 import { Calendar, Users, X} from "lucide-react";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
@@ -11,11 +11,11 @@ import "../../assets/scss/components/Meeting_roomCard-Details.scss";
 }
 
 export const Meeting_roomCardDetails = ({ meetingId, open, onClose }: Meeting_roomCardDetailsProps) => {
-    const { meeting, loading, error } = useMeetingCardViewModel(meetingId);
+    const { meeting } = useMeetingCardViewModel(meetingId);
 
-    if (loading) return <CircularProgress />;
-    if (error) return <div>Error: {error}</div>;
-    if (!meeting) return <div>No meeting room details available.</div>;
+    // if (loading) return <CircularProgress />;
+    // if (error) return <div>Error: {error}</div>;
+    if (!meeting) return ;
 
     return (
       <div>

@@ -12,6 +12,8 @@ import {
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import "../../assets/scss/components/Participants-Table.scss"
 import "../../assets/scss/global.scss"
+import { Mail, Phone } from "lucide-react";
+import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 export const ParticipantsTable = () => {
   const { participants, columns } =
     useparticipantsViewModel();
@@ -54,12 +56,12 @@ export const ParticipantsTable = () => {
                   case "contact":
                     return (
                       <TableCell key={col.id}>
-                        <div
-
-                        >
-                          <Typography>{participant.email}</Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {participant.phoneNumber}
+                        <div className="Contact">
+                          <Typography className="email">
+                           <Mail size={12}/> {participant.email}
+                            </Typography>
+                          <Typography className="number" variant="body2" color="text.secondary">
+                        <Phone size={12}/>    {participant.phoneNumber}
                           </Typography>
                         </div>
                       </TableCell>

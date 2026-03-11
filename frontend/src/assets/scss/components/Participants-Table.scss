@@ -16,3 +16,19 @@
   background-color: transparent !important;
   border: 0.1px solid #E5E5E5 !important;
 }
+
+.Contact{
+  display: flex;
+  flex-direction: column;
+
+
+  .email, .number{
+    color: #4A5592;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    // justify-content: center;
+    font-size: var(--labelSmallSize);
+  }
+}
+

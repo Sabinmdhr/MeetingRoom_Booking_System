@@ -1,4 +1,4 @@
-import { Card, CardContent, CircularProgress, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import "../../assets/scss/components/Meeting_roomCard.scss";
 import "../../assets/scss/global.scss";
@@ -10,9 +10,9 @@ interface MeetingCardProps {
 }
 
 export const Meeting_roomCard = ({ meetingId }: MeetingCardProps) => {
-  const { meeting, loading, error } = useMeetingCardViewModel(meetingId);
+  const { meeting,  error } = useMeetingCardViewModel(meetingId);
   const [openDetails, setOpenDetails] = useState(false);
-  if (loading) return <CircularProgress />;
+  // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!meeting) return null;
 
