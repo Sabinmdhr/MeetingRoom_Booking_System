@@ -9,12 +9,12 @@ interface RoomDetailsCardProps {
   room: Meeting_room | null;
 }
 
-const featureIcons: Record<string, any> ={
-  "Projector": <Projector size={12} />,
-    "Whiteboard": <Presentation size={12} />,
-    "Video Conferencing": <TvMinimal size={12} />,
-    "Wi-Fi": <Wifi size={12} />,
-}
+const featureIcons: Record<string, any> = {
+  Projector: <Projector size={12} />,
+  Whiteboard: <Presentation size={12} />,
+  "Video Conferencing": <TvMinimal size={12} />,
+  "Wi-Fi": <Wifi size={12} />,
+};
 
 const RoomDetailsCard = ({ room }: RoomDetailsCardProps) => {
   if (!room) return null;
@@ -32,38 +32,48 @@ const RoomDetailsCard = ({ room }: RoomDetailsCardProps) => {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <LocationOnOutlinedIcon sx={{mb: 2 }}/>
-        <Typography variant="h6" sx={{mb: 2 , fontSize: 17, fontWeight: 600 }}>
+        <LocationOnOutlinedIcon sx={{ mb: 2 }} />
+        <Typography variant="h6" sx={{ mb: 2, fontSize: 17, fontWeight: 600 }}>
           Room Details
         </Typography>
       </Box>
       <Box className="room-box">
-      <Typography variant="body2" sx={{color:'grey'}}>Room Name</Typography>
-      <Typography variant="body2" fontWeight="bold">
-        {room.title}
-      </Typography>
+        <Typography variant="body2" sx={{ color: "grey" }}>
+          Room Name
+        </Typography>
+        <Typography variant="body2" fontWeight="bold">
+          {room.title}
+        </Typography>
       </Box>
-      <Box className="room-box" sx={{mt:1}}>
-      <Typography variant="body2" sx={{color:'grey'}}>
-        Capacity 
-      </Typography>
-      <Typography variant="body2" fontWeight="bold" sx={{display:"flex", justifyContent:"center",}}>
-        <PeopleAltOutlinedIcon  />
-        <div style={{ marginTop:"4px"}}> {room.capacity} people</div>
-       
-      </Typography>
+      <Box className="room-box" sx={{ mt: 1 }}>
+        <Typography variant="body2" sx={{ color: "grey" }}>
+          Capacity
+        </Typography>
+        <Typography
+          variant="body2"
+          fontWeight="bold"
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          <PeopleAltOutlinedIcon />
+          <div style={{ marginTop: "4px" }}> {room.capacity} people</div>
+        </Typography>
       </Box>
       <hr />
-      <Typography variant="body2" sx={{ mt:1, mb:1, fontSize: 14, fontWeight: 600, color:'grey'}}>
+      <Typography
+        variant="body2"
+        sx={{ mt: 1, mb: 1, fontSize: 14, fontWeight: 600, color: "grey" }}
+      >
         AVAILABLE RESOURCES
       </Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap">
         {room.features.map((feature) => (
-          <Chip key={feature} label={feature} icon={featureIcons[feature]} size="small" />
+          <Box key={feature} sx={{ width: "calc(50% - 8px)" }}>
+            <Chip label={feature} icon={featureIcons[feature]} size="small" />
+          </Box>
         ))}
       </Stack>
     </Card>
-  )
-}
+  );
+};
 
 export default RoomDetailsCard;

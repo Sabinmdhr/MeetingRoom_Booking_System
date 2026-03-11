@@ -1,0 +1,41 @@
+.report-columns {
+  margin: 8px;
+  border: 2px solid #bedbff;
+  border-radius: 14px !important;
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600 !important;
+  }
+
+  &__buttons {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__buttons button {
+    text-transform: capitalize;
+    padding: 12px;
+    border: none;
+    color: #1c398e;
+    height: 40px;
+    border-radius: 10px;
+    flex: 0 0 calc(25% - 12px); // 4 buttons per row
+    justify-content: flex-start;
+    background-color: #dbeafe;
+  }
+
+  .active {
+    background-color: #dbeafe;
+    color: #1c398e;
+  }
+
+  .inactive {
+    background-color: #f3f4f6;
+    color: #4a5578;
+  }
+}

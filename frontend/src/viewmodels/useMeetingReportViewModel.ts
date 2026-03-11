@@ -10,6 +10,8 @@ export const columns: Column[] = [
   { id: "duration", label: "Duration" },
   { id: "user", label: "User" },
   { id: "department", label: "Department" },
+  { id: "createdVia", label: "Created Via" },
+  { id: "createdAt", label: "Created At" },
 ];
 
 const initialRows: Meeting[] = [
@@ -22,6 +24,8 @@ const initialRows: Meeting[] = [
     duration: "01:00",
     user: "David Kim",
     department: "Engineering",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -32,6 +36,8 @@ const initialRows: Meeting[] = [
     duration: "00:32",
     user: "Michael Chen",
     department: "Sales",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -42,6 +48,8 @@ const initialRows: Meeting[] = [
     duration: "00:12",
     user: "James Taylor",
     department: "Finance",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -52,6 +60,8 @@ const initialRows: Meeting[] = [
     duration: "01:00",
     user: "Sarah Johnson",
     department: "Engineering",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -62,6 +72,8 @@ const initialRows: Meeting[] = [
     duration: "01:00",
     user: "Amanda Wilson",
     department: "Marketing",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -72,6 +84,8 @@ const initialRows: Meeting[] = [
     duration: "00:15",
     user: "Emily Rodriguez",
     department: "Engineering",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -82,6 +96,8 @@ const initialRows: Meeting[] = [
     duration: "00:12",
     user: "Jennifer Williams",
     department: "Product",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -92,6 +108,8 @@ const initialRows: Meeting[] = [
     duration: "00:12",
     user: "Jennifer Williams",
     department: "Product",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -102,6 +120,8 @@ const initialRows: Meeting[] = [
     duration: "00:12",
     user: "Jennifer Williams",
     department: "Product",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -112,6 +132,8 @@ const initialRows: Meeting[] = [
     duration: "00:12",
     user: "Jennifer Williams",
     department: "Product",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -122,6 +144,8 @@ const initialRows: Meeting[] = [
     duration: "00:12",
     user: "Jennifer Williams",
     department: "Product",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
   {
     status: "current",
@@ -132,6 +156,8 @@ const initialRows: Meeting[] = [
     duration: "00:12",
     user: "Jennifer Williams",
     department: "Product",
+    createdVia: "desktop",
+    createdAt: "2026-01-23 11:08",
   },
 ];
 
