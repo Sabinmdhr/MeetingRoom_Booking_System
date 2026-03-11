@@ -17,9 +17,11 @@ import {
   getMeetingRooms,
 } from "../services/Meetinf_room.service";
 import RoomDetailsCard from "../components/BookingRooms/RoomDetailsCard";
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
+import "../assets/scss/global.scss";
+
 // import LocationOnIcon from "@mui/icons-material/LocationOn";
 // import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 // import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -28,7 +30,9 @@ import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 
 const BookRoom = () => {
   const [meetingType, setMeetingType] = useState<string>("");
-  const [participantType, setParticipantType] = useState< "internal"| "external" | null>(null);
+  const [participantType, setParticipantType] = useState<
+    "internal" | "external" | null
+  >(null);
   const menuItemOptions = [
     { value: "Internal", label: "Internal" },
     { value: "Client", label: "Client" },
@@ -38,18 +42,18 @@ const BookRoom = () => {
   const [roomId, setRoomId] = useState("");
   const [selectedRoom, setSelectedRoom] = useState<Meeting_room | null>(null);
 
-  const handleInternalClick = ()=>{
-    setParticipantType((prev) => (prev === "internal"? null : "internal"))
-  }
-  const handleExternalClick= () =>{
-    setParticipantType((prev)=> (prev === "external"? null : "external"))
-  }
+  const handleInternalClick = () => {
+    setParticipantType((prev) => (prev === "internal" ? null : "internal"));
+  };
+  const handleExternalClick = () => {
+    setParticipantType((prev) => (prev === "external" ? null : "external"));
+  };
 
   useEffect(() => {
     const fetchRooms = async () => {
       const data = await getMeetingRooms();
       setRooms(data);
-    }
+    };
 
     fetchRooms();
   }, []);
@@ -59,14 +63,17 @@ const BookRoom = () => {
 
     const roomData = await getMeetingRoomById(id);
     setSelectedRoom(roomData);
-  }
+  };
 
   return (
     <div className="bookroom">
       <form className="bookroom-form">
         <Card className="bookroom-card">
           <div className="bookroom-header">
-            <Typography variant="h6" className="title">
+            <Typography
+              variant="h6"
+              className="title"
+            >
               Book a Meeting Room
             </Typography>
             <Typography className="subtitle">
@@ -86,12 +93,20 @@ const BookRoom = () => {
               </div>
               <div className="field">
                 <p className="field-label">Date *</p>
-                <TextField type="date" fullWidth size="small" />
+                <TextField
+                  type="date"
+                  fullWidth
+                  size="small"
+                />
               </div>
               <div className="time">
                 <div className="field">
                   <p className="field-label">Start Time *</p>
-                  <TextField type="time" fullWidth size="small" />
+                  <TextField
+                    type="time"
+                    fullWidth
+                    size="small"
+                  />
 
                   {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
@@ -105,7 +120,11 @@ const BookRoom = () => {
                 </div>
                 <div className="field">
                   <p className="field-label">End Time *</p>
-                  <TextField type="time" fullWidth size="small" />
+                  <TextField
+                    type="time"
+                    fullWidth
+                    size="small"
+                  />
                 </div>
               </div>
 
@@ -125,7 +144,7 @@ const BookRoom = () => {
                           <span style={{ color: "#9aa0a6", fontSize: "14px" }}>
                             Select meeting type
                           </span>
-                        )
+                        );
                       }
                       return selected as string;
                     },
@@ -142,31 +161,33 @@ const BookRoom = () => {
                 <Typography className="subtitle">
                   Add internal team members or external guests to the meeting
                 </Typography>
-                <Box sx={{display:'flex', gap:1}}>
-                <Button
-                  className="participants-btn"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                  startIcon={<PeopleAltOutlinedIcon />}
-                  onClick={handleInternalClick}
-                >
-                  {participantType==="internal" ? "Hide Internal" : "Add Internal"}
-                </Button>
-                <Button
-                  className="participants-btn"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                  startIcon={<PersonAddAltOutlinedIcon />}
-                  onClick={handleExternalClick}
-                >
-                  {participantType==="external" ? "Hide External" : "Add External"}
-                </Button>
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Button
+                    className="participants-btn"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    startIcon={<PeopleAltOutlinedIcon />}
+                    onClick={handleInternalClick}
+                  >
+                    {participantType === "internal"
+                      ? "Hide Internal"
+                      : "Add Internal"}
+                  </Button>
+                  <Button
+                    className="participants-btn"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    startIcon={<PersonAddAltOutlinedIcon />}
+                    onClick={handleExternalClick}
+                  >
+                    {participantType === "external"
+                      ? "Hide External"
+                      : "Add External"}
+                  </Button>
                 </Box>
-                {participantType && (
-                  <ParticipantsCard type={participantType}/>
-                )}
+                {participantType && <ParticipantsCard type={participantType} />}
               </div>
 
               <div className="field">
@@ -183,9 +204,12 @@ const BookRoom = () => {
             <div className="bookroom-right">
               <div className="field">
                 <p className="field-label">Select Room *</p>
-                <FormControl fullWidth size="small">
+                <FormControl
+                  fullWidth
+                  size="small"
+                >
                   <Select
-                  className="select-room"
+                    className="select-room"
                     displayEmpty
                     value={roomId}
                     onChange={(e) => handleRoomChange(e.target.value)}
@@ -198,7 +222,10 @@ const BookRoom = () => {
                     }}
                   >
                     {rooms.map((room) => (
-                      <MenuItem key={room.id} value={room.id}>
+                      <MenuItem
+                        key={room.id}
+                        value={room.id}
+                      >
                         {room.title}
                       </MenuItem>
                     ))}

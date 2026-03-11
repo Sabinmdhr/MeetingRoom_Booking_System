@@ -9,6 +9,7 @@ import {
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import type { CalendarEvent } from "../models/calendar.model";
 import "../assets/scss/pages/CalendarModal.scss";
+import "../assets/scss/global.scss";
 
 interface CalendarModalProps {
   open: boolean;
@@ -21,6 +22,7 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
 
   return (
     <Dialog
+      className="calendar-modal-main"
       open={open}
       onClose={onClose}
       fullWidth

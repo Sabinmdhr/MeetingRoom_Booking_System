@@ -5,11 +5,15 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Switch from "@mui/material/Switch";
+import "../assets/scss/global.scss";
 
 const Settings = () => {
   return (
     <div className="settings">
-      <Typography variant="h5" className="settings-title">
+      <Typography
+        variant="h5"
+        className="settings-title"
+      >
         Settings
       </Typography>
       <Typography className="settings-subtitle">
@@ -20,27 +24,52 @@ const Settings = () => {
         <div className="settings-header">Profile Information</div>
         <div className="name">
           <div className="field">
-            <p className="field-label">First Name</p>
-            <TextField fullWidth size="small" />
+            <label
+              className="field-label"
+              htmlFor="firstName"
+            >
+              First Name
+            </label>
+            <TextField
+              id="firstName"
+              fullWidth
+              size="small"
+            />
           </div>
           <div className="field">
             <p className="field-label">Last Name</p>
-            <TextField fullWidth size="small" />
+            <TextField
+              fullWidth
+              size="small"
+            />
           </div>
         </div>
         <div className="field">
           <p className="field-label">Email Address</p>
-          <TextField fullWidth size="small" />
+          <TextField
+            fullWidth
+            size="small"
+          />
         </div>
         <div className="field">
           <p className="field-label">Phone Number</p>
-          <TextField fullWidth size="small" />
+          <TextField
+            fullWidth
+            size="small"
+          />
         </div>
         <div className="field">
           <p className="field-label">Department</p>
-          <TextField fullWidth size="small" />
+          <TextField
+            fullWidth
+            size="small"
+          />
         </div>
-        <Button className="settings-btn" variant="contained" size="small">
+        <Button
+          className="settings-btn"
+          variant="contained"
+          size="small"
+        >
           Save Changes
         </Button>
       </Card>

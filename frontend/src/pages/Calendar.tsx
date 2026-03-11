@@ -6,6 +6,8 @@ import { useCalendarViewModel } from "../viewmodels/useCalendarEventViewModel";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import "../assets/scss/global.scss";
+
 const Calendar = () => {
   const navigate = useNavigate();
   const {
