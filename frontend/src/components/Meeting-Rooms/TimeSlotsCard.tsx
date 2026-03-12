@@ -3,9 +3,10 @@ import { useTimeSlotsViewModel } from "../../viewmodels/useTimeSlotsViewModel";
 import { Clock } from "lucide-react";
 import "../../assets/scss/components/TimeSlotsCard.scss"
 import "../../assets/scss/global.scss"
-const TimeSlotSelector = () => {
+
+const TimeSlotSelector = ({roomId}: {roomId:string}) => {
   const { slots, selectedSlot, selectSlot, confirmBooking } =
-    useTimeSlotsViewModel();
+    useTimeSlotsViewModel(roomId);
 
   return (
     <>
