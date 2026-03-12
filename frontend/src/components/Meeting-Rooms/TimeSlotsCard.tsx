@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Button, Box } from "@mui/material";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 import { useTimeSlotsViewModel } from "../../viewmodels/useTimeSlotsViewModel";
 import { Clock } from "lucide-react";
 import "../../assets/scss/components/TimeSlotsCard.scss"
