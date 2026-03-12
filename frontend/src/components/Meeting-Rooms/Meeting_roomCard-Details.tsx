@@ -48,7 +48,7 @@ export const Meeting_roomCardDetails = ({ meetingId, open, onClose }: Meeting_ro
             </div>
             <div className="timeSlots">
               <Typography>TODAY'S SCHEDULE</Typography>
-              <TimeSlotsCard/>
+              <TimeSlotsCard roomId={meetingId} />
             </div>
           </DialogContent>
         </Dialog>

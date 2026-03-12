@@ -5,7 +5,7 @@ type SeclectTimeCardProps = {
   open: boolean;
   onClose: () => void;
   onSelectTime: (time: string) => void;
-  type: "start" | "end";
+  type: "start" | "end" | null;
   startTime?: string;
 };
 

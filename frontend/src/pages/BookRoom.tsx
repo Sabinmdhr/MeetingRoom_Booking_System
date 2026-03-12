@@ -11,24 +11,21 @@ import {
   Box,
   InputAdornment,
 } from "@mui/material";
+import { Users, UserPlus } from 'lucide-react';
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import type { Meeting_room } from "../models/Meeting_room.model";
 import {
-  getMeetingRoomById,
+  getMeetingRoomById, 
   getMeetingRooms,
 } from "../services/Meetinf_room.service";
 import RoomDetailsCard from "../components/BookingRooms/RoomDetailsCard";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 import SelectTimeCard from "../components/BookingRooms/SelectTimeCard";
 
 const BookRoom = () => {
   const [meetingType, setMeetingType] = useState<string>("");
-  const [participantType, setParticipantType] = useState<
-    "internal" | "external" | null
-  >(null);
+  const [participantType, setParticipantType] = useState< "internal" | "external" | null >(null);
   const menuItemOptions = [
     { value: "Internal", label: "Internal" },
     { value: "Client", label: "Client" },
@@ -211,7 +208,7 @@ const BookRoom = () => {
                     fullWidth
                     variant="outlined"
                     size="small"
-                    startIcon={<PeopleAltOutlinedIcon />}
+                    startIcon={<Users size={18} />}
                     onClick={handleInternalClick}
                   >
                     {participantType === "internal"
@@ -223,7 +220,7 @@ const BookRoom = () => {
                     fullWidth
                     variant="outlined"
                     size="small"
-                    startIcon={<PersonAddAltOutlinedIcon />}
+                    startIcon={<UserPlus size={18} />}
                     onClick={handleExternalClick}
                   >
                     {participantType === "external"
