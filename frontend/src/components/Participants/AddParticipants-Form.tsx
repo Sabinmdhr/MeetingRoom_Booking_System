@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
-import { Plus, X } from "lucide-react";
+import { Plus, Save, X } from "lucide-react";
 import "../../assets/scss/global.scss";
 import "../../assets/scss/components/AddParticipants-Form.scss";
 export const AddParticipantsForm = () => {
@@ -40,7 +40,7 @@ export const AddParticipantsForm = () => {
           <CardHeader
             className="title"
             title="Add New Participant"
-            action={<X onClick={handleClose} />}
+            action={<X size={18} onClick={handleClose} />}
           ></CardHeader>
 
           <CardContent>
@@ -107,9 +107,9 @@ export const AddParticipantsForm = () => {
               </Grid>
             </Grid>
           </CardContent>
-          <CardActions>
-            <Button onClick={handleClose}>Close</Button>
-            <Button onClick={handleAddParticipant}>Add</Button>
+          <CardActions className="form-btns">
+            <Button onClick={handleClose} variant="outlined" className="cancel-btn">Cancel</Button>
+            <Button onClick={handleAddParticipant} className="add-btn"> <Save size={16}/> Add Participant</Button>
           </CardActions>
         </Card>
       )}

@@ -2,10 +2,12 @@ import "../assets/scss/pages/Participants.scss";
 import "../assets/scss/global.scss";
 import { FolderPlus, SquarePen, Users } from "lucide-react";
 import { ParticipantsTable } from "../components/Participants/Participants-Table";
-import { Button, Card, CardContent, CardHeader, dividerClasses } from "@mui/material";
+import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import { useState } from "react";
 import { AddParticipantsForm } from "../components/Participants/AddParticipants-Form";
 import { useAddParticipantsViewModel } from "../viewmodels/useAddParticipantsViewModel";
+import { GroupCard } from "../components/Participants/GroupCard";
+import { AddGroupForm } from "../components/Participants/AddGroup-Form";
 const Participants = () => {
   const [editMode, setEditMode] = useState(false);
     const { open } = useAddParticipantsViewModel();
@@ -44,7 +46,7 @@ const Participants = () => {
           {editMode ? "Exit Edit Mode" : "Edit Mode"}
         </Button>
 {activeTab == "Tab1" && editMode? <AddParticipantsForm />: editMode &&(
-  <div>dsd</div>
+ <AddGroupForm/>
 )}
       </div>
 
@@ -55,13 +57,16 @@ const Participants = () => {
           <CardContent>
             {/* <div className="searchBar">Search</div> */}
             <div className="participants-table">
-              <ParticipantsTable />
+              <ParticipantsTable editMode = {editMode} />
             </div>
           </CardContent>
         </Card>
       </div>
 ):(
-  <div>custom</div>
+  <div>
+<GroupCard editMode= {editMode}/>
+
+  </div>
 )}
 
 
