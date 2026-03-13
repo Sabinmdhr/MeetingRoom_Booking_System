@@ -34,14 +34,14 @@ return(
          <span>Members: {numOfMembers}</span>
          <span>Created: {group.createdAt}</span>
        </Typography>
-       <Typography className="group-members">
+       <div className="group-members">
          <div className="text">Group Members:</div>
          <div className="members">
            {group.groupMemmbers.map((groupMember) => {
              return <Chip label={groupMember} className="member-chip"></Chip>;
            })}
          </div>
-       </Typography>
+       </div>
      </CardContent>
    </Card>
  );

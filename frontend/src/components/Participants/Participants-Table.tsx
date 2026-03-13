@@ -13,11 +13,12 @@ import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewMo
 import "../../assets/scss/components/Participants-Table.scss"
 import "../../assets/scss/global.scss"
 import { Mail, Pen, Phone, Trash2 } from "lucide-react";
+import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 export const ParticipantsTable = ({editMode} : {editMode: boolean}) => {
   const { participants, columns } =
     useparticipantsViewModel();
-
+const {open,handleOpen} = useAddParticipantsViewModel()
   return (
     <TableContainer component={Paper} className="TableContainer">
       <Table>
@@ -91,7 +92,7 @@ export const ParticipantsTable = ({editMode} : {editMode: boolean}) => {
               {editMode && (
                 <TableCell>
                   {" "}
-                  <Pen size={16} /> <Trash2 size={16} />{" "}
+                  <Pen size={16} onClick={handleOpen} /> <Trash2 size={16} />{" "}
                 </TableCell>
               )}
             </TableRow>

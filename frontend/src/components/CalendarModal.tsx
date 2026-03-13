@@ -10,6 +10,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import type { CalendarEvent } from "../models/calendar.model";
 import "../assets/scss/pages/CalendarModal.scss";
 import "../assets/scss/global.scss";
+import ParticipantsCard from "./BookingRooms/ParticipantsCard";
 
 interface CalendarModalProps {
   open: boolean;
@@ -74,6 +75,9 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
 
         <Divider />
 
+        <ParticipantsCard type="" displayOn="calendar"/>
+        <Divider />
+
         <div className="modal-section">
           <div className="datetime-grid">
             <div>
@@ -97,11 +101,7 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
       </DialogContent>
 
       <DialogActions className="calendar-modal-actions">
-        <Button
-          className="close-button"
-          onClick={onClose}
-          variant="contained"
-        >
+        <Button className="close-button" onClick={onClose} variant="contained">
           Close
         </Button>
         <Button
@@ -111,10 +111,7 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
         >
           Delete Meeting
         </Button>
-        <Button
-          className="edit-button"
-          variant="text"
-        >
+        <Button className="edit-button" variant="text">
           Edit Meeting
         </Button>
       </DialogActions>

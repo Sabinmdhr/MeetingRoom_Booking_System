@@ -1,17 +1,17 @@
 .groupCard-Container{
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
-  flex: 0 0 0 calc(50% - 20px);
-  gap: 20px;
 }
 
 .groupCard{
-  width: 100%;
-  padding: 10px !important;
+  flex: 0 0  calc(50% - 10px);
+  padding: 8px !important;
   border-radius: 12px !important;
   border: 0.5px solid #E5E5E5;
   box-shadow: none !important;
+  margin: 10px 0px;
 }
 .groupCard-title{
     // display: flex !important;

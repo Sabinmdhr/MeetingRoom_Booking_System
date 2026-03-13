@@ -25,14 +25,19 @@
       }
 }
 .customTextField{
-  margin-top: 8px !important;
-  // border: ;
-    // margin-top: 8px;
-    // border-radius: 12px;
-       input{
-        padding: 8px 12px;
-        border-radius: 12px;
+  margin: 8px 0px !important;
+
+// -------------------to make whole texfield of searchfield in add group form------------
+   &.search-field{
     background-color: #F3F3F5;
+        border-radius: 12px;
+   }
+
+       input{
+        border-radius: 12px;
+
+    background-color: #F3F3F5;
+        padding: 8px 12px;
        }
        fieldset{
         outline: none;
