@@ -1,7 +1,6 @@
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import "../assets/scss/pages/ReportColumns.scss";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
 
 type ColumnKey =
   | "status"
@@ -15,19 +14,7 @@ type ColumnKey =
   | "createdVia"
   | "createdAt";
 
-const ReportColumns = () => {
-  const [columns, setColumns] = useState<Record<ColumnKey, boolean>>({
-    status: true,
-    room: true,
-    title: true,
-    start: true,
-    end: true,
-    duration: true,
-    user: true,
-    department: true,
-    createdVia: true,
-    createdAt: true,
-  });
+const ReportColumns = ({ columns, setColumns }: any) => {
   const columnList: { key: ColumnKey; label: string }[] = [
     { key: "status", label: "Status" },
     { key: "room", label: "Room" },
@@ -41,7 +28,7 @@ const ReportColumns = () => {
     { key: "createdAt", label: "Created At" },
   ];
   const handleButton = (key: ColumnKey) => {
-    setColumns((prev) => ({
+    setColumns((prev: { [x: string]: any }) => ({
       ...prev,
       [key]: !prev[key],
     }));
