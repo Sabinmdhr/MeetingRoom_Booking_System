@@ -10,6 +10,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import type { CalendarEvent } from "../models/calendar.model";
 import "../assets/scss/pages/CalendarModal.scss";
 import "../assets/scss/global.scss";
+import ParticipantsCard from "./BookingRooms/ParticipantsCard";
 
 interface CalendarModalProps {
   open: boolean;
