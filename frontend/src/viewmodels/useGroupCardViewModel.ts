@@ -4,9 +4,10 @@ import { useState } from "react";
 
 export const useGroupCardViewModel= () =>  {
 const [group, setGroup] = useState<groupCard[]>(demoGroupCards());
+const numOfGroup = group.length
 
 return{
-  group, setGroup
+  group, setGroup,numOfGroup
 }
 
 }

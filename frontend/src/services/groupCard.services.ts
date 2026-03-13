@@ -11,6 +11,13 @@ return [
     groupName: "Frontend Developers",
   },
   {
+    id: "3",
+    createdAt: " 2024-12-8",
+    description: "Frontend Team Members",
+    groupMemmbers: ["Sushant Basnet", "Shristi Yakami", "Sabin Mdhr"],
+    groupName: "Frontend Developers",
+  },
+  {
     id: "2",
     createdAt: " 2025-02-18",
     description: "Complete product development team",

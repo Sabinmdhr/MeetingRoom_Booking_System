@@ -2,16 +2,18 @@ import "../assets/scss/pages/Participants.scss";
 import "../assets/scss/global.scss";
 import { FolderPlus, SquarePen, Users } from "lucide-react";
 import { ParticipantsTable } from "../components/Participants/Participants-Table";
-import { Button, Card, CardContent, CardHeader } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Chip } from "@mui/material";
 import { useState } from "react";
 import { AddParticipantsForm } from "../components/Participants/AddParticipants-Form";
 import { useAddParticipantsViewModel } from "../viewmodels/useAddParticipantsViewModel";
 import { GroupCard } from "../components/Participants/GroupCard";
 import { AddGroupForm } from "../components/Participants/AddGroup-Form";
+import { useGroupCardViewModel } from "../viewmodels/useGroupCardViewModel";
 const Participants = () => {
   const [editMode, setEditMode] = useState(false);
-    const { open } = useAddParticipantsViewModel();
-    const [activeTab, setActiveTab] = useState<"Tab1" | "Tab2">("Tab1");
+  const { open } = useAddParticipantsViewModel();
+  const { numOfGroup } = useGroupCardViewModel();
+  const [activeTab, setActiveTab] = useState<"Tab1" | "Tab2">("Tab1");
   return (
     <div>
       <div className="titleDesc">
@@ -31,7 +33,7 @@ const Participants = () => {
           className={`participants-tab ${activeTab == "Tab2" ? `active` : ``}`}
           onClick={() => setActiveTab("Tab2")}
         >
-          <FolderPlus size={16} /> <span>Custom Groups</span>
+          <FolderPlus size={16} /> <span>Custom Groups  <Chip label={numOfGroup}></Chip></span>
         </div>
       </div>
 
@@ -45,31 +47,30 @@ const Participants = () => {
           <SquarePen size={14} />
           {editMode ? "Exit Edit Mode" : "Edit Mode"}
         </Button>
-{activeTab == "Tab1" && editMode? <AddParticipantsForm />: editMode &&(
- <AddGroupForm/>
-)}
+        {activeTab == "Tab1" && editMode ? (
+          <AddParticipantsForm />
+        ) : (
+          editMode && <AddGroupForm />
+        )}
       </div>
 
-{activeTab == "Tab1"? (
-<div className="participants-container">
-        <Card>
-          <CardHeader title="Participants Direntory" />
-          <CardContent>
-            {/* <div className="searchBar">Search</div> */}
-            <div className="participants-table">
-              <ParticipantsTable editMode = {editMode} />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-):(
-  <div>
-<GroupCard editMode= {editMode}/>
-
-  </div>
-)}
-
-
+      {activeTab == "Tab1" ? (
+        <div className="participants-container">
+          <Card>
+            <CardHeader title="Participants Direntory" />
+            <CardContent>
+              {/* <div className="searchBar">Search</div> */}
+              <div className="participants-table">
+                <ParticipantsTable editMode={editMode} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <div>
+          <GroupCard editMode={editMode} />
+        </div>
+      )}
     </div>
   );
 };
