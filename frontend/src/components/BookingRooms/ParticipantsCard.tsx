@@ -16,7 +16,7 @@ import { DemoParticipants } from "../../services/participants.service";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface ParticipantsCardProps {
-  type: "internal" | "external"| "";
+  type: "internal" | "external" | "";
   displayOn: "participant" | "book-room" | "calendar";
 }
 
@@ -27,7 +27,8 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
   // const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
-const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel();
+  const { selectedParticipants, setSelectedParticipants } =
+    useparticipantsViewModel();
   useEffect(() => {
     const data = DemoParticipants();
     setParticipants(data);
@@ -42,7 +43,7 @@ const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel
   const handleSelectParticipant = (id: string) => {
     setSelectedParticipants((prev) =>
       prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
-    )
+    );
   };
 
   const handleAddExternal = () => {
@@ -69,12 +70,24 @@ const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel
                   onChange={(e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab label="People" value="people" />
-                  <Tab label="Teams" value="teams" />
-                  <Tab label="All" value="all" />
+                  <Tab
+                    label="People"
+                    value="people"
+                  />
+                  <Tab
+                    label="Teams"
+                    value="teams"
+                  />
+                  <Tab
+                    label="All"
+                    value="all"
+                  />
                 </TabList>
 
-                <TabPanel value="people" className="tab-panel">
+                <TabPanel
+                  value="people"
+                  className="tab-panel"
+                >
                   <TextField
                     fullWidth
                     size="small"
@@ -84,7 +97,10 @@ const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search size={18} color="gray" />
+                          <Search
+                            size={18}
+                            color="gray"
+                          />
                         </InputAdornment>
                       ),
                     }}
@@ -196,7 +212,10 @@ const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search size={14} color="gray" />
+                  <Search
+                    size={14}
+                    color="gray"
+                  />
                 </InputAdornment>
               ),
             }}
@@ -219,7 +238,10 @@ const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel
                 />
 
                 <div className="participant-info">
-                  <Typography variant="subtitle2" className="name">
+                  <Typography
+                    variant="subtitle2"
+                    className="name"
+                  >
                     {p.fullName}
                   </Typography>
                   <div className="participant-Subinfo">
@@ -237,36 +259,36 @@ const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel
       )}
 
       {displayOn == "calendar" && (
-          <div>
-            <Typography>{filteredParticipants.length} Participants</Typography>
-            <div className={`participants-list `}>
-              {filteredParticipants.map((p) => (
-                <div
-                  key={p.id}
-                  className={`participant-item ${
-                    selectedParticipants.includes(p.id) ? "selected" : ""
-                  }   `}
-                >
-
-
-                  <div className="participant-info">
-                    <Typography variant="subtitle2" className="name">
-                      {p.fullName}
-                    </Typography>
-                    <div className="participant-Subinfo">
-                      <Typography className="department">
-                        {p.email}
-                      </Typography>
-
-                    </div>
+        <div className="calendar-participants">
+          <Typography className="participants-title">
+            Participants ({filteredParticipants.length})
+          </Typography>
+          <div className={`participants-list `}>
+            {filteredParticipants.map((p) => (
+              <div
+                key={p.id}
+                className={`participant-item ${
+                  selectedParticipants.includes(p.id) ? "selected" : ""
+                }   `}
+              >
+                <div className="participant-info">
+                  <Typography
+                    variant="subtitle2"
+                    className="name"
+                  >
+                    {p.fullName}
+                  </Typography>
+                  <div className="participant-Subinfo">
+                    <Typography className="department">{p.email}</Typography>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        </div>
       )}
     </>
   );
-}
+};
 
 export default ParticipantsCard;

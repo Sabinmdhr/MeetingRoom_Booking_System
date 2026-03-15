@@ -22,31 +22,33 @@
 }
 
 .modal-category {
-  font-size: 13px;
-  color: #fff;
+  font-size: 14px;
+  // font-weight: 500;
   &.client {
     margin: 3px;
+    color: #ca3500;
     padding: 4px 8px;
-    border: 2px solid rgb(104, 49, 4);
+    border: 2px solid #ffd6a7;
     border-radius: 10px;
-    background-color: #ff6900;
+    background-color: #ffedd4;
     opacity: 2;
   }
   &.internal {
     margin: 3px;
     padding: 4px 8px;
-    border: 2px solid rgb(6, 7, 35);
+    border: 2px solid #bedbff;
     border-radius: 10px;
-    background-color: #2b7fff;
+    background-color: #dbeafe;
+    color: #1447e6;
     opacity: 2;
   }
   &.executive {
-    // color: white;
+    color: #8200db;
     margin: 3px;
     padding: 4px 8px;
-    border: 2px solid #3c0569;
+    border: 2px solid #e9d4ff;
+    background-color: #f3e8ff;
     border-radius: 10px;
-    background-color: #ad46ff;
     opacity: 2;
   }
 }

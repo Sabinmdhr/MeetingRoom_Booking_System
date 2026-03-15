@@ -11,7 +11,7 @@ import {
   Box,
   InputAdornment,
 } from "@mui/material";
-import { Users, UserPlus } from 'lucide-react';
+import { Users, UserPlus } from "lucide-react";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import type { Meeting_room } from "../models/Meeting_room.model";
 import {
@@ -26,13 +26,15 @@ import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel
 
 const BookRoom = () => {
   const [meetingType, setMeetingType] = useState<string>("");
-  const [participantType, setParticipantType] = useState< "internal" | "external" | null >(null);
+  const [participantType, setParticipantType] = useState<
+    "internal" | "external" | null
+  >(null);
   const menuItemOptions = [
     { value: "Internal", label: "Internal" },
     { value: "Client", label: "Client" },
     { value: "Executive", label: "Executive" },
   ];
-  const {selectedParticipants} = useparticipantsViewModel();
+  const { selectedParticipants } = useparticipantsViewModel();
   const [rooms, setRooms] = useState<Meeting_room[]>([]);
   const [roomId, setRoomId] = useState("");
   const [selectedRoom, setSelectedRoom] = useState<Meeting_room | null>(null);
@@ -41,8 +43,7 @@ const BookRoom = () => {
   const [endTime, setEndTime] = useState<string | null>(null);
   const [timeType, setTimeType] = useState<"start" | "end" | null>(null);
 
-
-const plength = selectedParticipants.length
+  const plength = selectedParticipants.length;
   const handleInternalClick = () => {
     setParticipantType((prev) => (prev === "internal" ? null : "internal"));
   };
@@ -83,7 +84,10 @@ const plength = selectedParticipants.length
       <form className="bookroom-form">
         <Card className="bookroom-card">
           <div className="bookroom-header">
-            <Typography variant="h6" className="title">
+            <Typography
+              variant="h6"
+              className="title"
+            >
               Book a Meeting Room
             </Typography>
             <Typography className="subtitle">
@@ -103,7 +107,11 @@ const plength = selectedParticipants.length
               </div>
               <div className="field">
                 <p className="field-label">Date *</p>
-                <TextField type="date" fullWidth size="small" />
+                <TextField
+                  type="date"
+                  fullWidth
+                  size="small"
+                />
               </div>
               <div className="time">
                 <div className="field">
@@ -247,7 +255,10 @@ const plength = selectedParticipants.length
             <div className="bookroom-right">
               <div className="field">
                 <p className="field-label">Select Room *</p>
-                <FormControl fullWidth size="small">
+                <FormControl
+                  fullWidth
+                  size="small"
+                >
                   <Select
                     className="select-room"
                     displayEmpty
@@ -262,7 +273,10 @@ const plength = selectedParticipants.length
                     }}
                   >
                     {rooms.map((room) => (
-                      <MenuItem key={room.id} value={room.id}>
+                      <MenuItem
+                        key={room.id}
+                        value={room.id}
+                      >
                         {room.title}
                       </MenuItem>
                     ))}

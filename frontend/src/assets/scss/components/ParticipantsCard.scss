@@ -43,10 +43,9 @@
   flex-direction: column;
   gap: 8px;
 
-  .check{
+  .check {
     accent-color: bla;
   }
-
 }
 
 .participant-item {
@@ -58,18 +57,17 @@
   gap: 10px;
   border: 1px solid #e5e7eb;
 
-    display: flex !important;
-    align-items: center;
+  display: flex !important;
+  align-items: center;
 
   input {
-  transform: scale(1.5);
+    transform: scale(1.5);
     // margin-top: 4px;
   }
 
-  &.selected{
-    background-color: #EFF6FF;
+  &.selected {
+    background-color: #eff6ff;
   }
-
 }
 
 .participant-info {
@@ -77,40 +75,35 @@
   font-size: 14px !important;
   flex-direction: column;
 
+  .name {
+    font-weight: 500;
+    font-size: 14px;
+  }
 
-.name {
-  font-weight: 500;
-  font-size: 14px;
-}
+  .email {
+    font-size: 13px;
+    color: #6b7280;
+  }
 
-.email {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.department {
-  font-size: 12px;
-  color: #2563eb;
-}
-  .participant-Subinfo{
+  .department {
+    font-size: 12px;
+    color: #2563eb;
+  }
+  .participant-Subinfo {
     display: flex;
     align-items: center;
     gap: 4px;
 
-
-    .department{
-    font-size: 12px !important;
-    color: #6B7383;
+    .department {
+      font-size: 12px !important;
+      color: #6b7383;
     }
-    .role{
-    color: #6B7383;
-    font-size: 12px !important;
-
+    .role {
+      color: #6b7383;
+      font-size: 12px !important;
     }
   }
 }
-
-
 
 .external-members {
   display: flex;
@@ -137,6 +130,16 @@
   display: flex;
   gap: 10px;
 }
-.participants-btn{
+.participants-btn {
   border-radius: 8px;
+}
+
+/*calendar css*/
+.calendar-participants {
+  margin-bottom: 12px;
+  .participants-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin-top: 12px !important;
+  }
 }

@@ -1,0 +1,76 @@
+.edit-modal-main {
+  font-family: var(--titleMediumFont);
+  .edit-modal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  .calendar-modal-content {
+    .modal-section {
+      margin-top: 16px;
+      margin-bottom: 16px;
+
+      .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .MuiTextField-root {
+        width: 100%;
+        input,
+        textarea {
+          padding: 6px 8px;
+          font-size: 14px;
+        }
+      }
+
+      .datetime-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 6px;
+      }
+    }
+  }
+
+  .calendar-modal-actions {
+    margin-bottom: 14px;
+    display: flex;
+    gap: 4px;
+
+    button {
+      text-transform: capitalize;
+      font-size: small !important;
+      padding: 4px 8px !important;
+      border: 1px solid black;
+
+      &.cancel-button {
+        color: black;
+        background-color: white;
+      }
+
+      &.save-button {
+        padding: 4px 10px !important;
+        background-color: black;
+        color: white;
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        align-items: flex-start;
+      }
+    }
+  }
+}
+
+/* Ensure the edit modal appears above the main modal */
+.MuiDialog-root {
+  z-index: 1600 !important;
+}
