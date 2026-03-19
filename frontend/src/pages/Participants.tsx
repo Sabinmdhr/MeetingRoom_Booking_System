@@ -39,32 +39,21 @@ const Participants = () => {
 
       {/* ------------------------Edit Mode Button------------ */}
       <div>
-        <Button
-          className={`edit-btn ${editMode ? `edit-mode` : ``}`}
-          variant="outlined"
-          onClick={() => setEditMode((prev) => !prev)}
-        >
-          <SquarePen size={14} />
-          {editMode ? "Exit Edit Mode" : "Edit Mode"}
-        </Button>
-        {activeTab == "Tab1" && editMode ? (
+
+        {activeTab == "Tab1" ? (
           <AddParticipantsForm />
         ) : (
-          editMode && <AddGroupForm />
+        <AddGroupForm />
         )}
       </div>
 
       {activeTab == "Tab1" ? (
         <div className="participants-container">
-          <Card>
-            <CardHeader title="Participants Direntory" />
-            <CardContent>
-              {/* <div className="searchBar">Search</div> */}
+
               <div className="participants-table">
-                <ParticipantsTable editMode={editMode} />
+                <ParticipantsTable  />
               </div>
-            </CardContent>
-          </Card>
+           
         </div>
       ) : (
         <div>

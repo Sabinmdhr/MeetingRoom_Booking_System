@@ -1,7 +1,7 @@
 export interface groupCard {
-  id : string;
-  groupName : string;
+  id: string;
+  groupName: string;
   description: string;
   createdAt: string;
-  groupMemmbers: string[];
+  groupMembers: string[];
 }
