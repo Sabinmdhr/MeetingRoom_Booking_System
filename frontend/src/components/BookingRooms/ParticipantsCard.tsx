@@ -6,7 +6,6 @@ import {
   TextField,
   Button,
   InputAdornment,
-  CardContent,
 } from "@mui/material";
 import "../../assets/scss/components/ParticipantsCard.scss";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -14,9 +13,10 @@ import { UserPlus, Search } from "lucide-react";
 import type { Participants } from "../../models/participants.model";
 import { DemoParticipants } from "../../services/participants.service";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
+import { useAppSelector } from "../../redux/store";
 
 interface ParticipantsCardProps {
-  type: "internal" | "external" | "";
+  type: "internal" | "external"| "";
   displayOn: "participant" | "book-room" | "calendar";
 }
 
@@ -27,24 +27,25 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
   // const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
-  const { selectedParticipants, setSelectedParticipants } =
-    useparticipantsViewModel();
+// const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel();
   useEffect(() => {
     const data = DemoParticipants();
     setParticipants(data);
   }, []);
 
+const {handleToggle} = useparticipantsViewModel();
+const {selectedParticipants} = useAppSelector((state)=> state.participants)
   const filteredParticipants = participants.filter(
     (p) =>
       p.fullName.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const handleSelectParticipant = (id: string) => {
-    setSelectedParticipants((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
-    );
-  };
+  // const handleSelectParticipant = (id: string) => {
+  //   setSelectedParticipants((prev) =>
+  //     prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
+  //   )
+  // };
 
   const handleAddExternal = () => {
     if (!externalName || !externalEmail) return;
@@ -70,24 +71,12 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
                   onChange={(e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab
-                    label="People"
-                    value="people"
-                  />
-                  <Tab
-                    label="Teams"
-                    value="teams"
-                  />
-                  <Tab
-                    label="All"
-                    value="all"
-                  />
+                  <Tab label="People" value="people" />
+                  <Tab label="Teams" value="teams" />
+                  <Tab label="All" value="all" />
                 </TabList>
 
-                <TabPanel
-                  value="people"
-                  className="tab-panel"
-                >
+                <TabPanel value="people" className="tab-panel">
                   <TextField
                     fullWidth
                     size="small"
@@ -97,10 +86,7 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search
-                            size={18}
-                            color="gray"
-                          />
+                          <Search size={18} color="gray" />
                         </InputAdornment>
                       ),
                     }}
@@ -113,12 +99,12 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
                         className={`participant-item ${
                           selectedParticipants.includes(p.id) ? "selected" : ""
                         }`}
-                        onClick={() => handleSelectParticipant(p.id)}
+                        onClick={() => handleToggle(p.id)}
                       >
                         <input
                           type="checkbox"
                           checked={selectedParticipants.includes(p.id)}
-                          onChange={() => handleSelectParticipant(p.id)}
+                          onChange={() => handleToggle(p.id)}
                         />
 
                         <div className="participant-info">
@@ -200,7 +186,7 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
       {displayOn == "participant" && (
         <div>
           {" "}
-          <label htmlFor="searchField">Select Members</label>
+          <label htmlFor="searchField">Select Members ({selectedParticipants.length} selected) </label>
           <TextField
             fullWidth
             id="searchField"
@@ -212,10 +198,7 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search
-                    size={14}
-                    color="gray"
-                  />
+                  <Search size={14} color="gray" />
                 </InputAdornment>
               ),
             }}
@@ -227,21 +210,18 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
                 className={`participant-item ${
                   selectedParticipants.includes(p.id) ? "selected" : ""
                 }   `}
-                onClick={() => handleSelectParticipant(p.id)}
+                onClick={() => handleToggle(p.id)}
               >
                 <input
                   // color="red"
                   className="check"
                   type="checkbox"
                   checked={selectedParticipants.includes(p.id)}
-                  onClick={() => handleSelectParticipant(p.id)}
+                  onChange={() => handleToggle(p.id)}
                 />
 
                 <div className="participant-info">
-                  <Typography
-                    variant="subtitle2"
-                    className="name"
-                  >
+                  <Typography variant="subtitle2" className="name">
                     {p.fullName}
                   </Typography>
                   <div className="participant-Subinfo">
@@ -259,36 +239,36 @@ const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
       )}
 
       {displayOn == "calendar" && (
-        <div className="calendar-participants">
-          <Typography className="participants-title">
-            Participants ({filteredParticipants.length})
-          </Typography>
-          <div className={`participants-list `}>
-            {filteredParticipants.map((p) => (
-              <div
-                key={p.id}
-                className={`participant-item ${
-                  selectedParticipants.includes(p.id) ? "selected" : ""
-                }   `}
-              >
-                <div className="participant-info">
-                  <Typography
-                    variant="subtitle2"
-                    className="name"
-                  >
-                    {p.fullName}
-                  </Typography>
-                  <div className="participant-Subinfo">
-                    <Typography className="department">{p.email}</Typography>
+          <div>
+            <Typography>{filteredParticipants.length} Participants</Typography>
+            <div className={`participants-list `}>
+              {filteredParticipants.map((p) => (
+                <div
+                  key={p.id}
+                  className={`participant-item ${
+                    selectedParticipants.includes(p.id) ? "selected" : ""
+                  }   `}
+                >
+
+
+                  <div className="participant-info">
+                    <Typography variant="subtitle2" className="name">
+                      {p.fullName}
+                    </Typography>
+                    <div className="participant-Subinfo">
+                      <Typography className="department">
+                        {p.email}
+                      </Typography>
+
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
       )}
     </>
   );
-};
+}
 
 export default ParticipantsCard;

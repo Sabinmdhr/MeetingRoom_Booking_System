@@ -1,5 +1,6 @@
 export interface TimeSlot {
   id : string;
-  time: string;
+  start: string;
+  end: string;
   available: boolean;
-} 
+}

@@ -7,35 +7,37 @@
   // padding: 4px;
   width: 100%;
   height: 62px;
-  border-radius: 10px;
-  border: 1px;
-  box-shadow: none !important;
+  border-radius: 10px !important;
 
 
 
   &.Available{
-    background-color: var(--colors-Green-Alpha-10);
-    color: var(--colors-Green-200);
+    background-color: #F0FDF4;
+    color: #0D542B;
     cursor: pointer;
-    border: 1px solid;
+    border: 1.5px solid #B9F8CF;
 
     &:hover{
-    border: 2px solid;
+    border: 2px solid #42915e;
 
     }
   }
 
   &.Booked{
-    background-color: var(--colors-Red-Alpha-10);
-    color: var(--colors-Red-200);
-    cursor: not-allowed;
-    
+    background-color: #FEF7F7;
+    color: #B7797A;
+    border:  1px solid #FFDFDF;
+    pointer-events: none;
+    cursor: not-allowed !important;
   }
 
    &.Selected{
-    background-color: var(--ColorsPrimary100);
-    border:2px solid var(--ColorsPrimary300);
-    color: var(--ColorsPrimary500);
+    background-color:#AD46FF;
+    border:none;
+    color: #F6EBFF;
+    &:hover{
+      border: none !important;
+    }
   }
 }
 .Time{

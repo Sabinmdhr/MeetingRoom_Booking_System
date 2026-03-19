@@ -1,5 +1,8 @@
 import {
   Chip,
+  IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -10,15 +13,20 @@ import {
   Typography,
 } from "@mui/material";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
-import "../../assets/scss/components/Participants-Table.scss"
-import "../../assets/scss/global.scss"
-import { Mail, Pen, Phone, Trash2 } from "lucide-react";
-import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
+import "../../assets/scss/components/Participants-Table.scss";
+import "../../assets/scss/global.scss";
+import { EllipsisVertical, Mail, Pen, Phone, Trash, Trash2 } from "lucide-react";
+import type { Participants } from "../../models/participants.model";
+import { useState } from "react";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
-export const ParticipantsTable = ({editMode} : {editMode: boolean}) => {
-  const { participants, columns } =
-    useparticipantsViewModel();
-const {open,handleOpen} = useAddParticipantsViewModel()
+// import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
+export const ParticipantsTable = () => {
+  const { participants, columns, handleEdit } = useparticipantsViewModel();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) =>
+    setAnchorEl(e.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
     <TableContainer component={Paper} className="TableContainer">
       <Table>
@@ -27,12 +35,12 @@ const {open,handleOpen} = useAddParticipantsViewModel()
             {columns.map((col) => (
               <TableCell key={col.id}>{col.label}</TableCell>
             ))}
-            {editMode && <TableCell> Actions</TableCell>}
+            <TableCell> Actions</TableCell>
           </TableRow>
         </TableHead>
 
         <TableBody>
-          {participants.map((participant) => (
+          {participants.map((participant: Participants) => (
             <TableRow key={participant.id} hover>
               {columns.map((col) => {
                 switch (col.id) {
@@ -89,12 +97,45 @@ const {open,handleOpen} = useAddParticipantsViewModel()
                     return <TableCell key={col.id}>-</TableCell>;
                 }
               })}
-              {editMode && (
-                <TableCell>
-                  {" "}
-                  <Pen size={16} onClick={handleOpen} /> <Trash2 size={16} />{" "}
-                </TableCell>
-              )}
+
+              <TableCell>
+                <IconButton onClick={handleMenuOpen}>
+                  <EllipsisVertical size={16} />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                >
+                  <MenuItem
+                    className="menu-btn"
+                    onClick={() => {
+                      handleEdit(participant);
+                      handleMenuClose();
+                    }}
+                  >
+                    <Pen size={18} /> Edit
+                  </MenuItem>
+                  <MenuItem
+                    className="menu-btn"
+                    onClick={() => {
+                      // handleDelete(participant);
+                      handleMenuClose();
+                    }}
+                  >
+                    <Trash2 size={18} />
+                    <Typography color="red"> Delete</Typography>
+                  </MenuItem>
+                </Menu>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

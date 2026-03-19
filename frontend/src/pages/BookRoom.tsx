@@ -10,8 +10,9 @@ import {
   Select,
   Box,
   InputAdornment,
+  Chip,
 } from "@mui/material";
-import { Users, UserPlus } from "lucide-react";
+import { Users, UserPlus, X } from 'lucide-react';
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import type { Meeting_room } from "../models/Meeting_room.model";
 import {
@@ -23,6 +24,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 import SelectTimeCard from "../components/BookingRooms/SelectTimeCard";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
+import { useAppSelector } from "../redux/store";
 
 const BookRoom = () => {
   const [meetingType, setMeetingType] = useState<string>("");
@@ -34,7 +36,7 @@ const BookRoom = () => {
     { value: "Client", label: "Client" },
     { value: "Executive", label: "Executive" },
   ];
-  const { selectedParticipants } = useparticipantsViewModel();
+  // const {selectedParticipants} = useparticipantsViewModel();
   const [rooms, setRooms] = useState<Meeting_room[]>([]);
   const [roomId, setRoomId] = useState("");
   const [selectedRoom, setSelectedRoom] = useState<Meeting_room | null>(null);
@@ -43,7 +45,12 @@ const BookRoom = () => {
   const [endTime, setEndTime] = useState<string | null>(null);
   const [timeType, setTimeType] = useState<"start" | "end" | null>(null);
 
-  const plength = selectedParticipants.length;
+const {selectedParticipants} = useAppSelector((state)=> state.participants)
+const participants  = useAppSelector((state)=> state.participants.participants)
+const selectedId = useAppSelector((state) => state.participants.selectedParticipants)
+
+const selectedNames = participants.filter((p) => selectedId.includes(p.id)).map((p)=> p.fullName)
+// const plength = selectedParticipants.length
   const handleInternalClick = () => {
     setParticipantType((prev) => (prev === "internal" ? null : "internal"));
   };
@@ -207,6 +214,20 @@ const BookRoom = () => {
                 <Typography className="subtitle">
                   Add internal team members or external guests to the meeting
                 </Typography>
+{selectedParticipants.length != 0 &&
+<div>
+  <Typography>Internal Members {selectedParticipants.length}</Typography>
+
+ <div>
+  {selectedNames.map((p)=>
+<Chip label={p} icon={<X/>}></Chip>
+  )}
+ </div>
+
+  </div>
+
+  }
+
                 <Box sx={{ display: "flex", gap: 1 }}>
                   <Button
                     className="participants-btn"
@@ -217,7 +238,7 @@ const BookRoom = () => {
                     onClick={handleInternalClick}
                   >
                     {participantType === "internal"
-                      ? `Hide Internal ${plength}`
+                      ? `Hide Internal (${selectedParticipants.length})`
                       : `Add Internal  `}
                   </Button>
                   <Button

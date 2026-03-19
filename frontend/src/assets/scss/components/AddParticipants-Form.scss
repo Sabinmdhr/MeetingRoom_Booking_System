@@ -1,8 +1,8 @@
-.addParticipants-Form__Container{
-  margin: 20px 0 !important;
+.Form__Container{
   border-radius: 16px !important;
-  border: 2px solid #BEDBFF   ;
-  padding: 10px !important;
+  border: 2px solid #BEDBFF  !important ;
+  margin: 8px 0;
+  // padding: 10px !important;
 }
 .add-btn{
   background-color: black !important;
@@ -11,9 +11,10 @@
   font-weight: 500;
   display: flex;
   gap: 8px;
+  margin: 8px 0;
     border-radius: 8px !important;
 
-  margin-left: 18px !important;
+  // margin-left: 18px !important;
 }
 .title{
     display: flex;
@@ -24,21 +25,39 @@
         font-weight:200 !important;
       }
 }
+label{
+  font-size: 17px !important;
+}
 .customTextField{
   margin: 8px 0px !important;
 
-// -------------------to make whole texfield of searchfield in add group form------------
+// ------------0------to make whole texfield of searchfield in add group form------------
    &.search-field{
-    background-color: #F3F3F5;
+    // background-color: #F3F3F5;
         border-radius: 12px;
    }
 
-       input{
-        border-radius: 12px;
+       .MuiInputBase-input {        /* target MUI input */
+    border-radius: 12px;
+    background-color: #F3F3F5; /* works now */
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 
+  .MuiOutlinedInput-root {     /* wrapper / outline */
+    border-radius: 12px;
     background-color: #F3F3F5;
-        padding: 8px 12px;
-       }
+  }
+
+  .MuiOutlinedInput-notchedOutline { /* border */
+    border: none;
+    border-radius: 12px;
+  }
+
+  &.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border: 1px solid #A1A1A1;
+    box-shadow: 0 0 0 2px #CFCFCF;
+  }
        fieldset{
         outline: none;
         border-radius: 12px;
@@ -50,6 +69,9 @@
     border: 1px solid #A1A1A1 ;
     box-shadow: 0 0 0 2px #CFCFCF;
   }
+}
+.dropdown{
+  color:  red !important;
 }
 .form-btns{
   display: flex;
