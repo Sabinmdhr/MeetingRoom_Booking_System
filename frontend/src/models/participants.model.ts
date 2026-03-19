@@ -6,7 +6,6 @@ export interface Participants{
   email: string;
   phoneNumber: string;
   numOfMeetings: number;
-
 }
 
 export interface Columns{

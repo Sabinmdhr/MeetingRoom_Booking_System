@@ -1,7 +1,8 @@
 .settings {
-  padding: 0px 10px;
+  padding: 0px 12px;
   font-family: var(--titleMediumFont);
 
+  //ProfileSection
   .settings-title {
     font-weight: 600;
     // font-family: Arial, Helvetica, sans-serif;
@@ -14,14 +15,14 @@
 
   .settings-card {
     width: 100%;
-    padding: 22px;
+    padding: 28px;
     border-radius: 14px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
   }
 
   .settings-header {
     font-size: 18px;
-    font-weight: 300px;
+    font-weight: 300;
   }
 
   .name {
@@ -36,8 +37,7 @@
   }
   .field-label {
     font-size: 15px;
-    font-weight: 300;
-    color: black;
+    color: #0A0A0A;
   }
 
   .settings-btn {
@@ -45,6 +45,14 @@
     color: white;
     margin-top: 15px;
     border-radius: 8px;
+    height: 40px;
+    padding: 12px ;
+    text-transform: none; 
+
+    &:hover{
+      opacity: 0.9;
+      box-shadow: none;
+    }
   }
 
   .MuiTextField-root {
@@ -71,19 +79,19 @@
     }
   }
 
+  //NotificationSection
   .second-card {
     width: 100%;
-    padding: 22px;
+    padding: 28px;
     border-radius: 14px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
     margin-top: 30px;
   }
 
   .second-header {
-    font-size: 20px;
-    font-weight: 300px;
+    font-size: 18px;
     display: flex;
-    gap: 6px;
+    gap: 12px;
     margin-bottom: 15px;
   }
 
@@ -94,7 +102,8 @@
 
   .notification-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
     gap: 12px;
     padding: 12px 0;
   }
@@ -102,15 +111,17 @@
   .notification-icon {
     margin-top: 8px;
     color: #6a7282;
+    width: 22px;
+    height: 22px;
   }
 
   .email {
-    display: flex;
-    flex-direction: column;
+    flex: 1;   
   }
 
   .title {
     font-weight: 600;
+    color: rgb(46, 45, 45);
   }
 
   .subtitle {
@@ -124,4 +135,177 @@
     background-color: #d5d9de;
     margin: 4px 0;
   }
+
+  //ColorSection
+  .third-card {
+    width: 100%;
+    padding: 28px;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    margin-top: 30px;
+  }
+
+  .third-header {
+    font-size: 18px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .third-subheader {
+    color: #777;
+    margin-top: 26px;
+  }
+
+  .settings-color {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .color-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .color {
+    flex: 1;   
+  }
+
+  .title {
+    font-weight: 600;
+    color: rgb(46, 45, 45);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #777;
+  }
+
+  .settings-color hr {
+    border: none;
+    height: 1px;
+    background-color: #d5d9de;
+    margin: 4px 0;
+  }
+  
+  .color-btn{
+    display: flex;
+    gap: 12px !important;
+  }
+  .reset-btn {
+    background-color: white;
+    color: black;
+    border: 1px solid #d8d5d5;
+    box-shadow: none;
+    margin-top: 15px;
+    border-radius: 8px;
+    height: 40px;
+    padding: 12px ;
+    text-transform: none; 
+
+    &:hover{
+      background-color: #f2f2f2;
+      box-shadow: none; 
+    }
+  }
+
+  //BookingSection
+  .fourth-card {
+    width: 100%;
+    padding: 28px;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    margin-top: 30px;
+  }
+
+  .fourth-header {
+    font-size: 18px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .booking-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    margin-top: 12px;
+  }
+
+  .booking {
+    flex: 1;   
+  }
+
+  //SecuritySection
+  .fifth-card {
+    width: 100%;
+    padding: 28px;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    margin-top: 30px;
+  }
+
+  .fifth-header {
+    font-size: 18px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .settings-security {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .security-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .security {
+    flex: 1;   
+  }
+
+  .title {
+    font-weight: 600;
+    color: rgb(46, 45, 45);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #777;
+  }
+
+  .settings-security hr {
+    border: none;
+    height: 1px;
+    background-color: #d5d9de;
+    margin: 4px 0;
+  }
+  
+  .reset-btn {
+    background-color: white;
+    color: black;
+    border: 1px solid #d8d5d5;
+    box-shadow: none;
+    margin-top: 15px;
+    border-radius: 8px;
+    height: 40px;
+    padding: 12px ;
+    text-transform: none; 
+
+    &:hover{
+      background-color: #f2f2f2;
+      box-shadow: none; 
+    }
+  }
+
 }

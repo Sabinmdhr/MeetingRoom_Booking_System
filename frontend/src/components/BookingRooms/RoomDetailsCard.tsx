@@ -1,9 +1,7 @@
 import { Card, Typography, Chip, Stack, Box } from "@mui/material";
 import type { Meeting_room } from "../../models/Meeting_room.model";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import "../../assets/scss/pages/RoomDetailsCard.scss";
-import { Presentation, Projector, TvMinimal, Wifi } from "lucide-react";
+import { MapPin, Users, Presentation, Projector, TvMinimal, Wifi } from "lucide-react";
 
 interface RoomDetailsCardProps {
   room: Meeting_room | null;
@@ -32,7 +30,7 @@ const RoomDetailsCard = ({ room }: RoomDetailsCardProps) => {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <LocationOnOutlinedIcon sx={{ mb: 2 }} />
+        < MapPin size={18} />
         <Typography variant="h6" sx={{ mb: 2, fontSize: 17, fontWeight: 600 }}>
           Room Details
         </Typography>
@@ -54,8 +52,8 @@ const RoomDetailsCard = ({ room }: RoomDetailsCardProps) => {
           fontWeight="bold"
           sx={{ display: "flex", justifyContent: "center" }}
         >
-          <PeopleAltOutlinedIcon />
-          <div style={{ marginTop: "4px" }}> {room.capacity} people</div>
+          <Users />
+          <span style={{ marginTop: "4px" }}> {room.capacity} people</span>
         </Typography>
       </Box>
       <hr />

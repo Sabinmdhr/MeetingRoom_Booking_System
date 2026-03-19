@@ -4,7 +4,6 @@ const meetingRooms: Meeting_room[] = [
   {
     id: "1",
     title: "Manang",
-    
     participants: ["Sabin", "Suman"],
     capacity: 10,
     available: true,

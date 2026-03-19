@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Card,
   Typography,
@@ -10,49 +9,29 @@ import {
 import "../../assets/scss/components/ParticipantsCard.scss";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { UserPlus, Search } from "lucide-react";
-import type { Participants } from "../../models/participants.model";
-import { DemoParticipants } from "../../services/participants.service";
+import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface ParticipantsCardProps {
   type: "internal" | "external";
 }
 
 const ParticipantsCard = ({ type }: ParticipantsCardProps) => {
-  const [tabValue, setTabValue] = useState("people");
-  const [participants, setParticipants] = useState<Participants[]>([]);
-  const [search, setSearch] = useState("");
-  const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
-  const [externalName, setExternalName] = useState("");
-  const [externalEmail, setExternalEmail] = useState("");
+  // const [participants, setParticipants] = useState<Participants[]>([]);
 
-  useEffect(() => {
-    const data = DemoParticipants();
-    setParticipants(data);
-  }, []);
-
-  const filteredParticipants = participants.filter(
-    (p) =>
-      p.fullName.toLowerCase().includes(search.toLowerCase()) ||
-      p.email.toLowerCase().includes(search.toLowerCase()),
-  );
-
-  const handleSelectParticipant = (id: string) => {
-    setSelectedParticipants((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
-    )
-  };
-
-  const handleAddExternal = () => {
-    if (!externalName || !externalEmail) return;
-
-    console.log({
-      name: externalName,
-      email: externalEmail,
-    });
-
-    setExternalName("");
-    setExternalEmail("");
-  };
+  const {
+    tabValue,
+    setTabValue,
+    selectedParticipants,
+    handleSelectParticipant,
+    search,
+    setSearch,
+    filteredParticipants,
+    externalName,
+    setExternalName,
+    externalEmail,
+    setExternalEmail,
+    handleAddExternal,
+  } = useparticipantsViewModel();
 
   return (
     <Card className="participants-card">
@@ -97,7 +76,7 @@ const ParticipantsCard = ({ type }: ParticipantsCardProps) => {
                     <input
                       type="checkbox"
                       checked={selectedParticipants.includes(p.id)}
-                      onChange={() => handleSelectParticipant(p.id)}
+                      readOnly
                     />
 
                     <div className="participant-info">
@@ -122,30 +101,35 @@ const ParticipantsCard = ({ type }: ParticipantsCardProps) => {
       {type === "external" && (
         <div className="external-members">
           <div className="external-header">
-            <UserPlus size={18} />
-            <Typography>Add External Member</Typography>
+            <UserPlus size={17} />
+            <Typography className="header">Add External Member</Typography>
           </div>
 
+          <div className="field">
+          <label className="field-label" htmlFor="Name *">Name *</label>
           <TextField
-            label="Name *"
+            id="Name *"
             fullWidth
             size="small"
             placeholder="Enter external member name"
             value={externalName}
             onChange={(e) => setExternalName(e.target.value)}
           />
+
+          <label className="field-label" htmlFor="Email *">Email *</label>
           <TextField
-            label="Email *"
+            id="Email *"
             fullWidth
             size="small"
             placeholder="Enter external member email"
             value={externalEmail}
             onChange={(e) => setExternalEmail(e.target.value)}
           />
+          </div>
 
           <div className="external-note">
-            <Typography>
-              <b>Note:</b> External members will be tracked separately in
+            <Typography className="note">
+              <b><strong>Note:</strong></b> External members will be tracked separately in
               reports and won't affect internal dashboard statistics.
             </Typography>
           </div>
@@ -172,7 +156,7 @@ const ParticipantsCard = ({ type }: ParticipantsCardProps) => {
         </div>
       )}
     </Card>
-  )
+  );
 }
 
 export default ParticipantsCard;
