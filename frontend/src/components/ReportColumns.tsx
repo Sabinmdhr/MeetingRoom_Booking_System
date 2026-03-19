@@ -1,6 +1,6 @@
-import { Button, Card, CardContent, Typography } from "@mui/material";
+import { Button, Drawer, Typography, Divider, IconButton } from "@mui/material";
 import "../assets/scss/pages/ReportColumns.scss";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 
 type ColumnKey =
   | "status"
@@ -14,7 +14,7 @@ type ColumnKey =
   | "createdVia"
   | "createdAt";
 
-const ReportColumns = ({ columns, setColumns }: any) => {
+const ReportColumns = ({ columns, setColumns, open, onClose }: any) => {
   const columnList: { key: ColumnKey; label: string }[] = [
     { key: "status", label: "Status" },
     { key: "room", label: "Room" },
@@ -27,6 +27,7 @@ const ReportColumns = ({ columns, setColumns }: any) => {
     { key: "createdVia", label: "Created Via" },
     { key: "createdAt", label: "Created At" },
   ];
+
   const handleButton = (key: ColumnKey) => {
     setColumns((prev: { [x: string]: any }) => ({
       ...prev,
@@ -35,16 +36,28 @@ const ReportColumns = ({ columns, setColumns }: any) => {
   };
 
   return (
-    <div>
-      <Card className="report-columns">
-        <CardContent>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+    >
+      <div className="report-columns">
+        <div className="report-columns__header">
           <Typography
             variant="body1"
             className="report-columns__title"
           >
-            Customize columns
+            Customize Columns
           </Typography>
-        </CardContent>
+          <IconButton
+            onClick={onClose}
+            size="small"
+          >
+            <X size={18} />
+          </IconButton>
+        </div>
+
+        <Divider />
 
         <section className="report-columns__buttons">
           {columnList.map((col) => (
@@ -60,8 +73,8 @@ const ReportColumns = ({ columns, setColumns }: any) => {
             </Button>
           ))}
         </section>
-      </Card>
-    </div>
+      </div>
+    </Drawer>
   );
 };
 

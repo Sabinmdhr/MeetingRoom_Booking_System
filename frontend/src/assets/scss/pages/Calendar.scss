@@ -1,6 +1,6 @@
 .calendar {
   font-family: var(--titleMediumFont);
-  border: 2px solid rgb(195, 190, 190);
+  // border: 1px solid rgb(195, 190, 190);
   border-radius: 15px !important;
   background: #fff;
 
@@ -8,14 +8,12 @@
   flex-direction: column;
 }
 
-/* ============================= */
 /* TOPBAR */
-/* ============================= */
 
 .calendar__topbar {
   // margin: 15px;
   // border: 2px solid rgb(201, 185, 185);
-  padding: 16px 20px;
+  padding: 20px 25px !important;
   //   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -185,19 +183,17 @@
 //   padding: 20px;
 //   border-radius: 10px;
 // }
-/* ============================= */
+
 /* MAIN AREA */
-/* ============================= */
 
 .calendar__main {
+  padding: 20px 25px !important;
   //   border: 2px solid red;
   margin-top: 25px;
   //   background: red    ;
 }
 
-/* ============================= */
 /* MONTH VIEW */
-/* ============================= */
 
 .month {
   display: flex;
@@ -220,7 +216,7 @@
   padding: 10px;
   font-weight: 600;
   font-size: 17px;
-  border-right: 1px solid #e5e7eb;
+  border-right: 2px solid #e5e7eb;
 }
 
 .month__day:last-child {
@@ -239,7 +235,7 @@
 .month__cell {
   padding: 6px;
   border-right: 1px solid #f1f5f9;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 2px solid #f1f5f9;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -279,9 +275,7 @@
   color: white;
 }
 
-/* ============================= */
 /* WEEK VIEW */
-/* ============================= */
 
 .week {
   display: flex;
@@ -302,11 +296,37 @@
 }
 
 .week__day {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 10px;
-  font-weight: 700 !important;
-  font-size: 17px !important;
   border-left: 1px solid #e5e7eb;
+
+  &__name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+  }
+
+  &__date {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 2px;
+
+    // &.today {
+    //   background: black;
+    //   color: white;
+    //   width: 32px;
+    //   height: 32px;
+    //   border-radius: 50%;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    // }
+  }
 }
 
 .week__body {

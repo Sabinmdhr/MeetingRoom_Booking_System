@@ -13,7 +13,11 @@
 
 .page-content {
   flex: 1;
+  min-width: 0;
   padding: 30px;
   background: #f7f7f8;
   overflow-y: auto;
+  transition:
+    margin 0.3s ease,
+    width 0.3s ease;
 }

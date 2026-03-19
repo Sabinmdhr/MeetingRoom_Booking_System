@@ -31,16 +31,20 @@ export default function LoginCard() {
     await login(data);
   };
 
-
-  
   // const handleClickShowPassword = () => setShowPassword((prev) => !prev);
   // const handleMouseDownPassword = (event) => event.preventDefault();
   return (
     <div className="loginContainer">
       <Card className="loginCard">
         <div className="logo">
-          <img src={logo} alt="Logo" />
-          <Link to={{ pathname: "/" }} className="outlook">
+          <img
+            src={logo}
+            alt="Logo"
+          />
+          <Link
+            to={{ pathname: "/" }}
+            className="outlook"
+          >
             <span>Use your outlook account</span>
           </Link>
         </div>

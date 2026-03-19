@@ -136,13 +136,13 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
 
       {/* Edit Modal */}
 
-      <EditCalendarModal
-        event={event}
-        open={open}
-        onClose={onClose}
-        openEdit={openEdit}
-        setOpenEdit={setOpenEdit}
-      />
+      {openEdit && (
+        <EditCalendarModal
+          event={event}
+          openEdit={openEdit}
+          setOpenEdit={setOpenEdit}
+        />
+      )}
     </div>
   );
 };
