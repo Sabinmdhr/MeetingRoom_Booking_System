@@ -1,22 +1,16 @@
-// types.ts
 
-// Participant represents a participant in a calendar event.
-export type Participant = {
-  name: string;
-  email: string;
-};
+export type EventCategory = "internal" | "client" | "executive";
 
-// CalendarEvent represents a calendar event with details.
 export type CalendarEvent = {
   id: number;
   title: string;
-  category: string;
+  category: EventCategory;
   date: string;
   startTime: string;
   endTime: string;
   location: string;
   organizer: string;
-  participants: Participant[];
+  participants: string[];
   description: string;
   department: string;
 };

@@ -1,4 +1,4 @@
-import type { BookingForm } from "../types/booking.types"
+import type { BookingForm } from "../models/booking.model"
 
 export const validateBookingForm = (values: BookingForm) =>{ // values: BookingFormValues -- The function expects an object shaped like this:export interface BookingFormValues {   meetingTitle: string roomId: string date: string... }
  

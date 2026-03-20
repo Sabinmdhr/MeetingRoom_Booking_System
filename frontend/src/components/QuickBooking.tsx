@@ -1,5 +1,8 @@
 const QuickBooking = () => {
-  return <div></div>;
+  return <div>
+
+
+  </div>;
 };
 
 export default QuickBooking;

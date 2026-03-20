@@ -2,6 +2,7 @@
   margin: 20px 0 !important;
   border-radius: 16px !important;
   border: 2px solid #BEDBFF   ;
+  padding: 10px !important;
 }
 .add-btn{
   background-color: black !important;
@@ -14,16 +15,29 @@
 
   margin-left: 18px !important;
 }
-
+.title{
+    display: flex;
+    align-items: center;
+      .MuiCardHeader-title{
+        font-size: 18px !important;
+        color: var(--colorsNeutral600);
+        font-weight:200 !important;
+      }
+}
 .customTextField{
-  margin-top: 8px !important;
-  // border: ;
-    // margin-top: 8px;
-    // border-radius: 12px;
-       input{
-        padding: 8px 12px;
-        border-radius: 12px;
+  margin: 8px 0px !important;
+
+// -------------------to make whole texfield of searchfield in add group form------------
+   &.search-field{
     background-color: #F3F3F5;
+        border-radius: 12px;
+   }
+
+       input{
+        border-radius: 12px;
+
+    background-color: #F3F3F5;
+        padding: 8px 12px;
        }
        fieldset{
         outline: none;
@@ -36,4 +50,17 @@
     border: 1px solid #A1A1A1 ;
     box-shadow: 0 0 0 2px #CFCFCF;
   }
+}
+.form-btns{
+  display: flex;
+  justify-content: end;
+}
+.cancel-btn{
+  color: #0A0E19 !important;
+  border: 0.5px solid #E5E5E5 !important;
+  margin: 10px 0 !important;
+  border-radius: 8px !important;
+
+  text-transform: none !important;
+  font-weight: 500;
 }

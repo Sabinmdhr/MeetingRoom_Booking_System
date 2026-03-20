@@ -202,7 +202,7 @@ export default function BookMeetingRoom() {
                     {participantType === "external" ? "Hide External" : "Add External"}
                   </Button>
                   </Stack>
-                  {participantType && <ParticipantsCard type={participantType} />}
+                  {participantType && <ParticipantsCard displayOn="book-room" type={participantType} />}
               </div>            
 
               <div className="field">

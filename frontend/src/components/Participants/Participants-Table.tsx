@@ -12,12 +12,13 @@ import {
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import "../../assets/scss/components/Participants-Table.scss"
 import "../../assets/scss/global.scss"
-import { Mail, Phone } from "lucide-react";
+import { Mail, Pen, Phone, Trash2 } from "lucide-react";
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
-export const ParticipantsTable = () => {
+// import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
+export const ParticipantsTable = ({editMode} : {editMode: boolean}) => {
   const { participants, columns } =
     useparticipantsViewModel();
-
+const {open,handleOpen} = useAddParticipantsViewModel()
   return (
     <TableContainer component={Paper} className="TableContainer">
       <Table>
@@ -26,6 +27,7 @@ export const ParticipantsTable = () => {
             {columns.map((col) => (
               <TableCell key={col.id}>{col.label}</TableCell>
             ))}
+            {editMode && <TableCell> Actions</TableCell>}
           </TableRow>
         </TableHead>
 
@@ -38,7 +40,9 @@ export const ParticipantsTable = () => {
                     return (
                       <TableCell key={col.id}>
                         <div className="name-Col">
-                          <Typography className="fullname">{participant.fullName}</Typography>
+                          <Typography className="fullname">
+                            {participant.fullName}
+                          </Typography>
                           <Typography className="role">
                             {participant.role}
                           </Typography>
@@ -49,7 +53,10 @@ export const ParticipantsTable = () => {
                   case "department":
                     return (
                       <TableCell key={col.id}>
-                        <Chip className="department-chip" label={participant.department} />
+                        <Chip
+                          className="department-chip"
+                          label={participant.department}
+                        />
                       </TableCell>
                     );
 
@@ -58,10 +65,14 @@ export const ParticipantsTable = () => {
                       <TableCell key={col.id}>
                         <div className="Contact">
                           <Typography className="email">
-                           <Mail size={12}/> {participant.email}
-                            </Typography>
-                          <Typography className="number" variant="body2" color="text.secondary">
-                        <Phone size={12}/>    {participant.phoneNumber}
+                            <Mail size={12} /> {participant.email}
+                          </Typography>
+                          <Typography
+                            className="number"
+                            variant="body2"
+                            color="text.secondary"
+                          >
+                            <Phone size={12} /> {participant.phoneNumber}
                           </Typography>
                         </div>
                       </TableCell>
@@ -78,6 +89,12 @@ export const ParticipantsTable = () => {
                     return <TableCell key={col.id}>-</TableCell>;
                 }
               })}
+              {editMode && (
+                <TableCell>
+                  {" "}
+                  <Pen size={16} onClick={handleOpen} /> <Trash2 size={16} />{" "}
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
