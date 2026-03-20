@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL ;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const axiosInstance = ({ baseUrl }: { baseUrl?: string }) => {
   console.log("BASE_URL", baseUrl, BASE_URL);
@@ -8,6 +8,7 @@ export const axiosInstance = ({ baseUrl }: { baseUrl?: string }) => {
     baseURL: baseUrl ?? BASE_URL,
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
   });
 };

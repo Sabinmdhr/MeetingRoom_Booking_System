@@ -49,7 +49,7 @@ export const DemoParticipants = (): Participants[] => {
   ];
 };
 
-export const DemoColumns=(): Columns[] =>{
+export const DemoColumns = (): Columns[] => {
   return [
     {
       id: "Name",
@@ -63,11 +63,13 @@ export const DemoColumns=(): Columns[] =>{
       id: "contact",
       label: "Contact",
     },
-     {
+    {
       id: "numOfMeetings",
-      label: "Meetings"
+      label: "Meetings",
+    },
+    {
+      id: "actions",
+      label: "Actions",
     },
   ];
-
-
-}
+};
