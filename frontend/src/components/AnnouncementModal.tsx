@@ -9,20 +9,42 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
+
 import { Megaphone, X, CircleCheckBig, CircleAlert, Users } from "lucide-react";
 import { useState } from "react";
 import "../assets/scss/global.scss";
 
 import "../assets/scss/pages/AnnouncementModal.scss";
+import { toast } from "mui-sonner";
+
+// inside the component, add the publish handler:
 
 const AnnouncementModal = ({ open, handleClose }: any) => {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [audience, setAudience] = useState("All Users");
+  // const [openBar, setOpenBar] = useState(false);
 
   const today = new Date().toLocaleDateString();
   // console.log(priority);
+
+  const handlePublish = () => {
+    if (!title.trim()) {
+      toast.error("Please enter an announcement title.");
+      return;
+    }
+    if (!message.trim()) {
+      toast.error("Please enter a message.");
+      return;
+    }
+
+    toast.success("Announcement published!", {
+      description: `"${title}" sent to ${audience}`,
+    });
+
+    handleModalClose();
+  };
 
   const handleModalClose = () => {
     setTitle("");
@@ -218,6 +240,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
           <Button
             variant="contained"
             className="announcement__button__publish"
+            onClick={handlePublish}
           >
             <Megaphone size={20} />
             Publish Announcement

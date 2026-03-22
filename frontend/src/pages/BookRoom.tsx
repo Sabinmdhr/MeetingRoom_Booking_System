@@ -12,7 +12,7 @@ import {
   InputAdornment,
   Chip,
 } from "@mui/material";
-import { Users, UserPlus, X } from 'lucide-react';
+import { Users, UserPlus, X } from "lucide-react";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import type { Meeting_room } from "../models/Meeting_room.model";
 import {
@@ -45,12 +45,20 @@ const BookRoom = () => {
   const [endTime, setEndTime] = useState<string | null>(null);
   const [timeType, setTimeType] = useState<"start" | "end" | null>(null);
 
-const {selectedParticipants} = useAppSelector((state)=> state.participants)
-const participants  = useAppSelector((state)=> state.participants.participants)
-const selectedId = useAppSelector((state) => state.participants.selectedParticipants)
+  const { selectedParticipants } = useAppSelector(
+    (state) => state.participants,
+  );
+  const participants = useAppSelector(
+    (state) => state.participants.participants,
+  );
+  const selectedId = useAppSelector(
+    (state) => state.participants.selectedParticipants,
+  );
 
-const selectedNames = participants.filter((p) => selectedId.includes(p.id)).map((p)=> p.fullName)
-// const plength = selectedParticipants.length
+  const selectedNames = participants
+    .filter((p) => selectedId.includes(p.id))
+    .map((p) => p.fullName);
+  // const plength = selectedParticipants.length
   const handleInternalClick = () => {
     setParticipantType((prev) => (prev === "internal" ? null : "internal"));
   };
@@ -214,19 +222,22 @@ const selectedNames = participants.filter((p) => selectedId.includes(p.id)).map(
                 <Typography className="subtitle">
                   Add internal team members or external guests to the meeting
                 </Typography>
-{selectedParticipants.length != 0 &&
-<div>
-  <Typography>Internal Members {selectedParticipants.length}</Typography>
+                {selectedParticipants.length != 0 && (
+                  <div>
+                    <Typography>
+                      Internal Members {selectedParticipants.length}
+                    </Typography>
 
- <div>
-  {selectedNames.map((p)=>
-<Chip label={p} icon={<X/>}></Chip>
-  )}
- </div>
-
-  </div>
-
-  }
+                    <div>
+                      {selectedNames.map((p) => (
+                        <Chip
+                          label={p}
+                          icon={<X />}
+                        ></Chip>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <Box sx={{ display: "flex", gap: 1 }}>
                   <Button
