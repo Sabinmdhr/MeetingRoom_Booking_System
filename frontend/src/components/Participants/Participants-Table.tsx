@@ -18,9 +18,13 @@ import "../../assets/scss/global.scss";
 import { EllipsisVertical, Mail, Pen, Phone, Trash, Trash2 } from "lucide-react";
 import type { Participants } from "../../models/participants.model";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { openEditForm } from "../../redux/ParticipantsSlice";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 export const ParticipantsTable = () => {
+
+  const dispatch  = useDispatch()
   const { participants, columns, handleEdit } = useparticipantsViewModel();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) =>
@@ -35,7 +39,7 @@ export const ParticipantsTable = () => {
             {columns.map((col) => (
               <TableCell key={col.id}>{col.label}</TableCell>
             ))}
-            <TableCell> Actions</TableCell>
+
           </TableRow>
         </TableHead>
 
@@ -93,12 +97,12 @@ export const ParticipantsTable = () => {
                       </TableCell>
                     );
 
-                  default:
-                    return <TableCell key={col.id}>-</TableCell>;
-                }
-              })}
 
-              <TableCell>
+
+                  case "actions":
+                  return (
+
+                <TableCell>
                 <IconButton onClick={handleMenuOpen}>
                   <EllipsisVertical size={16} />
                 </IconButton>
@@ -118,11 +122,12 @@ export const ParticipantsTable = () => {
                   <MenuItem
                     className="menu-btn"
                     onClick={() => {
-                      handleEdit(participant);
+                      // handleEdit(participant);
+                      handleEdit(participant)
                       handleMenuClose();
                     }}
                   >
-                    <Pen size={18} /> Edit
+                    <Pen size={18}/> Edit
                   </MenuItem>
                   <MenuItem
                     className="menu-btn"
@@ -136,6 +141,15 @@ export const ParticipantsTable = () => {
                   </MenuItem>
                 </Menu>
               </TableCell>
+              );
+
+                  default:
+                    return <TableCell key={col.id}>-</TableCell>;
+                }
+
+              })}
+
+
             </TableRow>
           ))}
         </TableBody>

@@ -1,29 +1,22 @@
 import {
   Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
+
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   MenuItem,
-  Paper,
   TextField,
 } from "@mui/material";
+import {closeEditForm} from "../../redux/ParticipantsSlice"
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
-import { Plus, Save, X } from "lucide-react";
+import { FastForward, Plus } from "lucide-react";
 import "../../assets/scss/global.scss";
 import "../../assets/scss/components/AddParticipants-Form.scss";
 import { useAppSelector } from "../../redux/store";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
-import { ClassNames } from "@emotion/react";
-import type { LoginFormInputs } from "../../models/auth.model";
-import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+
 export const AddParticipantsForm = () => {
   const {
     handleChange,
@@ -31,13 +24,13 @@ export const AddParticipantsForm = () => {
     open,
     submitForm,
     participantFormData,
+    setParticipantFormData,
     cancelForm,
+    initialFormData,
   } = useAddParticipantsViewModel();
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<LoginFormInputs>();
+const dispatch = useDispatch();
+  const {isEditOpen , selectedParticipant} = useAppSelector((state) => state.participants)
+
   const departments = ["Engineering", "Product", "Finance", "Marketing"];
   const roles = [
     "Senior Engineer",
@@ -47,6 +40,21 @@ export const AddParticipantsForm = () => {
     "Product Manager",
     "UX Researcher",
   ];
+//  useEffect(() => {
+//    if (selectedParticipant) {
+//      setParticipantFormData({
+//        name: selectedParticipant.fullName,
+//        role: selectedParticipant.role,
+//        phoneNum: selectedParticipant.phoneNumber,
+//        email: selectedParticipant.email,
+//        department: selectedParticipant.department,
+//      });
+//    } else {
+//      setParticipantFormData(initialFormData);
+//    }
+//  }, [selectedParticipant]);
+
+
   return (
     <>
       <Button
@@ -58,8 +66,8 @@ export const AddParticipantsForm = () => {
       </Button>
 
       <Dialog
-        open={open}
-        onClose={cancelForm}
+        open={isEditOpen}
+        onClose={()=> dispatch(closeEditForm())}
         slotProps={{ paper: { className: "Form__Container" } }}
         className="Form__Container"
       >

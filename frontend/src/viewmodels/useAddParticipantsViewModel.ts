@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { closeEditForm } from "../redux/ParticipantsSlice";
 
 export const useAddParticipantsViewModel = () => {
+const {selectedParticipant} = useAppSelector((state) => state.participants)
+const dispatch = useDispatch();
+
   const initialFormData = {
     name: "",
     role: "Senior Engineer",
@@ -8,6 +14,8 @@ export const useAddParticipantsViewModel = () => {
     email: "",
     department: "Engineering",
   };
+
+  // const {isEditOpen , selectedParticipant} = useAppSelector((state) => state.participants)
 
   const [participantFormData, setParticipantFormData] =
     useState(initialFormData);
@@ -27,18 +35,21 @@ export const useAddParticipantsViewModel = () => {
     console.log(participantFormData);
     setParticipantFormData(initialFormData);
     setOpen(false);
+
   };
 
   const cancelForm = () => {
     setParticipantFormData(initialFormData);
-    setOpen(false);
+    // dispatch(closeEditForm());
   };
+
 
   return {
     handleChange,
     submitForm,
     cancelForm,
     open,
+    initialFormData,
     setOpen,
     participantFormData,
     setParticipantFormData,
