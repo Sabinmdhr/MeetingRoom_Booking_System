@@ -22,9 +22,7 @@ export const useCalendarEventViewModel = () => {
     setSelectedEvent(null);
   };
 
-  /* =============================
-     EVENTS (memoized)
-  ============================== */
+  //  EVENTS (memoized)
 
   const events: CalendarEvent[] = useMemo(
     () => [
@@ -32,11 +30,11 @@ export const useCalendarEventViewModel = () => {
         id: 1,
         title: "Board Meeting",
         category: "executive",
-        date: "2026-03-15",
+        date: "2026-03-19",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
         location: "Board Room 5A",
-        organizer: "Sarah Johnson",
+        organizer: "Elon Musk",
         participants: [],
         description: "Quarterly board meeting",
         department: "Account Management",
@@ -45,11 +43,11 @@ export const useCalendarEventViewModel = () => {
         id: 2,
         title: "Frontend Dev Meeting",
         category: "internal",
-        date: "2026-03-15",
+        date: "2026-03-19",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
         location: "Board Room 6A",
-        organizer: "Sabin Manandhar",
+        organizer: "Lionel Messi",
         participants: [],
         description: "Frontend sync meeting",
         department: "Engineering",
@@ -58,11 +56,11 @@ export const useCalendarEventViewModel = () => {
         id: 3,
         title: "Client Meeting",
         category: "client",
-        date: "2026-03-15",
+        date: "2026-03-19",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
         location: "Board Room 6A",
-        organizer: "Sabin Manandhar",
+        organizer: "Lionel Messi",
         participants: [],
         description: "Client sync",
         department: "Engineering",
@@ -71,11 +69,11 @@ export const useCalendarEventViewModel = () => {
         id: 4,
         title: "Client Meeting",
         category: "client",
-        date: "2026-03-15",
+        date: "2026-03-19",
         startTime: "12:00 PM",
         endTime: "1:00 PM",
         location: "Board Room 6A",
-        organizer: "Sabin Manandhar",
+        organizer: "Lionel Messi",
         participants: [],
         description: "Client sync",
         department: "Engineering",
@@ -84,9 +82,7 @@ export const useCalendarEventViewModel = () => {
     [],
   );
 
-  /* =============================
-     MONTH VIEW CALCULATION
-  ============================== */
+  //  MONTH VIEW CALCULATION
 
   const startOfMonth = currentMonth.startOf("month").day();
   const daysInMonth = currentMonth.daysInMonth();
@@ -102,21 +98,19 @@ export const useCalendarEventViewModel = () => {
   const formatDate = (day: number) =>
     currentMonth.date(day).format("YYYY-MM-DD");
 
-  /* =============================
-     WEEK VIEW CALCULATION
-  ============================== */
+  //  WEEK VIEW CALCULATION
 
+  // creates 7 days of the week
   const weekStart = currentMonth.startOf("week");
 
   const weekDaysWithDates = Array.from({ length: 7 }, (_, i) =>
     weekStart.add(i, "day"),
   );
 
+  //this will create time slots
   const hours = Array.from({ length: 10 }, (_, i) => 9 + i);
 
-  /* =============================
-     INDEX EVENTS BY DATE
-  ============================== */
+  //  INDEX EVENTS BY DATE
 
   const eventsByDate = useMemo(() => {
     const map: Record<string, CalendarEvent[]> = {};
@@ -129,9 +123,7 @@ export const useCalendarEventViewModel = () => {
     return map;
   }, [events]);
 
-  /* =============================
-     INDEX EVENTS BY DATE + HOUR
-  ============================== */
+  //  INDEX EVENTS BY DATE + HOUR
 
   const eventsByDateHour = useMemo(() => {
     const map: Record<string, Record<number, CalendarEvent[]>> = {};
@@ -153,9 +145,7 @@ export const useCalendarEventViewModel = () => {
     return map;
   }, [events]);
 
-  /* =============================
-     NAVIGATION
-  ============================== */
+  //  NAVIGATION
 
   const goToNext = () => {
     setCurrentMonth((prev) => {

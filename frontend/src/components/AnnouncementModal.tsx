@@ -22,6 +22,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
   const [audience, setAudience] = useState("All Users");
 
   const today = new Date().toLocaleDateString();
+  // console.log(priority);
 
   const handleModalClose = () => {
     setTitle("");
@@ -37,6 +38,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
       onClose={handleModalClose}
       fullWidth
       maxWidth="sm"
+      slotProps={{ paper: { className: "announcement__modal__main" } }}
     >
       <div className="announcementModal">
         <DialogTitle className="announcementModal__header">
@@ -184,13 +186,15 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
             </div>
           </div>
 
-          <div className="announcementModal__preview">
+          <div className={`announcementModal__preview `}>
             <Typography className="announcementModal__previewTitle">
               <Megaphone size={12} />
               Preview
             </Typography>
 
-            <div className="announcementModal__main">
+            <div
+              className={`announcementModal__main ${priority === "High Priority" ? "high-priority" : ""} `}
+            >
               <h3>{title || "Announcement Title"}</h3>
               <p>{message || "Announcement message will appear here..."}</p>
               <span className="announcementModal__meta">

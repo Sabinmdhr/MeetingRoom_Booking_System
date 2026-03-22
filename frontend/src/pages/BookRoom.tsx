@@ -1,9 +1,12 @@
-import BookMeetingRoom from '../components/BookRoom/BookMeetingRoom'
+import BookMeetingRoom from "../components/BookRoom/BookMeetingRoom"
 
-const BookRoom = () => {
+ const BookRoom = () => {
   return (
+    <>
     <BookMeetingRoom />
+    </>
   )
 }
 
 export default BookRoom
+

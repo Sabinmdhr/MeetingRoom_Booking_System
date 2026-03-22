@@ -1,76 +1,188 @@
 .edit-modal-main {
   font-family: var(--titleMediumFont);
-  .edit-modal-title {
+
+  // Dialog paper itself
+  .MuiDialog-paper {
+    border-radius: 8px !important;
+    // overflow: hidden;
+  }
+
+  .edit-modal-header {
+    padding: 16px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 4px;
-
-    h2 {
-      font-size: 20px;
+    font-size: 18px;
+    border-bottom: 1px solid #e5e7eb;
+    p {
       font-weight: 600;
     }
   }
 
-  .calendar-modal-content {
-    .modal-section {
-      margin-top: 16px;
-      margin-bottom: 16px;
+  .modal-category {
+    font-size: 14px;
+    // font-weight: 500;
+    text-transform: capitalize;
+    border-radius: 20px;
 
-      .section-title {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-
-      .MuiTextField-root {
-        width: 100%;
-        input,
-        textarea {
-          padding: 6px 8px;
-          font-size: 14px;
-        }
-      }
-
-      .datetime-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-top: 6px;
-      }
+    &.client {
+      margin: 3px;
+      color: #ca3500;
+      padding: 4px 8px;
+      border: 2px solid #ffd6a7;
+      // border-radius: 10px;
+      background-color: #ffedd4;
+      opacity: 2;
+    }
+    &.internal {
+      margin: 3px;
+      padding: 4px 8px;
+      border: 2px solid #bedbff;
+      border-radius: 10px;
+      background-color: #dbeafe;
+      color: #1447e6;
+      opacity: 2;
+    }
+    &.executive {
+      color: #8200db;
+      margin: 3px;
+      padding: 4px 8px;
+      border: 2px solid #e9d4ff;
+      background-color: #f3e8ff;
+      border-radius: 10px;
+      opacity: 2;
     }
   }
 
-  .calendar-modal-actions {
-    margin-bottom: 14px;
-    display: flex;
-    gap: 4px;
+  .edit-modal-content {
+    padding: 8px 24px;
+    overflow-y: auto !important;
+    max-height: 75vh;
 
-    button {
-      text-transform: capitalize;
-      font-size: small !important;
-      padding: 4px 8px !important;
-      border: 1px solid black;
+    // custom scrollbar
+    // &::-webkit-scrollbar {
+    //   width: 6px;
+    // }
 
-      &.cancel-button {
-        color: black;
-        background-color: white;
+    // &::-webkit-scrollbar-track {
+    //   background: transparent;
+    // }
+
+    // &::-webkit-scrollbar-thumb {
+    //   background: #d1d5db;
+    //   border-radius: 10px;
+
+    //   &:hover {
+    //     background: #9ca3af;
+    //   }
+    // }
+
+    .modal-section {
+      margin: 14px 0;
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .datetime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+  }
+
+  .edit-modal-actions {
+    padding: 14px 24px;
+    gap: 5px;
+    border-top: 1px solid #e5e7eb;
+
+    .cancel-button {
+      text-transform: none !important;
+      border-radius: 8px !important;
+      border: 1px solid #d1d5db !important;
+      background: white !important;
+      color: black !important;
+      padding: 6px 16px !important;
+
+      &:hover {
+        background: #f9fafb !important;
       }
+    }
 
-      &.save-button {
-        padding: 4px 10px !important;
-        background-color: black;
-        color: white;
-        display: flex;
-        gap: 5px;
-        justify-content: center;
-        align-items: flex-start;
+    .save-button {
+      text-transform: none !important;
+      border-radius: 8px !important;
+      background: black !important;
+      color: white !important;
+      padding: 6px 16px !important;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &:hover {
+        background: #222 !important;
       }
     }
   }
 }
 
-/* Ensure the edit modal appears above the main modal */
-.MuiDialog-root {
-  z-index: 1600 !important;
+/* TextField styling inside modal */
+.edit-modal-main .MuiOutlinedInput-root {
+  background: #f3f3f5;
+  border-radius: 10px;
+  font-size: 14px;
+
+  fieldset {
+    border: none;
+  }
+
+  &.Mui-focused fieldset {
+    border: 2px solid #a1a1a1 !important;
+    box-shadow: 0 0 0 3px #ebebeb;
+  }
+}
+
+.edit-modal-main .MuiInputBase-input {
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.edit-modal-main .MuiSelect-select {
+  display: flex !important;
+  align-items: center;
+  padding: 10px 14px !important;
+}
+
+.edit-modal-main .MuiSelect-icon {
+  color: #6b7280;
+}
+
+/* Dropdown menu — rendered via disablePortal so scoped inside modal */
+.edit-modal-menu {
+  border-radius: 10px !important;
+  margin-top: 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+
+  .MuiMenuItem-root {
+    font-size: 14px;
+    border-radius: 6px;
+    margin: 2px 6px;
+
+    &:hover {
+      background-color: #f3f4f6 !important;
+    }
+
+    &.Mui-selected {
+      background-color: #ede9fe !important;
+      font-weight: 600;
+
+      &:hover {
+        background-color: #ddd6fe !important;
+      }
+    }
+  }
 }

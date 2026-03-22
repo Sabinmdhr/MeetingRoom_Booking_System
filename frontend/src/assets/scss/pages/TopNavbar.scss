@@ -1,28 +1,32 @@
 .topbar {
   height: 84px;
   background-color: #f2edff !important;
-  z-index: 1300;
 }
 
 .topbar-toolbar {
-  //   height: 102px;
   padding: 12px 0 12px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .nav-items {
+  margin-left: 12%;
   display: flex;
   align-items: center;
   gap: 54px;
+  flex: 1;
+  justify-content: flex-start;
+  padding-left: 32px;
 }
-.notification-icon {
-  height: 26px;
-  width: 26px;
-  color: black;
-  font-weight: lighter;
-  cursor: pointer;
-}
-.dropdown {
-  width: 256px;
+
+.topbar-search {
+  width: 60%;
+
+  .MuiOutlinedInput-root {
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 16px;
+    height: 50px;
+  }
 }

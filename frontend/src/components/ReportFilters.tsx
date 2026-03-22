@@ -1,181 +1,212 @@
 import {
   Button,
-  Card,
-  CardContent,
+  Divider,
+  Drawer,
   Grid,
+  IconButton,
   MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
 import { Calendar, X } from "lucide-react";
 import "../assets/scss/pages/ReportFilters.scss";
-// import { useState } from "react";
-
-import "../assets/scss/global.scss";
 import { useState } from "react";
+import "../assets/scss/global.scss";
 
-const ReportFilters = ({ setFilter }: any) => {
+const ReportFilters = ({ open, onClose }: any) => {
   const [department, setDepartment] = useState("All Department");
   const [room, setRoom] = useState("All Rooms");
   const [user, setUser] = useState("All Users");
-  const [selectedFilter, setSelectedFilter] = useState("All Types");
+  const [meetingType, setMeetingType] = useState("All Types");
+
+  const handleClear = () => {
+    setDepartment("All Department");
+    setRoom("All Rooms");
+    setUser("All Users");
+    setMeetingType("All Types");
+  };
+
   return (
-    <Card className="report-filter__main">
-      <CardContent>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      slotProps={{ paper: { className: "report-filter" } }}
+    >
+      <div className="report-filter__inner">
+        {/* Header */}
         <div className="report-filter__header">
           <Typography variant="h6">Filters</Typography>
-
           <div className="report-filter__header__right">
-            <Button
-              className="report-filter__header__right__button"
-              variant="outlined"
-              onClick={() => {
-                setDepartment("All Department");
-                setRoom("All Rooms");
-                setUser("All Users");
-                setSelectedFilter("All Types");
-              }}
+            <IconButton
+              onClick={onClose}
+              size="small"
             >
-              Clear All
-            </Button>
-
-            <X
-              onClick={() => {
-                setFilter(false);
-              }}
-              size={25}
-            />
+              <X size={20} />
+            </IconButton>
           </div>
         </div>
 
-        <Grid
-          spacing={2}
-          container
-          className="report-filter__calendar"
-        >
+        <Divider />
+
+        <div className="report-filter__content">
+          {/* Row 1: Start Date + End Date */}
           <Grid
-            size={6}
-            className="report-filter__calendar__start"
+            container
+            spacing={2}
           >
-            <label className="report-filter__calendar__start__label">
-              <Calendar size={17} /> Start Date
-            </label>
-            <TextField
-              type="date"
-              fullWidth
-            />
+            <Grid size={6}>
+              <label className="report-filter__label">
+                <Calendar size={14} /> Start Date
+              </label>
+              <TextField
+                type="date"
+                fullWidth
+                className="report-filter__input"
+              />
+            </Grid>
+            <Grid size={6}>
+              <label className="report-filter__label">
+                <Calendar size={14} /> End Date
+              </label>
+              <TextField
+                type="date"
+                fullWidth
+                className="report-filter__input"
+              />
+            </Grid>
           </Grid>
+
+          {/* Row 2: Meeting Type + Department */}
           <Grid
-            size={6}
-            className="report-filter__calendar__end"
+            container
+            spacing={2}
+            className="report-filter__row"
           >
-            <label className="report-filter__calendar__end__label">
-              <Calendar size={17} /> End Date
-            </label>
-            <TextField
-              type="date"
-              fullWidth
-            />
+            <Grid size={6}>
+              <label className="report-filter__label">Meeting Type</label>
+              <TextField
+                select
+                fullWidth
+                value={meetingType}
+                onChange={(e) => setMeetingType(e.target.value)}
+                className="report-filter__select"
+              >
+                {["All Types", "Internal", "Client", "Executive"].map((opt) => (
+                  <MenuItem
+                    key={opt}
+                    value={opt}
+                  >
+                    {opt}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid size={6}>
+              <label className="report-filter__label">Department</label>
+              <TextField
+                select
+                fullWidth
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                className="report-filter__select"
+              >
+                {[
+                  "All Department",
+                  "Engineering",
+                  "Sales",
+                  "Product",
+                  "Finance",
+                  "Marketing",
+                ].map((opt) => (
+                  <MenuItem
+                    key={opt}
+                    value={opt}
+                  >
+                    {opt}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
           </Grid>
-        </Grid>
 
-        <div className="report-filter__buttons">
-          <Button
-            className={`report-filter_button ${selectedFilter === "All Types" && "active"}`}
-            onClick={() => {
-              setSelectedFilter("All Types");
-            }}
-            fullWidth
-            variant="contained"
+          {/* Row 3: Room + User */}
+          <Grid
+            container
+            spacing={2}
+            className="report-filter__row"
           >
-            All Types
+            <Grid size={6}>
+              <label className="report-filter__label">Room</label>
+              <TextField
+                select
+                fullWidth
+                value={room}
+                onChange={(e) => setRoom(e.target.value)}
+                className="report-filter__select"
+              >
+                {[
+                  "All Rooms",
+                  "Executive Room 3A",
+                  "Conference Room 2B",
+                  "Meeting Room 1C",
+                ].map((opt) => (
+                  <MenuItem
+                    key={opt}
+                    value={opt}
+                  >
+                    {opt}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid size={6}>
+              <label className="report-filter__label">User</label>
+              <TextField
+                select
+                fullWidth
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
+                className="report-filter__select"
+              >
+                {[
+                  "All Users",
+                  "Sarah Johnson",
+                  "Michael Chen",
+                  "James Taylor",
+                  "Jennifer Williams",
+                  "Emily Rodriguez",
+                ].map((opt) => (
+                  <MenuItem
+                    key={opt}
+                    value={opt}
+                  >
+                    {opt}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+          </Grid>
+        </div>
+
+        <Divider />
+
+        <div className="report-filter__footer">
+          <Button
+            className="report-filter__footer__clear"
+            onClick={handleClear}
+          >
+            Clear All
           </Button>
           <Button
-            className={`report-filter_button ${selectedFilter === "Internal" && "active"}`}
-            onClick={() => {
-              setSelectedFilter("Internal");
-            }}
-            fullWidth
-            variant="contained"
+            className="report-filter__footer__apply"
+            variant="outlined"
           >
-            Internal
-          </Button>
-          <Button
-            className={`report-filter_button ${selectedFilter === "Client" && "active"}`}
-            onClick={() => {
-              setSelectedFilter("Client");
-            }}
-            fullWidth
-            variant="contained"
-          >
-            Client
-          </Button>
-          <Button
-            className={`report-filter_button ${selectedFilter === "Executive" && "active"}`}
-            onClick={() => {
-              setSelectedFilter("Executive");
-            }}
-            fullWidth
-            variant="contained"
-          >
-            Executive
+            Apply Filter
           </Button>
         </div>
-        <div className="report-filter__dropdown">
-          <div className="report-filter__dropdown-item">
-            <label className="report-filter__label">Department</label>
-            <TextField
-              select
-              fullWidth
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-              className="report-filter__select"
-            >
-              <MenuItem value="All Department">All Department</MenuItem>
-              <MenuItem value="Engineering">Engineering</MenuItem>
-              <MenuItem value="Sales">Sales</MenuItem>
-              <MenuItem value="Product">Product</MenuItem>
-              <MenuItem value="Finance">Finance</MenuItem>
-              <MenuItem value="Marketing">Marketing</MenuItem>
-            </TextField>
-          </div>
-
-          <div className="report-filter__dropdown-item">
-            <label className="report-filter__label">Room</label>
-            <TextField
-              select
-              fullWidth
-              value={room}
-              onChange={(e) => setRoom(e.target.value)}
-              className="report-filter__select"
-            >
-              <MenuItem value="All Rooms">All Rooms</MenuItem>
-              <MenuItem value="Executive Room 3A">Executive Room 3A</MenuItem>
-              <MenuItem value="Conference Room 2B">Conference Room 2B</MenuItem>
-              <MenuItem value="Meeting Room 1C">Meeting Room 1C</MenuItem>
-            </TextField>
-          </div>
-
-          <div className="report-filter__dropdown-item">
-            <label className="report-filter__label">User</label>
-            <TextField
-              select
-              fullWidth
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              className="report-filter__select"
-            >
-              <MenuItem value="All Users">All Users</MenuItem>
-              <MenuItem value="Sarah Johnson">Sarah Johnson</MenuItem>
-              <MenuItem value="Michael Chen">Michael Chen</MenuItem>
-              <MenuItem value="James Taylor">James Taylor</MenuItem>
-              <MenuItem value="Jennifer Williams">Jennifer Williams</MenuItem>
-              <MenuItem value="Emily Rodriguez">Emily Rodriguez</MenuItem>
-            </TextField>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </Drawer>
   );
 };
 

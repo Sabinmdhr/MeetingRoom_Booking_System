@@ -4,6 +4,13 @@ import { Calendar, Users, X} from "lucide-react";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import "../../assets/scss/components/Meeting_roomCard-Details.scss";
 
+import { TimeSlotGrid} from "./TimeSlotTable";
+import type { Booking } from "./TimeSlotTable";
+const bookings: Booking[] = [
+  { id: "1", start: "09:20", end: "09:50" },
+  { id: "2", start: "11:00", end: "11:30" },
+];
+
  interface Meeting_roomCardDetailsProps {
   meetingId: string;
   open: boolean;
@@ -12,7 +19,9 @@ import "../../assets/scss/components/Meeting_roomCard-Details.scss";
 
 export const Meeting_roomCardDetails = ({ meetingId, open, onClose }: Meeting_roomCardDetailsProps) => {
     const { meeting } = useMeetingCardViewModel(meetingId);
-
+ const handleSelect = (slot: any) => {
+   console.log("Selected:", slot.start, slot.end);
+ };
     // if (loading) return <CircularProgress />;
     // if (error) return <div>Error: {error}</div>;
     if (!meeting) return ;
@@ -48,7 +57,13 @@ export const Meeting_roomCardDetails = ({ meetingId, open, onClose }: Meeting_ro
             </div>
             <div className="timeSlots">
               <Typography>TODAY'S SCHEDULE</Typography>
-              <TimeSlotsCard roomId={meetingId} />
+              {/* <TimeSlotsCard roomId={meetingId} /> */}
+              <TimeSlotGrid
+                bookings={bookings}
+                startHour={9}
+                endHour={17}
+                onSelect={handleSelect}
+              />
             </div>
           </DialogContent>
         </Dialog>

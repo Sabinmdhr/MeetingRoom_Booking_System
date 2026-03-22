@@ -1,6 +1,6 @@
 .meeting-table {
-  margin-top: 20px;
-  border-radius: 15px !important;
+  margin-top: 25px;
+  border-radius: 25px !important;
 
   &__main {
     display: flex;
@@ -8,34 +8,30 @@
     align-items: center;
   }
 
-  &__header {
-    margin: 8px;
-    padding-bottom: 10px !important;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  // &__header {
+  //   margin: 8px;
+  //   padding-bottom: 10px !important;
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  // }
 
-  &__button {
-    display: flex;
-    gap: 4px;
-    font-size: 13px !important;
-    text-transform: none !important;
-    color: white !important;
-    border-radius: 8px !important;
-    background: black !important;
-    padding: 6px 12px !important;
-  }
+  // &__button {
+  //   display: flex;
+  //   gap: 4px;
+  //   font-size: 13px !important;
+  //   text-transform: none !important;
+  //   color: white !important;
+  //   border-radius: 8px !important;
+  //   background: black !important;
+  //   padding: 6px 12px !important;
+  // }
+
   &__subtitle {
     color: #6b7280;
     margin-top: 4px;
   }
 
-  &__paper {
-    margin-top: 30px;
-    width: 100%;
-    overflow-x: auto;
-  }
   &__buttons {
     display: flex;
     gap: 10px;
@@ -56,6 +52,7 @@
         color: white !important;
       }
     }
+
     &__export {
       font-size: 13px !important;
       text-transform: none !important;
@@ -67,25 +64,93 @@
       gap: 7px;
     }
   }
-  &__container {
-    max-height: 440px;
-    overflow-x: auto;
-  }
 
-  &__container table {
-    min-width: 1200px;
-  }
+  &__grid {
+    // border-radius: 20px !important;
+    margin-top: 14px;
+    // padding: 0 24px;
 
-  &__head {
-    font-weight: 600;
-    background-color: #e5e7eb !important;
-  }
+    .MuiDataGrid-root {
+      border: 1px solid #e5e7eb;
+      // border-top: 1px solid black;
+      border-radius: 8px;
+      font-size: 14px;
+    }
 
-  .MuiTableRow-root:hover {
-    background-color: #f8fafc;
-  }
+    .MuiDataGrid-columnHeader {
+      background-color: #dedfdf !important;
+      font-size: 16px;
+      border-right: 1px solid #bfc1c5 !important;
+      height: 52px !important;
 
-  .MuiTableCell-root {
-    font-size: 14px;
+      &:focus,
+      &:focus-within {
+        outline: black !important;
+      }
+      .MuiDataGrid-sortIcon {
+        color: #6b7280 !important;
+      }
+    }
+    .MuiDataGrid-columnHeaderTitle {
+      font-weight: 600 !important;
+    }
+    .MuiDataGrid-columnSeparator {
+      display: none !important;
+      // border: 1px solid black !important;
+    }
+    // .MuiDataGrid-columnHeaders {
+    //   border-bottom: 2px solid #d1d5db;
+    // }
+
+    .MuiDataGrid-cell {
+      border-bottom: 1px solid #e5e7eb;
+
+      &:focus,
+      &:focus-within {
+        outline: none !important;
+      }
+    }
+
+    .MuiDataGrid-row:hover {
+      background-color: #f8fafc;
+    }
+
+    // circle that contains arrow
+    .MuiDataGrid-iconButtonContainer {
+      .MuiIconButton-root {
+        background-color: transparent !important;
+
+        &:hover {
+          background-color: #e5e7eb !important;
+        }
+
+        .MuiSvgIcon-root {
+          color: #1956d0;
+          font-size: 18px;
+        }
+      }
+    }
   }
+}
+
+.meeting-table__toolbar {
+  padding: 8px 16px;
+  border-bottom: 1px solid #e5e7eb;
+
+  .MuiButtonBase-root {
+    font-size: 13px !important;
+    text-transform: none !important;
+    color: black !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    background: white !important;
+    padding: 6px 12px !important;
+    border: 1px solid rgb(170, 165, 165) !important;
+    gap: 7px;
+  }
+}
+
+.meeting-table__grid {
+  overflow: hidden; // prevents white flash
+  width: 100%;
 }

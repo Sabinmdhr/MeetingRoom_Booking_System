@@ -1,4 +1,7 @@
+// .announcement__dialog {
+// }
 .announcementModal {
+  border-radius: 20px !important;
   // font-family: "Inter", sans-serif;
   font-family: var(--titleMediumFont);
   &__header {
@@ -61,7 +64,7 @@
     }
 
     p {
-      color: #6b7280;
+      // color: #6b7280;
       margin-bottom: 7px;
       line-height: 1.5;
       font-size: 14px;
@@ -77,6 +80,11 @@
     margin-bottom: 10px;
   }
 
+  .high-priority {
+    background: #fef2f2;
+    border: 1px solid #ffabab;
+  }
+
   &__main {
     padding: 16px;
     background: #fff;
@@ -86,7 +94,7 @@
 
   &__meta {
     font-size: 12px;
-    color: #9ca3af;
+    color: #505357;
   }
 
   &__divider {
@@ -212,4 +220,8 @@
 /* Select field arrow alignment */
 .MuiSelect-icon {
   color: #6b7280;
+}
+
+.announcement__modal__main {
+  border-radius: 8px !important;
 }

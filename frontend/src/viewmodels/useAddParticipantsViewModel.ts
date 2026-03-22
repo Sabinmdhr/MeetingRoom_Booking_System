@@ -1,49 +1,46 @@
 import { useState } from "react";
 
 export const useAddParticipantsViewModel = () => {
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
-  const [email, setEmail] = useState("");
-  const [department, setDepartment] = useState("");
-  const [open, setOpen] = useState(false);
-  const [closeBtn, setCloseBtn] = useState(true);
-
-  const handleOpen = () => {
-    setOpen(true);
-    setCloseBtn(false);
+  const initialFormData = {
+    name: "",
+    role: "Senior Engineer",
+    phoneNum: "",
+    email: "",
+    department: "Engineering",
   };
-  const handleClose = () => setOpen(false);
 
-  const handleAddParticipant = () => {
-    // e.preventDefault();
+  const [participantFormData, setParticipantFormData] =
+    useState(initialFormData);
 
-    const newParticipant = {
-      name,
-      role,
-      department,
-      email,
-      phoneNum,
-    };
+  const [open, setOpen] = useState(false);
 
-    console.log("new participant: ", newParticipant);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setParticipantFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const submitForm = () => {
+    console.log(participantFormData);
+    setParticipantFormData(initialFormData);
+    setOpen(false);
+  };
+
+  const cancelForm = () => {
+    setParticipantFormData(initialFormData);
+    setOpen(false);
   };
 
   return {
-    department,
-    email,
-    handleAddParticipant,
-    phoneNum,
-    role,
-    name,
-    setDepartment,
-    setName,
-    setEmail,
-    setRole,
+    handleChange,
+    submitForm,
+    cancelForm,
     open,
-    setPhoneNum,
-    handleClose,
-    handleOpen,
-    closeBtn,
+    setOpen,
+    participantFormData,
+    setParticipantFormData,
   };
 };

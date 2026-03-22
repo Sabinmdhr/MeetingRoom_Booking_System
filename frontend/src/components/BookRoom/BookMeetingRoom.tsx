@@ -5,19 +5,29 @@ import {
   Card,
   Typography,
   InputAdornment,
-  Stack, Snackbar,
+  Stack,
+  Snackbar,
   Select,
-  FormControl, 
+  FormControl,
+  Chip,
 } from "@mui/material";
 import { useBookingForm } from "../../viewmodels/useBookingForm";
 import "../../assets/scss/pages/BookRoom.scss";
-import { Calendar, Clock4, UserPlus, Users, CircleAlert } from "lucide-react";
+import {
+  Calendar,
+  Clock4,
+  UserPlus,
+  Users,
+  CircleAlert,
+  X,
+} from "lucide-react";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { useTimeSlotsViewModel } from "../../viewmodels/useTimeSlotsViewModel";
 import SelectTimeCard from "../BookingRooms/SelectTimeCard";
 import { useRoomDetailsCard } from "../../viewmodels/useRoomDetailsCard";
 import RoomDetailsCard from "../BookingRooms/RoomDetailsCard";
+import { useAppSelector } from "../../redux/store";
 
 const meetings = [
   { id: "1", name: "Internal" },
@@ -27,10 +37,31 @@ const meetings = [
 
 export default function BookMeetingRoom() {
   const { values, errors, handleChange, handleSubmit } = useBookingForm();
-  const { participantType, handleInternalClick, handleExternalClick } = useparticipantsViewModel();
-  const { handleTimeClick, openWarning, setOpenWarning, timeType, openTime, setOpenTime } = useTimeSlotsViewModel(values.roomId, values.date);
-  const { handleRoomChange, rooms, roomId ,selectedRoom } = useRoomDetailsCard();
+  const { participantType, handleInternalClick, handleExternalClick } =
+    useparticipantsViewModel();
+  const {
+    handleTimeClick,
+    openWarning,
+    setOpenWarning,
+    timeType,
+    openTime,
+    setOpenTime,
+  } = useTimeSlotsViewModel(values.roomId, values.date);
+  const { handleRoomChange, rooms, roomId, selectedRoom } =
+    useRoomDetailsCard();
 
+  const { selectedParticipants } = useAppSelector(
+    (state) => state.participants,
+  );
+  const participants = useAppSelector(
+    (state) => state.participants.participants,
+  );
+  const selectedId = useAppSelector(
+    (state) => state.participants.selectedParticipants,
+  );
+  const selectedNames = participants
+    .filter((p) => selectedId.includes(p.id))
+    .map((p) => p.fullName);
   return (
     <div className="bookroom">
       <form className="bookroom-form" onSubmit={handleSubmit}>
@@ -47,7 +78,9 @@ export default function BookMeetingRoom() {
           <div className="bookroom-body">
             <div className="bookroom-left">
               <div className="field">
-                <label className="field-label" htmlFor="meeting-title">Meeting Title *</label>
+                <label className="field-label" htmlFor="meeting-title">
+                  Meeting Title *
+                </label>
                 <TextField
                   placeholder="Enter meeting title"
                   id="meeting-title"
@@ -73,9 +106,9 @@ export default function BookMeetingRoom() {
                   error={!!errors.date}
                   fullWidth
                 />
-              {errors.date && (
-                <span className="field-error">{errors.date}</span>
-              )}
+                {errors.date && (
+                  <span className="field-error">{errors.date}</span>
+                )}
               </div>
 
               <div className="time">
@@ -180,8 +213,20 @@ export default function BookMeetingRoom() {
                 <Typography className="subtitle">
                   Add internal team members or external guests to the meeting
                 </Typography>
-                  <Stack className="stack-container">
-                    <Button
+                {selectedParticipants.length != 0 && (
+                  <div>
+                    <Typography>
+                      Internal Members {selectedParticipants.length}
+                    </Typography>
+
+                    {selectedNames.map((p) => (
+                      <Chip label={p} icon={<X />}></Chip>
+                    ))}
+                  </div>
+                )}
+
+                <Stack className="stack-container">
+                  <Button
                     className="participants-btn"
                     fullWidth
                     variant="outlined"
@@ -189,7 +234,9 @@ export default function BookMeetingRoom() {
                     startIcon={<Users size={18} />}
                     onClick={handleInternalClick}
                   >
-                    {participantType === "internal" ? "Hide Internal" : "Add Internal"}
+                    {participantType === "internal"
+                      ? "Hide Internal"
+                      : "Add Internal"}
                   </Button>
                   <Button
                     className="participants-btn"
@@ -199,11 +246,18 @@ export default function BookMeetingRoom() {
                     startIcon={<UserPlus size={18} />}
                     onClick={handleExternalClick}
                   >
-                    {participantType === "external" ? "Hide External" : "Add External"}
+                    {participantType === "external"
+                      ? "Hide External"
+                      : "Add External"}
                   </Button>
-                  </Stack>
-                  {participantType && <ParticipantsCard displayOn="book-room" type={participantType} />}
-              </div>            
+                </Stack>
+                {participantType && (
+                  <ParticipantsCard
+                    displayOn="book-room"
+                    type={participantType}
+                  />
+                )}
+              </div>
 
               <div className="field">
                 <label className="field-label" htmlFor="desc">
@@ -221,34 +275,41 @@ export default function BookMeetingRoom() {
             <div className="bookroom-right">
               <div className="field">
                 <label className="field-label">Select Room *</label>
-                <FormControl fullWidth size="small" className="formcontrol-room">
-                <Select
-                  name="roomId"
-                  value={roomId}
-                  onChange={(e) =>{
-                    handleRoomChange(e.target.value);
-                    handleChange(e);
-                  }}                 
+                <FormControl
                   fullWidth
                   size="small"
-                  displayEmpty
-                  renderValue={(selected)=>{
-                    if(!selected){
-                      return <span className="select-room">Choose a meeting room</span>;
-                    }
-                    const room = rooms.find((r) => r.id === selected);
-                    return room?.title;
-                  }}
+                  className="formcontrol-room"
                 >
-                  {rooms.map((room) => (
-                    <MenuItem key={room.id} value={room.id}>
-                      {room.title}
-                    </MenuItem>
-                  ))}
-                </Select>
+                  <Select
+                    name="roomId"
+                    value={roomId}
+                    onChange={(e) => {
+                      handleRoomChange(e.target.value);
+                      handleChange(e);
+                    }}
+                    fullWidth
+                    size="small"
+                    displayEmpty
+                    renderValue={(selected) => {
+                      if (!selected) {
+                        return (
+                          <span className="select-room">
+                            Choose a meeting room
+                          </span>
+                        );
+                      }
+                      const room = rooms.find((r) => r.id === selected);
+                      return room?.title;
+                    }}
+                  >
+                    {rooms.map((room) => (
+                      <MenuItem key={room.id} value={room.id}>
+                        {room.title}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
                 <RoomDetailsCard room={selectedRoom} />
-
               </div>
               <Button
                 className="book-btn"
@@ -266,12 +327,19 @@ export default function BookMeetingRoom() {
           </div>
         </Card>
       </form>
-      <Snackbar open={openWarning} autoHideDuration={3000} onClose={()=> setOpenWarning(false)} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
+      <Snackbar
+        open={openWarning}
+        autoHideDuration={3000}
+        onClose={() => setOpenWarning(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
         <div className="warning">
           <CircleAlert className="warning-icon" size={18} />
-          <span className="warning-span">Please select a room and date first</span>
+          <span className="warning-span">
+            Please select a room and date first
+          </span>
         </div>
       </Snackbar>
     </div>
-  )
+  );
 }

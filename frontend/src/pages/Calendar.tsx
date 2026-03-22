@@ -8,6 +8,7 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+
 import { useCalendarEventViewModel } from "../viewmodels/useCalendarEventViewModel";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -15,7 +16,7 @@ import CalendarModal from "../components/CalendarModal";
 import "../assets/scss/global.scss";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import React, { useState } from "react";
+import React, { Activity, useState } from "react";
 import { Popover } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -182,43 +183,61 @@ const Calendar = () => {
 
       <CardContent className="calendar__main">
         {isDayView ? (
-          <div className="day">
-            <div className="day__header">
-              {currentMonth.format("dddd, MMMM D")}
+          <Activity mode={isDayView ? "visible" : "hidden"}>
+            <div className="day">
+              <div className="day__header">
+                {currentMonth.format("dddd, MMMM D")}
+              </div>
+
+              <div className="day__body">
+                {hours.map((hour) => {
+                  const cellEvents =
+                    eventsByDateHour[selectedDate]?.[hour] || [];
+
+                  return (
+                    <React.Fragment key={hour}>
+                      <div className="day__hour">
+                        {dayjs().hour(hour).format("h A")}
+                      </div>
+
+                      <div className="day__cell">
+                        {cellEvents.map((event) => (
+                          <div
+                            key={event.id}
+                            className={`day__event ${event.category}`}
+                            onClick={() => openEvent(event)}
+                          >
+                            <span className="event-time">
+                              {event.startTime}
+                            </span>
+                            <br />
+                            <span className="event-title">{event.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
             </div>
-
-            <div className="day__body">
-              {hours.map((hour) => {
-                const cellEvents = eventsByDateHour[selectedDate]?.[hour] || [];
-
-                return (
-                  <React.Fragment key={hour}>
-                    <div className="day__hour">
-                      {dayjs().hour(hour).format("h A")}
-                    </div>
-
-                    <div className="day__cell">
-                      {cellEvents.map((event) => (
-                        <div
-                          key={event.id}
-                          className={`day__event ${event.category}`}
-                          onClick={() => openEvent(event)}
-                        >
-                          <span className="event-time">{event.startTime}</span>
-                          <br />
-                          <span className="event-title">{event.title}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          </div>
+          </Activity>
         ) : isWeekView ? (
           <div className="week">
             <div className="week__header">
               <div className="week__corner"></div>
+              {weekDaysWithDates.map((day) => (
+                <div
+                  key={day.format("YYYY-MM-DD")}
+                  className="week__day"
+                >
+                  <span className="week__day__name">{day.format("ddd")}</span>
+                  <span
+                    className={`week__day__date ${day.format("YYYY-MM-DD") === today ? "today" : ""}`}
+                  >
+                    {day.format("D")}
+                  </span>
+                </div>
+              ))}
             </div>
 
             <div className="week__body">
@@ -254,11 +273,11 @@ const Calendar = () => {
                             </div>
                           ))}
 
-                          {cellEvents.length > 2 && (
+                          {/* {cellEvents.length > 2 && (
                             <span className="month__more">
                               +{cellEvents.length - 2} more
                             </span>
-                          )}
+                          )} */}
                         </div>
                       );
                     })}
@@ -307,11 +326,11 @@ const Calendar = () => {
                           </div>
                         ))}
 
-                        {dayEvents.length > 3 && (
+                        {/* {dayEvents.length > 3 && (
                           <span className="month__more">
                             +{dayEvents.length - 3} more
                           </span>
-                        )}
+                        )} */}
                       </>
                     )}
                   </div>

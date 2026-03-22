@@ -4,15 +4,51 @@ import {
   DemoParticipants,
   DemoColumns,
 } from "../services/participants.service";
+import { useSelector , useDispatch} from "react-redux";
+import {
+  setParticipants,
+  closeEditForm,
+  openEditForm,
+
+  toggleParticipantsSelection,
+  clearSelectedParticipants,
+} from "../redux/ParticipantsSlice";
 
 export const useparticipantsViewModel = () => {
+
+   useEffect(() => {
+    const data = DemoParticipants();
+    dispatch(setParticipants(data));
+    dispatch(clearSelectedParticipants());
+    
+  }, []);
   const [participantType, setParticipantType] = useState< "internal" | "external" | null >(null);
   const [tabValue, setTabValue] = useState("people");
-  const [participants, setParticipants] =
-    useState<Participants[]>(DemoParticipants());
-  const [columns, setColumns] = useState<Columns[]>(DemoColumns());
+  
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>(
-    [],
+    [],)
+
+  // const [participants, setParticipants] = useState<Participants[]>(DemoParticipants());
+  const [columns, setColumns] = useState<Columns[]>(DemoColumns());
+  const dispatch = useDispatch();
+
+
+
+  
+  const handleEdit = (participants: any) => {
+    dispatch(openEditForm(participants));
+  };
+
+  const handleToggle = (pId: string) => {
+    dispatch(toggleParticipantsSelection(pId));
+  };
+
+  const handleClose = () => {
+    dispatch(closeEditForm());
+  };
+
+  const { participants, isEditOpen } = useSelector(
+    (state: any) => state.participants,
   );
   const [search, setSearch] = useState("");
   const [externalName, setExternalName] = useState("");
@@ -33,15 +69,12 @@ export const useparticipantsViewModel = () => {
   };
 
   const filteredParticipants = participants.filter(
-    (p) =>
+    (p:Participants) =>
       p.fullName.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
 
-  useEffect(() => {
-    const data = DemoParticipants();
-    setParticipants(data);
-  }, []);
+ 
 
   const handleAddExternal = () => {
     if (!externalName || !externalEmail) return;
@@ -60,10 +93,16 @@ export const useparticipantsViewModel = () => {
     handleInternalClick,
     handleExternalClick,
     tabValue,
-    setTabValue,
     participants,
+    setParticipants,
+    isEditOpen,
+    handleClose,
+    handleEdit,
     columns,
     setColumns,
+    handleToggle,
+    setTabValue,
+   
     selectedParticipants,
     handleSelectParticipant,
     search,
@@ -79,15 +118,3 @@ export const useparticipantsViewModel = () => {
 
 
 
-// import { useState } from "react";
-// import type { Participants,Columns } from "../models/participants.model";
-// import { DemoParticipants,DemoColumns } from "../services/participants.service";
-// export const useparticipantsViewModel =() =>{
-//   const [participants, setParticipants] = useState<Participants[]>(DemoParticipants());
-//   const[columns, setColumns] = useState<Columns[]>(DemoColumns())
-//   const [selectedParticipants, setSelectedParticipants] = useState<string[]>(
-//     [],
-//   );
-
-//   return{ participants, setParticipants, columns, setColumns, setSelectedParticipants, selectedParticipants}
-// } 

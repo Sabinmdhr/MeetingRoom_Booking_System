@@ -64,6 +64,16 @@
 
   &__card-title {
     font-weight: 600;
+    display: flex;
+    justify-content: space-evenly !important;
+    // align-items: ;
+
+    gap: 6px !important;
+
+    // &__icon {
+    //   margin-top: 4px;
+    //   color: red;
+    // }
   }
 
   &__tags {

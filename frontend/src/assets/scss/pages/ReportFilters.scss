@@ -1,62 +1,51 @@
+// Applied to the MUI Paper via slotProps
 .report-filter {
-  &__main {
-    margin-top: 10px;
-    border: 1px solid #bedbff !important;
-    border-radius: 14px !important;
-    font-family: var(--titleMediumFont);
+  width: 30% !important;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--titleMediumFont);
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   &__header {
-    margin: 0 7px;
+    padding: 18px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
 
-    &__right {
-      display: flex;
-      gap: 15px;
-      cursor: pointer;
-      align-items: center;
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
-      &__button {
-        text-transform: none !important;
-        font-weight: 700 !important;
-        border-radius: 8px !important;
-        background-color: transparent !important;
-        border: none !important;
-        color: black !important;
-
-        &:hover {
-          background-color: #ececf0 !important;
-        }
-      }
-    }
+  &__row {
+    margin-top: 8px !important;
   }
 
   &__label {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: black;
   }
 
-  &__calendar {
-    margin: 5px 8px;
-    font-size: 17px;
-    font-weight: 700;
-
-    &__start,
-    &__end {
-      margin: 5px 0;
-
-      &__label {
-        margin-bottom: 5px !important;
-        display: flex;
-        gap: 8px;
-      }
-    }
-
+  &__input {
     .MuiOutlinedInput-root {
       background: #f3f3f5;
       border-radius: 10px;
+      font-size: 14px;
 
       fieldset {
         border: none;
@@ -69,69 +58,63 @@
     }
 
     .MuiInputBase-input {
-      padding: 10px 12px;
+      padding: 10px 15px;
       font-size: 14px;
     }
-
-    .MuiSvgIcon-root {
-      color: #6b7280;
-    }
   }
 
-  &__buttons {
-    display: flex !important;
-    padding: 10px;
-    justify-content: space-between;
-    gap: 10px !important;
-
-    Button {
-      text-transform: none;
-      border-radius: 12px;
-      background-color: white;
-      padding: 8px 16px;
-      color: black;
-      border: 1px solid #c5c0c0;
-    }
-
-    .active {
-      background-color: black;
-      color: white;
-    }
-  }
-
-  &__dropdown {
+  &__footer {
+    padding: 16px;
     display: flex;
-    gap: 15px;
-    margin: 15px;
+    gap: 8px;
 
-    .report-filter__dropdown-item {
+    &__clear {
       flex: 1;
-      display: flex;
-      flex-direction: column;
+      text-transform: none !important;
+      font-weight: 600 !important;
+      border-radius: 10px !important;
+      color: #ef4444 !important;
+      background-color: #fff1f1 !important;
+      border: none !important;
+      padding: 10px !important;
+      font-size: 14px !important;
+
+      &:hover {
+        background-color: #fde8e8 !important;
+      }
+    }
+
+    &__apply {
+      flex: 1;
+      text-transform: none !important;
+      font-weight: 600 !important;
+      border-radius: 10px !important;
+      color: black !important;
+      background-color: #f2edff !important;
+      border: none !important;
+      padding: 10px !important;
+      font-size: 14px !important;
+
+      &:hover {
+        background-color: #c4c2ca !important;
+      }
     }
   }
 }
 
-/* Dropdown styling */
 .report-filter__select {
-  background-color: #f3f3f5;
-  border-radius: 12px;
+  .MuiOutlinedInput-root {
+    background-color: #f3f3f5;
+    border-radius: 10px;
+    font-size: 14px;
+  }
 
   .MuiOutlinedInput-notchedOutline {
     border: none;
   }
 
-  &:hover .MuiOutlinedInput-notchedOutline {
-    border: none;
-  }
-
-  &.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border: none;
-    box-shadow: none;
-  }
-
   .MuiSelect-select {
-    padding: 10px 12px;
+    padding: 10px 15px;
     font-size: 14px;
   }
 
@@ -140,11 +123,7 @@
   }
 }
 
-/* Dropdown menu items */
 .MuiMenuItem-root {
-  display: flex !important;
-  align-items: center;
-  gap: 8px;
   font-size: 14px;
 
   &.Mui-selected {
@@ -155,13 +134,8 @@
       background-color: #e5e7eb !important;
     }
   }
-
-  svg {
-    flex-shrink: 0;
-  }
 }
 
-/* Dropdown menu container */
 .MuiPaper-root.MuiMenu-paper {
   border-radius: 10px !important;
   margin-top: 4px;
