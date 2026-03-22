@@ -9,13 +9,14 @@ import DashboardLayout from "./layouts/DashboardLayout";
 
 import Dashboard from "./pages/Dashboard";
 // import Calendar from "./pages/Calendar";
-import BookRoom from "./pages/BookRoom";
+
 import MeetingRooms from "./pages/MeetingRooms";
 import Announcements from "./pages/Announcements";
 import Report from "./pages/Report";
 import Participants from "./pages/Participants";
 import Settings from "./pages/Settings";
 import Calendar from "./pages/Calendar";
+import BookRoom from "./pages/BookRoom";
 
 function App() {
   return (

@@ -69,6 +69,20 @@
     }
   }
 
+  .timefield {
+  .MuiOutlinedInput-root {
+    background-color: white;
+
+    &:hover {
+      background-color: #f7f7fa;
+    }
+
+    input {
+      cursor: default;
+    }
+  }
+}
+
   .MuiTextField-root {
     background: #f3f3f5;
     border-radius: 8px;
@@ -104,11 +118,53 @@
     }
   }
 
+  .formcontrol-room {
+  background: #f3f3f5;
+  border-radius: 8px;
+
+  .MuiOutlinedInput-root {
+    height: 34px;
+    border-radius: 8px;
+
+    fieldset {
+      border-color: #f3f3f5 !important;
+    }
+
+    &:hover fieldset {
+      border-color: #d5d9de !important;
+    }
+
+    &.Mui-focused fieldset {
+      border: 3px solid #d5d9de !important;
+    }
+
+    .MuiSelect-select {
+      padding: 8px 10px !important;
+      color: #2f2f2f !important;
+      font-size: 14px;
+    }
+    .select-room{
+      color: #9aa0a6;
+    }
+  }
+}
+
+  .field-error{
+    color: red;
+    font-size: 12px;
+    margin-left: 12px !important;
+  }
   .subtitle {
     font-size: 12px;
     color: #4a5565;
   }
 
+  .stack-container{
+    display: flex;
+    flex-direction: row;
+    gap: 8px; 
+    height: 32px;
+  }
   .participants-btn {
     text-transform: none;
     justify-content: center;
@@ -197,4 +253,25 @@
     color: #9aa0a6;
     text-align: center;
   }
+.warning {
+  display: flex;
+  align-items: center;
+  height: 55px;
+  width: 400px;
+  padding: 8px 12px;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.warning-icon {
+  color: #000;
+}
+
+.warning-span {
+  font-size: 14px;
+  font-weight: 540;
+}
 }

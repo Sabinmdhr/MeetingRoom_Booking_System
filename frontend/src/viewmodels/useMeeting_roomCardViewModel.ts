@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import type { Meeting_room } from "../models/Meeting_room.model";
 import { getMeetingRoomById } from "../services/Meetinf_room.service";
 
-
 export const useMeetingCardViewModel = (meetingId: string) => {
   const [meeting, setMeeting] = useState<Meeting_room | null>(null);
   const [loading, setLoading] = useState(false);
