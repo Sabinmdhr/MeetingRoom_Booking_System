@@ -40,9 +40,7 @@ export const useparticipantsViewModel = () => {
     dispatch(clearSelectedParticipants())
   }, [dispatch]);
 
-  const handleEdit = (participa: any) => {
-    dispatch(openEditForm(participa));
-
+ 
   const handleEdit = (participants: any) => {
     dispatch(openEditForm(participants));
   };
