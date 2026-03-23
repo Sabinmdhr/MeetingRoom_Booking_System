@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Card,
   Typography,
@@ -13,6 +12,7 @@ import { UserPlus, Search } from "lucide-react";
 import type { Participants } from "../../models/participants.model";
 import { DemoParticipants } from "../../services/participants.service";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/store";
 
 interface ParticipantsCardProps {
@@ -23,10 +23,13 @@ interface ParticipantsCardProps {
 const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
   const [tabValue, setTabValue] = useState("people");
   const [participants, setParticipants] = useState<Participants[]>([]);
+
+
   const [search, setSearch] = useState("");
-  // const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
+  // const { selectedParticipants, setSelectedParticipants } =
+  //   useparticipantsViewModel();
 // const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel();
   useEffect(() => {
     const data = DemoParticipants();

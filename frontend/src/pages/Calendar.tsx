@@ -65,6 +65,7 @@ const Calendar = () => {
 
   const isWeekView = view === "week";
   const isDayView = view === "day";
+  const isMonthView = view === "month";
   const selectedDate = currentMonth.format("YYYY-MM-DD");
 
   return (
@@ -182,46 +183,42 @@ const Calendar = () => {
       </CardContent>
 
       <CardContent className="calendar__main">
-        {isDayView ? (
-          <Activity mode={isDayView ? "visible" : "hidden"}>
-            <div className="day">
-              <div className="day__header">
-                {currentMonth.format("dddd, MMMM D")}
-              </div>
-
-              <div className="day__body">
-                {hours.map((hour) => {
-                  const cellEvents =
-                    eventsByDateHour[selectedDate]?.[hour] || [];
-
-                  return (
-                    <React.Fragment key={hour}>
-                      <div className="day__hour">
-                        {dayjs().hour(hour).format("h A")}
-                      </div>
-
-                      <div className="day__cell">
-                        {cellEvents.map((event) => (
-                          <div
-                            key={event.id}
-                            className={`day__event ${event.category}`}
-                            onClick={() => openEvent(event)}
-                          >
-                            <span className="event-time">
-                              {event.startTime}
-                            </span>
-                            <br />
-                            <span className="event-title">{event.title}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
-              </div>
+        <React.Activity mode={isDayView ? "visible" : "hidden"}>
+          <div className="day">
+            <div className="day__header">
+              {currentMonth.format("dddd, MMMM D")}
             </div>
-          </Activity>
-        ) : isWeekView ? (
+
+            <div className="day__body">
+              {hours.map((hour) => {
+                const cellEvents = eventsByDateHour[selectedDate]?.[hour] || [];
+
+                return (
+                  <React.Fragment key={hour}>
+                    <div className="day__hour">
+                      {dayjs().hour(hour).format("h A")}
+                    </div>
+
+                    <div className="day__cell">
+                      {cellEvents.map((event) => (
+                        <div
+                          key={event.id}
+                          className={`day__event ${event.category}`}
+                          onClick={() => openEvent(event)}
+                        >
+                          <span className="event-time">{event.startTime}</span>
+                          <br />
+                          <span className="event-title">{event.title}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </div>
+        </React.Activity>
+        <React.Activity mode={isWeekView ? "visible" : "hidden"}>
           <div className="week">
             <div className="week__header">
               <div className="week__corner"></div>
@@ -286,7 +283,8 @@ const Calendar = () => {
               </div>
             </div>
           </div>
-        ) : (
+        </React.Activity>
+        <Activity mode={isMonthView ? "visible" : "hidden"}>
           <div className="month">
             <div className="month__header">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -338,7 +336,7 @@ const Calendar = () => {
               })}
             </div>
           </div>
-        )}
+        </Activity>
       </CardContent>
       <CalendarModal
         open={openModal}

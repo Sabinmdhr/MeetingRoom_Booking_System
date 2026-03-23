@@ -4,6 +4,7 @@ import {
   GridToolbarContainer,
   GridToolbarColumnsButton,
 } from "@mui/x-data-grid";
+// import { useGridApiRef } from "@mui/x-data-grid";
 
 import { useMeetingTableViewModel } from "../viewmodels/useMeetingReportViewModel";
 import "../assets/scss/pages/Report.scss";
@@ -22,6 +23,9 @@ function CustomToolbar() {
 export default function MeetingTable() {
   const [filter, setFilter] = useState(false);
   const vm = useMeetingTableViewModel();
+
+  // const apiRef = useGridApiRef();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
@@ -75,6 +79,7 @@ export default function MeetingTable() {
             <Button
               variant="outlined"
               className="meeting-table__buttons__export"
+              // onClick={() => apiRef?.current?.exportDataAsCsv()}
             >
               <Download size={16} /> Export
             </Button>
@@ -107,6 +112,7 @@ export default function MeetingTable() {
           <DataGrid
             rows={rows}
             columns={columns}
+            // apiRef={apiRef}
             // columnHeaderHeight={40}
             pageSizeOptions={[5, 10, 25]}
             initialState={{

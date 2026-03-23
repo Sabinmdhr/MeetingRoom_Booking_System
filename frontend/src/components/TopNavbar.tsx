@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { InputAdornment, TextField } from "@mui/material";
 import { Search } from "lucide-react";
 
+import { Bell } from "lucide-react";
 export default function TopNavbar() {
   return (
     <AppBar
@@ -38,6 +39,7 @@ export default function TopNavbar() {
             }}
           />
         </div>
+        <Bell className="nav-bell" />
       </Toolbar>
     </AppBar>
   );

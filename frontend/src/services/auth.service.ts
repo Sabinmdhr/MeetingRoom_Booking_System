@@ -1,7 +1,6 @@
 import { axiosInstance } from "../api/api";
 import type { LoginRequest, LoginResponse } from "../models/auth.model";
 
-
 export const loginService = async (
   data: LoginRequest,
 ): Promise<LoginResponse> => {

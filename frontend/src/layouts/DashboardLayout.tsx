@@ -3,11 +3,13 @@ import TopNavbar from "../components/TopNavbar";
 import { Outlet } from "react-router-dom";
 import "../assets/scss/layout/DashboardLayout.scss";
 
+import { Toaster } from "mui-sonner";
+
 export default function DashboardLayout() {
   return (
     <div className="dashboard-layout">
+      <Toaster position="bottom-right" />
       <TopNavbar />
-
       <div className="dashboard-body">
         <Sidebar />
         <div className="page-content">

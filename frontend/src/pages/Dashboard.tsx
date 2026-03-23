@@ -8,6 +8,7 @@ export default function Dashboard() {
     window.location.href = "/";
     return null;
   }
+  
   return (
     <div className="dashboard-container">
       <main className="dashboard-content">
