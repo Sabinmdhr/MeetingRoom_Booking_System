@@ -27,8 +27,8 @@ export const useparticipantsViewModel = () => {
     dispatch(clearSelectedParticipants())
   }, [dispatch]);
 
-  const handleEdit = (participants: any) => {
-    dispatch(openEditForm(participants));
+  const handleEdit = (participa: any) => {
+    dispatch(openEditForm(participa));
   };
 
   const handleToggle = (pId: string) => {

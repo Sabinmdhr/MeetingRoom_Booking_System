@@ -1,6 +1,5 @@
 .Meeting-Card{
   padding: 0 ;
-  display: flex;
   // max-width:500px !important;
 }
 .Meeting-title{
@@ -87,20 +86,32 @@ justify-content: start;
 }
 .Meeting_room-Book{
   padding: 8px 24px;
-  border-radius:10px;
+  border-radius:10px !important;
   border: 1px solid var(--colorNeutral300);
-  background-color: #1976d2;
-  color: white;
+  color: white !important;
   cursor: pointer;
+    width: 100%;
+  text-transform: none !important;
 
  &.Available {
     background-color: black;
   }
   &.Unavailable {
     background-color: var(--colorNeutral200);
-    color: black;
+    color: black !important;
     &:hover {
        background-color: #e0e0e0;
     }
   }
+}
+.Meeting-Card--Actions{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
+
+.Meeting-card-editbtns{
+  display: flex;
+ 
+}
 }

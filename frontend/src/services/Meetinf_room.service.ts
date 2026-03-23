@@ -1,10 +1,11 @@
-import type { Meeting_room } from "../models/Meeting_room.model";
-
+import { axiosInstance } from "../api/api";
+import type { AddRoomModal, Meeting_room } from "../models/Meeting_room.model";
+import axios from "axios";
 const meetingRooms: Meeting_room[] = [
   {
     id: "1",
     title: "Manang",
-    
+
     participants: ["Sabin", "Suman"],
     capacity: 10,
     available: true,
@@ -34,10 +35,23 @@ const meetingRooms: Meeting_room[] = [
   },
 ];
 
-export const getMeetingRooms = async(): Promise<Meeting_room[]> =>{
-  await new Promise((resolve) => setTimeout(resolve, 300))
+
+export const addRoom = async (data: AddRoomModal) => {
+  const api = axiosInstance({});
+  const response = await api.post("/api/v1/room/add", data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
+    },
+  });
+  return response.data;
+};
+
+
+
+export const getMeetingRooms = async (): Promise<Meeting_room[]> => {
+  await new Promise((resolve) => setTimeout(resolve, 300));
   return meetingRooms;
-}
+};
 
 export const getMeetingRoomById = async (id: string): Promise<Meeting_room> => {
   await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate network delay

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { closeEditForm } from "../redux/ParticipantsSlice";
-
+import { closeEditForm , openEditForm, clearSelectedParticipants} from "../redux/ParticipantsSlice";
+import type { Participants } from "../models/participants.model";
 export const useAddParticipantsViewModel = () => {
 const {selectedParticipant} = useAppSelector((state) => state.participants)
 const dispatch = useDispatch();
@@ -20,7 +20,17 @@ const dispatch = useDispatch();
   const [participantFormData, setParticipantFormData] =
     useState(initialFormData);
 
-  const [open, setOpen] = useState(false);
+
+const openAddParticipantForm =(participant: Participants)=>{
+    dispatch(openEditForm(participant));
+    console.log(selectedParticipant);
+
+}
+
+const closeAddParticipantForm = ()=>{
+  dispatch(closeEditForm())
+  setParticipantFormData(initialFormData);
+}
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,27 +41,13 @@ const dispatch = useDispatch();
     }));
   };
 
-  const submitForm = () => {
-    console.log(participantFormData);
-    setParticipantFormData(initialFormData);
-    setOpen(false);
-
-  };
-
-  const cancelForm = () => {
-    setParticipantFormData(initialFormData);
-    // dispatch(closeEditForm());
-  };
-
 
   return {
     handleChange,
-    submitForm,
-    cancelForm,
-    open,
+openAddParticipantForm,
     initialFormData,
-    setOpen,
     participantFormData,
+    closeAddParticipantForm,
     setParticipantFormData,
   };
 };

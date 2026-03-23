@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import type { Meeting_room } from "../models/Meeting_room.model";
+import type { Meeting_room, AddRoomModal } from "../models/Meeting_room.model";
 import { getMeetingRoomById } from "../services/Meetinf_room.service";
-
+import { addRoom } from "../services/Meetinf_room.service";
 
 export const useMeetingCardViewModel = (meetingId: string) => {
   const [meeting, setMeeting] = useState<Meeting_room | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchMeeting = async () => {
@@ -24,5 +25,10 @@ export const useMeetingCardViewModel = (meetingId: string) => {
     fetchMeeting();
   }, [meetingId]);
 
-  return { meeting, loading, error };
+  return {
+    meeting,
+    loading,
+    error,
+
+  };
 };

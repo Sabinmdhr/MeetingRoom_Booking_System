@@ -1,8 +1,8 @@
-import { Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Menu, MenuItem, Typography } from "@mui/material";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import "../../assets/scss/components/Meeting_roomCard.scss";
 import "../../assets/scss/global.scss";
-import { Projector, Presentation, TvMinimal, Wifi } from "lucide-react";
+import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from "lucide-react";
 import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
 import { useState } from "react";
 interface MeetingCardProps {
@@ -10,12 +10,12 @@ interface MeetingCardProps {
 }
 
 export const Meeting_roomCard = ({ meetingId }: MeetingCardProps) => {
+  const [open , setOpen] = useState(false)
   const { meeting,  error } = useMeetingCardViewModel(meetingId);
   const [openDetails, setOpenDetails] = useState(false);
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!meeting) return null;
-
   // object for icons of features
   const featureIcons: Record<string, any> = {
     Projector: <Projector size={12} />,
@@ -30,10 +30,7 @@ export const Meeting_roomCard = ({ meetingId }: MeetingCardProps) => {
         <CardContent className="Meeting-Card--content">
           <div>
             <div className="cardHeader">
-              <Typography
-                className="Meeting-title"
-                variant="h6"
-              >
+              <Typography className="Meeting-title" variant="h6">
                 {meeting.title}
               </Typography>
               <Typography
@@ -57,28 +54,35 @@ export const Meeting_roomCard = ({ meetingId }: MeetingCardProps) => {
                 Capacity: {meeting.capacity}
               </Typography>
             </div>
-            <Typography
-              variant="body2"
-              className="Features-Tabs"
-            >
+            <Typography variant="body2" className="Features-Tabs">
               {meeting.features.map((feature, index) => (
-                <span
-                  className="Meeitng_room-Feature"
-                  key={index}
-                >
+                <span className="Meeitng_room-Feature" key={index}>
                   <span className="Feature-icons">{featureIcons[feature]}</span>
                   <span className="Feature-title">{feature}</span>
                 </span>
               ))}
             </Typography>
           </div>
-          <button
+        </CardContent>
+
+        <CardActions className="Meeting-Card--Actions">
+          <Button
             className={`Meeting_room-Book ${meeting.available ? "Available" : "Unavailable"}`}
             onClick={() => setOpenDetails(true)}
           >
             {meeting.available ? "Book Now" : "View Schedule"}
-          </button>
-        </CardContent>
+          </Button>
+          <div className="Meeting-card-editbtns">
+            <Button>
+
+              <Pen size={18} />
+            </Button>
+            <Button>
+
+              <Trash2 size={18} color="red" />
+            </Button>
+          </div>
+        </CardActions>
       </Card>
 
       <Meeting_roomCardDetails

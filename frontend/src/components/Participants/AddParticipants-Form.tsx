@@ -8,7 +8,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import {closeEditForm} from "../../redux/ParticipantsSlice"
+import {closeEditForm, openForm} from "../../redux/ParticipantsSlice"
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 import { FastForward, Plus } from "lucide-react";
 import "../../assets/scss/global.scss";
@@ -20,12 +20,9 @@ import { useDispatch } from "react-redux";
 export const AddParticipantsForm = () => {
   const {
     handleChange,
-    setOpen,
-    open,
-    submitForm,
+closeAddParticipantForm,
     participantFormData,
     setParticipantFormData,
-    cancelForm,
     initialFormData,
   } = useAddParticipantsViewModel();
 const dispatch = useDispatch();
@@ -40,19 +37,21 @@ const dispatch = useDispatch();
     "Product Manager",
     "UX Researcher",
   ];
-//  useEffect(() => {
-//    if (selectedParticipant) {
-//      setParticipantFormData({
-//        name: selectedParticipant.fullName,
-//        role: selectedParticipant.role,
-//        phoneNum: selectedParticipant.phoneNumber,
-//        email: selectedParticipant.email,
-//        department: selectedParticipant.department,
-//      });
-//    } else {
-//      setParticipantFormData(initialFormData);
-//    }
-//  }, [selectedParticipant]);
+ useEffect(() => {
+   if  (selectedParticipant) {
+     setParticipantFormData({
+       name: selectedParticipant.fullName,
+       role: selectedParticipant.role,
+       phoneNum: selectedParticipant.phoneNumber,
+       email: selectedParticipant.email,
+       department: selectedParticipant.department,
+     });
+    console.log(selectedParticipant);
+
+   } else {
+     setParticipantFormData(initialFormData);
+   }
+ }, [ selectedParticipant]);
 
 
   return (
@@ -60,7 +59,7 @@ const dispatch = useDispatch();
       <Button
         className="add-btn"
         variant="outlined"
-        onClick={() => setOpen(true)}
+        onClick={() => dispatch(openForm())}
       >
         <Plus size={14} /> Add Participant
       </Button>
@@ -69,7 +68,6 @@ const dispatch = useDispatch();
         open={isEditOpen}
         onClose={()=> dispatch(closeEditForm())}
         slotProps={{ paper: { className: "Form__Container" } }}
-        className="Form__Container"
       >
         <DialogTitle className="title"> Add Paraticipant</DialogTitle>
         <DialogContent>
@@ -164,10 +162,10 @@ const dispatch = useDispatch();
           ></TextField>
         </DialogContent>
         <DialogActions>
-          <Button onClick={cancelForm} className="cancel-btn">
+          <Button  className="cancel-btn" onClick={()=>{closeAddParticipantForm()}}>
             Close
           </Button>
-          <Button onClick={submitForm} className="add-btn">
+          <Button  className="add-btn">
             ADD
           </Button>
         </DialogActions>

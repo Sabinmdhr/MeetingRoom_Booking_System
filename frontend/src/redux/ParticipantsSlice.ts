@@ -40,10 +40,17 @@ const participantsSlice = createSlice({
     clearSelectedParticipants: (state) =>{
       state.selectedParticipants = [];
     },
+
     openEditForm: (state, action: PayloadAction<Participants>) => {
       state.selectedParticipant = action.payload;
       state.isEditOpen = true;
     },
+
+    openForm : (state) =>{
+state.isEditOpen = true;
+    },
+
+
     closeEditForm: (state) => {
       state.isEditOpen = !state.isEditOpen;
       state.selectedParticipant = null;
@@ -52,7 +59,7 @@ const participantsSlice = createSlice({
   },
 });
 
-export const { setParticipants, setSelectedGroup,openEditForm, closeEditForm, toggleParticipantsSelection, clearSelectedParticipants } =
+export const { setParticipants, openForm,setSelectedGroup,openEditForm, closeEditForm, toggleParticipantsSelection, clearSelectedParticipants } =
   participantsSlice.actions;
 
 export default participantsSlice.reducer;

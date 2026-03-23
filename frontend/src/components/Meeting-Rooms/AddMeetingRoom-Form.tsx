@@ -1,59 +1,141 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Grid, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  TextField,
+} from "@mui/material";
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
-import { Plus, X } from "lucide-react";
-import { useAppSelector } from "../../redux/store";
-import { useEffect } from "react";
+import { Plus, Vault, X } from "lucide-react";
 
 export const AddMeetingRoomForm = () => {
-  const { handleClose } = useAddRoomViewModel();
-const {isEditOpen} = useAppSelector ((state) => state.meetingRoom)
+  // const { handleClose } = useAddRoomViewModel();
+  // const { isEditOpen } = useAppSelector((state) => state.meetingRoom);
 
+  const {
+    openAddRoomForm,
+    addRoomFormData,
+    handleChange,
+    handleCheckboxChange,
+    setOpenAddRoomForm,
+    submitAddRomForm
+  } = useAddRoomViewModel();
 
   return (
     <>
-      <Button className="add-btn" variant="outlined" onClick={handleClose}>
+      <Button
+        className="add-btn"
+        variant="outlined"
+        onClick={() => setOpenAddRoomForm((prev) => (prev = !prev))}
+      >
         <Plus size={14} /> Add Room
       </Button>
 
-      {isEditOpen && (
-        <Card className="Form__Container">
-          <CardHeader
-          className="title"
-            title="Add Room"
-            action={<X size={18} onClick={handleClose} />}
-          ></CardHeader>
-          <CardContent>
-            <Grid container spacing={2} mt={2}>
-              <Grid size={6}>
-                <label htmlFor="RoomName ">Room-Name</label>
-                <TextField
-                  id="RoomName"
-                  className="customTextField"
-                  fullWidth
-                  required
-                ></TextField>
-              </Grid>
-              <Grid size={6}>
-                <label htmlFor="RoomName ">Room-Name</label>
-                <TextField
-                  id="RoomName"
-                  className="customTextField"
-                  fullWidth
-                  required
-                ></TextField>
-              </Grid>
-              <label htmlFor="">Resource</label>
-              <Grid size={6}>
-                
-              </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions>
-            <Button onClick={handleClose} variant="outlined" className="cancel-btn">Cancel</Button>
+      <Dialog
+        open={openAddRoomForm}
+        maxWidth="sm"
+        fullWidth
+        onClose={() => setOpenAddRoomForm((prev) => (prev = !prev))}
+        slotProps={{ paper: { className: "Form__Container" } }}
+      >
+        <DialogTitle className="title">Create a New Room</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            {/* TextFields */}
 
-          </CardActions>
-        </Card>
-      )}
+            <label htmlFor="roomName">Room Name</label>
+            <TextField
+              fullWidth
+              id="roomName"
+              name="roomName"
+              placeholder="Room Name"
+              className="customTextField"
+              value={addRoomFormData.roomName}
+              onChange={handleChange}
+            />
+
+            <label htmlFor="capacity">Capacity</label>
+            <TextField
+              fullWidth
+              id="capacity"
+              name="capacity"
+              placeholder="Number of People"
+              className="customTextField"
+              value={addRoomFormData.capacity}
+              onChange={handleChange}
+            />
+
+            {/* Checkboxes in 2 columns */}
+            <FormGroup>
+              <Grid container>
+                <Grid size={6}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value="WIFI"
+                        onChange={handleCheckboxChange}
+                        checked={addRoomFormData.resources.includes("WIFI")}
+                      />
+                    }
+                    label="WIFI"
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value="PROJECTOR"
+                        onChange={handleCheckboxChange}
+                        checked={addRoomFormData.resources.includes(
+                          "PROJECTOR",
+                        )}
+                      />
+                    }
+                    label="Projector"
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value="WHITEBOARD"
+                        onChange={handleCheckboxChange}
+                        checked={addRoomFormData.resources.includes(
+                          "WHITEBOARD",
+                        )}
+                      />
+                    }
+                    label="Whiteboard"
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value="VIDEO CONFERENCE"
+                        onChange={handleCheckboxChange}
+                        checked={addRoomFormData.resources.includes(
+                          "VIDEO CONFERENCE",
+                        )}
+                      />
+                    }
+                    label="Video Conference"
+                  />
+                </Grid>
+              </Grid>
+            </FormGroup>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={submitAddRomForm}>Add</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
