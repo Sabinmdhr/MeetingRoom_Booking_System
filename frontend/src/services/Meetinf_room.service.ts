@@ -1,8 +1,12 @@
 import { axiosInstance } from "../api/api";
 import type { AddRoomModal, Meeting_room } from "../models/Meeting_room.model";
 import axios from "axios";
-const meetingRooms: Meeting_room[] = [
-  {
+
+
+
+ const meetingRooms: Meeting_room[] =
+  [
+     {
     id: "1",
     title: "Manang",
 
@@ -33,7 +37,8 @@ const meetingRooms: Meeting_room[] = [
     next_available_time: null,
     next_booking_time: "5:00PM",
   },
-];
+  ]
+
 
 
 export const addRoom = async (data: AddRoomModal) => {

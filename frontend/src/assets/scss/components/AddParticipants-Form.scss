@@ -7,11 +7,12 @@
 .add-btn{
   background-color: black !important;
   color: white !important;
-  text-transform: none !important;
+  // text-transform: none !important;
   font-weight: 500;
   display: flex;
   gap: 8px;
-  margin: 8px 0;
+  // margin: 8px auto;
+  text-align: end;
     border-radius: 8px !important;
 
   // margin-left: 18px !important;
@@ -28,8 +29,16 @@
 label{
   font-size: 17px !important;
 }
+
+// .form-Content{
+//   display: flex;
+//   flex-direction: column;
+//   gap: 18px;
+//   width: 100%;
+
+// }
 .customTextField{
-  margin: 8px 0px !important;
+  margin: 0px 0px !important;
 
 // ------------0------to make whole texfield of searchfield in add group form------------
    &.search-field{

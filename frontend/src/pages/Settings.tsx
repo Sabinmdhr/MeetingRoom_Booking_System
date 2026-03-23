@@ -15,27 +15,26 @@ const Settings = () => {
 
   return (
     <div className="settings">
-      <Typography
-        variant="h5"
-        className="settings-title"
-      >
-        Settings
-      </Typography>
-      <Typography className="settings-subtitle">
-        Manage your account and application preferences
-      </Typography>
-
-      <ProfileSection 
+      <div className="titleDesc">
+        <Typography variant="h1">
+          Settings
+        </Typography>
+        <Typography variant="subtitle1">
+          Manage your account and application preferences
+        </Typography>
+      </div>
+      <ProfileSection
         profile={settings.profile}
         onChange={updateProfileSection}
-        onSave={saveSettings}/>
-        
+        onSave={saveSettings}
+      />
+
       <NotificationSection />
       <ColorSection />
       <BookingSection />
       <SecuritySection />
-      </div>
-  )
+    </div>
+  );
 }
 
 export default Settings

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import { Plus, Vault, X } from "lucide-react";
-
+import "../../assets/scss/components/AddMeetingRoom-Form.scss"
 export const AddMeetingRoomForm = () => {
   // const { handleClose } = useAddRoomViewModel();
   // const { isEditOpen } = useAppSelector((state) => state.meetingRoom);
@@ -28,7 +28,7 @@ export const AddMeetingRoomForm = () => {
   } = useAddRoomViewModel();
 
   return (
-    <>
+    <div className="add-Form">
       <Button
         className="add-btn"
         variant="outlined"
@@ -136,6 +136,6 @@ export const AddMeetingRoomForm = () => {
           <Button variant="contained" onClick={submitAddRomForm}>Add</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };

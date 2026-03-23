@@ -61,10 +61,10 @@ const Announcements = () => {
           <div className="announcement__title-wrapper">
             <div className="announcement__title">
               <Megaphone size={20} />
-              <Typography variant="h5">Announcements</Typography>
+              <Typography variant="h1">Announcements</Typography>
             </div>
             <Typography
-              variant="body2"
+              variant="subtitle1"
               className="announcement__subtitle"
             >
               Stay updated with company-wide communications and important
@@ -92,7 +92,7 @@ const Announcements = () => {
               <CardContent>
                 <div className="announcement__card-header">
                   <Typography
-                    variant="subtitle1"
+                    variant="h4"
                     className="announcement__card-title"
                   >
                     {/* <CircleAlert

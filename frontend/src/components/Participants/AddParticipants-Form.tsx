@@ -1,14 +1,14 @@
 import {
   Button,
-
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   MenuItem,
   TextField,
+  Typography,
 } from "@mui/material";
-import {closeEditForm, openForm} from "../../redux/ParticipantsSlice"
+import { closeEditForm, openForm } from "../../redux/ParticipantsSlice";
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 import { FastForward, Plus } from "lucide-react";
 import "../../assets/scss/global.scss";
@@ -20,13 +20,15 @@ import { useDispatch } from "react-redux";
 export const AddParticipantsForm = () => {
   const {
     handleChange,
-closeAddParticipantForm,
+    closeAddParticipantForm,
     participantFormData,
     setParticipantFormData,
     initialFormData,
   } = useAddParticipantsViewModel();
-const dispatch = useDispatch();
-  const {isEditOpen , selectedParticipant} = useAppSelector((state) => state.participants)
+  const dispatch = useDispatch();
+  const { isEditOpen, selectedParticipant } = useAppSelector(
+    (state) => state.participants,
+  );
 
   const departments = ["Engineering", "Product", "Finance", "Marketing"];
   const roles = [
@@ -37,22 +39,20 @@ const dispatch = useDispatch();
     "Product Manager",
     "UX Researcher",
   ];
- useEffect(() => {
-   if  (selectedParticipant) {
-     setParticipantFormData({
-       name: selectedParticipant.fullName,
-       role: selectedParticipant.role,
-       phoneNum: selectedParticipant.phoneNumber,
-       email: selectedParticipant.email,
-       department: selectedParticipant.department,
-     });
-    console.log(selectedParticipant);
-
-   } else {
-     setParticipantFormData(initialFormData);
-   }
- }, [ selectedParticipant]);
-
+  useEffect(() => {
+    if (selectedParticipant) {
+      setParticipantFormData({
+        name: selectedParticipant.fullName,
+        role: selectedParticipant.role,
+        phoneNum: selectedParticipant.phoneNumber,
+        email: selectedParticipant.email,
+        department: selectedParticipant.department,
+      });
+      console.log(selectedParticipant);
+    } else {
+      setParticipantFormData(initialFormData);
+    }
+  }, [selectedParticipant]);
 
   return (
     <>
@@ -66,11 +66,13 @@ const dispatch = useDispatch();
 
       <Dialog
         open={isEditOpen}
-        onClose={()=> dispatch(closeEditForm())}
+        onClose={() => dispatch(closeEditForm())}
         slotProps={{ paper: { className: "Form__Container" } }}
       >
-        <DialogTitle className="title"> Add Paraticipant</DialogTitle>
-        <DialogContent>
+        <DialogTitle>
+          <Typography variant="h3">Add Paraticipant</Typography>
+        </DialogTitle>
+        <DialogContent className="form-Content">
           <label htmlFor="Name">Name </label>
           <TextField
             id="Name"
@@ -82,7 +84,6 @@ const dispatch = useDispatch();
             fullWidth
             required
           ></TextField>
-
           <label htmlFor="Department">Department</label>
           <TextField
             fullWidth
@@ -107,7 +108,6 @@ const dispatch = useDispatch();
               <MenuItem value={d}>{d}</MenuItem>
             ))}
           </TextField>
-
           <label htmlFor="Role">Role</label>
           <TextField
             fullWidth
@@ -132,7 +132,6 @@ const dispatch = useDispatch();
               <MenuItem value={r}>{r}</MenuItem>
             ))}
           </TextField>
-
           <label htmlFor="Phone">Phone Number</label>
           <TextField
             id="Phone"
@@ -148,7 +147,6 @@ const dispatch = useDispatch();
               maxLength: 10, // prevent typing more than 10 digits
             }}
           ></TextField>
-
           <label htmlFor="Email">Email</label>
           <TextField
             id="Email"
@@ -162,15 +160,17 @@ const dispatch = useDispatch();
           ></TextField>
         </DialogContent>
         <DialogActions>
-          <Button  className="cancel-btn" onClick={()=>{closeAddParticipantForm()}}>
+          <Button
+            className="cancel-btn"
+            onClick={() => {
+              closeAddParticipantForm();
+            }}
+          >
             Close
           </Button>
-          <Button  className="add-btn">
-            ADD
-          </Button>
+          <Button className="add-btn">ADD</Button>
         </DialogActions>
       </Dialog>
-
     </>
   );
 };

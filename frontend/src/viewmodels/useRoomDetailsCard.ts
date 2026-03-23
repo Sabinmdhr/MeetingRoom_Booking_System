@@ -12,7 +12,7 @@ export const useRoomDetailsCard = ()=>{
           const data = await getMeetingRooms();
           setRooms(data);
         };
-    
+
         fetchRooms();
       }, []);
 

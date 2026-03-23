@@ -22,6 +22,7 @@ export const useparticipantsViewModel = () => {
     dispatch(clearSelectedParticipants());
 
   }, []);
+  
   const [participantType, setParticipantType] = useState< "internal" | "external" | null >(null);
   const [tabValue, setTabValue] = useState("people");
 
@@ -40,7 +41,7 @@ export const useparticipantsViewModel = () => {
     dispatch(clearSelectedParticipants())
   }, [dispatch]);
 
- 
+
   const handleEdit = (participants: any) => {
     dispatch(openEditForm(participants));
   };

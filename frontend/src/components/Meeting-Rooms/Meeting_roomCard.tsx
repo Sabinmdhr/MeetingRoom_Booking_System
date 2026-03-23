@@ -3,7 +3,7 @@ import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardVie
 import "../../assets/scss/components/Meeting_roomCard.scss";
 import "../../assets/scss/global.scss";
 import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from "lucide-react";
-import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
+// import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
 import { useState } from "react";
 interface MeetingCardProps {
   meetingId: string;
@@ -72,7 +72,6 @@ export const Meeting_roomCard = ({ meetingId }: MeetingCardProps) => {
           >
             {meeting.available ? "Book Now" : "View Schedule"}
           </Button>
-          <div className="Meeting-card-editbtns">
             <Button>
 
               <Pen size={18} />
@@ -81,15 +80,14 @@ export const Meeting_roomCard = ({ meetingId }: MeetingCardProps) => {
 
               <Trash2 size={18} color="red" />
             </Button>
-          </div>
         </CardActions>
       </Card>
 
-      <Meeting_roomCardDetails
+      {/* <Meeting_roomCardDetails
         meetingId={meetingId}
         open={openDetails}
         onClose={() => setOpenDetails(false)}
-      />
+      /> */}
     </div>
   );
 };

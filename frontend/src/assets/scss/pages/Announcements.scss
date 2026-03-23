@@ -15,7 +15,7 @@
   &__title-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
   }
 
   &__title {
@@ -30,7 +30,7 @@
   }
 
   &__button {
-    font-size: 13px !important;
+    font-size: 13px ;
     text-transform: none !important;
     color: white !important;
     border-radius: 8px !important;
@@ -63,8 +63,9 @@
   }
 
   &__card-title {
-    font-weight: 600;
+    // font-weight: 600;
     display: flex;
+    color: black !important;
     justify-content: space-evenly !important;
     // align-items: ;
 

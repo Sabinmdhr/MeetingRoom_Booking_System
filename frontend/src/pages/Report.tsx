@@ -59,12 +59,9 @@ export default function MeetingTable() {
     <div>
       <div>
         <div className="meeting-table__main">
-          <div>
-            <Typography variant="h5">Reports & Analytics</Typography>
-            <Typography
-              variant="body2"
-              className="meeting-table__subtitle"
-            >
+          <div className="titleDesc">
+            <Typography variant="h1">Reports & Analytics</Typography>
+            <Typography variant="subtitle1" className="meeting-table__subtitle">
               View and export reservation data
             </Typography>
           </div>
@@ -85,10 +82,7 @@ export default function MeetingTable() {
             </Button>
           </div>
         </div>
-        <ReportFilters
-          open={filter}
-          onClose={() => setFilter(false)}
-        />
+        <ReportFilters open={filter} onClose={() => setFilter(false)} />
       </div>
 
       <div className="meeting-table">
