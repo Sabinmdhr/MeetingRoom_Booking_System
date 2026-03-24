@@ -24,7 +24,7 @@ import {
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { useTimeSlotsViewModel } from "../../viewmodels/useTimeSlotsViewModel";
-import SelectTimeCard from "../BookingRooms/SelectTimeCard";
+// import SelectTimeCard from "../BookingRooms/SelectTimeCard";
 import { useRoomDetailsCard } from "../../viewmodels/useRoomDetailsCard";
 import RoomDetailsCard from "../BookingRooms/RoomDetailsCard";
 import { useAppSelector } from "../../redux/store";
@@ -67,10 +67,10 @@ export default function BookMeetingRoom() {
       <form className="bookroom-form" onSubmit={handleSubmit}>
         <Card className="bookroom-card">
           <div className="bookroom-header">
-            <Typography variant="h6" className="title">
+            <Typography variant="h1" >
               Book a Meeting Room
             </Typography>
-            <Typography className="subtitle">
+            <Typography  variant="subtitle1" >
               Fill in the details to reserve a meeting room
             </Typography>
           </div>
@@ -165,13 +165,13 @@ export default function BookMeetingRoom() {
                   Please select both Start time and End time.
                 </span>
               )}
-              <SelectTimeCard
+              {/* <SelectTimeCard
                 open={openTime}
                 onClose={() => setOpenTime(false)}
                 type={timeType}
                 // meetingId={values.roomId}
                 meetingId={values.roomId}
-              />
+              /> */}
 
               <div className="field">
                 <label className="field-label">Meeting Type *</label>

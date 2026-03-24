@@ -20,11 +20,12 @@ export const useparticipantsViewModel = () => {
     const data = DemoParticipants();
     dispatch(setParticipants(data));
     dispatch(clearSelectedParticipants());
-    
+
   }, []);
+  
   const [participantType, setParticipantType] = useState< "internal" | "external" | null >(null);
   const [tabValue, setTabValue] = useState("people");
-  
+
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>(
     [],)
 
@@ -34,7 +35,13 @@ export const useparticipantsViewModel = () => {
 
 
 
-  
+  useEffect(() => {
+    const data = DemoParticipants();
+    dispatch(setParticipants(data));
+    dispatch(clearSelectedParticipants())
+  }, [dispatch]);
+
+
   const handleEdit = (participants: any) => {
     dispatch(openEditForm(participants));
   };
@@ -74,7 +81,7 @@ export const useparticipantsViewModel = () => {
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
 
- 
+
 
   const handleAddExternal = () => {
     if (!externalName || !externalEmail) return;
@@ -102,7 +109,7 @@ export const useparticipantsViewModel = () => {
     setColumns,
     handleToggle,
     setTabValue,
-   
+
     selectedParticipants,
     handleSelectParticipant,
     search,

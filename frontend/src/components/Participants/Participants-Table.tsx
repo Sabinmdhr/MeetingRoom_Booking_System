@@ -20,16 +20,39 @@ import type { Participants } from "../../models/participants.model";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { openEditForm } from "../../redux/ParticipantsSlice";
+import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 export const ParticipantsTable = () => {
-
+const {openAddParticipantForm} = useAddParticipantsViewModel();
   const dispatch  = useDispatch()
   const { participants, columns, handleEdit } = useparticipantsViewModel();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) =>
-    setAnchorEl(e.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
+
+  const [menuState, setMenuState] = useState<{
+    anchorEl: HTMLElement | null;
+  participant: Participants | null;}>
+  ({
+    anchorEl: null,
+    participant: null,
+  })
+
+
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>,participant: Participants) =>{
+setMenuState({
+  anchorEl: e.currentTarget,
+  participant: participant,
+})
+
+  }
+
+
+
+  const handleMenuClose = () =>{
+    setMenuState({
+      anchorEl: null,
+      participant: null,
+    })
+  }
   // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
     <TableContainer component={Paper} className="TableContainer">
@@ -103,12 +126,12 @@ export const ParticipantsTable = () => {
                   return (
 
                 <TableCell>
-                <IconButton onClick={handleMenuOpen}>
+                <IconButton onClick={(e)=>{handleMenuOpen(e, participant)}}>
                   <EllipsisVertical size={16} />
                 </IconButton>
                 <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
+                  anchorEl={menuState.anchorEl}
+                  open={Boolean(menuState.anchorEl)}
                   onClose={handleMenuClose}
                   anchorOrigin={{
                     vertical: "bottom",
@@ -122,9 +145,11 @@ export const ParticipantsTable = () => {
                   <MenuItem
                     className="menu-btn"
                     onClick={() => {
-                      // handleEdit(participant);
-                      handleEdit(participant)
-                      handleMenuClose();
+                   if(menuState.participant)
+                   {
+                    openAddParticipantForm(menuState.participant);
+                   }
+                   handleMenuClose();
                     }}
                   >
                     <Pen size={18}/> Edit

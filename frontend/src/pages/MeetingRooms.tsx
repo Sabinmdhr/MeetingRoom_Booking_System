@@ -1,6 +1,6 @@
 import { Meeting_roomCard } from "../components/Meeting-Rooms/Meeting_roomCard";
 import "../assets/scss/pages/MeetingRooms.scss";
-import { Button, Card, CardContent, CardHeader, CircularProgress } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, CircularProgress, Typography } from "@mui/material";
 import { useMeetingCardViewModel } from "../viewmodels/useMeeting_roomCardViewModel";
 import {  useState } from "react";
 import { SquarePen } from "lucide-react";
@@ -17,15 +17,14 @@ const MeetingRooms = () => {
 // const {isEditOpen} = useAppSelector((state) => state.meetingRoom)
   return (
     <div>
-       <div>
+      <div className="titleDesc">
+        <Typography variant="h1">Meeting Rooms</Typography>
+        <Typography variant="subtitle1">Book available rooms</Typography>
+      </div>
+      <div>
+        <AddMeetingRoomForm />
+      </div>
 
-
-
-           <AddMeetingRoomForm/>
-        </div>
-        
-      <Card>
-        <CardHeader title="Meeting Rooms" />
 
         <CardContent className="MeetingRooms">
           <Meeting_roomCard meetingId="1" />
@@ -33,7 +32,6 @@ const MeetingRooms = () => {
           <Meeting_roomCard meetingId="3" />
           <Meeting_roomCard meetingId="3" />
         </CardContent>
-      </Card>
     </div>
   );
 };
