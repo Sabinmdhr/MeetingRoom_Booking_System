@@ -2,8 +2,8 @@
 // }
 .announcementModal {
   border-radius: 20px !important;
-  // font-family: "Inter", sans-serif;
-  font-family: var(--titleMediumFont);
+  // font-family: "Inter", sans-serif !important;
+  font-family: var(--titleMediumFont) !important;
   &__header {
     display: flex;
     align-items: center;

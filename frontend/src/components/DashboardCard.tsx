@@ -2,70 +2,55 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import CardActionArea from "@mui/material/CardActionArea";
-import { Building2, Calendar } from "lucide-react";
-import { useState } from "react";
+// import CardActionArea from "@mui/material/CardActionArea";
+
+// import { useState } from "react";
 import "../assets/scss/pages/DashboardCard.scss";
+import Announcements from "../pages/Announcements";
 
-const cards = [
-  {
-    id: 1,
-    title: "Total Rooms",
-    description: "Total number of rooms available.",
-    icon: <Building2 size={22} />,
-  },
-  {
-    id: 2,
-    title: "Today's Meetings",
-    description: "Number of meetings scheduled for today.",
-    icon: <Calendar size={22} />,
-  },
-];
-
-function SelectActionCard() {
-  const [selectedCard, setSelectedCard] = useState(0);
-
+function DashboardCard({ cards }: any) {
   return (
     <div className="dashboard">
       <div className="dashboard__header">
         <h1>Dashboard Overview</h1>
-        <p>Welcome back! Here's what's happening with your meeting rooms.</p>
+        <p>
+          Welcome back (username) ! Here's what's happening with your meeting
+          rooms.
+        </p>
       </div>
 
       <Box className="dashboard__grid">
-        {cards.map((card, index) => (
+        {cards.map((card: any, index: any) => (
           <Card
             key={card.id}
-            className="dashboard__card"
+            className={`dashboard__card dashboard__card--${index}`}
           >
-            <CardActionArea
-              onClick={() => setSelectedCard(index)}
-              className={`dashboard__card-action ${
-                selectedCard === index ? "active" : ""
-              }`}
-            >
-              <CardContent className="dashboard__card-content">
-                <Typography
-                  variant="h6"
-                  className="dashboard__card-title"
-                >
-                  <span className="icon">{card.icon}</span>
-                  {card.title}
-                </Typography>
+            <CardContent className="dashboard__card-content">
+              <Typography
+                variant="h6"
+                className="dashboard__card-title"
+              >
+                <span className="icon">{card.icon}</span>
+                {card.title}
+              </Typography>
 
-                <Typography
-                  variant="body2"
-                  className="dashboard__card-description"
-                >
-                  {card.description}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
+              <Typography
+                variant="body2"
+                className="dashboard__card-description"
+              >
+                {card.number}
+              </Typography>
+              <p className="dashboard__card-text">{card.description}</p>
+            </CardContent>
           </Card>
         ))}
       </Box>
+
+      <div className="dashboard__announcements">
+        <Announcements />
+      </div>
     </div>
   );
 }
 
-export default SelectActionCard;
+export default DashboardCard;

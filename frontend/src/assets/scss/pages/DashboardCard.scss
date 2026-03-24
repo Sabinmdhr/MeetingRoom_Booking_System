@@ -1,5 +1,5 @@
 .dashboard {
-  width: 100%;
+  // width: 100%;
 
   &__header {
     h1 {
@@ -16,50 +16,43 @@
 
   &__grid {
     margin-top: 20px;
-    width: 100%;
+    // width: 100%;
 
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
     gap: 20px;
   }
 
   &__card {
+    // width: 250px;
+    padding: 10px 20px;
     border-radius: 12px !important;
+    border: 1px solid #d5d3d3;
     transition: all 0.2s ease;
 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
-
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
-    }
   }
 
-  &__card-action {
-    height: 100%;
-    padding: 16px;
-
-    &.active {
-      background-color: #eef2ff; // soft blue highlight
-    }
-  }
-
-  &__card-content {
-    height: 100%;
-  }
+  // &__card-content {
+  //   height: 100%;
+  // }
 
   &__card-title {
     display: flex;
     align-items: center;
     gap: 10px;
-
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 17px !important;
   }
 
   &__card-description {
-    font-size: 14px;
-    color: #6b7280;
+    margin-top: 20px !important;
+    font-size: 26px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px;
+    color: black !important;
+  }
+  &__card-text {
+    font-size: 12px;
   }
 }
 
@@ -67,4 +60,26 @@
   display: flex;
   align-items: center;
   color: #4f46e5;
+}
+
+.dashboard__card--4 {
+  border-left: 4px solid red;
+}
+
+.dashboard__card--5 {
+  border-left: 4px solid green;
+}
+
+.dashboard__card--6 {
+  border-left: 4px solid orange;
+}
+
+.dashboard__card--7 {
+  border-left: 4px solid purple;
+}
+
+.dashboard__announcements {
+  // padding: 20px;
+  margin-top: 10px;
+  // width: 100% ;
 }

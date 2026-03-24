@@ -18,14 +18,15 @@ import "../assets/scss/pages/AnnouncementModal.scss";
 import { toast } from "mui-sonner";
 
 // inside the component, add the publish handler:
+import { Switch, FormControlLabel } from "@mui/material";
 
 const AnnouncementModal = ({ open, handleClose }: any) => {
+  const [isPinned, setIsPinned] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [audience, setAudience] = useState("All Users");
   // const [openBar, setOpenBar] = useState(false);
-
   const today = new Date().toLocaleDateString();
   // console.log(priority);
 
@@ -39,6 +40,18 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
       return;
     }
 
+    // const newAnnouncement = {
+    //   title,
+    //   description: message,
+    //   date: new Date().toLocaleDateString(),
+    //   priority,
+    //   isNew: true,
+    //   isPinned, 
+    // };
+
+    // console.log(newAnnouncement);
+
+
     toast.success("Announcement published!", {
       description: `"${title}" sent to ${audience}`,
     });
@@ -51,6 +64,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
     setMessage("");
     setPriority("Normal");
     setAudience("All Users");
+    setIsPinned(false);
     handleClose();
   };
 
@@ -223,6 +237,18 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
                 {today} • {audience}
               </span>
             </div>
+          </div>
+
+          <div>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isPinned}
+                  onChange={(e) => setIsPinned(e.target.checked)}
+                />
+              }
+              label="Pin this announcement"
+            />
           </div>
         </DialogContent>
 

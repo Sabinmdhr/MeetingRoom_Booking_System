@@ -31,8 +31,29 @@
   }
 }
 
-.nav-bell {
+.topbar-actions {
   color: black;
   margin-right: 50px;
   cursor: pointer;
+}
+
+.notification-menu {
+  width: 350px;
+  max-height: 400px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+.notification-header {
+  margin: 5px 20px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // font-size: 18px !important;
+  // font-weight: 700 !important;
+}
+
+.notification-menu .MuiMenuItem-root {
+  white-space: normal; // allow wrapping
+  word-break: break-word; // break long text
+  align-items: flex-start;
 }
