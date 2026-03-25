@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { closeEditForm , openEditForm, clearSelectedParticipants} from "../redux/ParticipantsSlice";
+import {
+  closeEditForm,
+  openEditForm,
+  clearSelectedParticipants,
+} from "../redux/ParticipantsSlice";
 import type { Participants } from "../models/participants.model";
 export const useAddParticipantsViewModel = () => {
-const {selectedParticipant} = useAppSelector((state) => state.participants)
-const dispatch = useDispatch();
+  const { selectedParticipant } = useAppSelector((state) => state.participants);
+  const dispatch = useDispatch();
 
   const initialFormData = {
     name: "",
@@ -20,17 +24,15 @@ const dispatch = useDispatch();
   const [participantFormData, setParticipantFormData] =
     useState(initialFormData);
 
-
-const openAddParticipantForm =(participant: Participants)=>{
+  const openAddParticipantForm = (participant: Participants) => {
     dispatch(openEditForm(participant));
     console.log(selectedParticipant);
+  };
 
-}
-
-const closeAddParticipantForm = ()=>{
-  dispatch(closeEditForm())
-  setParticipantFormData(initialFormData);
-}
+  const closeAddParticipantForm = () => {
+    dispatch(closeEditForm());
+    setParticipantFormData(initialFormData);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,10 +43,9 @@ const closeAddParticipantForm = ()=>{
     }));
   };
 
-
   return {
     handleChange,
-openAddParticipantForm,
+    openAddParticipantForm,
     initialFormData,
     participantFormData,
     closeAddParticipantForm,

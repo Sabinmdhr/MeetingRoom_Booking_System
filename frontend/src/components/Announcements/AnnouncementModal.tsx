@@ -8,17 +8,25 @@ import {
   MenuItem,
   Divider,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 
-import { Megaphone, X, CircleCheckBig, CircleAlert, Users } from "lucide-react";
+import {
+  Megaphone,
+  X,
+  CircleCheckBig,
+  CircleAlert,
+  Users,
+  Pin,
+} from "lucide-react";
 import { useState } from "react";
-import "../assets/scss/global.scss";
+import "../../assets/scss/global.scss";
 
-import "../assets/scss/pages/AnnouncementModal.scss";
+import "../../assets/scss/pages/AnnouncementModal.scss";
 import { toast } from "mui-sonner";
 
 // inside the component, add the publish handler:
-import { Switch, FormControlLabel } from "@mui/material";
 
 const AnnouncementModal = ({ open, handleClose }: any) => {
   const [isPinned, setIsPinned] = useState(false);
@@ -26,9 +34,8 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
   const [message, setMessage] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [audience, setAudience] = useState("All Users");
-  // const [openBar, setOpenBar] = useState(false);
+  const [author, setAuthor] = useState("");
   const today = new Date().toLocaleDateString();
-  // console.log(priority);
 
   const handlePublish = () => {
     if (!title.trim()) {
@@ -40,18 +47,10 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
       return;
     }
 
-    // const newAnnouncement = {
-    //   title,
-    //   description: message,
-    //   date: new Date().toLocaleDateString(),
-    //   priority,
-    //   isNew: true,
-    //   isPinned, 
-    // };
-
-    // console.log(newAnnouncement);
-
-
+    if (!author.trim()) {
+      toast.error("Please enter your name.");
+      return;
+    }
     toast.success("Announcement published!", {
       description: `"${title}" sent to ${audience}`,
     });
@@ -65,6 +64,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
     setPriority("Normal");
     setAudience("All Users");
     setIsPinned(false);
+    setAuthor("");
     handleClose();
   };
 
@@ -221,8 +221,42 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
               </TextField>
             </div>
           </div>
+          <div className="announcementModal__checkbox">
+            <FormControlLabel
+              control={<Checkbox color="secondary" />}
+              label={
+                <span
+                  className="announcementModal__checkbox-style"
+                  style={{}}
+                  aria-disabled
+                >
+                  <Pin size={16} />
+                  <Typography variant="h4">
+                    Pin this announcement to the top
+                  </Typography>
+                </span>
+              }
+            />
+          </div>
 
-          <div className={`announcementModal__preview `}>
+          <div className="announcementModal__author">
+            <label
+              htmlFor="announcement_title"
+              className="announcementModal__label"
+            >
+              Author
+            </label>
+
+            <TextField
+              id="announcement_title"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              fullWidth
+              placeholder="Enter author name"
+            />
+          </div>
+
+          {/* <div className={`announcementModal__preview `}>
             <Typography className="announcementModal__previewTitle">
               <Megaphone size={12} />
               Preview
@@ -234,22 +268,10 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
               <h3>{title || "Announcement Title"}</h3>
               <p>{message || "Announcement message will appear here..."}</p>
               <span className="announcementModal__meta">
-                {today} • {audience}
+                {today} • {audience} • {author || "Author"}
               </span>
             </div>
-          </div>
-
-          <div>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={isPinned}
-                  onChange={(e) => setIsPinned(e.target.checked)}
-                />
-              }
-              label="Pin this announcement"
-            />
-          </div>
+          </div> */}
         </DialogContent>
 
         <Divider className="announcementModal__divider" />

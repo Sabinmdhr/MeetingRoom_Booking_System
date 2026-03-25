@@ -1,5 +1,5 @@
 import "../assets/scss/pages/Dashboard.scss";
-import DashboardCard from "../components/DashboardCard";
+import DashboardCard from "../components/Dashboard/DashboardCard";
 import "../assets/scss/global.scss";
 import {
   ArrowUpRight,

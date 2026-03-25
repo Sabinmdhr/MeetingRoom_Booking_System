@@ -52,8 +52,12 @@
   // font-weight: 700 !important;
 }
 
+.notification__icon{
+  margin-right: 30px !important;
+}
+
 .notification-menu .MuiMenuItem-root {
-  white-space: normal; // allow wrapping
-  word-break: break-word; // break long text
+  white-space: normal;
+  word-break: break-word;
   align-items: flex-start;
 }

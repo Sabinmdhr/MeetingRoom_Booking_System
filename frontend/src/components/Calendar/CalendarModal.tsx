@@ -7,10 +7,10 @@ import {
   Divider,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import type { CalendarEvent } from "../models/calendar.model";
-import "../assets/scss/pages/CalendarModal.scss";
-import "../assets/scss/global.scss";
-import ParticipantsCard from "./BookingRooms/ParticipantsCard";
+import type { CalendarEvent } from "../../models/calendar.model";
+import "../../assets/scss/pages/CalendarModal.scss";
+import "../../assets/scss/global.scss";
+import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import EditCalendarModal from "./EditCalendarModal";
 import { useState } from "react";
 

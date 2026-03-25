@@ -5,18 +5,18 @@ import Typography from "@mui/material/Typography";
 // import CardActionArea from "@mui/material/CardActionArea";
 
 // import { useState } from "react";
-import "../assets/scss/pages/DashboardCard.scss";
-import Announcements from "../pages/Announcements";
+import "../../assets/scss/pages/DashboardCard.scss";
+import Announcements from "../../pages/Announcements";
 
 function DashboardCard({ cards }: any) {
   return (
     <div className="dashboard">
       <div className="dashboard__header">
-        <h1>Dashboard Overview</h1>
-        <p>
+        <Typography variant="h1">Dashboard Overview</Typography>
+        <Typography variant="subtitle1">
           Welcome back (username) ! Here's what's happening with your meeting
           rooms.
-        </p>
+        </Typography>
       </div>
 
       <Box className="dashboard__grid">
@@ -40,7 +40,12 @@ function DashboardCard({ cards }: any) {
               >
                 {card.number}
               </Typography>
-              <p className="dashboard__card-text">{card.description}</p>
+              <Typography
+                variant="subtitle1"
+                className="dashboard__card-text"
+              >
+                {card.description}
+              </Typography>
             </CardContent>
           </Card>
         ))}

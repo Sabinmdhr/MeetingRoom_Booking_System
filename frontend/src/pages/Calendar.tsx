@@ -12,7 +12,7 @@ import {
 import { useCalendarEventViewModel } from "../viewmodels/useCalendarEventViewModel";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import CalendarModal from "../components/CalendarModal";
+import CalendarModal from "../components/Calendar/CalendarModal";
 import "../assets/scss/global.scss";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

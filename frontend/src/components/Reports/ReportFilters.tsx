@@ -9,9 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Calendar, X } from "lucide-react";
-import "../assets/scss/pages/ReportFilters.scss";
+import "../../assets/scss/pages/ReportFilters.scss";
 import { useState } from "react";
-import "../assets/scss/global.scss";
+import "../../assets/scss/global.scss";
 
 const ReportFilters = ({ open, onClose }: any) => {
   const [department, setDepartment] = useState("All Department");
@@ -195,6 +195,8 @@ const ReportFilters = ({ open, onClose }: any) => {
           <Button
             className="report-filter__footer__clear"
             onClick={handleClear}
+            // variant="contained"
+            color="error"
           >
             Clear All
           </Button>

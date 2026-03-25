@@ -1,5 +1,5 @@
 .settings {
-  padding: 0px 12px;
+  // padding: 0px 12px;
   font-family: var(--titleMediumFont);
 
   //ProfileSection
@@ -14,16 +14,17 @@
   }
 
   .settings-card {
+    margin-top: 15px;
     width: 100%;
     padding: 28px;
     border-radius: 14px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
   }
 
-  .settings-header {
-    font-size: 18px;
-    font-weight: 300;
-  }
+  // .settings-header {
+  //   font-size: 18px;
+  //   font-weight: 300;
+  // }
 
   .name {
     display: flex;
@@ -37,7 +38,7 @@
   }
   .field-label {
     font-size: 15px;
-    color: #0A0A0A;
+    color: #0a0a0a;
     font-weight: 600;
     color: black;
   }
@@ -48,10 +49,10 @@
     margin-top: 15px;
     border-radius: 8px;
     height: 40px;
-    padding: 12px ;
-    text-transform: none; 
+    padding: 12px;
+    text-transform: none;
 
-    &:hover{
+    &:hover {
       opacity: 0.9;
       box-shadow: none;
     }
@@ -118,7 +119,7 @@
   }
 
   .email {
-    flex: 1;   
+    flex: 1;
   }
 
   .title {
@@ -173,7 +174,7 @@
   }
 
   .color {
-    flex: 1;   
+    flex: 1;
   }
 
   .title {
@@ -192,8 +193,8 @@
     background-color: #d5d9de;
     margin: 4px 0;
   }
-  
-  .color-btn{
+
+  .color-btn {
     display: flex;
     gap: 12px !important;
   }
@@ -205,12 +206,12 @@
     margin-top: 15px;
     border-radius: 8px;
     height: 40px;
-    padding: 12px ;
-    text-transform: none; 
+    padding: 12px;
+    text-transform: none;
 
-    &:hover{
+    &:hover {
       background-color: #f2f2f2;
-      box-shadow: none; 
+      box-shadow: none;
     }
   }
 
@@ -240,7 +241,7 @@
   }
 
   .booking {
-    flex: 1;   
+    flex: 1;
   }
 
   //SecuritySection
@@ -273,7 +274,7 @@
   }
 
   .security {
-    flex: 1;   
+    flex: 1;
   }
 
   .title {
@@ -292,7 +293,7 @@
     background-color: #d5d9de;
     margin: 4px 0;
   }
-  
+
   .reset-btn {
     background-color: white;
     color: black;
@@ -301,13 +302,12 @@
     margin-top: 15px;
     border-radius: 8px;
     height: 40px;
-    padding: 12px ;
-    text-transform: none; 
+    padding: 12px;
+    text-transform: none;
 
-    &:hover{
+    &:hover {
       background-color: #f2f2f2;
-      box-shadow: none; 
+      box-shadow: none;
     }
   }
-
 }

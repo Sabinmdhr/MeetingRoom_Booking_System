@@ -1,8 +1,8 @@
-import { Button, Card, TextField } from '@mui/material'
+import { Button, Card, TextField, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
-import type { ProfileSettings } from '../../models/settings.model';
+import type { ProfileSettings } from "../../models/settings.model";
 
-interface ProfileProps{
+interface ProfileProps {
   profile: ProfileSettings;
   onChange: (field: string, value: string) => void;
   onSave: () => void;
@@ -10,11 +10,21 @@ interface ProfileProps{
 const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
   return (
     <>
-    <Card className="settings-card">
-        <div className="settings-header">Profile Information</div>
+      <Card className="settings-card">
+        <Typography
+          variant="h5"
+          className="settings-header"
+        >
+          Profile Information
+        </Typography>
         <div className="name">
           <div className="field">
-            <label className="field-label" htmlFor="firstName">First Name</label>
+            <label
+              className="field-label"
+              htmlFor="firstName"
+            >
+              First Name
+            </label>
             <TextField
               id="firstName"
               fullWidth
@@ -24,7 +34,12 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
             />
           </div>
           <div className="field">
-            <label className="field-label" htmlFor="lastName">Last Name</label>
+            <label
+              className="field-label"
+              htmlFor="lastName"
+            >
+              Last Name
+            </label>
             <TextField
               id="lastName"
               fullWidth
@@ -35,7 +50,12 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
           </div>
         </div>
         <div className="field">
-          <label className="field-label" htmlFor="email">Email Address</label>
+          <label
+            className="field-label"
+            htmlFor="email"
+          >
+            Email Address
+          </label>
           <TextField
             id="email"
             fullWidth
@@ -45,7 +65,12 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
           />
         </div>
         <div className="field">
-          <label className="field-label" htmlFor="phone-no">Phone Number</label>
+          <label
+            className="field-label"
+            htmlFor="phone-no"
+          >
+            Phone Number
+          </label>
           <TextField
             id="phone-no"
             fullWidth
@@ -55,7 +80,12 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
           />
         </div>
         <div className="field">
-          <label className="field-label" htmlFor="desc">Department</label>
+          <label
+            className="field-label"
+            htmlFor="desc"
+          >
+            Department
+          </label>
           <TextField
             id="desc"
             fullWidth
@@ -68,12 +98,13 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
           className="settings-btn"
           variant="contained"
           size="small"
-          onClick={onSave}>
+          onClick={onSave}
+        >
           Save Changes
         </Button>
       </Card>
     </>
-  )
-}
+  );
+};
 
-export default ProfileSection
+export default ProfileSection;

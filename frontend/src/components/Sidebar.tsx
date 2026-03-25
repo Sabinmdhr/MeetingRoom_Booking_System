@@ -12,15 +12,16 @@ import {
   Calendar,
   DoorOpen,
   Building2,
-  Megaphone,
-  FileText,
+  ClipboardMinus,
   Users,
   Settings,
   Menu,
   ChevronLeft,
   LogOut,
+  Bell,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 const menuItems = [
   {
@@ -37,10 +38,10 @@ const menuItems = [
   },
   {
     text: "Announcements",
-    icon: <Megaphone size={20} />,
+    icon: <Bell size={20} />,
     path: "/announcements",
   },
-  { text: "Report", icon: <FileText size={20} />, path: "/report" },
+  { text: "Report", icon: <ClipboardMinus size={20} />, path: "/report" },
   { text: "Participants", icon: <Users size={20} />, path: "/participants" },
   { text: "Settings", icon: <Settings size={20} />, path: "/settings" },
 ];
@@ -63,21 +64,11 @@ export default function Sidebar() {
   return (
     <Drawer
       variant="permanent"
-      className={`sidebar ${open ? "open" : "closed"}`}
+      // className={`sidebar ${open ? "open" : "closed"}`}
       PaperProps={{
         className: open ? "sidebar-paper open" : "sidebar-paper closed",
       }}
     >
-      {/* Header */}
-      <div className="sidebar-header">
-        <div
-          className="toggle-button"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <ChevronLeft size={20} /> : <Menu size={20} />}
-        </div>
-      </div>
-
       {/* Menu Content Wrapper */}
       <div className="sidebar-content">
         {/* Top Items */}
@@ -95,14 +86,26 @@ export default function Sidebar() {
                 onClick={() => navigate(item.path)}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText
-                  primary={item.text}
+                <Typography
+                  // variant="h4"
+                  // primary={item.text}
                   className={`sidebar-text ${open ? "show" : "hide"}`}
-                />
+                >
+                  {item.text}
+                </Typography>
               </ListItemButton>
             </ListItem>
           ))}
+          <div className="sidebar-header">
+            <div
+              className="toggle-button"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <ChevronLeft size={20} /> : <Menu size={20} />}
+            </div>
+          </div>
         </List>
+        {/* Header */}
 
         {/* Logout Bottom */}
         <List className="logout-section">

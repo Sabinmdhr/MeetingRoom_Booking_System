@@ -9,7 +9,7 @@ import {
 import { useMeetingTableViewModel } from "../viewmodels/useMeetingReportViewModel";
 import "../assets/scss/pages/Report.scss";
 import { Download, Funnel } from "lucide-react";
-import ReportFilters from "../components/ReportFilters";
+import ReportFilters from "../components/Reports/ReportFilters";
 import { useEffect, useState } from "react";
 
 function CustomToolbar() {

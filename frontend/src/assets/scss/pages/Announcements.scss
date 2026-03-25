@@ -1,8 +1,6 @@
-.announcement__main {
-  font-family: var(--titleMediumFont);
-}
 .announcement {
   border-radius: 12px !important;
+  padding: 0 20px;
 
   &__header {
     display: flex;
@@ -30,19 +28,44 @@
   }
 
   &__button {
-    font-size: 13px ;
+    font-size: 13px;
     text-transform: none !important;
     color: white !important;
     border-radius: 8px !important;
-    // background: #4e24b8 !important;
     background: black !important;
     padding: 6px 12px !important;
   }
 
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__section {
+    // padding: 0 20px;
+  }
+
+  &__content-title {
+    margin-bottom: 8px;
+  }
+
+  &__title-flex {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 0 15px;
+  }
+
+  &__divider {
+    margin: 0 15px !important;
+  }
   &__list {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    // margin-top: 12px;
   }
 
   &__card {
@@ -59,32 +82,27 @@
   &__card-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 12px;
     margin-bottom: 8px;
   }
 
   &__card-title {
-    // font-weight: 600;
     display: flex;
+    align-items: center;
+    gap: 6px;
     color: black !important;
-    justify-content: space-evenly !important;
-    // align-items: ;
-
-    gap: 6px !important;
-
-    // &__icon {
-    //   margin-top: 4px;
-    //   color: red;
-    // }
   }
 
   &__tags {
     display: flex;
-    gap: 6px !important;
+    gap: 6px;
+
     .chip__one {
       background-color: #d4183d;
       color: white;
     }
+
     .chip__two {
       background-color: #9810fa;
       color: white;

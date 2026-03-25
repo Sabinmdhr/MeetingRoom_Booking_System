@@ -1,5 +1,5 @@
 import { Button, Drawer, Typography, Divider, IconButton } from "@mui/material";
-import "../assets/scss/pages/ReportColumns.scss";
+import "../../assets/scss/pages/ReportColumns.scss";
 import { Eye, EyeOff, X } from "lucide-react";
 
 type ColumnKey =

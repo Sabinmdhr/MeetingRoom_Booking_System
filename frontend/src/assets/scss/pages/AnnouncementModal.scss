@@ -2,7 +2,6 @@
 // }
 .announcementModal {
   border-radius: 20px !important;
-  // font-family: "Inter", sans-serif !important;
   font-family: var(--titleMediumFont) !important;
   &__header {
     display: flex;
@@ -24,7 +23,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    margin-top: 15px;
+    // margin-top: 5px;
 
     .MuiTextField-root {
       margin-top: 2px;
@@ -177,6 +176,19 @@
     &--grey {
       color: grey;
     }
+  }
+
+  &__checkbox {
+    margin-top: 15px;
+    &-style {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+  }
+
+  &__author {
+    margin-top: 15px;
   }
 }
 

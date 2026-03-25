@@ -4,43 +4,40 @@ import {
   DemoParticipants,
   DemoColumns,
 } from "../services/participants.service";
-import { useSelector , useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   setParticipants,
   closeEditForm,
   openEditForm,
-
   toggleParticipantsSelection,
   clearSelectedParticipants,
 } from "../redux/ParticipantsSlice";
 
 export const useparticipantsViewModel = () => {
-
-   useEffect(() => {
+  useEffect(() => {
     const data = DemoParticipants();
     dispatch(setParticipants(data));
     dispatch(clearSelectedParticipants());
-
   }, []);
-  
-  const [participantType, setParticipantType] = useState< "internal" | "external" | null >(null);
+
+  const [participantType, setParticipantType] = useState<
+    "internal" | "external" | null
+  >(null);
   const [tabValue, setTabValue] = useState("people");
 
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>(
-    [],)
+    [],
+  );
 
   // const [participants, setParticipants] = useState<Participants[]>(DemoParticipants());
   const [columns, setColumns] = useState<Columns[]>(DemoColumns());
   const dispatch = useDispatch();
 
-
-
   useEffect(() => {
     const data = DemoParticipants();
     dispatch(setParticipants(data));
-    dispatch(clearSelectedParticipants())
+    dispatch(clearSelectedParticipants());
   }, [dispatch]);
-
 
   const handleEdit = (participants: any) => {
     dispatch(openEditForm(participants));
@@ -76,12 +73,10 @@ export const useparticipantsViewModel = () => {
   };
 
   const filteredParticipants = participants.filter(
-    (p:Participants) =>
+    (p: Participants) =>
       p.fullName.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
-
-
 
   const handleAddExternal = () => {
     if (!externalName || !externalEmail) return;
@@ -122,6 +117,3 @@ export const useparticipantsViewModel = () => {
     handleAddExternal,
   };
 };
-
-
-

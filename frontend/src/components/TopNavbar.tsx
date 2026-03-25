@@ -3,7 +3,7 @@ import Toolbar from "@mui/material/Toolbar";
 import "../assets/scss/pages/TopNavbar.scss";
 import logo from "../assets/swift-logo.svg";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, Bell, X } from "lucide-react";
 
 import { useState } from "react";
@@ -16,15 +16,32 @@ import {
   MenuItem,
   Typography,
   Divider,
+  Avatar,
 } from "@mui/material";
+import { deepPurple } from "@mui/material/colors";
 
 export default function TopNavbar() {
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(
+    null,
+  );
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+  const handleProfileMenuOpen = (event: any) => {
+    setProfileAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setProfileAnchorEl(null);
+  };
   const open = Boolean(anchorEl);
 
-  const handleOpen = (event: any) => {
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -80,7 +97,7 @@ export default function TopNavbar() {
               badgeContent={notifications.length}
               color="error"
             >
-              <Bell size={20} />
+              <Bell size={22} />
             </Badge>
           </IconButton>
         </div>
@@ -129,6 +146,26 @@ export default function TopNavbar() {
               </MenuItem>
             ))
           )}
+        </Menu>
+        <IconButton
+          onClick={handleProfileMenuOpen}
+          className="notification__icon"
+        >
+          <Avatar
+            sx={{ bgcolor: deepPurple[500], width: 40, height: 40 }}
+            sizes=""
+          >
+            OP
+          </Avatar>
+        </IconButton>
+
+        <Menu
+          anchorEl={profileAnchorEl}
+          open={Boolean(profileAnchorEl)}
+          onClose={handleProfileMenuClose}
+        >
+          <MenuItem onClick={handleProfileMenuClose}> Profile</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

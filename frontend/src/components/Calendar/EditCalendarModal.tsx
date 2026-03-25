@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
-import "../assets/scss/pages/EditCalendarModal.scss";
-import ParticipantsCard from "./BookingRooms/ParticipantsCard";
+import "../../assets/scss/pages/EditCalendarModal.scss";
+import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 
 interface Props {
   event: any;

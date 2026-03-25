@@ -1,18 +1,27 @@
-import { Button, Card, CardContent, Typography, Chip } from "@mui/material";
-import { CircleAlert, Megaphone } from "lucide-react";
+import {
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  // Chip,
+  Divider,
+} from "@mui/material";
+import { CircleAlert, Megaphone, Pin } from "lucide-react";
 import "../assets/scss/pages/Announcements.scss";
 import { useState } from "react";
-import AnnouncementModal from "../components/AnnouncementModal";
+import AnnouncementModal from "../components/Announcements/AnnouncementModal";
 import "../assets/scss/global.scss";
-
-// const announcements = [];
+import AnnouncementCard from "../components/Announcements/AnnouncementCard";
 
 const Announcements = () => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [announcements, setAnnouncements] = useState([
+
+  const date = new Date().toDateString();
+
+  const [announcements] = useState([
     {
       icon: (
         <CircleAlert
@@ -23,10 +32,11 @@ const Announcements = () => {
       title: "System Maintenance Scheduled",
       description:
         "The meeting room booking system will undergo maintenance on Feb 15, 2026 from 2:00 AM to 4:00 AM. Please plan your bookings accordingly.",
-      date: "Feb 7, 2026",
+      date,
       priority: "High Priority",
       isNew: true,
       isPinned: true,
+      author: "Shristi Yakami (Frontend Intern)",
     },
     {
       icon: (
@@ -38,9 +48,10 @@ const Announcements = () => {
       title: "New Conference Room Available",
       description:
         "Board Room 5A is now available for booking. It features state-of-the-art video conferencing equipment and can accommodate up to 20 people.",
-      date: "Feb 6, 2026",
+      date,
       isNew: true,
-      isPinned: true,
+      isPinned: false,
+      author: "Sabin Manandhar (Frontend Intern)",
     },
     {
       icon: (
@@ -52,23 +63,25 @@ const Announcements = () => {
       title: "Updated Booking Policy",
       description:
         "Please review the updated meeting room booking policy. Maximum booking duration is now 4 hours per session.",
-      date: "Feb 5, 2026",
+      date,
       isNew: false,
+      isPinned: false,
+      author: "Sushant Basnet (Frontend Intern)",
     },
   ]);
 
-  // const sortedAnnouncements = [...announcements].sort(
-  //   (a, b) => Number(b.isPinned) - Number(a.isPinned),
-  // );
+  const pinned = announcements.filter((a) => a.isPinned);
+  const others = announcements.filter((a) => !a.isPinned);
+
   return (
     <div className="announcement__main">
       <Card className="announcement">
-        {/* Main Card Header */}
+        {/* Header */}
         <CardContent className="announcement__header">
           <div className="announcement__title-wrapper">
             <div className="announcement__title">
               <Megaphone size={20} />
-              <Typography variant="h1">Announcements</Typography>
+              <Typography variant="h1"> Announcements</Typography>
             </div>
             <Typography
               variant="subtitle1"
@@ -88,64 +101,56 @@ const Announcements = () => {
           </Button>
         </CardContent>
 
-        {/* Announcement List */}
-        <CardContent className="announcement__list">
-          {announcements.map((item, index) => (
-            <Card
-              key={index}
-              className="announcement__card"
-              variant="outlined"
+        {/* Content */}
+        <div className="announcement__content">
+          <div className="announcement__section">
+            <Typography
+              className="announcement__content-title"
+              variant="h3"
             >
-              <CardContent>
-                <div className="announcement__card-header">
-                  <Typography
-                    variant="h4"
-                    className="announcement__card-title"
-                  >
-                    {/* <CircleAlert
-                      size={18}
-                      className="announcement__card-title__icon"
-                    /> */}
-                    {item.icon}
-                    {item.title}
-                  </Typography>
+              <span className="announcement__title-flex">
+                <Pin size={18} />
+                Pinned Announcements ({pinned.length})
+              </span>
+            </Typography>
 
-                  <div className="announcement__tags">
-                    {item.priority && (
-                      <Chip
-                        label={item.priority}
-                        className="chip__one"
-                        size="small"
-                      />
-                    )}
-                    {item.isNew && (
-                      <Chip
-                        label="New"
-                        className="chip__two"
-                        size="small"
-                      />
-                    )}
-                  </div>
-                </div>
+            <Divider className="announcement__divider" />
 
-                <Typography
-                  variant="body2"
-                  className="announcement__description"
-                >
-                  {item.description}
-                </Typography>
+            <CardContent className="announcement__list">
+              {pinned.map((item, index) => (
+                <AnnouncementCard
+                  key={index}
+                  item={item}
+                />
+              ))}
+            </CardContent>
+          </div>
 
-                <Typography
-                  variant="caption"
-                  className="announcement__date"
-                >
-                  {item.date}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </CardContent>
+          <div className="announcement__section">
+            <Typography
+              className="announcement__content-title"
+              variant="h3"
+            >
+              <span className="announcement__title-flex">
+                <Megaphone size={18} />
+                All Announcements ({others.length})
+              </span>{" "}
+            </Typography>
+
+            <Divider className="announcement__divider" />
+
+            <CardContent className="announcement__list">
+              {others.map((item, index) => (
+                <AnnouncementCard
+                  key={index}
+                  item={item}
+                />
+              ))}
+            </CardContent>
+          </div>
+        </div>
       </Card>
+
       <AnnouncementModal
         open={open}
         handleClose={handleClose}
