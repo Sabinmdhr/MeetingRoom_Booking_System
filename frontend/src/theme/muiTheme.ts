@@ -16,7 +16,7 @@ export const muiTheme = createTheme({
     subtitle1: { fontSize: "16px", color: " var(--colorsNeutral600)" },
 
     // -------------------------------Form Title------------
-    h3: { fontSize: "17px", fontWeight: "500" },
+    h3: { fontSize: "18px", fontWeight: "500" },
 
     h4: { fontSize: "16px", fontWeight: "500" },
   },

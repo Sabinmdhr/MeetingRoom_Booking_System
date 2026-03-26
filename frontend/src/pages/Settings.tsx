@@ -22,11 +22,11 @@ const Settings = () => {
           Manage your account and application preferences
         </Typography>
       </div>
-      <ProfileSection
+      {/* <ProfileSection
         profile={settings.profile}
         onChange={updateProfileSection}
         onSave={saveSettings}
-      />
+      /> */}
 
       <NotificationSection />
       <ColorSection />
