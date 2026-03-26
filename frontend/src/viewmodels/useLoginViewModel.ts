@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { LoginFormInputs } from "../models/auth.model";
-import { loginService } from "../services/auth.service";
+import { loginService, logoutService } from "../services/auth.service";
 
 export const useLoginViewModel = () => {
   const [loading, setLoading] = useState(false);
@@ -29,6 +29,16 @@ export const useLoginViewModel = () => {
       setLoading(false);
     }
   };
-
-  return { login, loading, error };
+  const logout = async () => {
+    try {
+      await logoutService();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      localStorage.removeItem("accesstoken");
+      localStorage.removeItem("refreshToken");
+      navigate("/");
+    }
+  };
+  return { login, loading, error, logout };
 };

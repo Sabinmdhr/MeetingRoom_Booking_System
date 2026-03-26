@@ -15,13 +15,14 @@ import {
   ClipboardMinus,
   Users,
   Settings,
-  Menu,
   ChevronLeft,
   LogOut,
   Bell,
+  ChevronRight,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
+import { useLoginViewModel } from "../viewmodels/useLoginViewModel";
 
 const menuItems = [
   {
@@ -55,23 +56,19 @@ export default function Sidebar() {
   const location = useLocation();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
+  const { logout } = useLoginViewModel();
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
     <Drawer
       variant="permanent"
-      // className={`sidebar ${open ? "open" : "closed"}`}
       PaperProps={{
         className: open ? "sidebar-paper open" : "sidebar-paper closed",
       }}
     >
-      {/* Menu Content Wrapper */}
       <div className="sidebar-content">
-        {/* Top Items */}
         <List>
           {menuItems.map((item) => (
             <ListItem
@@ -87,8 +84,6 @@ export default function Sidebar() {
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <Typography
-                  // variant="h4"
-                  // primary={item.text}
                   className={`sidebar-text ${open ? "show" : "hide"}`}
                 >
                   {item.text}
@@ -96,18 +91,18 @@ export default function Sidebar() {
               </ListItemButton>
             </ListItem>
           ))}
-          <div className="sidebar-header">
-            <div
-              className="toggle-button"
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <ChevronLeft size={20} /> : <Menu size={20} />}
-            </div>
-          </div>
         </List>
-        {/* Header */}
+        <Divider />
 
-        {/* Logout Bottom */}
+        <div
+          className="sidebar-header"
+          onClick={() => setOpen(!open)}
+        >
+          <div className="toggle-button">
+            {open ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+          </div>
+        </div>
+
         <List className="logout-section">
           <ListItem disablePadding>
             <ListItemButton

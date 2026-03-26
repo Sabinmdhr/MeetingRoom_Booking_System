@@ -4,7 +4,7 @@ import "../assets/scss/pages/TopNavbar.scss";
 import logo from "../assets/swift-logo.svg";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Bell, X } from "lucide-react";
+import { Search, Bell, X, CircleCheckBig } from "lucide-react";
 
 import { useState } from "react";
 import {
@@ -17,8 +17,10 @@ import {
   Typography,
   Divider,
   Avatar,
+  Button,
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
+import Announcements from "../pages/Announcements";
 
 export default function TopNavbar() {
   const [search, setSearch] = useState("");
@@ -31,6 +33,11 @@ export default function TopNavbar() {
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
+  };
+
+  const handleProfile = () => {
+    navigate("/profile");
+    handleProfileMenuClose();
   };
   const handleProfileMenuOpen = (event: any) => {
     setProfileAnchorEl(event.currentTarget);
@@ -97,7 +104,7 @@ export default function TopNavbar() {
               badgeContent={notifications.length}
               color="error"
             >
-              <Bell size={22} />
+              <Bell size={25} />
             </Badge>
           </IconButton>
         </div>
@@ -119,34 +126,51 @@ export default function TopNavbar() {
           }}
         >
           <div className="notification-header">
-            <Typography variant="subtitle1">Notifications</Typography>
-
             <div>
-              <span>
-                <X
-                  style={{ cursor: "pointer" }}
-                  size={17}
-                  onClick={handleClose}
-                />
-              </span>
+              <Typography variant="h3">Notifications</Typography>
+              <Typography variant="subtitle1">
+                {notifications.length} unread notifications.
+              </Typography>
+            </div>
+
+            <div className="notification__close">
+              <X
+                size={18}
+                onClick={handleClose}
+              />
             </div>
           </div>
 
           <Divider />
+          <div className="notification__container">
+            <div className="notification__actions">
+              <Button className="notification__actions-tags">
+                <CircleCheckBig size={17} />
+                <Typography variant="subtitle2">Mark all as read</Typography>
+              </Button>
+              <Button className="notification__actions-tags">
+                <X size={17} />
+                <Typography variant="subtitle2">Clear all</Typography>
+              </Button>
+            </div>
 
-          {notifications.length === 0 ? (
-            <MenuItem>No notifications</MenuItem>
-          ) : (
-            notifications.map((note, index) => (
-              <MenuItem
-                key={index}
-                onClick={handleClose}
-              >
-                {note}
-              </MenuItem>
-            ))
-          )}
+            <Divider />
+
+            {notifications.length === 0 ? (
+              <MenuItem>No notifications</MenuItem>
+            ) : (
+              notifications.map((note, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={handleClose}
+                >
+                  {note}
+                </MenuItem>
+              ))
+            )}
+          </div>
         </Menu>
+
         <IconButton
           onClick={handleProfileMenuOpen}
           className="notification__icon"
@@ -155,16 +179,19 @@ export default function TopNavbar() {
             sx={{ bgcolor: deepPurple[500], width: 40, height: 40 }}
             sizes=""
           >
-            OP
+            SB
           </Avatar>
         </IconButton>
 
         <Menu
+          PaperProps={{
+            className: "profile-menu",
+          }}
           anchorEl={profileAnchorEl}
           open={Boolean(profileAnchorEl)}
           onClose={handleProfileMenuClose}
         >
-          <MenuItem onClick={handleProfileMenuClose}> Profile</MenuItem>
+          <MenuItem onClick={handleProfile}> Profile</MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
