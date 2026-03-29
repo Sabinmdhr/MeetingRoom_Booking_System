@@ -1,6 +1,5 @@
 .settings {
   // padding: 0px 12px;
-  font-family: var(--titleMediumFont);
 
   //ProfileSection
   .settings-title {
@@ -14,10 +13,15 @@
   }
 
   .settings-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px !important;
     margin-top: 15px;
     width: 100%;
-    padding: 28px;
-
+    // padding: 0 28px;
+    padding: 16px 28px; // reduce top padding
+    // gap: 100px !important;
+    // padding-bottom: 20px;
     border-radius: 14px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
   }
@@ -27,39 +31,52 @@
   //   font-weight: 300;
   // }
 
+  &__main {
+    // display: flex;
+    // flex-direction: column;
+    // gap: 6px;
+  }
   .name {
     display: flex;
     gap: 20px;
+    padding: 0;
+    // background-color: red;
   }
 
   .field {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    background-color: #fff;
   }
   .field-label {
-    font-size: 15px;
+    font-size: 15px !important;
     color: #0a0a0a;
     font-weight: 600;
     color: black;
   }
 
-  .settings-btn {
-    background-color: black;
-    color: white;
-    margin-top: 15px;
-    border-radius: 8px;
-    height: 40px;
-    padding: 12px;
-    text-transform: none;
+  .settings__buttons {
+    display: flex;
+    gap: 12px;
+    .settings-btn {
+      background-color: black;
+      color: white;
+      margin-top: 35px;
+      border-radius: 8px;
+      height: 40px;
+      padding: 12px;
+      text-transform: none;
 
-    &:hover {
-      opacity: 0.9;
-      box-shadow: none;
+      &:hover {
+        opacity: 0.9;
+        box-shadow: none;
+      }
     }
   }
 
   .MuiTextField-root {
+    margin: 0 !important;
     background: #f3f3f5;
     border-radius: 8px;
 

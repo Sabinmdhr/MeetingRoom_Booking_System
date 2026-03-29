@@ -17,6 +17,7 @@ import Participants from "./pages/Participants";
 import Settings from "./pages/Settings";
 import Calendar from "./pages/Calendar";
 import BookRoom from "./pages/BookRoom";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
@@ -76,6 +77,10 @@ function App() {
           <Route
             path="settings"
             element={<Settings />}
+          />
+          <Route
+            path="profile"
+            element={<UserProfile />}
           />
         </Route>
       </Routes>

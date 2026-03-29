@@ -1,0 +1,81 @@
+.profile {
+  &__card {
+    margin-top: 20px;
+    border-radius: 12px !important;
+    padding: 20px;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__avatar-wrapper {
+    display: flex;
+    align-items: center !important;
+    gap: 15px;
+  }
+
+  &__avatar {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 24px !important;
+    background-color: #673ab7 !important;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__divider {
+    margin: 20px 0 !important;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__row {
+    display: flex;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  &__field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__save-btn {
+    align-self: flex-end;
+    text-transform: none !important;
+    border-radius: 8px !important;
+  }
+  &__button {
+    background-color: black !important;
+    width: 100px;
+    color: white !important;
+    margin-top: 10px !important;
+    border-radius: 8px !important;
+    height: 40px !important;
+    padding: 14px !important;
+
+    &:hover {
+      opacity: 0.9;
+      box-shadow: none;
+    }
+  }
+
+  &__label {
+    font-size: 15px !important;
+    color: #6b7280;
+  }
+}
