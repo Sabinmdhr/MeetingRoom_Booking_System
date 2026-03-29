@@ -9,8 +9,12 @@ import { useAddParticipantsViewModel } from "../viewmodels/useAddParticipantsVie
 import { GroupCard } from "../components/Participants/GroupCard";
 import { AddGroupForm } from "../components/Participants/AddGroup-Form";
 import { useGroupCardViewModel } from "../viewmodels/useGroupCardViewModel";
+import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
 const Participants = () => {
   const [editMode, setEditMode] = useState(false);
+  const {users,setUsers,handleParticipantsFormClose, handleParticipantFormOpen, participantsFormState}= useparticipantsViewModel()
+  // console.log("thisis ",users);
+
   // const { open } = useAddParticipantsViewModel();
   const { numOfGroup } = useGroupCardViewModel();
   const [activeTab, setActiveTab] = useState<"Tab1" | "Tab2">("Tab1");
@@ -44,13 +48,27 @@ const Participants = () => {
 
       {/* ------------------------Edit Mode Button------------ */}
       <div>
-        {activeTab == "Tab1" ? <AddParticipantsForm /> : <AddGroupForm />}
+        {activeTab == "Tab1" ? (
+          <AddParticipantsForm
+            participantsFormState={participantsFormState}
+            handleParticipantFormOpen={handleParticipantFormOpen}
+            handleParticipantsFormClose={handleParticipantsFormClose}
+          />
+        ) : (
+          <AddGroupForm />
+        )}
       </div>
 
       {activeTab == "Tab1" ? (
         <div className="participants-container">
           <div className="participants-table">
-            <ParticipantsTable />
+            <ParticipantsTable
+              users={users}
+              participantsFormState={participantsFormState}
+            handleParticipantFormOpen={handleParticipantFormOpen}
+
+              handleParticipantsFormClose={handleParticipantsFormClose}
+            />
           </div>
         </div>
       ) : (

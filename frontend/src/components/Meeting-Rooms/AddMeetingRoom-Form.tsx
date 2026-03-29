@@ -13,35 +13,77 @@ import {
 } from "@mui/material";
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import { Plus, Vault, X } from "lucide-react";
-import "../../assets/scss/components/AddMeetingRoom-Form.scss"
-export const AddMeetingRoomForm = () => {
+import "../../assets/scss/components/AddMeetingRoom-Form.scss";
+import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
+import { useEffect } from "react";
+import type {
+  meeting_rooms,
+} from "../../models/Meeting_room.model";
+
+type props = {
+  roomFormState: {
+    open: boolean;
+    mode: "add" | "edit";
+    room: meeting_rooms | null;
+  };
+  handleRoomFormOpen: (mode: "add" | "edit", room?: meeting_rooms) => void;
+  handleRoomFormClose: ()=> void
+};
+export const AddMeetingRoomForm = ({ roomFormState, handleRoomFormOpen,handleRoomFormClose }: props) => {
   // const { handleClose } = useAddRoomViewModel();
   // const { isEditOpen } = useAppSelector((state) => state.meetingRoom);
 
   const {
     openAddRoomForm,
     addRoomFormData,
+    setAddRoomFormData,
     handleChange,
     handleCheckboxChange,
     setOpenAddRoomForm,
-    submitAddRomForm
+    submitAddRomForm,
   } = useAddRoomViewModel();
+  // const {
+  //   addMeetingFormData,
+  //   setAddMeetingFormData,
+  //   selectedRoom,
+  //   setSelectedRoom,
+  //   setRoomFormState,
+  //   handleRoomFormOpen,
+  // } = useMeetingCardViewModel();
+  useEffect(() => {
+    if (roomFormState.mode === "edit" && roomFormState.room) {
+      setAddRoomFormData({
+        id: roomFormState.room.id,
+        roomName: roomFormState.room.roomName,
+        capacity: roomFormState.room.capacity,
+        resources: roomFormState.room.resources,
+      });
+    } else {
+      setAddRoomFormData({
+        id: "",
+        roomName: "",
+        capacity: 0,
+        resources: [],
+      });
+    }
+  }, [roomFormState.room]);
 
   return (
     <div className="add-Form">
       <Button
         className="add-btn"
         variant="outlined"
-        onClick={() => setOpenAddRoomForm((prev) => (prev = !prev))}
+        onClick={() => handleRoomFormOpen("add")}
       >
         <Plus size={14} /> Add Room
       </Button>
 
       <Dialog
-        open={openAddRoomForm}
+        open={roomFormState.open}
         maxWidth="sm"
         fullWidth
-        onClose={() => setOpenAddRoomForm((prev) => (prev = !prev))}
+        onClose={() => handleRoomFormClose()}
+        // onClose={() => setOpen((prev) => (prev = !prev))}
         slotProps={{ paper: { className: "Form__Container" } }}
       >
         <DialogTitle className="title">Create a New Room</DialogTitle>
@@ -133,7 +175,9 @@ export const AddMeetingRoomForm = () => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={submitAddRomForm}>Add</Button>
+          <Button variant="contained" onClick={submitAddRomForm}>
+            Add
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

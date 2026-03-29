@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import type { Participants, Columns } from "../models/participants.model";
+import type { Participants, Columns, participantsApi } from "../models/participants.model";
 import {
   DemoParticipants,
   DemoColumns,
+  getAllUser,
 } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -15,10 +16,48 @@ import {
 
 export const useparticipantsViewModel = () => {
   useEffect(() => {
+    const demoUsers =()=>{
+
     const data = DemoParticipants();
     dispatch(setParticipants(data));
     dispatch(clearSelectedParticipants());
+    }
+
+
+     const fetchUsers = async () => {
+       const data = await getAllUser();
+       setUsers(data);
+       console.log(data);
+     };
+     fetchUsers();
+    demoUsers();
   }, []);
+
+
+const [users,setUsers] = useState<participantsApi[]>([])
+
+
+const [participantsFormState, setPArticipantsFormState] = useState({
+  open: false,
+  mode: "edit" as "edit" | "add",
+  participant : null as participantsApi | null,
+})
+
+
+const handleParticipantFormOpen = (mode: "edit"| "add", participant?: participantsApi)=>{
+  setPArticipantsFormState({
+    open: true,
+    mode: mode,
+    participant: participant || null,
+  })
+}
+
+const handleParticipantsFormClose = ()=>{
+  setPArticipantsFormState((prev) => ({
+    ...prev,
+    open: false
+  }))
+}
 
   const [participantType, setParticipantType] = useState<
     "internal" | "external" | null
@@ -105,6 +144,9 @@ export const useparticipantsViewModel = () => {
     handleToggle,
     setTabValue,
 
+    users,
+    setUsers,
+
     selectedParticipants,
     handleSelectParticipant,
     search,
@@ -115,5 +157,11 @@ export const useparticipantsViewModel = () => {
     externalEmail,
     setExternalEmail,
     handleAddExternal,
+
+
+    participantsFormState,
+    setPArticipantsFormState,
+    handleParticipantFormOpen,
+    handleParticipantsFormClose
   };
 };

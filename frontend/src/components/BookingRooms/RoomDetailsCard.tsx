@@ -1,10 +1,10 @@
 import { Card, Typography, Chip, Stack, Box } from "@mui/material";
-import type { Meeting_room } from "../../models/Meeting_room.model";
+import type { meeting_rooms} from "../../models/Meeting_room.model";
 import "../../assets/scss/pages/RoomDetailsCard.scss";
 import { MapPin, Users, Presentation, Projector, TvMinimal, Wifi } from "lucide-react";
 
 interface RoomDetailsCardProps {
-  room: Meeting_room | null;
+  room: meeting_rooms | null;
 }
 
 const featureIcons: Record<string, any> = {
@@ -40,7 +40,7 @@ const RoomDetailsCard = ({ room }: RoomDetailsCardProps) => {
           Room Name
         </Typography>
         <Typography variant="body2" fontWeight="bold">
-          {room.title}
+          {room.roomName}
         </Typography>
       </Box>
       <Box className="room-box" sx={{ mt: 1 }}>
@@ -64,7 +64,7 @@ const RoomDetailsCard = ({ room }: RoomDetailsCardProps) => {
         AVAILABLE RESOURCES
       </Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap">
-        {room.features.map((feature) => (
+        {room.resources.map((feature) => (
           <Box key={feature} sx={{ width: "calc(50% - 8px)" }}>
             <Chip label={feature} icon={featureIcons[feature]} size="small" />
           </Box>

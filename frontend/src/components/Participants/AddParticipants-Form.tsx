@@ -15,9 +15,29 @@ import "../../assets/scss/global.scss";
 import "../../assets/scss/components/AddParticipants-Form.scss";
 import { useAppSelector } from "../../redux/store";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, type ProviderProps } from "react-redux";
+import type { participantsApi } from "../../models/participants.model";
 
-export const AddParticipantsForm = () => {
+
+type props = {
+  participantsFormState: {
+    open: boolean;
+    mode: "add" | "edit";
+    participant: participantsApi;
+  };
+  handleParticipantFormOpen: (
+    mode: "add" | "edit",
+    participant?: participantsApi,
+  ) => void;
+  handleParticipantsFormClose: () => void;
+};
+export const AddParticipantsForm = ({
+  handleParticipantsFormClose,
+  handleParticipantFormOpen,
+  participantsFormState,
+}: props) => {
+
+
   const {
     handleChange,
     closeAddParticipantForm,
@@ -39,6 +59,26 @@ export const AddParticipantsForm = () => {
     "Product Manager",
     "UX Researcher",
   ];
+
+  useEffect(()=>{
+
+ if (
+   participantsFormState.mode === "edit" &&
+   participantsFormState.participant
+ ) {
+   setParticipantFormData({
+     name: participantsFormState.participant.email,
+     role: participantsFormState.participant.role,
+     phoneNum: participantsFormState.participant.email,
+     email: participantsFormState.participant.email,
+     department: participantsFormState.participant.email,
+   });
+ } else {
+   setParticipantFormData(initialFormData);
+ }
+
+    }, [participantsFormState])
+
   useEffect(() => {
     if (selectedParticipant) {
       setParticipantFormData({
@@ -59,14 +99,14 @@ export const AddParticipantsForm = () => {
       <Button
         className="add-btn"
         variant="outlined"
-        onClick={() => dispatch(openForm())}
+        onClick={() => handleParticipantFormOpen("add")}
       >
         <Plus size={14} /> Add Participant
       </Button>
 
       <Dialog
-        open={isEditOpen}
-        onClose={() => dispatch(closeEditForm())}
+        open={participantsFormState.open}
+        onClose={() => handleParticipantsFormClose()}
         slotProps={{ paper: { className: "Form__Container" } }}
       >
         <DialogTitle>

@@ -1,4 +1,5 @@
-import type { Participants, Columns } from "../models/participants.model";
+import { axiosInstance } from "../api/api";
+import type { Participants,participantsApi, Columns } from "../models/participants.model";
 export const DemoParticipants = (): Participants[] => {
   return [
     {
@@ -73,3 +74,13 @@ export const DemoColumns = (): Columns[] => {
     },
   ];
 };
+
+
+export const getAllUser = async() =>{
+  const api = axiosInstance({});
+
+  const response = await api.get("/api/v1/user/get-all");
+
+  return response.data.data.content;
+
+}

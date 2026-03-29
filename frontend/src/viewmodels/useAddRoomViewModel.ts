@@ -5,6 +5,7 @@ import { closeEditForm, openEditForm } from "../redux/MeetingRoomSlice";
 import { addRoom } from "../services/Meetinf_room.service";
 
 export const useAddRoomViewModel = () => {
+
    const [openAddRoomForm, setOpenAddRoomForm] = useState(false);
    const [addRoomFormData, setAddRoomFormData] = useState<AddRoomModal>({
      id: "",
@@ -21,6 +22,7 @@ export const useAddRoomViewModel = () => {
        [name]: value,
      }));
    };
+
 
    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
      const { value, checked } = e.target;
@@ -43,6 +45,7 @@ export const useAddRoomViewModel = () => {
        console.log(error);
      }
    };
+
   return {
     openAddRoomForm,
     handleCheckboxChange,
@@ -50,5 +53,6 @@ export const useAddRoomViewModel = () => {
     addRoomFormData,
     submitAddRomForm,
     handleChange,
+    setAddRoomFormData,
   };
 };

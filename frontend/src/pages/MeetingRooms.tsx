@@ -1,6 +1,6 @@
 import { Meeting_roomCard } from "../components/Meeting-Rooms/Meeting_roomCard";
 import "../assets/scss/pages/MeetingRooms.scss";
-import { Button, Card, CardContent, CardHeader, CircularProgress, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, CircularProgress, Grid, Typography } from "@mui/material";
 import { useMeetingCardViewModel } from "../viewmodels/useMeeting_roomCardViewModel";
 import {  useState } from "react";
 import { SquarePen } from "lucide-react";
@@ -10,7 +10,16 @@ import { useAppSelector } from "../redux/store";
 // import { EventCalendar } from "@mui/x-scheduler/event-calendar";
 
 const MeetingRooms = () => {
-  const { loading } = useMeetingCardViewModel("1");
+  const { loading, handleRoomFormOpen, roomFormState, handleRoomFormClose } = useMeetingCardViewModel();
+// const open = roomFormState.open
+    // const {
+    //   openAddRoomForm,
+    //   addRoomFormData,
+    //   handleChange,
+    //   handleCheckboxChange,
+    //   setOpenAddRoomForm,
+    //   submitAddRomForm,
+    // } = useAddRoomViewModel();
   // const [editMode, setEditMode] = useState(false)
   if (loading) return <CircularProgress />;
 //   const {handleClose} = useAddRoomViewModel();
@@ -22,16 +31,21 @@ const MeetingRooms = () => {
         <Typography variant="subtitle1">Book available rooms</Typography>
       </div>
       <div>
-        <AddMeetingRoomForm />
+        <AddMeetingRoomForm
+          roomFormState={roomFormState}
+          handleRoomFormOpen={handleRoomFormOpen}
+          handleRoomFormClose={handleRoomFormClose}
+        />
       </div>
 
-
-        <CardContent className="MeetingRooms">
-          <Meeting_roomCard meetingId="1" />
-          <Meeting_roomCard meetingId="2" />
-          <Meeting_roomCard meetingId="3" />
-          <Meeting_roomCard meetingId="3" />
-        </CardContent>
+      <CardContent className="MeetingRooms">
+        {/* <Grid container> */}
+        <Meeting_roomCard
+          roomFormState={roomFormState}
+          handleRoomFormOpen={handleRoomFormOpen}
+        />
+        {/* </Grid> */}
+      </CardContent>
     </div>
   );
 };

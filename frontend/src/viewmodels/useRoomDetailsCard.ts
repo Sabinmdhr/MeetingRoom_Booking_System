@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
-import { getMeetingRoomById, getMeetingRooms } from "../services/Meetinf_room.service";
-import type { Meeting_room } from "../models/Meeting_room.model";
+import {  getMeetingRooms } from "../services/Meetinf_room.service";
+import type { meeting_rooms } from "../models/Meeting_room.model";
 
 export const useRoomDetailsCard = ()=>{
-    const [rooms, setRooms] = useState<Meeting_room[]>([]);
+    const [rooms, setRooms] = useState<meeting_rooms[]>([]);
     const [roomId, setRoomId] = useState("");
-    const [selectedRoom, setSelectedRoom] = useState<Meeting_room | null>(null);
+    const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
 
     useEffect(() => {
         const fetchRooms = async () => {

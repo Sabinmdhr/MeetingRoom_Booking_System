@@ -7,7 +7,11 @@ export interface Participants{
   phoneNumber: string;
   numOfMeetings: number;
 }
-
+export interface participantsApi{
+  id:string;
+  email: string;
+  role: string;
+}
 export interface Columns{
   id: string;
   label: string;

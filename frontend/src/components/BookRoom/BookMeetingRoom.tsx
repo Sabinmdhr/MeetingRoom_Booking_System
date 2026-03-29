@@ -67,10 +67,8 @@ export default function BookMeetingRoom() {
       <form className="bookroom-form" onSubmit={handleSubmit}>
         <Card className="bookroom-card">
           <div className="bookroom-header">
-            <Typography variant="h1" >
-              Book a Meeting Room
-            </Typography>
-            <Typography  variant="subtitle1" >
+            <Typography variant="h1">Book a Meeting Room</Typography>
+            <Typography variant="subtitle1">
               Fill in the details to reserve a meeting room
             </Typography>
           </div>
@@ -299,12 +297,12 @@ export default function BookMeetingRoom() {
                         );
                       }
                       const room = rooms.find((r) => r.id === selected);
-                      return room?.title;
+                      return room?.roomName;
                     }}
                   >
                     {rooms.map((room) => (
                       <MenuItem key={room.id} value={room.id}>
-                        {room.title}
+                        {room.roomName}
                       </MenuItem>
                     ))}
                   </Select>
