@@ -227,7 +227,7 @@ const EditCalendarModal = ({ event, openEdit, setOpenEdit }: Props) => {
       <DialogActions className="edit-modal-actions">
         <Button
           className="cancel-button"
-          onClick={() => setOpenEdit(false)}
+          onClick={() => setOpenEdit(true)}
         >
           Cancel
         </Button>
