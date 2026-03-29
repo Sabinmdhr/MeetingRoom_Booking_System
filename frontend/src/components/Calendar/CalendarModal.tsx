@@ -141,6 +141,7 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
           event={event}
           openEdit={openEdit}
           setOpenEdit={setOpenEdit}
+          // onClose={onClose}
         />
       )}
     </div>
