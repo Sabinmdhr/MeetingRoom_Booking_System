@@ -9,7 +9,7 @@ interface ProfileProps {
 }
 const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
   return (
-    <>
+    <> 
       <Card className="settings-card">
         <Typography
           variant="h5"
