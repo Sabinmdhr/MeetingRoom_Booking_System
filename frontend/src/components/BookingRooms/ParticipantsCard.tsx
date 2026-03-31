@@ -83,12 +83,24 @@ const ParticipantsCard = ({
                   onChange={(e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab label="People" value="people" />
-                  <Tab label="Teams" value="teams" />
-                  <Tab label="All" value="all" />
+                  <Tab
+                    label="People"
+                    value="people"
+                  />
+                  <Tab
+                    label="Teams"
+                    value="teams"
+                  />
+                  <Tab
+                    label="All"
+                    value="all"
+                  />
                 </TabList>
 
-                <TabPanel value="people" className="tab-panel">
+                <TabPanel
+                  value="people"
+                  className="tab-panel"
+                >
                   <TextField
                     fullWidth
                     size="small"
@@ -98,7 +110,10 @@ const ParticipantsCard = ({
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search size={18} color="gray" />
+                          <Search
+                            size={18}
+                            color="gray"
+                          />
                         </InputAdornment>
                       ),
                     }}
@@ -214,7 +229,10 @@ const ParticipantsCard = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search size={14} color="gray" />
+                  <Search
+                    size={14}
+                    color="gray"
+                  />
                 </InputAdornment>
               ),
             }}

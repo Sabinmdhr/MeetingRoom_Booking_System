@@ -9,17 +9,18 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Save } from "lucide-react";
+import { MonitorPlayIcon, Save } from "lucide-react";
 import "../../assets/scss/pages/EditCalendarModal.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
+import { toast } from "mui-sonner";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface Props {
   event: any;
   openEdit: boolean;
-  setOpenEdit: (value: boolean) => void;
+  onCloseAll: () => void;
+  onBack: () => void;
 }
-
 const menuProps = {
   disablePortal: true,
   PaperProps: {
@@ -28,7 +29,7 @@ const menuProps = {
   },
 };
 
-const EditCalendarModal = ({ event, openEdit, setOpenEdit }: Props) => {
+const EditCalendarModal = ({ event, openEdit, onCloseAll, onBack }: Props) => {
   const [eventData, setEventData] = useState({
     title: "",
     date: "",
@@ -68,11 +69,20 @@ const { users } = useparticipantsViewModel();
     setEventData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleSave = () => {
+    toast.success("Changes saved Successfully!", {
+      closeButton: true,
+    });
+  };
   return (
     <Dialog
       className="edit-modal-main"
       open={openEdit}
-      onClose={() => setOpenEdit(false)}
+      onClose={(_event, reason) => {
+        if (reason === "backdropClick") {
+          onCloseAll();
+        }
+      }}
       fullWidth
       maxWidth="sm"
       scroll="body"
@@ -86,7 +96,6 @@ const { users } = useparticipantsViewModel();
         </span>
       </DialogTitle>
 
-      {/* CONTENT */}
       <DialogContent className="edit-modal-content">
         {/* Title */}
         <div className="modal-section">
@@ -224,12 +233,11 @@ const { users } = useparticipantsViewModel();
           />
         </div>
       </DialogContent>
-
       {/* ACTIONS */}
       <DialogActions className="edit-modal-actions">
         <Button
           className="cancel-button"
-          onClick={() => setOpenEdit(true)}
+          onClick={onBack}
         >
           Cancel
         </Button>
@@ -237,8 +245,9 @@ const { users } = useparticipantsViewModel();
           className="save-button"
           variant="contained"
           onClick={() => {
-            console.log(eventData);
-            setOpenEdit(false);
+            // console.log(eventData);
+            handleSave();
+            onBack();
           }}
         >
           <Save size={18} />

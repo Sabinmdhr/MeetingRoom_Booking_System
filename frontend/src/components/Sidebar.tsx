@@ -47,10 +47,10 @@ const menuItems = [
   { text: "Settings", icon: <Settings size={20} />, path: "/settings" },
 ];
 
-const logoutItem = {
-  text: "Logout",
-  icon: <LogOut size={20} />,
-};
+// const logoutItem = {
+//   text: "Logout",
+//   icon: ,
+// };
 
 export default function Sidebar() {
   const location = useLocation();
@@ -109,9 +109,11 @@ export default function Sidebar() {
               className="sidebar-item logout"
               onClick={handleLogout}
             >
-              <ListItemIcon>{logoutItem.icon}</ListItemIcon>
+              <ListItemIcon>
+                <LogOut size={20} />
+              </ListItemIcon>
               <ListItemText
-                primary={logoutItem.text}
+                primary={"Logout"}
                 className={`sidebar-text ${open ? "show" : "hide"}`}
               />
             </ListItemButton>
