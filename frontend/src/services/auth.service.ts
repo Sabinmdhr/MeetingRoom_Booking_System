@@ -1,16 +1,16 @@
-import { axiosInstance } from "../api/api";
+// import { axiosInstance } from "../api/api";
 import type { LoginRequest, LoginResponse } from "../models/auth.model";
-
+import api from "../api/api";
 export const loginService = async (
   data: LoginRequest,
 ): Promise<LoginResponse> => {
-  const api = axiosInstance({}); // create instance
+  // const api = axiosInstance({}); // create instance
   const response = await api.post("/api/v1/login", data);
   return response.data;
 };
 
 export const logoutService = async () => {
-  const api = axiosInstance({});
+  // const api = axiosInstance({});
 
   // create instance
   const body = {
@@ -18,7 +18,7 @@ export const logoutService = async () => {
   };
   const result = await api.post("/api/v1/logout", body, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   });
   return result.data;

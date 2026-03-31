@@ -1,63 +1,56 @@
 import { useEffect, useState } from "react";
-import type { Participants, Columns, participantsApi } from "../models/participants.model";
-import {
-  DemoParticipants,
-  DemoColumns,
-  getAllUser,
-} from "../services/participants.service";
+import type {  Columns, participantsApi } from "../models/participants.model";
+import { DemoColumns, getAllUser } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setParticipants,
-  closeEditForm,
-  openEditForm,
   toggleParticipantsSelection,
-  clearSelectedParticipants,
 } from "../redux/ParticipantsSlice";
+import type { addParticipants } from "../models/addParticipants.model";
 
 export const useparticipantsViewModel = () => {
   useEffect(() => {
-    const demoUsers =()=>{
+    // const demoUsers =()=>{
 
-    const data = DemoParticipants();
-    dispatch(setParticipants(data));
-    dispatch(clearSelectedParticipants());
-    }
+    // const data = DemoParticipants();
+    // dispatch(setParticipants(data));
+    // dispatch(clearSelectedParticipants());
+    // }
 
-
-     const fetchUsers = async () => {
-       const data = await getAllUser();
-       setUsers(data);
-       console.log(data);
-     };
-     fetchUsers();
-    demoUsers();
+    const fetchUsers = async () => {
+      const data = await getAllUser();
+      setUsers(data);
+      console.log(data);
+    };
+    fetchUsers();
+    // demoUsers();
   }, []);
 
+  const [users, setUsers] = useState<participantsApi[]>([]);
 
-const [users,setUsers] = useState<participantsApi[]>([])
+  const [participantsFormState, setPArticipantsFormState] = useState({
+    open: false,
+    mode: "edit" as "edit" | "add",
+    participant: null as participantsApi | null,
+  });
 
+  const handleParticipantFormOpen = (
+    mode: "edit" | "add",
+    participant?: participantsApi,
+  ) => {
+    setPArticipantsFormState({
+      open: true,
+      mode: mode,
+      participant: participant || null,
+    });
+  };
 
-const [participantsFormState, setPArticipantsFormState] = useState({
-  open: false,
-  mode: "edit" as "edit" | "add",
-  participant : null as participantsApi | null,
-})
-
-
-const handleParticipantFormOpen = (mode: "edit"| "add", participant?: participantsApi)=>{
-  setPArticipantsFormState({
-    open: true,
-    mode: mode,
-    participant: participant || null,
-  })
-}
-
-const handleParticipantsFormClose = ()=>{
-  setPArticipantsFormState((prev) => ({
-    ...prev,
-    open: false
-  }))
-}
+  const handleParticipantsFormClose = () => {
+    setPArticipantsFormState((prev) => ({
+      ...prev,
+      open: false,
+    }));
+  };
 
   const [participantType, setParticipantType] = useState<
     "internal" | "external" | null
@@ -72,23 +65,23 @@ const handleParticipantsFormClose = ()=>{
   const [columns, setColumns] = useState<Columns[]>(DemoColumns());
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const data = DemoParticipants();
-    dispatch(setParticipants(data));
-    dispatch(clearSelectedParticipants());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const data = DemoParticipants();
+  //   dispatch(setParticipants(data));
+  //   dispatch(clearSelectedParticipants());
+  // }, [dispatch]);
 
-  const handleEdit = (participants: any) => {
-    dispatch(openEditForm(participants));
-  };
+  // const handleEdit = (participants: any) => {
+  //   dispatch(openEditForm(participants));
+  // };
 
   const handleToggle = (pId: string) => {
     dispatch(toggleParticipantsSelection(pId));
   };
 
-  const handleClose = () => {
-    dispatch(closeEditForm());
-  };
+  // const handleClose = () => {
+  //   dispatch(closeEditForm());
+  // };
 
   const { participants, isEditOpen } = useSelector(
     (state: any) => state.participants,
@@ -112,8 +105,8 @@ const handleParticipantsFormClose = ()=>{
   };
 
   const filteredParticipants = participants.filter(
-    (p: Participants) =>
-      p.fullName.toLowerCase().includes(search.toLowerCase()) ||
+    (p: participantsApi) =>
+      p.firstname.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
 
@@ -137,8 +130,8 @@ const handleParticipantsFormClose = ()=>{
     participants,
     setParticipants,
     isEditOpen,
-    handleClose,
-    handleEdit,
+    // handleClose,
+    // handleEdit,
     columns,
     setColumns,
     handleToggle,
@@ -158,10 +151,9 @@ const handleParticipantsFormClose = ()=>{
     setExternalEmail,
     handleAddExternal,
 
-
     participantsFormState,
     setPArticipantsFormState,
     handleParticipantFormOpen,
-    handleParticipantsFormClose
+    handleParticipantsFormClose,
   };
 };
