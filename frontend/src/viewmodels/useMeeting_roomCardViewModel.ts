@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import type {  AddRoomModal, meeting_rooms } from "../models/Meeting_room.model";
+import type { meeting_rooms } from "../models/Meeting_room.model";
 import { getMeetingRooms} from "../services/Meetinf_room.service";
-import { addRoom } from "../services/Meetinf_room.service";
 
 export const useMeetingCardViewModel = () => {
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
@@ -43,8 +42,8 @@ open: false,
         setLoading(true);
         // const data = await getMeetingRoomById(meetingId);
         const data = await getMeetingRooms()
-        console.log(data);
-        setMeeting(data.data.data);
+        // console.log(data);
+        setMeeting(data.data);
       } catch (err: any) {
         setError(err.message || "Failed to load meeting room");
       } finally {
