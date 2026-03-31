@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
-  const accessToken = localStorage.getItem("accesstoken");
+  const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     window.location.href = "/";
     return null;

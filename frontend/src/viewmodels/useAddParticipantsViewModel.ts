@@ -1,33 +1,42 @@
-import { useEffect, useState } from "react";
-import { useAppSelector } from "../redux/store";
+import { useEffect, useEffectEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeEditForm,
   openEditForm,
   clearSelectedParticipants,
 } from "../redux/ParticipantsSlice";
-import type { Participants } from "../models/participants.model";
+import { addUser } from "../services/participants.service";
+import type { departmentList } from "../models/departmentList.model";
+import type { participantsApi } from "../models/participants.model";
 export const useAddParticipantsViewModel = () => {
-  const { selectedParticipant } = useAppSelector((state) => state.participants);
+  // const { selectedParticipant } = useAppSelector((state) => state.participants);
   const dispatch = useDispatch();
 
   const initialFormData = {
-    name: "",
-    role: "Senior Engineer",
-    phoneNum: "",
+    password: "",
     email: "",
-    department: "Engineering",
+    roleId: "1",
+    firstname: "",
+    lastname: "",
+    departmentId: "1",
+    phoneNo: "",
+    status: "",
+    position: "",
   };
 
   // const {isEditOpen , selectedParticipant} = useAppSelector((state) => state.participants)
 
   const [participantFormData, setParticipantFormData] =
-    useState(initialFormData);
+    useState<participantsApi>(initialFormData);
 
-  const openAddParticipantForm = (participant: Participants) => {
-    dispatch(openEditForm(participant));
-    console.log(selectedParticipant);
-  };
+
+
+
+
+  // const openAddParticipantForm = (participant: Participants) => {
+  //   dispatch(openEditForm(participant));
+  //   console.log(selectedParticipant);
+  // };
 
   const closeAddParticipantForm = () => {
     dispatch(closeEditForm());
@@ -43,9 +52,20 @@ export const useAddParticipantsViewModel = () => {
     }));
   };
 
+  
+  const handleSubmit = async () => {
+    try {
+      const response = await addUser(participantFormData);
+      console.log("User added successfully:", response);
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
+  };
   return {
     handleChange,
-    openAddParticipantForm,
+    handleSubmit,
+
+    // openAddParticipantForm,
     initialFormData,
     participantFormData,
     closeAddParticipantForm,

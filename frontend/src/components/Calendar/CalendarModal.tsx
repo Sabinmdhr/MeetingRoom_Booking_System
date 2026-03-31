@@ -12,6 +12,9 @@ import "../../assets/scss/pages/CalendarModal.scss";
 import "../../assets/scss/global.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { toast } from "mui-sonner";
+import EditCalendarModal from "./EditCalendarModal";
+import { useState } from "react";
+import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface CalendarModalProps {
   open: boolean;
@@ -31,6 +34,11 @@ const CalendarModal = ({
       closeButton: true,
     });
   };
+
+const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
+  const [openEdit, setOpenEdit] = useState(false);
+const { users } = useparticipantsViewModel();
+
   return (
     <div>
       {/* View Modal */}
@@ -90,14 +98,11 @@ const CalendarModal = ({
 
           <Divider />
 
-          <div className="modal-section">
-            {/* <div className="modal-participants"> */}
-            <ParticipantsCard
-              type=""
-              displayOn="calendar"
-            />
-          </div>
-          {/* </div> */}
+          <ParticipantsCard
+            type=""
+            displayOn="calendar"
+            users = {users}
+          />
 
           <Divider />
 
