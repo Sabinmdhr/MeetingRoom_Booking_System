@@ -11,27 +11,35 @@ import type { CalendarEvent } from "../../models/calendar.model";
 import "../../assets/scss/pages/CalendarModal.scss";
 import "../../assets/scss/global.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
-import EditCalendarModal from "./EditCalendarModal";
-import { useState } from "react";
+import { toast } from "mui-sonner";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface CalendarModalProps {
   open: boolean;
   event: CalendarEvent | null;
   onClose: () => void;
+  onEdit: () => void;
 }
 
+const CalendarModal = ({
+  open,
+  event,
+  onClose,
+  onEdit,
+}: CalendarModalProps) => {
+  const { users } = useparticipantsViewModel();
 
-const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
-  const [openEdit, setOpenEdit] = useState(false);
-const { users } = useparticipantsViewModel();
-
+  const handleDelete = () => {
+    toast.error("Meeting Deleted Successfully!", {
+      closeButton: true,
+    });
+  };
   return (
     <div>
       {/* View Modal */}
       <Dialog
         className="calendar-modal-main"
-        open={open && !openEdit}
+        open={open}
         onClose={onClose}
         fullWidth
         maxWidth="sm"
@@ -50,6 +58,7 @@ const { users } = useparticipantsViewModel();
             {event?.category}
           </span>
         </DialogTitle>
+        <Divider />
 
         <DialogContent className="calendar-modal-content">
           <div className="modal-section">
@@ -84,11 +93,15 @@ const { users } = useparticipantsViewModel();
 
           <Divider />
 
-          <ParticipantsCard
-            type=""
-            displayOn="calendar"
-            users = {users}
-          />
+          <div className="modal-section">
+            {/* <div className="modal-participants"> */}
+            <ParticipantsCard
+              type=""
+              displayOn="calendar"
+              users={users}
+            />
+          </div>
+          {/* </div> */}
 
           <Divider />
 
@@ -125,29 +138,19 @@ const { users } = useparticipantsViewModel();
             className="delete-button"
             variant="contained"
             startIcon={<DeleteOutlineIcon />}
+            onClick={handleDelete}
           >
             Delete Meeting
           </Button>
           <Button
             className="edit-button"
             variant="text"
-            onClick={() => setOpenEdit(true)}
+            onClick={onEdit}
           >
             Edit Meeting
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Edit Modal */}
-
-      {openEdit && (
-        <EditCalendarModal
-          event={event}
-          openEdit={openEdit}
-          setOpenEdit={setOpenEdit}
-          // onClose={onClose}
-        />
-      )}
     </div>
   );
 };

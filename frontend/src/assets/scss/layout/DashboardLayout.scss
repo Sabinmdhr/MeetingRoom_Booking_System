@@ -22,3 +22,46 @@
     margin 0.3s ease,
     width 0.3s ease;
 }
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Body */
+.dashboard__body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Content */
+.dashboard__content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  background: #f7f7f8;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* ================= RESPONSIVENESS ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .dashboard__content {
+    padding: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dashboard__body {
+    position: relative;
+  }
+
+  .dashboard__content {
+    padding: 16px;
+  }
+}
