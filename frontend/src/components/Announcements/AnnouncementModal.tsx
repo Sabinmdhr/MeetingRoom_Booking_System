@@ -19,14 +19,13 @@ import {
   CircleAlert,
   Users,
   Pin,
+  FolderPlus,
 } from "lucide-react";
 import { useState } from "react";
 import "../../assets/scss/global.scss";
 
 import "../../assets/scss/pages/AnnouncementModal.scss";
 import { toast } from "mui-sonner";
-
-// inside the component, add the publish handler:
 
 const AnnouncementModal = ({ open, handleClose }: any) => {
   const [isPinned, setIsPinned] = useState(false);
@@ -35,7 +34,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
   const [priority, setPriority] = useState("Normal");
   const [audience, setAudience] = useState("All Users");
   const [author, setAuthor] = useState("");
-  const today = new Date().toLocaleDateString();
+  // const today = new Date().toLocaleDateString();
 
   const handlePublish = () => {
     if (!title.trim()) {
@@ -218,6 +217,33 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
                     <span>View-Only Staff </span>
                   </div>
                 </MenuItem>
+                <MenuItem value="Engineering Leadership">
+                  <div className="announcementModal__dropdownItem">
+                    <FolderPlus
+                      size={18}
+                      className="announcementModal__icon--grey"
+                    />
+                    <span>Engineering Leadership</span>
+                  </div>
+                </MenuItem>
+                <MenuItem value="Product Team">
+                  <div className="announcementModal__dropdownItem">
+                    <FolderPlus
+                      size={18}
+                      className="announcementModal__icon--grey"
+                    />
+                    <span>Product Team</span>
+                  </div>
+                </MenuItem>
+                <MenuItem value="Finance Department">
+                  <div className="announcementModal__dropdownItem">
+                    <FolderPlus
+                      size={18}
+                      className="announcementModal__icon--grey"
+                    />
+                    <span>Finance Department </span>
+                  </div>
+                </MenuItem>
               </TextField>
             </div>
           </div>
@@ -227,7 +253,6 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
               label={
                 <span
                   className="announcementModal__checkbox-style"
-                  style={{}}
                   aria-disabled
                 >
                   <Pin size={16} />
@@ -241,37 +266,20 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
 
           <div className="announcementModal__author">
             <label
-              htmlFor="announcement_title"
+              htmlFor="announcement_author"
               className="announcementModal__label"
             >
               Author
             </label>
 
             <TextField
-              id="announcement_title"
+              id="announcement_author"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
               fullWidth
               placeholder="Enter author name"
             />
           </div>
-
-          {/* <div className={`announcementModal__preview `}>
-            <Typography className="announcementModal__previewTitle">
-              <Megaphone size={12} />
-              Preview
-            </Typography>
-
-            <div
-              className={`announcementModal__main ${priority === "High Priority" ? "high-priority" : ""} `}
-            >
-              <h3>{title || "Announcement Title"}</h3>
-              <p>{message || "Announcement message will appear here..."}</p>
-              <span className="announcementModal__meta">
-                {today} • {audience} • {author || "Author"}
-              </span>
-            </div>
-          </div> */}
         </DialogContent>
 
         <Divider className="announcementModal__divider" />

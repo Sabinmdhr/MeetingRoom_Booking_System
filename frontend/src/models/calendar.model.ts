@@ -1,4 +1,3 @@
-
 export type EventCategory = "internal" | "client" | "executive";
 
 export type CalendarEvent = {

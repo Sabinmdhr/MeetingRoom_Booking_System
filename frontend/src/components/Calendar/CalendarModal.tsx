@@ -11,24 +11,32 @@ import type { CalendarEvent } from "../../models/calendar.model";
 import "../../assets/scss/pages/CalendarModal.scss";
 import "../../assets/scss/global.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
-import EditCalendarModal from "./EditCalendarModal";
-import { useState } from "react";
+import { toast } from "mui-sonner";
 
 interface CalendarModalProps {
   open: boolean;
   event: CalendarEvent | null;
   onClose: () => void;
+  onEdit: () => void;
 }
 
-const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
-  const [openEdit, setOpenEdit] = useState(false);
-
+const CalendarModal = ({
+  open,
+  event,
+  onClose,
+  onEdit,
+}: CalendarModalProps) => {
+  const handleDelete = () => {
+    toast.error("Meeting Deleted Successfully!", {
+      closeButton: true,
+    });
+  };
   return (
     <div>
       {/* View Modal */}
       <Dialog
         className="calendar-modal-main"
-        open={open && !openEdit}
+        open={open}
         onClose={onClose}
         fullWidth
         maxWidth="sm"
@@ -47,6 +55,7 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
             {event?.category}
           </span>
         </DialogTitle>
+        <Divider />
 
         <DialogContent className="calendar-modal-content">
           <div className="modal-section">
@@ -81,10 +90,14 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
 
           <Divider />
 
-          <ParticipantsCard
-            type=""
-            displayOn="calendar"
-          />
+          <div className="modal-section">
+            {/* <div className="modal-participants"> */}
+            <ParticipantsCard
+              type=""
+              displayOn="calendar"
+            />
+          </div>
+          {/* </div> */}
 
           <Divider />
 
@@ -121,29 +134,19 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
             className="delete-button"
             variant="contained"
             startIcon={<DeleteOutlineIcon />}
+            onClick={handleDelete}
           >
             Delete Meeting
           </Button>
           <Button
             className="edit-button"
             variant="text"
-            onClick={() => setOpenEdit(true)}
+            onClick={onEdit}
           >
             Edit Meeting
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Edit Modal */}
-
-      {openEdit && (
-        <EditCalendarModal
-          event={event}
-          openEdit={openEdit}
-          setOpenEdit={setOpenEdit}
-          // onClose={onClose}
-        />
-      )}
     </div>
   );
 };
