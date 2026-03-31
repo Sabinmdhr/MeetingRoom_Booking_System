@@ -12,10 +12,15 @@ export const useLoginViewModel = () => {
     try {
       setLoading(true);
       setError(null);
-
+      const accessToken = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (accessToken && refreshToken) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+      }
       const result = await loginService(data);
 
-      localStorage.setItem("accesstoken", result.data.accessToken);
+      localStorage.setItem("accessToken", result.data.accessToken);
       localStorage.setItem("refreshToken", result.data.refreshToken);
 
       console.log("Login Success:", result);
@@ -35,7 +40,7 @@ export const useLoginViewModel = () => {
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      localStorage.removeItem("accesstoken");
+      localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       navigate("/");
     }

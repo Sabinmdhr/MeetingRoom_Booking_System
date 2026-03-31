@@ -1,18 +1,27 @@
-export interface Participants{
-  id: string;
-  fullName: string;
-  role: string;
-  department: string;
+export interface participantsApi {
+  id?: string;
   email: string;
-  phoneNumber: string;
-  numOfMeetings: number;
+  roleId: string;
+  firstname: string;
+  lastname: string;
+  departmentId: string;
+  phoneNo: string;
+  status?: string;
+  position: string;
+  password? : string;
 }
-export interface participantsApi{
-  id:string;
-  email: string;
-  role: string;
-}
-export interface Columns{
+// export interface AddParticipantRequest {
+//   password: string;
+//   email: string;
+//   roleId: string;
+//   firstname: string;
+//   lastname: string;
+//   departmentId: string;
+//   phoneNo: string;
+//   status: string;
+//   position: string;
+// }
+export interface Columns {
   id: string;
   label: string;
 }
