@@ -14,6 +14,7 @@ import "../../assets/scss/components/AddGroup-Form.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { useEffect } from "react";
 import { useAppSelector } from "../../redux/store";
+import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 export const AddGroupForm = () => {
   const {
     handleAddGroup,
@@ -23,6 +24,8 @@ export const AddGroupForm = () => {
     handleClose,
     handleChange,
   } = useAddGroupViewModel();
+
+  const {users} = useparticipantsViewModel()
 
   // const { selectedGroup, isEditOpen } = useAppSelector(
   //   (state) => state.participants,
@@ -64,7 +67,7 @@ export const AddGroupForm = () => {
             onChange={handleChange}
             placeholder="Write group name"
           ></TextField>
-          <ParticipantsCard displayOn="participant" type="" />
+          <ParticipantsCard displayOn="participant" type="" users = { users}/>
         </DialogContent>
       </Dialog>
 

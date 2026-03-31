@@ -13,6 +13,7 @@ import "../../assets/scss/global.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import EditCalendarModal from "./EditCalendarModal";
 import { useState } from "react";
+import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface CalendarModalProps {
   open: boolean;
@@ -20,8 +21,10 @@ interface CalendarModalProps {
   onClose: () => void;
 }
 
+
 const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
   const [openEdit, setOpenEdit] = useState(false);
+const { users } = useparticipantsViewModel();
 
   return (
     <div>
@@ -84,6 +87,7 @@ const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
           <ParticipantsCard
             type=""
             displayOn="calendar"
+            users = {users}
           />
 
           <Divider />

@@ -8,22 +8,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { closeEditForm, openForm } from "../../redux/ParticipantsSlice";
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
-import { FastForward, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import "../../assets/scss/global.scss";
 import "../../assets/scss/components/AddParticipants-Form.scss";
-import { useAppSelector } from "../../redux/store";
 import { useEffect } from "react";
-import { useDispatch, type ProviderProps } from "react-redux";
 import type { participantsApi } from "../../models/participants.model";
-
+import { DepartmentList } from "./DepartmentList";
 
 type props = {
   participantsFormState: {
     open: boolean;
     mode: "add" | "edit";
-    participant: participantsApi;
+    participant: participantsApi | null;
   };
   handleParticipantFormOpen: (
     mode: "add" | "edit",
@@ -36,63 +33,66 @@ export const AddParticipantsForm = ({
   handleParticipantFormOpen,
   participantsFormState,
 }: props) => {
-
-
   const {
     handleChange,
-    closeAddParticipantForm,
     participantFormData,
     setParticipantFormData,
     initialFormData,
+    handleSubmit,
   } = useAddParticipantsViewModel();
-  const dispatch = useDispatch();
-  const { isEditOpen, selectedParticipant } = useAppSelector(
-    (state) => state.participants,
-  );
+  // const dispatch = useDispatch();
+  // const { isEditOpen, selectedParticipant } = useAppSelector(
+  //   (state) => state.participants,
+  // );
 
-  const departments = ["Engineering", "Product", "Finance", "Marketing"];
-  const roles = [
+  const departments = ["Engineering", "HR", "Product", "Finance", "Marketing"];
+  const positions = [
     "Senior Engineer",
     "Tech Lead",
+    "Senior",
+    "HR",
     "DevOps Engineer",
     "Frontend Developer",
     "Product Manager",
     "UX Researcher",
   ];
-
-  useEffect(()=>{
-
- if (
-   participantsFormState.mode === "edit" &&
-   participantsFormState.participant
- ) {
-   setParticipantFormData({
-     name: participantsFormState.participant.email,
-     role: participantsFormState.participant.role,
-     phoneNum: participantsFormState.participant.email,
-     email: participantsFormState.participant.email,
-     department: participantsFormState.participant.email,
-   });
- } else {
-   setParticipantFormData(initialFormData);
- }
-
-    }, [participantsFormState])
-
+  const roles = ["ADMIN", "User", "Viewer"];
   useEffect(() => {
-    if (selectedParticipant) {
+    if (
+      participantsFormState.mode === "edit" &&
+      participantsFormState.participant
+    ) {
       setParticipantFormData({
-        name: selectedParticipant.fullName,
-        role: selectedParticipant.role,
-        phoneNum: selectedParticipant.phoneNumber,
-        email: selectedParticipant.email,
-        department: selectedParticipant.department,
+        firstname: participantsFormState.participant.firstname,
+        lastname: participantsFormState.participant.lastname,
+        roleId: participantsFormState.participant.roleId,
+        position: participantsFormState.participant.position,
+        phoneNo: participantsFormState.participant.phoneNo,
+        email: participantsFormState.participant.email,
+        password: participantsFormState.participant.password,
+        status: participantsFormState.participant.status,
+        departmentId: participantsFormState.participant.departmentId,
       });
-      console.log(selectedParticipant);
     } else {
       setParticipantFormData(initialFormData);
     }
-  }, [selectedParticipant]);
+  }, [participantsFormState]);
+
+  // useEffect(() => {
+  //   if (selectedParticipant) {
+  //     setParticipantFormData({
+  //       name: selectedParticipant.fullName,
+  //       role: selectedParticipant.role,
+  //       position: selectedParticipant.position,
+  //       phoneNum: selectedParticipant.phoneNumber,
+  //       email: selectedParticipant.email,
+  //       department: selectedParticipant.department,
+  //     });
+  //     console.log(selectedParticipant);
+  //   } else {
+  //     setParticipantFormData(initialFormData);
+  //   }
+  // }, [selectedParticipant]);
 
   return (
     <>
@@ -113,18 +113,29 @@ export const AddParticipantsForm = ({
           <Typography variant="h3">Add Paraticipant</Typography>
         </DialogTitle>
         <DialogContent className="form-Content">
-          <label htmlFor="Name">Name </label>
+          <label htmlFor="First Name">First Name </label>
           <TextField
-            id="Name"
-            name="name"
+            id="First Name"
+            name="firstname"
             className="customTextField"
-            value={participantFormData.name}
-            placeholder="Enter Name"
+            value={participantFormData.firstname}
+            placeholder="Enter First Name"
             onChange={handleChange}
             fullWidth
             required
           ></TextField>
-          <label htmlFor="Department">Department</label>
+          <label htmlFor="Last Name">Last Name </label>
+          <TextField
+            id="Last Name"
+            name="lastname"
+            className="customTextField"
+            value={participantFormData.lastname}
+            placeholder="Enter Last Name"
+            onChange={handleChange}
+            fullWidth
+            required
+          ></TextField>
+          {/* <label htmlFor="Department">Department</label>
           <TextField
             fullWidth
             name="department"
@@ -147,7 +158,13 @@ export const AddParticipantsForm = ({
             {departments.map((d) => (
               <MenuItem value={d}>{d}</MenuItem>
             ))}
-          </TextField>
+          </TextField> */}
+
+          <DepartmentList
+            handleChange={handleChange}
+            formData={participantFormData}
+          />
+
           <label htmlFor="Role">Role</label>
           <TextField
             fullWidth
@@ -165,10 +182,34 @@ export const AddParticipantsForm = ({
                 },
               },
             }}
-            value={participantFormData.role}
+            value={participantFormData.roleId}
             onChange={handleChange}
           >
             {roles.map((r) => (
+              <MenuItem value={r}>{r}</MenuItem>
+            ))}
+          </TextField>
+          <label htmlFor="Position">Position</label>
+          <TextField
+            fullWidth
+            name="position"
+            placeholder="Position"
+            id="Position"
+            required
+            className="customTextField"
+            select
+            SelectProps={{
+              MenuProps: {
+                disablePortal: true,
+                PaperProps: {
+                  className: "customTextField",
+                },
+              },
+            }}
+            value={participantFormData.position}
+            onChange={handleChange}
+          >
+            {positions.map((r) => (
               <MenuItem value={r}>{r}</MenuItem>
             ))}
           </TextField>
@@ -180,7 +221,7 @@ export const AddParticipantsForm = ({
             required
             fullWidth
             placeholder="Phone Number"
-            value={participantFormData.phoneNum}
+            value={participantFormData.phoneNo}
             onChange={handleChange}
             inputProps={{
               pattern: "^97\\d{8}$", // starts with 97 + 10 digits
@@ -198,17 +239,40 @@ export const AddParticipantsForm = ({
             value={participantFormData.email}
             onChange={handleChange}
           ></TextField>
+          {participantsFormState.mode === "add" && (
+            <>
+              <label htmlFor="Password">Password</label>
+              <TextField
+                id="Password"
+                name="password"
+                className="customTextField"
+                required
+                fullWidth
+                placeholder="Password"
+                value={participantFormData.password}
+                onChange={handleChange}
+              ></TextField>
+            </>
+          )}
         </DialogContent>
         <DialogActions>
           <Button
             className="cancel-btn"
             onClick={() => {
-              closeAddParticipantForm();
+              handleParticipantsFormClose();
             }}
           >
             Close
           </Button>
-          <Button className="add-btn">ADD</Button>
+          <Button
+            className="add-btn"
+            onClick={() => {
+              handleSubmit();
+              handleParticipantsFormClose();
+            }}
+          >
+            ADD
+          </Button>
         </DialogActions>
       </Dialog>
     </>

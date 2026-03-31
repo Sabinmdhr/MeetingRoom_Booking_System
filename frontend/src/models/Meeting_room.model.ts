@@ -18,7 +18,7 @@ export interface meeting_rooms{
 }
 
 export interface AddRoomModal{
-  id: string;
+  // id: string;
   roomName: string;
   capacity: number;
   resources :string[];

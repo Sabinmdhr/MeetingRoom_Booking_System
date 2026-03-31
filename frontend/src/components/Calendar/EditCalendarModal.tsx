@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
 import "../../assets/scss/pages/EditCalendarModal.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
+import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface Props {
   event: any;
@@ -39,7 +40,7 @@ const EditCalendarModal = ({ event, openEdit, setOpenEdit }: Props) => {
     department: "",
     description: "",
   });
-
+const { users } = useparticipantsViewModel();
   useEffect(() => {
     if (event) {
       const convertTime = (time: string) => {
@@ -175,6 +176,7 @@ const EditCalendarModal = ({ event, openEdit, setOpenEdit }: Props) => {
           <ParticipantsCard
             type=""
             displayOn="calendar"
+            users={users }
           />
         </div>
 
