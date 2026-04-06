@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { AddRoomModal } from "../models/Meeting_room.model";
+import type { AddRoomModal } from "../models/meetingRoom.model";
 import { useDispatch } from "react-redux";
 import { closeEditForm, openEditForm } from "../redux/MeetingRoomSlice";
 import { addRoom } from "../services/Meetinf_room.service";

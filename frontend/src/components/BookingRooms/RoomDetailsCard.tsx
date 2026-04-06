@@ -1,5 +1,5 @@
 import { Card, Typography, Chip, Stack, Box } from "@mui/material";
-import type { meeting_rooms} from "../../models/Meeting_room.model";
+import type { meeting_rooms} from "../../models/meetingRoom.model";
 import "../../assets/scss/pages/RoomDetailsCard.scss";
 import { MapPin, Users, Presentation, Projector, TvMinimal, Wifi } from "lucide-react";
 

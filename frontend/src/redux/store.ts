@@ -2,13 +2,16 @@ import { configureStore } from "@reduxjs/toolkit";
 import forgotReducer from "./forgotSlice";
 import verifyotpReducer from "./verifyOtpSlice";
 import createPasswordReducer from "./createPasswordSlice";
+import resendOtpReducer from "./resendOtpSlice";
 import participantsReducer from "./ParticipantsSlice";
 import meetingRoomReducer from "./MeetingRoomSlice"
+
 export const store = configureStore({
   reducer: {
     forgot: forgotReducer,
     verifyOtp: verifyotpReducer,
     createPassword: createPasswordReducer,
+    resendOtp: resendOtpReducer,
     participants: participantsReducer,
     meetingRoom: meetingRoomReducer,
   },

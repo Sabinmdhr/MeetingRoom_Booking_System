@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import {  getMeetingRooms } from "../services/Meetinf_room.service";
-import type { meeting_rooms } from "../models/Meeting_room.model";
+import type { meeting_rooms } from "../models/meetingRoom.model";
 
 export const useRoomDetailsCard = ()=>{
     const [rooms, setRooms] = useState<meeting_rooms[]>([]);

@@ -16,5 +16,11 @@ export interface ICreatePasswordRequest{
     newPassword: string,
     confirmNewPassword: string
 }
-export interface ICreatePasswordResponse{
+export interface ICreatePasswordResponse{}
+
+export interface IResendOtpRequest{
+    otpPurpose: "FORGOT_PASSWORD";
+    email: string;
 }
+
+export interface IResendOtpResponse {}

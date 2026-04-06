@@ -26,28 +26,28 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
   }
 
-  // .settings-header {
-  //   font-size: 18px;
-  //   font-weight: 300;
-  // }
-
-  &__main {
-    // display: flex;
-    // flex-direction: column;
-    // gap: 6px;
+  .settings-header {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 18px !important;
   }
+
+  // &__main {
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 6px;
+  // }
   .name {
     display: flex;
-    gap: 20px;
-    padding: 0;
-    // background-color: red;
+    gap: 12px;
   }
 
   .field {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background-color: #fff;
+    margin: 0 !important;
+    margin-bottom: 18px !important;
   }
   .field-label {
     font-size: 15px !important;
@@ -56,17 +56,17 @@
     color: black;
   }
 
-  .settings__buttons {
+  .settings-buttons{
     display: flex;
-    gap: 12px;
+    gap: 12px !important;
+
     .settings-btn {
-      background-color: black;
-      color: white;
-      margin-top: 35px;
-      border-radius: 8px;
-      height: 40px;
-      padding: 12px;
-      text-transform: none;
+    background-color: black;
+    color: white;
+    border-radius: 8px;
+    height: 40px;
+    padding: 12px;
+    text-transform: none;
 
       &:hover {
         opacity: 0.9;
@@ -74,6 +74,7 @@
       }
     }
   }
+  
 
   .MuiTextField-root {
     margin: 0 !important;
@@ -81,6 +82,7 @@
     border-radius: 8px;
 
     .MuiOutlinedInput-root {
+      height: 36px;
       border-radius: 8px;
 
       fieldset {
@@ -232,6 +234,22 @@
       box-shadow: none;
     }
   }
+  .colors-btn {
+    border: 1px solid #d8d5d5;
+    box-shadow: none;
+    margin-top: 15px;
+    border-radius: 8px;
+    height: 40px;
+    padding: 12px;
+    text-transform: none;
+    background-color: black;
+    color: white;
+
+      &:hover {
+        opacity: 0.8;
+        box-shadow: none;
+      }
+    }
 
   //BookingSection
   .fourth-card {

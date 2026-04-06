@@ -2,7 +2,7 @@ import { axiosInstance } from "../api/api";
 import type {
   AddRoomModal,
   meeting_rooms,
-} from "../models/Meeting_room.model";
+} from "../models/meetingRoom.model";
 import axios from "axios";
 
 //  const meetingRooms: meeting_rooms[] =

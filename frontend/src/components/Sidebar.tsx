@@ -22,10 +22,11 @@ import {
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Divider, Typography } from "@mui/material";
-import { useLoginViewModel } from "../viewmodels/useLoginViewModel";
+import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
+import Logout from "./Auth/Logout";
 
 const menuItems = [
-  {
+  { 
     text: "Dashboard",
     icon: <LayoutDashboard size={20} />,
     path: "/dashboard",
@@ -56,10 +57,20 @@ export default function Sidebar() {
   const location = useLocation();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-  const { logout } = useLoginViewModel();
-  const handleLogout = async () => {
-    await logout();
-  };
+  const {logoutOpen,handleLogoutOpen,handleLogoutClose,handleLogoutConfirm} = useLogoutViewModel();
+  // const { logout } = useLoginViewModel();
+
+  // const[logoutOpen, setLogoutOpen]= useState(false);
+
+  //   const handleLogoutOpen= ()=>{
+  //       setLogoutOpen(true);
+  //   }
+  //   const handleLogoutClose= ()=>{
+  //       setLogoutOpen(false);
+  //   }
+  //   const handleLogoutConfirm = async () => {
+  //       await logout();
+  //   }
 
   return (
     <Drawer
@@ -107,8 +118,8 @@ export default function Sidebar() {
           <ListItem disablePadding>
             <ListItemButton
               className="sidebar-item logout"
-              onClick={handleLogout}
-            >
+              onClick={handleLogoutOpen}
+            > 
               <ListItemIcon>{logoutItem.icon}</ListItemIcon>
               <ListItemText
                 primary={logoutItem.text}
@@ -117,6 +128,12 @@ export default function Sidebar() {
             </ListItemButton>
           </ListItem>
         </List>
+
+        <Logout 
+        open={logoutOpen}
+        handleConfirm={handleLogoutConfirm}
+        handleClose={handleLogoutClose}
+        />
       </div>
     </Drawer>
   );

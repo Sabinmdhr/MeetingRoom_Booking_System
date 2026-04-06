@@ -1,4 +1,4 @@
-import { Button, Card, TextField, Typography } from "@mui/material";
+import { Button, Card, TextField } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import type { ProfileSettings } from "../../models/settings.model";
 
@@ -9,13 +9,8 @@ interface ProfileProps {
 }
 const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
   return (
-    <>
-      <Typography
-        variant="h1"
-        className="settings-header"
-      >
-        Edit Profile Information
-      </Typography>
+
+    <> 
       <Card className="settings-card">
         <div className="name">
           <div className="field">
@@ -92,7 +87,7 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
           />
         </div>
 
-        <div className="settings__buttons">
+        <div className="settings-buttons">
           <Button
             className="settings-btn"
             variant="contained"
@@ -112,7 +107,7 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
         </div>
       </Card>
     </>
-  );
-};
+  )
+}
 
 export default ProfileSection;

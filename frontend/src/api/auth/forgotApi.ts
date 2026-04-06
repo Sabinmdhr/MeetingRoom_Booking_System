@@ -1,7 +1,7 @@
 import type { AxiosResponse } from "axios";
 import { axiosInstance } from "../api";
 import type { IBackendResponse } from "../interface";
-import type { ICreatePasswordResponse, IForgotPasswordResponse, IVerifyOtpResponse } from "./interface";
+import type { ICreatePasswordResponse, IForgotPasswordResponse, IResendOtpResponse, IVerifyOtpResponse } from "./interface";
 
 export const forgotPassApi = async <TRequest>(data: TRequest) =>{
     const res= await axiosInstance({}).post<
@@ -31,4 +31,13 @@ export const createPasswordApi= async<TRequest>(data:TRequest) =>{
     {...data}
   )
   return res.data;
+}
+
+export const resendOtpApi= async<TRequest>(data:TRequest) =>{
+  const res = await axiosInstance({}).post<
+  TRequest,
+  AxiosResponse<IBackendResponse<IResendOtpResponse>>
+  >("/api/v1/resend/otp",
+    {...data});
+    return res.data;
 }

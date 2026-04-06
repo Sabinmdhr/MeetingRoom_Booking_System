@@ -6,7 +6,7 @@ import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from 
 // import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
 import { useState } from "react";
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
-import type { meeting_rooms } from "../../models/Meeting_room.model";
+import type { meeting_rooms } from "../../models/meetingRoom.model";
 // interface MeetingCardProps {
 //   meetingId: string;
 // }

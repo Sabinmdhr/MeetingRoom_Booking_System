@@ -18,7 +18,7 @@ import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardVie
 import { useEffect } from "react";
 import type {
   meeting_rooms,
-} from "../../models/Meeting_room.model";
+} from "../../models/meetingRoom.model";
 
 type props = {
   roomFormState: {

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../redux/store";
 import { verifyOtp } from "../redux/verifyOtpSlice";
 import { fixedValues, getLocalStorage, setLocalStorage } from "../helper";
+import ResendOtp from "./ResendOtp";
 
 const VerifyPassword = () => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
@@ -125,6 +126,7 @@ const VerifyPassword = () => {
           >
             {loading ? "Verifying..." : "Verify"}
           </Button>
+          <ResendOtp email={email}/>
         </form>
       </Card>
     </Box>

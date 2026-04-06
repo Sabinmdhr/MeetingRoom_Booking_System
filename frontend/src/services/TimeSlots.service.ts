@@ -1,4 +1,4 @@
-import type { TimeSlot } from "../models/TimeSlots";
+import type { TimeSlot } from "../models/timeSlots.model";
 
 const DemoTimeSlots: Record<string, TimeSlot[]> = {
   

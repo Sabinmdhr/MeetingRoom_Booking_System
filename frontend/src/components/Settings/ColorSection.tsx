@@ -1,8 +1,12 @@
 import { Button, Card, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import { Palette } from "lucide-react";
+import { useRoomScheduleViewModel } from "../../viewmodels/useRoomScheduleViewModel";
+import RoomSchedule from "../../pages/RoomSchedule/RoomSchedule";
 
 const ColorSection = () => {
+  const {openSchedule, handleOpen, handleClose} = useRoomScheduleViewModel();
+
   return (
     <>
       <Card className="third-card">
@@ -48,12 +52,15 @@ const ColorSection = () => {
             <Button className="reset-btn" variant="contained" size="small">
               Reset to Defaults
             </Button>
-            <Button className="settings-btn" variant="contained" size="small">
+            <Button className="colors-btn" variant="contained" size="small" onClick={handleOpen}>
               Save Colors
             </Button>
           </div>
         </div>
       </Card>
+      {openSchedule && (
+        <RoomSchedule onClose={handleClose} />
+      )}
     </>
   )
 }

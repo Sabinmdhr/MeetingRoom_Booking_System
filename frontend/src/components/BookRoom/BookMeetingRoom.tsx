@@ -20,6 +20,7 @@ import {
   Users,
   CircleAlert,
   X,
+  Repeat,
 } from "lucide-react";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
@@ -255,6 +256,31 @@ export default function BookMeetingRoom() {
                     type={participantType}
                   />
                 )}
+              </div>
+
+              <div className="field">
+                <label className="field-label">Recurring Meeting</label>
+                <TextField
+                  select
+                  name="recurringMeeting"
+                  onChange={handleChange}
+                  fullWidth
+                  size="small"
+                >
+                  {[
+                    "Does not repeat",
+                    "Every weekday (Mon - Fri)",
+                    "Daily",
+                    "Weekly",
+                    "Monthly",
+                    "Yearly",
+                    "Custom",
+                  ].map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </div>
 
               <div className="field">

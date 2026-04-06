@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getRoomTimeSlots } from "../services/TimeSlots.service";
-import type { TimeSlot } from "../models/TimeSlots";
+import type { TimeSlot } from "../models/timeSlots.model";
 
 export const useTimeSlotsViewModel = (roomId: string, date: string) => {
   const [slots, setSlots] = useState<TimeSlot[]>([]);

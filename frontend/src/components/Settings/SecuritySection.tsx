@@ -1,4 +1,5 @@
 import { Button, Card, Typography } from "@mui/material"
+import "../../assets/scss/pages/Settings.scss";
 import { Shield } from "lucide-react"
 
 const SecuritySection = () => {

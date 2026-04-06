@@ -14,7 +14,6 @@ export interface meeting_rooms{
   roomName: string;
   capacity: number;
   resources: string[];
-
 }
 
 export interface AddRoomModal{

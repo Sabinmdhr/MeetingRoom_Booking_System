@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Meeting_room } from "../models/Meeting_room.model";
+import type { Meeting_room } from "../models/meetingRoom.model";
 
 interface MeetingRoomState{
   meetingRoom : Meeting_room[];

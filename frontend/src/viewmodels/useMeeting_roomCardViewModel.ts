@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type {  AddRoomModal, meeting_rooms } from "../models/Meeting_room.model";
+import type {  AddRoomModal, meeting_rooms } from "../models/meetingRoom.model";
 import { getMeetingRooms} from "../services/Meetinf_room.service";
 import { addRoom } from "../services/Meetinf_room.service";
 
@@ -44,7 +44,7 @@ open: false,
         // const data = await getMeetingRoomById(meetingId);
         const data = await getMeetingRooms()
         console.log(data);
-        setMeeting(data.data.data);
+        setMeeting(data.data);
       } catch (err: any) {
         setError(err.message || "Failed to load meeting room");
       } finally {

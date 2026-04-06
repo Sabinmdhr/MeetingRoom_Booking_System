@@ -21,6 +21,8 @@ import {
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import Announcements from "../pages/Announcements";
+import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
+import Logout from "./Auth/Logout";
 
 export default function TopNavbar() {
   const [search, setSearch] = useState("");
@@ -40,7 +42,7 @@ export default function TopNavbar() {
     handleProfileMenuClose();
   };
   const handleProfileMenuOpen = (event: any) => {
-    setProfileAnchorEl(event.currentTarget);
+    setProfileAnchorEl(event.currentTarget); 
   };
 
   const handleProfileMenuClose = () => {
@@ -63,6 +65,8 @@ export default function TopNavbar() {
     "Executive meeting scheduled",
     "New announcement posted, New announcement posted, New announcement posted, New announcement posted",
   ];
+
+  const {logoutOpen,handleLogoutOpen,handleLogoutClose,handleLogoutConfirm} = useLogoutViewModel();
 
   return (
     <AppBar
@@ -192,8 +196,13 @@ export default function TopNavbar() {
           onClose={handleProfileMenuClose}
         >
           <MenuItem onClick={handleProfile}> Profile</MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem onClick={handleLogoutOpen}>Logout</MenuItem>
         </Menu>
+        <Logout 
+        open={logoutOpen}
+        handleConfirm={handleLogoutConfirm}
+        handleClose={handleLogoutClose}
+        />
       </Toolbar>
     </AppBar>
   );
