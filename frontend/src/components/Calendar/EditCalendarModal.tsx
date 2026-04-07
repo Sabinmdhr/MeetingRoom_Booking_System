@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
 import "../../assets/scss/pages/EditCalendarModal.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
-import { toast } from "mui-sonner";
+import { toast } from "react-toastify";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface Props {

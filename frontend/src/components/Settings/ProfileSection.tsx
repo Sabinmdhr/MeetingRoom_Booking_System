@@ -1,17 +1,29 @@
 import { Button, Card, TextField, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import type { ProfileSettings } from "../../models/settings.model";
-import { toast } from "mui-sonner";
+import { toast } from "react-toastify";
+// import { useSettingsViewModel } from "../../viewmodels/useSettingsViewModel";
 
 interface ProfileProps {
   profile: ProfileSettings;
-  onChange: (field: string, value: string) => void;
-  onSave: () => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSave: () => Promise<boolean>;
+  onCancel: () => void;
+  errors: Record<string, string>;
 }
-const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
+const ProfileSection = ({
+  profile,
+  onChange,
+  onSave,
+  errors,
+  onCancel,
+}: ProfileProps) => {
   function handleSave() {
     toast.success("Changes saved Successfully");
   }
+
+  const ErrorText = ({ error }: { error?: string }) =>
+    error ? <Typography className="error-text">{error}</Typography> : null;
   return (
     <>
       <Typography
@@ -32,9 +44,13 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
             <TextField
               id="firstName"
               fullWidth
+              name={"firstName"}
               value={profile.firstName}
-              onChange={(e) => onChange("firstName", e.target.value)}
+              required
+              onChange={onChange}
+              error={!!errors.firstName}
             />
+            <ErrorText error={errors.firstName} />
           </div>
           <div className="field">
             <label
@@ -47,8 +63,13 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
               id="lastName"
               fullWidth
               value={profile.lastName}
-              onChange={(e) => onChange("lastName", e.target.value)}
+              name="lastName"
+              error={!!errors.lastName}
+              required
+              onChange={onChange}
             />
+
+            <ErrorText error={errors.lastName} />
           </div>
         </div>
 
@@ -64,8 +85,12 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
             fullWidth
             size="small"
             value={profile.email}
-            onChange={(e) => onChange("email", e.target.value)}
+            error={!!errors.email}
+            name="email"
+            onChange={onChange}
           />
+
+          <ErrorText error={errors.email} />
         </div>
         <div className="field">
           <label
@@ -77,22 +102,43 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
           <TextField
             id="phone-no"
             fullWidth
+            required
+            name="phone"
             value={profile.phone}
-            onChange={(e) => onChange("phone", e.target.value)}
+            error={!!errors.phone}
+            onChange={onChange}
           />
+
+          <ErrorText error={errors.phone} />
         </div>
         <div className="field">
           <label
             className="field-label"
             htmlFor="desc"
           >
-            Department
+            Role
           </label>
           <TextField
             id="desc"
             fullWidth
+            name={"role"}
+            value={profile.role}
+            onChange={onChange}
+          />
+        </div>
+        <div className="field">
+          <label
+            className="field-label"
+            htmlFor="dep"
+          >
+            Department
+          </label>
+          <TextField
+            id="dep"
+            fullWidth
+            name={"department"}
             value={profile.department}
-            onChange={(e) => onChange("department", e.target.value)}
+            onChange={onChange}
           />
         </div>
 
@@ -101,9 +147,9 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
             className="settings-btn"
             variant="contained"
             size="small"
-            onClick={() => {
-              onSave();
-              handleSave();
+            onClick={async () => {
+              const success = await onSave();
+              if (success) handleSave();
             }}
           >
             Save Changes
@@ -112,9 +158,7 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
             className="settings-btn"
             variant="contained"
             size="small"
-            onClick={() => {
-              onSave();
-            }}
+            onClick={onCancel}
           >
             Cancel
           </Button>

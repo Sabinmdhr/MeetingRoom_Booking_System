@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type {  Columns, participantsApi } from "../models/participants.model";
+import type { Columns, participantsApi } from "../models/participants.model";
 import { DemoColumns, getAllUser } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import {

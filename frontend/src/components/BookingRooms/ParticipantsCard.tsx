@@ -265,10 +265,10 @@ const ParticipantsCard = ({
                   </Typography>
                   <div className="participant-Subinfo">
                     <Typography className="department">
-                      {p.departmentId}
+                      {p.department}
                     </Typography>
                     &bull;
-                    <Typography className="role">{p.roleId}</Typography>
+                    <Typography className="role">{p.role}</Typography>
                   </div>
                 </div>
               </div>

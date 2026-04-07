@@ -11,10 +11,9 @@ import type { CalendarEvent } from "../../models/calendar.model";
 import "../../assets/scss/pages/CalendarModal.scss";
 import "../../assets/scss/global.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
-import { toast } from "mui-sonner";
-// import EditCalendarModal from "./EditCalendarModal";
-import { useState } from "react";
+import { toast } from "react-toastify";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
+import { useState } from "react";
 
 interface CalendarModalProps {
   open: boolean;
