@@ -9,6 +9,8 @@ import { ThemeProvider } from "@emotion/react";
 import { muiTheme } from "../src/theme/muiTheme";
 import { CssBaseline } from "@mui/material";
 const queryClient = new QueryClient();
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider theme={muiTheme}>
@@ -16,6 +18,10 @@ createRoot(document.getElementById("root")!).render(
       <Provider store={store}>
         <CssBaseline />
         <App />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+        />
       </Provider>
     </QueryClientProvider>
   </ThemeProvider>,

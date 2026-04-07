@@ -9,10 +9,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { MonitorPlayIcon, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import "../../assets/scss/pages/EditCalendarModal.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
-import { toast } from "mui-sonner";
+import { toast } from "react-toastify";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 
 interface Props {
@@ -41,7 +41,7 @@ const EditCalendarModal = ({ event, openEdit, onCloseAll, onBack }: Props) => {
     department: "",
     description: "",
   });
-const { users } = useparticipantsViewModel();
+  const { users } = useparticipantsViewModel();
   useEffect(() => {
     if (event) {
       const convertTime = (time: string) => {
@@ -182,11 +182,19 @@ const { users } = useparticipantsViewModel();
 
         {/* Participants */}
         <div className="modal-section">
-          <ParticipantsCard
+          <div>
+            {/* <Users /> */}
+            <ParticipantsCard
+              type=""
+              displayOn="calendar"
+              users={users}
+            />
+          </div>
+          {/* <ParticipantsCard
             type=""
             displayOn="calendar"
-            users={users }
-          />
+            users={users}
+          /> */}
         </div>
 
         <Divider />

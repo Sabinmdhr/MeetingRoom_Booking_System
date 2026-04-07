@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Participants } from "../models/participants.model";
 import type { groupCard } from "../models/groupCard.model";
+import type { participantsApi } from "../models/participants.model";
 interface ParticipantsState {
-  participants: Participants[];
-  selectedParticipant: Participants | null;
+  participants: participantsApi[];
+  selectedParticipant: participantsApi | null;
   isEditOpen: boolean;
   selectedParticipants: string[];
   selectedGroup: groupCard | null;
@@ -22,7 +22,7 @@ const participantsSlice = createSlice({
   name: "participants",
   initialState,
   reducers: {
-    setParticipants: (state, action: PayloadAction<Participants[]>) => {
+    setParticipants: (state, action: PayloadAction<participantsApi[]>) => {
       state.participants = action.payload;
     },
 
@@ -30,26 +30,29 @@ const participantsSlice = createSlice({
       state.selectedGroup = action.payload;
     },
 
-    toggleParticipantsSelection: (state, action : PayloadAction<string>) =>{
-      const id  = action.payload;
+    toggleParticipantsSelection: (state, action: PayloadAction<number>) => {
+      const id = action.payload;
       {
-        state.selectedParticipants.includes(id) ? state.selectedParticipants = state.selectedParticipants.filter((pId)=>pId !== id) : state.selectedParticipants.push(id)
+        state.selectedParticipants.includes(id)
+          ? (state.selectedParticipants = state.selectedParticipants.filter(
+              (pId) => pId !== id,
+            ))
+          : state.selectedParticipants.push(id);
       }
     },
 
-    clearSelectedParticipants: (state) =>{
+    clearSelectedParticipants: (state) => {
       state.selectedParticipants = [];
     },
 
-    openEditForm: (state, action: PayloadAction<Participants>) => {
+    openEditForm: (state, action: PayloadAction<participantsApi>) => {
       state.selectedParticipant = action.payload;
       state.isEditOpen = true;
     },
 
-    openForm : (state) =>{
-state.isEditOpen = true;
+    openForm: (state) => {
+      state.isEditOpen = true;
     },
-
 
     closeEditForm: (state) => {
       state.isEditOpen = !state.isEditOpen;
@@ -59,7 +62,14 @@ state.isEditOpen = true;
   },
 });
 
-export const { setParticipants, openForm,setSelectedGroup,openEditForm, closeEditForm, toggleParticipantsSelection, clearSelectedParticipants } =
-  participantsSlice.actions;
+export const {
+  setParticipants,
+  openForm,
+  setSelectedGroup,
+  openEditForm,
+  closeEditForm,
+  toggleParticipantsSelection,
+  clearSelectedParticipants,
+} = participantsSlice.actions;
 
 export default participantsSlice.reducer;

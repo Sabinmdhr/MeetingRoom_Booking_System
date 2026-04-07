@@ -30,9 +30,11 @@ export const Calendar = () => {
   const [eventFilter, setEventFilter] = useState("all");
 
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
+
   const handleDateButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     setDatePickerAnchor(event.currentTarget);
   };
+
   const handleDateChange = (newDate: dayjs.Dayjs | null) => {
     if (newDate) {
       goToToday(newDate);

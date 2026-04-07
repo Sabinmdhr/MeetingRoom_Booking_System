@@ -85,7 +85,7 @@ const Participants = () => {
         </div>
       ) : (
         <div>
-          <GroupCard editMode={editMode} />
+          <GroupCard/>
         </div>
       )}
     </div>

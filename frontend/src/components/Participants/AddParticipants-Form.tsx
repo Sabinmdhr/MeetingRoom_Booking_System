@@ -13,21 +13,24 @@ import { Plus } from "lucide-react";
 import "../../assets/scss/global.scss";
 import "../../assets/scss/components/AddParticipants-Form.scss";
 import { useEffect } from "react";
-import type { participantsApi } from "../../models/participants.model";
+import type {  ParticipantResponse, ParticipantsRequest } from "../../models/participants.model";
 import { DepartmentList } from "./DepartmentList";
+import { RoleDropdown } from "./RoleDropdown";
+import { mapParticipantResponseToRequest } from "../../models/mapper/ParticipantMapper";
 
 type props = {
   participantsFormState: {
     open: boolean;
     mode: "add" | "edit";
-    participant: participantsApi | null;
+    participant: ParticipantResponse | null;
   };
   handleParticipantFormOpen: (
     mode: "add" | "edit",
-    participant?: participantsApi,
+    participant?: ParticipantResponse,
   ) => void;
   handleParticipantsFormClose: () => void;
 };
+
 export const AddParticipantsForm = ({
   handleParticipantsFormClose,
   handleParticipantFormOpen,
@@ -39,13 +42,21 @@ export const AddParticipantsForm = ({
     setParticipantFormData,
     initialFormData,
     handleSubmit,
+    errors,
+    resetForm,
+    isSubmitted,
+    departmentId,
+    setDepartmentId,
+    handleDepartmentChange,
+    handleRoleChange,
+    roleId,
   } = useAddParticipantsViewModel();
   // const dispatch = useDispatch();
   // const { isEditOpen, selectedParticipant } = useAppSelector(
   //   (state) => state.participants,
   // );
 
-  const departments = ["Engineering", "HR", "Product", "Finance", "Marketing"];
+  // const departments = ["Engineering", "HR", "Product", "Finance", "Marketing"];
   const positions = [
     "Senior Engineer",
     "Tech Lead",
@@ -56,23 +67,13 @@ export const AddParticipantsForm = ({
     "Product Manager",
     "UX Researcher",
   ];
-  const roles = ["ADMIN", "User", "Viewer"];
   useEffect(() => {
     if (
       participantsFormState.mode === "edit" &&
       participantsFormState.participant
     ) {
-      setParticipantFormData({
-        firstname: participantsFormState.participant.firstname,
-        lastname: participantsFormState.participant.lastname,
-        roleId: participantsFormState.participant.roleId,
-        position: participantsFormState.participant.position,
-        phoneNo: participantsFormState.participant.phoneNo,
-        email: participantsFormState.participant.email,
-        password: participantsFormState.participant.password,
-        status: participantsFormState.participant.status,
-        departmentId: participantsFormState.participant.departmentId,
-      });
+      setParticipantFormData(mapParticipantResponseToRequest(participantsFormState.participant));
+
     } else {
       setParticipantFormData(initialFormData);
     }
@@ -106,7 +107,10 @@ export const AddParticipantsForm = ({
 
       <Dialog
         open={participantsFormState.open}
-        onClose={() => handleParticipantsFormClose()}
+        onClose={() => {
+          handleParticipantsFormClose();
+          resetForm();
+        }}
         slotProps={{ paper: { className: "Form__Container" } }}
       >
         <DialogTitle>
@@ -122,6 +126,8 @@ export const AddParticipantsForm = ({
             placeholder="Enter First Name"
             onChange={handleChange}
             fullWidth
+            error={!!errors.firstname}
+            helperText={errors.firstname}
             required
           ></TextField>
           <label htmlFor="Last Name">Last Name </label>
@@ -133,6 +139,8 @@ export const AddParticipantsForm = ({
             placeholder="Enter Last Name"
             onChange={handleChange}
             fullWidth
+            error={!!errors.lastname}
+            helperText={errors.lastname}
             required
           ></TextField>
           {/* <label htmlFor="Department">Department</label>
@@ -159,12 +167,12 @@ export const AddParticipantsForm = ({
               <MenuItem value={d}>{d}</MenuItem>
             ))}
           </TextField> */}
-
           <DepartmentList
-            handleChange={handleChange}
-            formData={participantFormData}
+            onChange={handleDepartmentChange}
+            value={ participantFormData.departmentId}
           />
-
+          <RoleDropdown onChange={handleRoleChange} value={participantFormData.roleId} />
+          {/*
           <label htmlFor="Role">Role</label>
           <TextField
             fullWidth
@@ -182,13 +190,14 @@ export const AddParticipantsForm = ({
                 },
               },
             }}
-            value={participantFormData.roleId}
+            value={participantFormData.role}
             onChange={handleChange}
           >
             {roles.map((r) => (
               <MenuItem value={r}>{r}</MenuItem>
             ))}
-          </TextField>
+          </TextField> */}
+
           <label htmlFor="Position">Position</label>
           <TextField
             fullWidth
@@ -216,17 +225,15 @@ export const AddParticipantsForm = ({
           <label htmlFor="Phone">Phone Number</label>
           <TextField
             id="Phone"
-            name="phoneNum"
+            name="phoneNo"
             className="customTextField"
             required
             fullWidth
+            error={!!errors.phoneNo}
+            helperText={errors.phoneNo}
             placeholder="Phone Number"
             value={participantFormData.phoneNo}
             onChange={handleChange}
-            inputProps={{
-              pattern: "^97\\d{8}$", // starts with 97 + 10 digits
-              maxLength: 10, // prevent typing more than 10 digits
-            }}
           ></TextField>
           <label htmlFor="Email">Email</label>
           <TextField
@@ -235,7 +242,9 @@ export const AddParticipantsForm = ({
             className="customTextField"
             required
             fullWidth
-            placeholder="Email Adress "
+            error={!!errors.email}
+            helperText={errors.email}
+            placeholder="Email Address "
             value={participantFormData.email}
             onChange={handleChange}
           ></TextField>
@@ -248,6 +257,8 @@ export const AddParticipantsForm = ({
                 className="customTextField"
                 required
                 fullWidth
+                error={!!errors.password}
+                helperText={errors.password}
                 placeholder="Password"
                 value={participantFormData.password}
                 onChange={handleChange}
@@ -260,15 +271,19 @@ export const AddParticipantsForm = ({
             className="cancel-btn"
             onClick={() => {
               handleParticipantsFormClose();
+              resetForm();
             }}
           >
             Close
           </Button>
           <Button
             className="add-btn"
-            onClick={() => {
-              handleSubmit();
-              handleParticipantsFormClose();
+            onClick={async () => {
+              const success = await handleSubmit();
+
+              if (success) {
+                handleParticipantsFormClose();
+              }
             }}
           >
             ADD

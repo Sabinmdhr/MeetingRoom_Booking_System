@@ -2,7 +2,7 @@
 import api from "../api/api";
 import type {
   Columns,
-  participantsApi,
+  ParticipantsRequest,
 } from "../models/participants.model";
 // export const DemoParticipants = (): Participants[] => {
 //   return [
@@ -87,7 +87,7 @@ export const getAllUser = async () => {
   return response.data.data.content;
 };
 
-export const addUser = async (data: participantsApi) => {
+export const addUser = async (data: ParticipantsRequest) => {
   const response = await api.post("api/v1/signup", data);
   return response.data;
 };

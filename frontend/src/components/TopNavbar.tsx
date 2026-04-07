@@ -300,7 +300,6 @@ export default function TopNavbar() {
                       {note.description}{" "}
                     </Typography>
                     <br />
-                    {/* {date} */}
                   </div>
                 </MenuItem>
               ))

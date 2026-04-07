@@ -22,15 +22,13 @@ export const useCalendarEventViewModel = () => {
     setSelectedEvent(null);
   };
 
-  //  EVENTS (memoized)
-
   const events: CalendarEvent[] = useMemo(
     () => [
       {
         id: 1,
         title: "Board Meeting",
         category: "executive",
-        date: "2026-03-29",
+        date: "2026-04-01",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
         location: "Board Room 5A",
@@ -43,7 +41,7 @@ export const useCalendarEventViewModel = () => {
         id: 2,
         title: "Frontend Dev Meeting",
         category: "internal",
-        date: "2026-03-29",
+        date: "2026-04-01",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
         location: "Board Room 6A",
@@ -56,7 +54,7 @@ export const useCalendarEventViewModel = () => {
         id: 3,
         title: "Client Meeting",
         category: "client",
-        date: "2026-03-29",
+        date: "2026-04-01",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
         location: "Board Room 6A",
@@ -69,7 +67,7 @@ export const useCalendarEventViewModel = () => {
         id: 4,
         title: "Client Meeting",
         category: "client",
-        date: "2026-03-29",
+        date: "2026-04-01",
         startTime: "12:00 PM",
         endTime: "1:00 PM",
         location: "Board Room 6A",

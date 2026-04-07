@@ -1,44 +1,35 @@
 import { useEffect, useState } from "react";
-import type {  Columns, participantsApi } from "../models/participants.model";
+import type {  Columns, ParticipantResponse, ParticipantsRequest} from "../models/participants.model";
 import { DemoColumns, getAllUser } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setParticipants,
   toggleParticipantsSelection,
 } from "../redux/ParticipantsSlice";
-import type { addParticipants } from "../models/addParticipants.model";
 
 export const useparticipantsViewModel = () => {
+  const [users, setUsers] = useState<ParticipantResponse[]>([]);
   useEffect(() => {
-    // const demoUsers =()=>{
-
-    // const data = DemoParticipants();
-    // dispatch(setParticipants(data));
-    // dispatch(clearSelectedParticipants());
-    // }
-
     const fetchUsers = async () => {
       const data = await getAllUser();
       setUsers(data);
       console.log(data);
     };
     fetchUsers();
-    // demoUsers();
   }, []);
 
-  const [users, setUsers] = useState<participantsApi[]>([]);
 
-  const [participantsFormState, setPArticipantsFormState] = useState({
+  const [participantsFormState, setParticipantsFormState] = useState({
     open: false,
     mode: "edit" as "edit" | "add",
-    participant: null as participantsApi | null,
+    participant: null as ParticipantResponse | null,
   });
 
   const handleParticipantFormOpen = (
     mode: "edit" | "add",
-    participant?: participantsApi,
+    participant?: ParticipantResponse,
   ) => {
-    setPArticipantsFormState({
+    setParticipantsFormState({
       open: true,
       mode: mode,
       participant: participant || null,
@@ -46,7 +37,7 @@ export const useparticipantsViewModel = () => {
   };
 
   const handleParticipantsFormClose = () => {
-    setPArticipantsFormState((prev) => ({
+    setParticipantsFormState((prev) => ({
       ...prev,
       open: false,
     }));
@@ -75,7 +66,7 @@ export const useparticipantsViewModel = () => {
   //   dispatch(openEditForm(participants));
   // };
 
-  const handleToggle = (pId: string) => {
+  const handleToggle = (pId: number) => {
     dispatch(toggleParticipantsSelection(pId));
   };
 
@@ -105,7 +96,7 @@ export const useparticipantsViewModel = () => {
   };
 
   const filteredParticipants = participants.filter(
-    (p: participantsApi) =>
+    (p: ParticipantResponse) =>
       p.firstname.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
@@ -152,7 +143,7 @@ export const useparticipantsViewModel = () => {
     handleAddExternal,
 
     participantsFormState,
-    setPArticipantsFormState,
+    setParticipantsFormState,
     handleParticipantFormOpen,
     handleParticipantsFormClose,
   };

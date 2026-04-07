@@ -1,5 +1,5 @@
 export interface departmentList {
   departmentName: string;
-  id: string;
+  id: number;
   description: string;
 }
