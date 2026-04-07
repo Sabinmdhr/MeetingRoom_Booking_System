@@ -28,6 +28,7 @@ type props = {
   ) => void;
   handleParticipantsFormClose: () => void;
 };
+
 export const AddParticipantsForm = ({
   handleParticipantsFormClose,
   handleParticipantFormOpen,
@@ -39,6 +40,9 @@ export const AddParticipantsForm = ({
     setParticipantFormData,
     initialFormData,
     handleSubmit,
+    errors,
+    resetForm,
+    isSubmitted,
   } = useAddParticipantsViewModel();
   // const dispatch = useDispatch();
   // const { isEditOpen, selectedParticipant } = useAppSelector(
@@ -106,7 +110,10 @@ export const AddParticipantsForm = ({
 
       <Dialog
         open={participantsFormState.open}
-        onClose={() => handleParticipantsFormClose()}
+        onClose={() => {
+          handleParticipantsFormClose();
+          resetForm();
+        }}
         slotProps={{ paper: { className: "Form__Container" } }}
       >
         <DialogTitle>
@@ -122,6 +129,8 @@ export const AddParticipantsForm = ({
             placeholder="Enter First Name"
             onChange={handleChange}
             fullWidth
+            error={!!errors.firstname}
+            helperText={errors.firstname}
             required
           ></TextField>
           <label htmlFor="Last Name">Last Name </label>
@@ -133,6 +142,8 @@ export const AddParticipantsForm = ({
             placeholder="Enter Last Name"
             onChange={handleChange}
             fullWidth
+            error={!!errors.lastname}
+            helperText={errors.lastname}
             required
           ></TextField>
           {/* <label htmlFor="Department">Department</label>
@@ -216,17 +227,15 @@ export const AddParticipantsForm = ({
           <label htmlFor="Phone">Phone Number</label>
           <TextField
             id="Phone"
-            name="phoneNum"
+            name="phoneNo"
             className="customTextField"
             required
             fullWidth
+            error={!!errors.phoneNo}
+            helperText={errors.phoneNo}
             placeholder="Phone Number"
             value={participantFormData.phoneNo}
             onChange={handleChange}
-            inputProps={{
-              pattern: "^97\\d{8}$", // starts with 97 + 10 digits
-              maxLength: 10, // prevent typing more than 10 digits
-            }}
           ></TextField>
           <label htmlFor="Email">Email</label>
           <TextField
@@ -235,7 +244,9 @@ export const AddParticipantsForm = ({
             className="customTextField"
             required
             fullWidth
-            placeholder="Email Adress "
+            error={!!errors.email}
+            helperText={errors.email}
+            placeholder="Email Address "
             value={participantFormData.email}
             onChange={handleChange}
           ></TextField>
@@ -248,6 +259,8 @@ export const AddParticipantsForm = ({
                 className="customTextField"
                 required
                 fullWidth
+                error={!!errors.password}
+                helperText={errors.password}
                 placeholder="Password"
                 value={participantFormData.password}
                 onChange={handleChange}
@@ -260,15 +273,19 @@ export const AddParticipantsForm = ({
             className="cancel-btn"
             onClick={() => {
               handleParticipantsFormClose();
+              resetForm();
             }}
           >
             Close
           </Button>
           <Button
             className="add-btn"
-            onClick={() => {
-              handleSubmit();
-              handleParticipantsFormClose();
+            onClick={async () => {
+              const success = await handleSubmit();
+
+              if (success) {
+                handleParticipantsFormClose();
+              }
             }}
           >
             ADD

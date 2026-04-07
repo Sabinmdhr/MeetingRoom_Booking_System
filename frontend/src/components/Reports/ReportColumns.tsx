@@ -3,7 +3,6 @@ import "../../assets/scss/pages/ReportColumns.scss";
 import { Eye, EyeOff, X } from "lucide-react";
 
 type ColumnKey =
-  | "status"
   | "room"
   | "title"
   | "start"
@@ -16,7 +15,6 @@ type ColumnKey =
 
 const ReportColumns = ({ columns, setColumns, open, onClose }: any) => {
   const columnList: { key: ColumnKey; label: string }[] = [
-    { key: "status", label: "Status" },
     { key: "room", label: "Room" },
     { key: "title", label: "Title" },
     { key: "start", label: "Start" },

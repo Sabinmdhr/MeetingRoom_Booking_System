@@ -1,4 +1,4 @@
-import { Typography, Button, Chip } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -6,7 +6,7 @@ import {
 } from "@mui/x-data-grid";
 // import { useGridApiRef } from "@mui/x-data-grid";
 
-import { useMeetingTableViewModel } from "../viewmodels/useMeetingReportViewModel";
+import { useMeetingReportViewModel } from "../viewmodels/useMeetingReportViewModel";
 import "../assets/scss/pages/Report.scss";
 import { Download, Funnel } from "lucide-react";
 import ReportFilters from "../components/Reports/ReportFilters";
@@ -22,7 +22,7 @@ function CustomToolbar() {
 
 export default function MeetingTable() {
   const [filter, setFilter] = useState(false);
-  const vm = useMeetingTableViewModel();
+  const vm = useMeetingReportViewModel();
 
   // const apiRef = useGridApiRef();
 
@@ -39,15 +39,6 @@ export default function MeetingTable() {
     headerName: col.label,
     flex: 1,
     minWidth: 130,
-    ...(col.id === "status" && {
-      renderCell: (params: any) => (
-        <Chip
-          label={params.value}
-          size="small"
-          className="meeting-table__status"
-        />
-      ),
-    }),
   }));
 
   const rows = vm.rows.map((row, index) => ({
@@ -79,7 +70,7 @@ export default function MeetingTable() {
             <Button
               variant="outlined"
               className="meeting-table__buttons__export"
-              // onClick={() => apiRef?.current?.exportDataAsCsv()}
+              onClick={() => vm.exportReport()}
             >
               <Download size={16} /> Export
             </Button>
@@ -104,9 +95,6 @@ export default function MeetingTable() {
               columns: {
                 columnVisibilityModel: {
                   // status: false,
-
-                  createdVia: false,
-                  createdAt: false,
                 },
               },
             }}

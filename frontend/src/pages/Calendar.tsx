@@ -12,7 +12,7 @@ import {
 import { useCalendarEventViewModel } from "../viewmodels/useCalendarEventViewModel";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import  CalendarModal  from "../components/Calendar/CalendarModal";
+import CalendarModal from "../components/Calendar/CalendarModal";
 import "../assets/scss/global.scss";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -30,9 +30,11 @@ const Calendar = () => {
   const [eventFilter, setEventFilter] = useState("all");
 
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
+
   const handleDateButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     setDatePickerAnchor(event.currentTarget);
   };
+
   const handleDateChange = (newDate: dayjs.Dayjs | null) => {
     if (newDate) {
       goToToday(newDate);

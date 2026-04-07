@@ -31,11 +31,12 @@
   //   font-weight: 300;
   // }
 
-  &__main {
-    // display: flex;
-    // flex-direction: column;
-    // gap: 6px;
-  }
+  // &__main {
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 6px;
+  // }
+  
   .name {
     display: flex;
     gap: 20px;
@@ -102,7 +103,11 @@
       }
     }
   }
-
+  .error-text {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+  }
   //NotificationSection
   .second-card {
     width: 100%;
