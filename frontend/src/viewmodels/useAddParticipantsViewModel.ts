@@ -7,7 +7,7 @@ import {
 } from "../redux/ParticipantsSlice";
 import { addUser } from "../services/participants.service";
 import type { departmentList } from "../models/departmentList.model";
-import type { participantsApi } from "../models/participants.model";
+import type { ParticipantResponse, ParticipantsRequest } from "../models/participants.model";
 export const useAddParticipantsViewModel = () => {
   // const { selectedParticipant } = useAppSelector((state) => state.participants);
   const dispatch = useDispatch();
@@ -15,28 +15,22 @@ export const useAddParticipantsViewModel = () => {
   const initialFormData = {
     password: "",
     email: "",
-    roleId: "1",
+    roleId: 1,
     firstname: "",
     lastname: "",
-    departmentId: "1",
+    departmentId: 1,
     phoneNo: "",
     status: "",
-    position: "",
+    position: "Senior Engineer",
   };
 
   // const {isEditOpen , selectedParticipant} = useAppSelector((state) => state.participants)
 
   const [participantFormData, setParticipantFormData] =
-    useState<participantsApi>(initialFormData);
+    useState<ParticipantsRequest>(initialFormData);
 
-
-
-
-
-  // const openAddParticipantForm = (participant: Participants) => {
-  //   dispatch(openEditForm(participant));
-  //   console.log(selectedParticipant);
-  // };
+  const [departmentId, setDepartmentId] = useState<number>(1);
+  const [roleId, setRoleId] = useState<number>(1);
 
   const closeAddParticipantForm = () => {
     dispatch(closeEditForm());
@@ -52,11 +46,28 @@ export const useAddParticipantsViewModel = () => {
     }));
   };
 
-  
+  const handleDepartmentChange = (id: number) => {
+    setDepartmentId(id);
+    setParticipantFormData((prev) => ({
+      ...prev,
+      departmentId: id? id: 1,
+    }));
+  };
+
+  const handleRoleChange = (id: number) => {
+    setRoleId(id);
+    setParticipantFormData((prev) => ({
+      ...prev,
+      roleId: id ? id : 1,
+    }));
+  };
+
   const handleSubmit = async () => {
     try {
-      const response = await addUser(participantFormData);
-      console.log("User added successfully:", response);
+      // const response = await addUser(participantFormData);
+
+      // return response;
+      console.log("User added successfully:", participantFormData);
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -70,5 +81,11 @@ export const useAddParticipantsViewModel = () => {
     participantFormData,
     closeAddParticipantForm,
     setParticipantFormData,
+    departmentId,
+    setDepartmentId,
+    handleDepartmentChange,
+    handleRoleChange,
+    setRoleId,
+    roleId,
   };
 };

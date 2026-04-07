@@ -13,18 +13,20 @@ import { Plus } from "lucide-react";
 import "../../assets/scss/global.scss";
 import "../../assets/scss/components/AddParticipants-Form.scss";
 import { useEffect } from "react";
-import type { participantsApi } from "../../models/participants.model";
+import type {  ParticipantResponse, ParticipantsRequest } from "../../models/participants.model";
 import { DepartmentList } from "./DepartmentList";
+import { RoleDropdown } from "./RoleDropdown";
+import { mapParticipantResponseToRequest } from "../../models/mapper/ParticipantMapper";
 
 type props = {
   participantsFormState: {
     open: boolean;
     mode: "add" | "edit";
-    participant: participantsApi | null;
+    participant: ParticipantResponse | null;
   };
   handleParticipantFormOpen: (
     mode: "add" | "edit",
-    participant?: participantsApi,
+    participant?: ParticipantResponse,
   ) => void;
   handleParticipantsFormClose: () => void;
 };
@@ -39,13 +41,18 @@ export const AddParticipantsForm = ({
     setParticipantFormData,
     initialFormData,
     handleSubmit,
+    departmentId,
+    setDepartmentId,
+    handleDepartmentChange,
+    handleRoleChange,
+    roleId,
   } = useAddParticipantsViewModel();
   // const dispatch = useDispatch();
   // const { isEditOpen, selectedParticipant } = useAppSelector(
   //   (state) => state.participants,
   // );
 
-  const departments = ["Engineering", "HR", "Product", "Finance", "Marketing"];
+  // const departments = ["Engineering", "HR", "Product", "Finance", "Marketing"];
   const positions = [
     "Senior Engineer",
     "Tech Lead",
@@ -56,23 +63,13 @@ export const AddParticipantsForm = ({
     "Product Manager",
     "UX Researcher",
   ];
-  const roles = ["ADMIN", "User", "Viewer"];
   useEffect(() => {
     if (
       participantsFormState.mode === "edit" &&
       participantsFormState.participant
     ) {
-      setParticipantFormData({
-        firstname: participantsFormState.participant.firstname,
-        lastname: participantsFormState.participant.lastname,
-        roleId: participantsFormState.participant.roleId,
-        position: participantsFormState.participant.position,
-        phoneNo: participantsFormState.participant.phoneNo,
-        email: participantsFormState.participant.email,
-        password: participantsFormState.participant.password,
-        status: participantsFormState.participant.status,
-        departmentId: participantsFormState.participant.departmentId,
-      });
+      setParticipantFormData(mapParticipantResponseToRequest(participantsFormState.participant));
+
     } else {
       setParticipantFormData(initialFormData);
     }
@@ -159,12 +156,12 @@ export const AddParticipantsForm = ({
               <MenuItem value={d}>{d}</MenuItem>
             ))}
           </TextField> */}
-
           <DepartmentList
-            handleChange={handleChange}
-            formData={participantFormData}
+            onChange={handleDepartmentChange}
+            value={ participantFormData.departmentId}
           />
-
+          <RoleDropdown onChange={handleRoleChange} value={participantFormData.roleId} />
+          {/*
           <label htmlFor="Role">Role</label>
           <TextField
             fullWidth
@@ -182,13 +179,14 @@ export const AddParticipantsForm = ({
                 },
               },
             }}
-            value={participantFormData.roleId}
+            value={participantFormData.role}
             onChange={handleChange}
           >
             {roles.map((r) => (
               <MenuItem value={r}>{r}</MenuItem>
             ))}
-          </TextField>
+          </TextField> */}
+
           <label htmlFor="Position">Position</label>
           <TextField
             fullWidth
@@ -216,7 +214,7 @@ export const AddParticipantsForm = ({
           <label htmlFor="Phone">Phone Number</label>
           <TextField
             id="Phone"
-            name="phoneNum"
+            name="phoneNo"
             className="customTextField"
             required
             fullWidth

@@ -4,6 +4,7 @@ import {
   CardContent,
   CardHeader,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
@@ -69,6 +70,10 @@ export const AddGroupForm = () => {
           ></TextField>
           <ParticipantsCard displayOn="participant" type="" users = { users}/>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleAddGroup}>Create</Button>
+        </DialogActions>
       </Dialog>
 
       {/* {openGroupForm ||

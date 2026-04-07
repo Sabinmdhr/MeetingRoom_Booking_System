@@ -1,9 +1,10 @@
 export interface addParticipants{
-  id: string;
-  fullName: string;
+  id: number;
   email: string;
-  role: string;
-  department: string;
-  phoneNum: string;
+  firstname: string;
+  lastname: string;
+  roleId:number;
+  departmentId: number;
+  phoneNo: string;
 
 }

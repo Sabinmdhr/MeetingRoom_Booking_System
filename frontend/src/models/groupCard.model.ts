@@ -3,5 +3,10 @@ export interface groupCard {
   groupName: string;
   description: string;
   createdAt: string;
-  groupMembers: string[];
+  members: [
+    {
+      id: number;
+      name: string;
+    }
+  ]
 }

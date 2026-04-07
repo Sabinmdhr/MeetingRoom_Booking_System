@@ -20,42 +20,36 @@ import {
   Mail,
   Pen,
   Phone,
-  Trash,
   Trash2,
 } from "lucide-react";
-import type { participantsApi } from "../../models/participants.model";
+import type { ParticipantResponse, ParticipantsRequest } from "../../models/participants.model";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 // import { openEditForm } from "../../redux/ParticipantsSlice";
-import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 type props = {
-  users: participantsApi[];
+  users: ParticipantResponse[];
   participantsFormState: {
     open: boolean;
     mode: "add" | "edit";
-    participant: participantsApi | null;
+    participant: ParticipantResponse | null;
   };
   handleParticipantFormOpen: (
     mode: "add" | "edit",
-    participant?: participantsApi,
+    participant?: ParticipantResponse,
   ) => void;
   handleParticipantsFormClose: () => void;
 };
 export const ParticipantsTable = ({
   users,
   handleParticipantFormOpen,
-  participantsFormState,
-  handleParticipantsFormClose,
 }: props) => {
   // const { openAddParticipantForm } = useAddParticipantsViewModel();
-  const dispatch = useDispatch();
-  const { participants, columns } = useparticipantsViewModel();
+  const {  columns } = useparticipantsViewModel();
 
   const [menuState, setMenuState] = useState<{
     anchorEl: HTMLElement | null;
-    participant: participantsApi | null;
+    participant: ParticipantResponse | null;
   }>({
     anchorEl: null,
     participant: null,
@@ -63,7 +57,7 @@ export const ParticipantsTable = ({
 
   const handleMenuOpen = (
     e: React.MouseEvent<HTMLElement>,
-    participant: participantsApi,
+    participant: ParticipantResponse,
   ) => {
     setMenuState({
       anchorEl: e.currentTarget,
@@ -90,7 +84,7 @@ export const ParticipantsTable = ({
         </TableHead>
 
         <TableBody>
-          {users.map((participant: participantsApi) => (
+          {users.map((participant: ParticipantResponse) => (
             <TableRow key={participant.id} hover>
               {columns.map((col) => {
                 switch (col.id) {
@@ -113,7 +107,7 @@ export const ParticipantsTable = ({
                       <TableCell key={col.id}>
                         <Chip
                           className="department-chip"
-                          label={participant.departmentId}
+                          label={participant.department}
                         />
                       </TableCell>
                     );
@@ -146,7 +140,7 @@ export const ParticipantsTable = ({
 
                   case "actions":
                     return (
-                      <TableCell>
+                      <TableCell key={col.id}>
                         <IconButton
                           onClick={(e) => {
                             handleMenuOpen(e, participant);

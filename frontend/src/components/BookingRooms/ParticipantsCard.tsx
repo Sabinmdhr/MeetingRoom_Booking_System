@@ -14,13 +14,13 @@ import { UserPlus, Search } from "lucide-react";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/store";
-import type { participantsApi } from "../../models/participants.model";
+import type { ParticipantResponse } from "../../models/participants.model";
 import { getAllUser } from "../../services/participants.service";
 
 interface ParticipantsCardProps {
   type: "internal" | "external" | "";
   displayOn: "participant" | "book-room" | "calendar";
-  users: participantsApi[] | [];
+  users: ParticipantResponse[] | [];
 }
 
 const ParticipantsCard = ({
@@ -47,6 +47,8 @@ const ParticipantsCard = ({
   const { selectedParticipants } = useAppSelector(
     (state) => state.participants,
   );
+
+  
   const filteredParticipants = users.filter(
     (p) =>
       p.firstname.toLowerCase().includes(search.toLowerCase()) ||
@@ -109,14 +111,18 @@ const ParticipantsCard = ({
                       <div
                         key={p.id}
                         className={`participant-item ${
-                          selectedParticipants.includes(p.id) ? "selected" : ""
+                          p.id && selectedParticipants.includes(p.id)
+                            ? "selected"
+                            : ""
                         }`}
-                        onClick={() => handleToggle(p.id)}
+                        onClick={() => p.id && handleToggle(p.id)}
                       >
                         <input
                           type="checkbox"
-                          checked={selectedParticipants.includes(p.id)}
-                          onChange={() => handleToggle(p.id)}
+                          checked={
+                            p.id ? selectedParticipants.includes(p.id) : false
+                          }
+                          onChange={() => p.id && handleToggle(p.id)}
                         />
 
                         <div className="participant-info">
@@ -224,16 +230,16 @@ const ParticipantsCard = ({
               <div
                 key={p.id}
                 className={`participant-item ${
-                  selectedParticipants.includes(p.id) ? "selected" : ""
+                  p.id && selectedParticipants.includes(p.id) ? "selected" : ""
                 }   `}
-                onClick={() => handleToggle(p.id)}
+                onClick={() => p.id && handleToggle(p.id)}
               >
                 <input
                   // color="red"
                   className="check"
                   type="checkbox"
-                  checked={selectedParticipants.includes(p.id)}
-                  onChange={() => handleToggle(p.id)}
+                  checked={p.id ? selectedParticipants.includes(p.id) : false}
+                  onChange={() => p.id && handleToggle(p.id)}
                 />
 
                 <div className="participant-info">
@@ -259,10 +265,12 @@ const ParticipantsCard = ({
           <Typography>{filteredParticipants.length} Participants</Typography>
           <div className={`participants-list `}>
             {filteredParticipants.map((p) => (
-              <div key={p.id}
-               className={`participant-item ${
-                  selectedParticipants.includes(p.id) ? "selected" : ""
-                }   `}>
+              <div
+                key={p.id}
+                className={`participant-item ${
+                  p.id && selectedParticipants.includes(p.id) ? "selected" : ""
+                }   `}
+              >
                 <div className="participant-info">
                   <Typography variant="subtitle2" className="name">
                     {p.firstname} {p.lastname}

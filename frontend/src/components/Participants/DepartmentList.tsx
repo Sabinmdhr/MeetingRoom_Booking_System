@@ -1,41 +1,20 @@
-import { MenuItem, TextField } from "@mui/material";
 import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
-import type { departmentList } from "../../models/departmentList.model";
-import type { participantsApi } from "../../models/participants.model";
 
+import { CommonDropdown } from "../CommonDropdown";
 
 type props = {
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  formData: participantsApi;
+  value: number ;
+  onChange: (id: number ) => void;
 };
-export const DepartmentList = ({ handleChange, formData }: props) => {
-  const { departmentList } = useDepartmentListViewModel();
+export const DepartmentList = ({ value, onChange }: props) => {
+  const { departmentItems } = useDepartmentListViewModel();
+
   return (
-    <>
-      <label htmlFor="Department">Department</label>
-      <TextField
-        fullWidth
-        name="department"
-        placeholder="Department"
-        id="Department"
-        required
-        className="customTextField"
-        select
-        SelectProps={{
-          MenuProps: {
-            disablePortal: true,
-            PaperProps: {
-              className: "customTextField",
-            },
-          },
-        }}
-        value={formData.departmentId}
-        onChange={handleChange}
-      >
-        {departmentList.map((d: departmentList) => (
-          <MenuItem value={d.id}>{d.departmentName}</MenuItem>
-        ))}
-      </TextField>
-    </>
+    <CommonDropdown
+      label="Department"
+      value={value}
+      items={departmentItems}
+      onChange={onChange}
+    />
   );
 };
