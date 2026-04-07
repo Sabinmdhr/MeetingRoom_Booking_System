@@ -2,7 +2,14 @@ import "../assets/scss/pages/Participants.scss";
 import "../assets/scss/global.scss";
 import { FolderPlus, SquarePen, Users } from "lucide-react";
 import { ParticipantsTable } from "../components/Participants/Participants-Table";
-import { Button, Card, CardContent, CardHeader, Chip, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Chip,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { AddParticipantsForm } from "../components/Participants/AddParticipants-Form";
 import { useAddParticipantsViewModel } from "../viewmodels/useAddParticipantsViewModel";
@@ -12,7 +19,13 @@ import { useGroupCardViewModel } from "../viewmodels/useGroupCardViewModel";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
 const Participants = () => {
   const [editMode, setEditMode] = useState(false);
-  const {users,setUsers,handleParticipantsFormClose, handleParticipantFormOpen, participantsFormState}= useparticipantsViewModel()
+  const {
+    users,
+    setUsers,
+    handleParticipantsFormClose,
+    handleParticipantFormOpen,
+    participantsFormState,
+  } = useparticipantsViewModel();
   // console.log("thisis ",users);
 
   // const { open } = useAddParticipantsViewModel();
@@ -65,8 +78,7 @@ const Participants = () => {
             <ParticipantsTable
               users={users}
               participantsFormState={participantsFormState}
-            handleParticipantFormOpen={handleParticipantFormOpen}
-
+              handleParticipantFormOpen={handleParticipantFormOpen}
               handleParticipantsFormClose={handleParticipantsFormClose}
             />
           </div>

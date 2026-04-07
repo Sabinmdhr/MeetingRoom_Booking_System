@@ -1,7 +1,10 @@
 .calendar-modal-main {
   font-family: var(--titleMediumFont);
 }
-
+.MuiDialog-paper {
+  border-radius: 8px !important;
+  // overflow: hidden;
+}
 .calendar-modal-title {
   display: flex;
   justify-content: space-between;
@@ -13,7 +16,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  margin-top: 6px;
+  // margin-top: 6px;
 }
 
 .modal-title {
@@ -28,7 +31,7 @@
   border-radius: 20px;
 
   &.client {
-    margin: 3px;
+    // margin: 3px;
     color: #ca3500;
     padding: 4px 8px;
     border: 2px solid #ffd6a7;
@@ -37,7 +40,7 @@
     opacity: 2;
   }
   &.internal {
-    margin: 3px;
+    // margin: 3px;
     padding: 4px 8px;
     border: 2px solid #bedbff;
     border-radius: 10px;
@@ -47,7 +50,7 @@
   }
   &.executive {
     color: #8200db;
-    margin: 3px;
+    // margin: 3px;
     padding: 4px 8px;
     border: 2px solid #e9d4ff;
     background-color: #f3e8ff;
@@ -58,8 +61,8 @@
 
 .calendar-modal-content {
   .modal-section {
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin-top: 10px;
+    margin-bottom: 14px;
   }
 
   .section-title {
@@ -111,4 +114,8 @@
 
 .MuiDialog-root {
   z-index: 1500 !important;
+}
+
+.modal-participants {
+  display: flex;
 }

@@ -23,13 +23,10 @@ import {
   Trash,
   Trash2,
 } from "lucide-react";
-import type {
-  Participants,
-  participantsApi,
-} from "../../models/participants.model";
+import type { participantsApi } from "../../models/participants.model";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { openEditForm } from "../../redux/ParticipantsSlice";
+// import { openEditForm } from "../../redux/ParticipantsSlice";
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
@@ -38,7 +35,7 @@ type props = {
   participantsFormState: {
     open: boolean;
     mode: "add" | "edit";
-    participant: participantsApi;
+    participant: participantsApi | null;
   };
   handleParticipantFormOpen: (
     mode: "add" | "edit",
@@ -52,9 +49,9 @@ export const ParticipantsTable = ({
   participantsFormState,
   handleParticipantsFormClose,
 }: props) => {
-  const { openAddParticipantForm } = useAddParticipantsViewModel();
+  // const { openAddParticipantForm } = useAddParticipantsViewModel();
   const dispatch = useDispatch();
-  const { participants, columns, handleEdit } = useparticipantsViewModel();
+  const { participants, columns } = useparticipantsViewModel();
 
   const [menuState, setMenuState] = useState<{
     anchorEl: HTMLElement | null;
@@ -102,10 +99,10 @@ export const ParticipantsTable = ({
                       <TableCell key={col.id}>
                         <div className="name-Col">
                           <Typography className="fullname">
-                            {participant.email}
+                            {participant.firstname} {participant.lastname}
                           </Typography>
                           <Typography className="role">
-                            {participant.role}
+                            {participant.position}
                           </Typography>
                         </div>
                       </TableCell>
@@ -116,7 +113,7 @@ export const ParticipantsTable = ({
                       <TableCell key={col.id}>
                         <Chip
                           className="department-chip"
-                          label={participant.email}
+                          label={participant.departmentId}
                         />
                       </TableCell>
                     );
@@ -133,7 +130,7 @@ export const ParticipantsTable = ({
                             variant="body2"
                             color="text.secondary"
                           >
-                            <Phone size={12} /> {participant.email}
+                            <Phone size={12} /> {participant.phoneNo}
                           </Typography>
                         </div>
                       </TableCell>
@@ -142,7 +139,8 @@ export const ParticipantsTable = ({
                   case "numOfMeetings":
                     return (
                       <TableCell key={col.id}>
-                        {participant.email}
+                        {/* {participant.email} */}
+                        12
                       </TableCell>
                     );
 
@@ -173,7 +171,10 @@ export const ParticipantsTable = ({
                             className="menu-btn"
                             onClick={() => {
                               if (menuState.participant) {
-                                handleParticipantFormOpen("edit", menuState.participant)
+                                handleParticipantFormOpen(
+                                  "edit",
+                                  menuState.participant,
+                                );
                               }
                               handleMenuClose();
                             }}

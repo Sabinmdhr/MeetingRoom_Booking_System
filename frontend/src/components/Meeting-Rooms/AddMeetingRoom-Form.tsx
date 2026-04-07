@@ -12,13 +12,12 @@ import {
   TextField,
 } from "@mui/material";
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
-import { Plus, Vault, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import "../../assets/scss/components/AddMeetingRoom-Form.scss";
-import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import { useEffect } from "react";
 import type {
   meeting_rooms,
-} from "../../models/meetingRoom.model";
+} from "../../models/meeting_room.model";
 
 type props = {
   roomFormState: {
@@ -27,19 +26,21 @@ type props = {
     room: meeting_rooms | null;
   };
   handleRoomFormOpen: (mode: "add" | "edit", room?: meeting_rooms) => void;
-  handleRoomFormClose: ()=> void
+  handleRoomFormClose: () => void;
 };
-export const AddMeetingRoomForm = ({ roomFormState, handleRoomFormOpen,handleRoomFormClose }: props) => {
+export const AddMeetingRoomForm = ({
+  roomFormState,
+  handleRoomFormOpen,
+  handleRoomFormClose,
+}: props) => {
   // const { handleClose } = useAddRoomViewModel();
   // const { isEditOpen } = useAppSelector((state) => state.meetingRoom);
 
   const {
-    openAddRoomForm,
     addRoomFormData,
     setAddRoomFormData,
     handleChange,
     handleCheckboxChange,
-    setOpenAddRoomForm,
     submitAddRomForm,
   } = useAddRoomViewModel();
   // const {
@@ -53,14 +54,14 @@ export const AddMeetingRoomForm = ({ roomFormState, handleRoomFormOpen,handleRoo
   useEffect(() => {
     if (roomFormState.mode === "edit" && roomFormState.room) {
       setAddRoomFormData({
-        id: roomFormState.room.id,
+        // id: roomFormState.room.id,
         roomName: roomFormState.room.roomName,
         capacity: roomFormState.room.capacity,
         resources: roomFormState.room.resources,
       });
     } else {
       setAddRoomFormData({
-        id: "",
+        // id: "",
         roomName: "",
         capacity: 0,
         resources: [],
@@ -107,6 +108,7 @@ export const AddMeetingRoomForm = ({ roomFormState, handleRoomFormOpen,handleRoo
               fullWidth
               id="capacity"
               name="capacity"
+              // type="number"
               placeholder="Number of People"
               className="customTextField"
               value={addRoomFormData.capacity}
@@ -175,7 +177,12 @@ export const AddMeetingRoomForm = ({ roomFormState, handleRoomFormOpen,handleRoo
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={submitAddRomForm}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              submitAddRomForm();
+            }}
+          >
             Add
           </Button>
         </DialogActions>

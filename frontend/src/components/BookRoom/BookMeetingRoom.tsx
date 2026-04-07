@@ -250,12 +250,13 @@ export default function BookMeetingRoom() {
                       : "Add External"}
                   </Button>
                 </Stack>
-                {participantType && (
+                {/* {participantType && (
                   <ParticipantsCard
                     displayOn="book-room"
                     type={participantType}
+
                   />
-                )}
+                )} */}
               </div>
 
               <div className="field">
@@ -297,7 +298,7 @@ export default function BookMeetingRoom() {
               </div>
             </div>
             <div className="bookroom-right">
-              <div className="field">
+              {/* <div className="field">
                 <label className="field-label">Select Room *</label>
                 <FormControl
                   fullWidth
@@ -334,7 +335,7 @@ export default function BookMeetingRoom() {
                   </Select>
                 </FormControl>
                 <RoomDetailsCard room={selectedRoom} />
-              </div>
+              </div> */}
               <Button
                 className="book-btn"
                 type="submit"

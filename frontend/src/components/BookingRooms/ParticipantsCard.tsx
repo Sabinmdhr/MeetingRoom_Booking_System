@@ -9,38 +9,47 @@ import {
 import "../../assets/scss/components/ParticipantsCard.scss";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { UserPlus, Search } from "lucide-react";
-import type { Participants } from "../../models/participants.model";
-import { DemoParticipants } from "../../services/participants.service";
+// import type { Participants } from "../../models/participants.model";
+// import { DemoParticipants } from "../../services/participants.service";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/store";
+import type { participantsApi } from "../../models/participants.model";
+import { getAllUser } from "../../services/participants.service";
 
 interface ParticipantsCardProps {
-  type: "internal" | "external"| "";
+  type: "internal" | "external" | "";
   displayOn: "participant" | "book-room" | "calendar";
+  users: participantsApi[] | [];
 }
 
-const ParticipantsCard = ({ type, displayOn }: ParticipantsCardProps) => {
+const ParticipantsCard = ({
+  type,
+  displayOn,
+  users,
+}: ParticipantsCardProps) => {
   const [tabValue, setTabValue] = useState("people");
-  const [participants, setParticipants] = useState<Participants[]>([]);
 
+  // const [participants, setParticipants] = useState<participantsApi[]>([]);
 
   const [search, setSearch] = useState("");
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
   // const { selectedParticipants, setSelectedParticipants } =
   //   useparticipantsViewModel();
-// const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel();
-  useEffect(() => {
-    const data = DemoParticipants();
-    setParticipants(data);
-  }, []);
+  // const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel();
+  // useEffect(() => {
+  //   const data = getAllUser();
+  //   setParticipants(data);
+  // }, []);
 
-const {handleToggle} = useparticipantsViewModel();
-const {selectedParticipants} = useAppSelector((state)=> state.participants)
-  const filteredParticipants = participants.filter(
+  const { handleToggle } = useparticipantsViewModel();
+  const { selectedParticipants } = useAppSelector(
+    (state) => state.participants,
+  );
+  const filteredParticipants = users.filter(
     (p) =>
-      p.fullName.toLowerCase().includes(search.toLowerCase()) ||
+      p.firstname.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
 
@@ -74,12 +83,24 @@ const {selectedParticipants} = useAppSelector((state)=> state.participants)
                   onChange={(e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab label="People" value="people" />
-                  <Tab label="Teams" value="teams" />
-                  <Tab label="All" value="all" />
+                  <Tab
+                    label="People"
+                    value="people"
+                  />
+                  <Tab
+                    label="Teams"
+                    value="teams"
+                  />
+                  <Tab
+                    label="All"
+                    value="all"
+                  />
                 </TabList>
 
-                <TabPanel value="people" className="tab-panel">
+                <TabPanel
+                  value="people"
+                  className="tab-panel"
+                >
                   <TextField
                     fullWidth
                     size="small"
@@ -89,7 +110,10 @@ const {selectedParticipants} = useAppSelector((state)=> state.participants)
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search size={18} color="gray" />
+                          <Search
+                            size={18}
+                            color="gray"
+                          />
                         </InputAdornment>
                       ),
                     }}
@@ -111,7 +135,9 @@ const {selectedParticipants} = useAppSelector((state)=> state.participants)
                         />
 
                         <div className="participant-info">
-                          <Typography className="name">{p.fullName}</Typography>
+                          <Typography className="name">
+                            {p.firstname} {p.lastname}
+                          </Typography>
                           <Typography className="email">{p.email}</Typography>
                           <Typography className="department">
                             {p.department}
@@ -189,7 +215,9 @@ const {selectedParticipants} = useAppSelector((state)=> state.participants)
       {displayOn == "participant" && (
         <div>
           {" "}
-          <label htmlFor="searchField">Select Members ({selectedParticipants.length} selected) </label>
+          <label htmlFor="searchField">
+            Select Members ({selectedParticipants.length} selected){" "}
+          </label>
           <TextField
             fullWidth
             id="searchField"
@@ -201,7 +229,10 @@ const {selectedParticipants} = useAppSelector((state)=> state.participants)
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search size={14} color="gray" />
+                  <Search
+                    size={14}
+                    color="gray"
+                  />
                 </InputAdornment>
               ),
             }}
@@ -225,7 +256,7 @@ const {selectedParticipants} = useAppSelector((state)=> state.participants)
 
                 <div className="participant-info">
                   <Typography variant="subtitle2" className="name">
-                    {p.fullName}
+                    {p.firstname} {p.lastname}
                   </Typography>
                   <div className="participant-Subinfo">
                     <Typography className="department">
@@ -242,36 +273,29 @@ const {selectedParticipants} = useAppSelector((state)=> state.participants)
       )}
 
       {displayOn == "calendar" && (
-          <div>
-            <Typography>{filteredParticipants.length} Participants</Typography>
-            <div className={`participants-list `}>
-              {filteredParticipants.map((p) => (
-                <div
-                  key={p.id}
-                  className={`participant-item ${
-                    selectedParticipants.includes(p.id) ? "selected" : ""
-                  }   `}
-                >
-
-
-                  <div className="participant-info">
-                    <Typography variant="subtitle2" className="name">
-                      {p.fullName}
-                    </Typography>
-                    <div className="participant-Subinfo">
-                      <Typography className="department">
-                        {p.email}
-                      </Typography>
-
-                    </div>
+        <div>
+          <Typography>{filteredParticipants.length} Participants</Typography>
+          <div className={`participants-list `}>
+            {filteredParticipants.map((p) => (
+              <div key={p.id}
+               className={`participant-item ${
+                  selectedParticipants.includes(p.id) ? "selected" : ""
+                }   `}>
+                <div className="participant-info">
+                  <Typography variant="subtitle2" className="name">
+                    {p.firstname} {p.lastname}
+                  </Typography>
+                  <div className="participant-Subinfo">
+                    <Typography className="department">{p.email}</Typography>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        </div>
       )}
     </>
   );
-}
+};
 
 export default ParticipantsCard;

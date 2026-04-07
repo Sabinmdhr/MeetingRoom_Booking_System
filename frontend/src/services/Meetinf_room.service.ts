@@ -1,9 +1,6 @@
-import { axiosInstance } from "../api/api";
-import type {
-  AddRoomModal,
-  meeting_rooms,
-} from "../models/meetingRoom.model";
-import axios from "axios";
+// import { axiosInstance } from "../api/api";
+import api from "../api/api";
+import type { AddRoomModal} from "../models/meeting_room.model";
 
 //  const meetingRooms: meeting_rooms[] =
 //   [
@@ -41,26 +38,29 @@ import axios from "axios";
 //   ]
 
 export const addRoom = async (data: AddRoomModal) => {
-  const api = axiosInstance({});
-  const response = await api.post("/api/v1/room/add", data, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
-    },
-  });
+  // const api = axiosInstance({});
+  try {
+
+  const response = await api.post("/api/v1/room/add", data);
   return response.data;
+  } catch (error: any) {
+    console.error("Error adding meeting room:", error.response?.data || error.message);
+    throw error;
+  }
 };
 
 export const getMeetingRooms = async () => {
-  const api = axiosInstance({});
-  const body = {
-    pageNo: 0,
-  };
-  const response = await api.post("/api/v1/room/list", body, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("accesstoken")}`,
-    },
-  });
-  return response.data;
+  // const api = axiosInstance({});
+  // const body = {
+  //   pageNo: 0,
+  // };
+  try {
+    const response = await api.get("/api/v1/room/list");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching meeting rooms:", error);
+    throw error;
+  }
 };
 // const meetingRooms = getMeetingRooms();
 // export const getMeetingRoomById = async (id: string): Promise<meeting_rooms> => {

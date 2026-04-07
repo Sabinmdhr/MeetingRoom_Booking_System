@@ -1,9 +1,48 @@
-.roomschedule-title{
-    display: flex;
-    justify-content: space-between;
+.roomschedule-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 20px;
 }
 
-.roomschedule-heading{
-    display: flex;
-    gap: 8px;
+.roomschedule-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roomschedule-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  h6 {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  svg {
+    color: var(--hover-color);
+  }
+}
+
+.roomschedule-subtext {
+  font-size: 13px;
+  color: #6b7280; // subtle gray
+}
+
+.roomschedule-close {
+  align-self: flex-start;
+
+  svg {
+    color: #6b7280;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+
+    svg {
+      color: #000;
+    }
+  }
 }

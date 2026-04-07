@@ -1,6 +1,7 @@
 import { Button, Card, TextField } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import type { ProfileSettings } from "../../models/settings.model";
+import { toast } from "mui-sonner";
 
 interface ProfileProps {
   profile: ProfileSettings;
@@ -8,6 +9,9 @@ interface ProfileProps {
   onSave: () => void;
 }
 const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
+  function handleSave() {
+    toast.success("Changes saved Successfully");
+  }
   return (
 
     <> 
@@ -92,7 +96,10 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
             className="settings-btn"
             variant="contained"
             size="small"
-            onClick={onSave}
+            onClick={() => {
+              onSave();
+              handleSave();
+            }}
           >
             Save Changes
           </Button>
@@ -100,7 +107,9 @@ const ProfileSection = ({ profile, onChange, onSave }: ProfileProps) => {
             className="settings-btn"
             variant="contained"
             size="small"
-            onClick={onSave}
+            onClick={() => {
+              onSave();
+            }}
           >
             Cancel
           </Button>

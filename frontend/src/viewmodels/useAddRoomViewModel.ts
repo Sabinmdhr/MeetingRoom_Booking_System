@@ -1,14 +1,12 @@
 import { useState } from "react";
-import type { AddRoomModal } from "../models/meetingRoom.model";
-import { useDispatch } from "react-redux";
-import { closeEditForm, openEditForm } from "../redux/MeetingRoomSlice";
+import type { AddRoomModal } from "../models/meeting_room.model";
 import { addRoom } from "../services/Meetinf_room.service";
 
 export const useAddRoomViewModel = () => {
 
    const [openAddRoomForm, setOpenAddRoomForm] = useState(false);
    const [addRoomFormData, setAddRoomFormData] = useState<AddRoomModal>({
-     id: "",
+    //  id: "",
      roomName: "",
      capacity: 0,
      resources: [],
@@ -19,7 +17,7 @@ export const useAddRoomViewModel = () => {
 
      setAddRoomFormData((prev) => ({
        ...prev,
-       [name]: value,
+       [name]: name === "capacity" ? Number(value) : value,
      }));
    };
 
@@ -39,7 +37,13 @@ export const useAddRoomViewModel = () => {
 
    const submitAddRomForm = async () => {
      try {
-       await addRoom(addRoomFormData);
+
+const data = {
+  ...addRoomFormData,
+  capacity: Number(addRoomFormData.capacity),
+}
+
+       await addRoom(data);
        console.log("succes");
      } catch (error) {
        console.log(error);

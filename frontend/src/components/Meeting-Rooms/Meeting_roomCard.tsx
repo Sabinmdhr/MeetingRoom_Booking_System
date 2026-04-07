@@ -6,7 +6,8 @@ import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from 
 // import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
 import { useState } from "react";
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
-import type { meeting_rooms } from "../../models/meetingRoom.model";
+import type { meeting_rooms } from "../../models/meeting_room.model";
+import RoomSchedule from "../../pages/RoomSchedule/RoomSchedule";
 // interface MeetingCardProps {
 //   meetingId: string;
 // }
@@ -23,9 +24,13 @@ export const Meeting_roomCard = ({
   handleRoomFormOpen,
 }: props) => {
   // const [open , setOpen] = useState(false)
-  const { meeting, error, selectedRoom, setSelectedRoom } =
-    useMeetingCardViewModel();
+  const { meeting, error, selectedRoom, setSelectedRoom } = useMeetingCardViewModel();
+  const handleClose= ()=>{
+    setSelectedRoom(null);
+  }
+
   const [openDetails, setOpenDetails] = useState(false);
+
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!meeting) return null;
@@ -78,18 +83,19 @@ export const Meeting_roomCard = ({
                 </Typography>
               </div>
             </CardContent>
-
+            
             <CardActions className="Meeting-Card--Actions">
               <Button
                 className="Meeting_room-Book Available"
-                onClick={() => setOpenDetails(true)}
+                onClick={() => setSelectedRoom(m)}
               >
                 Book Now
               </Button>
+              <RoomSchedule room={selectedRoom} onClose={handleClose}/>
+
               <Button onClick={() => handleRoomFormOpen("edit", m)}>
                 <Pen size={18} />
               </Button>
-
               <Button>
                 <Trash2 size={18} color="red" />
               </Button>
