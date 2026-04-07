@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import "../assets/scss/pages/Settings.scss";
-import ProfileSection from "../components/Settings/ProfileSection";
+// import ProfileSection from "../components/Settings/ProfileSection";
 import NotificationSection from "../components/Settings/NotificationSection";
 import ColorSection from "../components/Settings/ColorSection";
 import BookingSection from "../components/Settings/BookingSection";

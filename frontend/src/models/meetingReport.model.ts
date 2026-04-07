@@ -1,27 +1,19 @@
 export interface Meeting {
-  status: string;
-  room: string;
-  title: string;
-  start: string;
-  end: string;
-  duration: string;
-  user: string;
-  department: string;
-  createdVia: string;
-  createdAt: string;
+  EndTime: string;
+  createdBy: string;
+  date: string;
+  meetingTitle: string;
+  roomName: string;
+  startTime: string;
 }
 
 export interface Column {
   id:
-    | "status"
-    | "room"
-    | "title"
-    | "start"
-    | "end"
-    | "duration"
-    | "user"
-    | "department"
-    | "createdVia"
-    | "createdAt";
+    | "EndTime"
+    | "createdBy"
+    | "date"
+    | "meetingTitle"
+    | "roomName"
+    | "startTime";
   label: string;
 }

@@ -9,10 +9,9 @@ import {
 import "../../assets/scss/components/ParticipantsCard.scss";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { UserPlus, Search } from "lucide-react";
-// import type { Participants } from "../../models/participants.model";
-// import { DemoParticipants } from "../../services/participants.service";
+
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "../../redux/store";
 import type { ParticipantResponse } from "../../models/participants.model";
 import { getAllUser } from "../../services/participants.service";
@@ -48,7 +47,7 @@ const ParticipantsCard = ({
     (state) => state.participants,
   );
 
-  
+
   const filteredParticipants = users.filter(
     (p) =>
       p.firstname.toLowerCase().includes(search.toLowerCase()) ||
@@ -82,15 +81,27 @@ const ParticipantsCard = ({
               <Typography className="group-title">Group by</Typography>
               <TabContext value={tabValue}>
                 <TabList
-                  onChange={(e, value) => setTabValue(value)}
+                  onChange={(_e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab label="People" value="people" />
-                  <Tab label="Teams" value="teams" />
-                  <Tab label="All" value="all" />
+                  <Tab
+                    label="People"
+                    value="people"
+                  />
+                  <Tab
+                    label="Teams"
+                    value="teams"
+                  />
+                  <Tab
+                    label="All"
+                    value="all"
+                  />
                 </TabList>
 
-                <TabPanel value="people" className="tab-panel">
+                <TabPanel
+                  value="people"
+                  className="tab-panel"
+                >
                   <TextField
                     fullWidth
                     size="small"
@@ -100,7 +111,10 @@ const ParticipantsCard = ({
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search size={18} color="gray" />
+                          <Search
+                            size={18}
+                            color="gray"
+                          />
                         </InputAdornment>
                       ),
                     }}
@@ -131,7 +145,7 @@ const ParticipantsCard = ({
                           </Typography>
                           <Typography className="email">{p.email}</Typography>
                           <Typography className="department">
-                            {p.department}
+                            {p.departmentId}
                           </Typography>
                         </div>
                       </div>
@@ -209,6 +223,9 @@ const ParticipantsCard = ({
           <label htmlFor="searchField">
             Select Members ({selectedParticipants.length} selected){" "}
           </label>
+          <label htmlFor="searchField">
+            Select Members ({selectedParticipants.length} selected){" "}
+          </label>
           <TextField
             fullWidth
             id="searchField"
@@ -220,7 +237,10 @@ const ParticipantsCard = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search size={14} color="gray" />
+                  <Search
+                    size={14}
+                    color="gray"
+                  />
                 </InputAdornment>
               ),
             }}
@@ -243,7 +263,10 @@ const ParticipantsCard = ({
                 />
 
                 <div className="participant-info">
-                  <Typography variant="subtitle2" className="name">
+                  <Typography
+                    variant="subtitle2"
+                    className="name"
+                  >
                     {p.firstname} {p.lastname}
                   </Typography>
                   <div className="participant-Subinfo">
@@ -272,7 +295,10 @@ const ParticipantsCard = ({
                 }   `}
               >
                 <div className="participant-info">
-                  <Typography variant="subtitle2" className="name">
+                  <Typography
+                    variant="subtitle2"
+                    className="name"
+                  >
                     {p.firstname} {p.lastname}
                   </Typography>
                   <div className="participant-Subinfo">

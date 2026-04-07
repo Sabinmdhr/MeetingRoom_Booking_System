@@ -20,6 +20,7 @@ import React, { Activity, useState } from "react";
 import { Popover } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { Calendar as CalendarIcon } from "lucide-react";
+import EditCalendarModal from "../components/Calendar/EditCalendarModal";
 
 const Calendar = () => {
   const [room, setRoom] = useState("All Rooms");
@@ -28,9 +29,12 @@ const Calendar = () => {
   );
   const [eventFilter, setEventFilter] = useState("all");
 
+  const [mode, setMode] = useState<"view" | "edit" | null>(null);
+
   const handleDateButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     setDatePickerAnchor(event.currentTarget);
   };
+
   const handleDateChange = (newDate: dayjs.Dayjs | null) => {
     if (newDate) {
       goToToday(newDate);
@@ -56,7 +60,6 @@ const Calendar = () => {
     goToNext,
     selectedEvent,
     closeModal,
-    openModal,
     goToPrev,
     goToToday,
   } = useCalendarEventViewModel();
@@ -204,7 +207,10 @@ const Calendar = () => {
                         <div
                           key={event.id}
                           className={`day__event ${event.category}`}
-                          onClick={() => openEvent(event)}
+                          onClick={() => {
+                            openEvent(event);
+                            setMode("view");
+                          }}
                         >
                           <span className="event-time">{event.startTime}</span>
                           <br />
@@ -260,7 +266,10 @@ const Calendar = () => {
                             <div
                               key={event.id}
                               className={`week__event ${event.category}`}
-                              onClick={() => openEvent(event)}
+                              onClick={() => {
+                                openEvent(event);
+                                setMode("view");
+                              }}
                             >
                               <span className="event-time">
                                 {event.startTime}
@@ -317,7 +326,10 @@ const Calendar = () => {
                           <div
                             key={event.id}
                             className={`month__event ${event.category}`}
-                            onClick={() => openEvent(event)}
+                            onClick={() => {
+                              openEvent(event);
+                              setMode("view");
+                            }}
                           >
                             {event.startTime} - {event.endTime}
                             <br /> {event.title}
@@ -339,9 +351,23 @@ const Calendar = () => {
         </Activity>
       </CardContent>
       <CalendarModal
-        open={openModal}
+        open={mode === "view"}
         event={selectedEvent}
-        onClose={closeModal}
+        onClose={() => {
+          setMode(null);
+          closeModal();
+        }}
+        onEdit={() => setMode("edit")}
+      />
+
+      <EditCalendarModal
+        openEdit={mode === "edit"}
+        event={selectedEvent}
+        onCloseAll={() => {
+          setMode(null);
+          closeModal();
+        }}
+        onBack={() => setMode("view")}
       />
     </Card>
   );

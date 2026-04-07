@@ -1,4 +1,4 @@
-import { Typography, Button, Chip } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -6,7 +6,7 @@ import {
 } from "@mui/x-data-grid";
 // import { useGridApiRef } from "@mui/x-data-grid";
 
-import { useMeetingTableViewModel } from "../viewmodels/useMeetingReportViewModel";
+import { useMeetingReportViewModel } from "../viewmodels/useMeetingReportViewModel";
 import "../assets/scss/pages/Report.scss";
 import { Download, Funnel } from "lucide-react";
 import ReportFilters from "../components/Reports/ReportFilters";
@@ -22,7 +22,7 @@ function CustomToolbar() {
 
 export default function MeetingTable() {
   const [filter, setFilter] = useState(false);
-  const vm = useMeetingTableViewModel();
+  const vm = useMeetingReportViewModel();
 
   // const apiRef = useGridApiRef();
 
@@ -39,15 +39,6 @@ export default function MeetingTable() {
     headerName: col.label,
     flex: 1,
     minWidth: 130,
-    ...(col.id === "status" && {
-      renderCell: (params: any) => (
-        <Chip
-          label={params.value}
-          size="small"
-          className="meeting-table__status"
-        />
-      ),
-    }),
   }));
 
   const rows = vm.rows.map((row, index) => ({
@@ -61,7 +52,10 @@ export default function MeetingTable() {
         <div className="meeting-table__main">
           <div className="titleDesc">
             <Typography variant="h1">Reports & Analytics</Typography>
-            <Typography variant="subtitle1" className="meeting-table__subtitle">
+            <Typography
+              variant="subtitle1"
+              className="meeting-table__subtitle"
+            >
               View and export reservation data
             </Typography>
           </div>
@@ -76,32 +70,19 @@ export default function MeetingTable() {
             <Button
               variant="outlined"
               className="meeting-table__buttons__export"
-              // onClick={() => apiRef?.current?.exportDataAsCsv()}
+              onClick={() => vm.exportReport()}
             >
               <Download size={16} /> Export
             </Button>
           </div>
         </div>
-        <ReportFilters open={filter} onClose={() => setFilter(false)} />
+        <ReportFilters
+          open={filter}
+          onClose={() => setFilter(false)}
+        />
       </div>
 
       <div className="meeting-table">
-        {/* <CardContent>
-          <div className="meeting-table__header">
-            <div>
-              <Typography variant="h6">Report Data</Typography>
-              <Typography
-                variant="body2"
-                className="meeting-table__subtitle"
-              >
-                2026-01-01 to 2026-01-31 • {vm.rows.length} results
-              </Typography>
-            </div>
-          </div>
-        </CardContent> */}
-
-        {/* <Divider /> */}
-
         <div className="meeting-table__grid">
           <DataGrid
             rows={rows}
@@ -114,9 +95,6 @@ export default function MeetingTable() {
               columns: {
                 columnVisibilityModel: {
                   // status: false,
-
-                  createdVia: false,
-                  createdAt: false,
                 },
               },
             }}

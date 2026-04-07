@@ -19,64 +19,62 @@ import {
   CircleAlert,
   Users,
   Pin,
+  FolderPlus,
 } from "lucide-react";
-import { useState } from "react";
+
 import "../../assets/scss/global.scss";
-
 import "../../assets/scss/pages/AnnouncementModal.scss";
-import { toast } from "mui-sonner";
 
-// inside the component, add the publish handler:
+import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
+const AnnouncementModal = ({
+  open,
+  handleClose,
+  refreshAnnouncements,
+}: any) => {
+  
+  const {
+    handleSubmit,
+    handleChange,
+    announcementFormData,
+    setAnnouncementFormData,
+    closeAnnouncementForm,
+  } = useAnnouncementViewModel(handleClose, refreshAnnouncements);
 
-const AnnouncementModal = ({ open, handleClose }: any) => {
-  const [isPinned, setIsPinned] = useState(false);
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
-  const [priority, setPriority] = useState("Normal");
-  const [audience, setAudience] = useState("All Users");
-  const [author, setAuthor] = useState("");
-  const today = new Date().toLocaleDateString();
-
-  const handlePublish = () => {
-    if (!title.trim()) {
-      toast.error("Please enter an announcement title.");
-      return;
-    }
-    if (!message.trim()) {
-      toast.error("Please enter a message.");
-      return;
-    }
-
-    if (!author.trim()) {
-      toast.error("Please enter your name.");
-      return;
-    }
-    toast.success("Announcement published!", {
-      description: `"${title}" sent to ${audience}`,
-    });
-
-    handleModalClose();
-  };
-
-  const handleModalClose = () => {
-    setTitle("");
-    setMessage("");
-    setPriority("Normal");
-    setAudience("All Users");
-    setIsPinned(false);
-    setAuthor("");
-    handleClose();
-  };
+  const fields: {
+    label: string;
+    name: "title" | "message";
+    placeholder: string;
+    type: string;
+    rows?: number;
+    maxLength: number;
+  }[] = [
+    {
+      label: "Announcement Title",
+      name: "title",
+      placeholder: "Enter announcement title",
+      type: "text",
+      maxLength: 100,
+    },
+    {
+      label: "Message",
+      name: "message",
+      placeholder: "Enter announcement message",
+      type: "multiline",
+      rows: 4,
+      maxLength: 500,
+    },
+  ];
 
   return (
     <Dialog
       open={open}
-      onClose={handleModalClose}
+      onClose={handleClose}
       fullWidth
       maxWidth="sm"
       slotProps={{ paper: { className: "announcement__modal__main" } }}
     >
       <div className="announcementModal">
+        {/* HEADER */}
         <DialogTitle className="announcementModal__header">
           <div className="announcementModal__header__main">
             <Megaphone size={20} />
@@ -85,69 +83,53 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
 
           <X
             className="announcementModal__header__close"
-            onClick={handleModalClose}
+            onClick={closeAnnouncementForm}
           />
         </DialogTitle>
 
+        {/* CONTENT */}
         <DialogContent>
-          <div className="announcementModal__inputGroup">
-            <label
-              htmlFor="announcement_title"
-              className="announcementModal__label"
+          {/* TEXT FIELDS */}
+          {fields.map((field) => (
+            <div
+              className="announcementModal__inputGroup"
+              key={field.name}
             >
-              Announcement Title
-            </label>
+              <label className="announcementModal__label">{field.label}</label>
 
-            <TextField
-              id="announcement_title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value.slice(0, 100))}
-              fullWidth
-              placeholder="Enter announcement title"
-            />
+              <TextField
+                name={field.name}
+                value={announcementFormData[field.name] || ""}
+                onChange={handleChange}
+                fullWidth
+                multiline={field.type === "multiline"}
+                rows={field.rows || 1}
+                placeholder={field.placeholder}
+                inputProps={{ maxLength: field.maxLength }}
+              />
 
-            <span className="announcementModal__counter">
-              {title.length}/100 characters
-            </span>
-          </div>
+              <span className="announcementModal__counter">
+                {announcementFormData[field.name]?.length || 0}/
+                {field.maxLength}
+              </span>
+            </div>
+          ))}
 
-          <div className="announcementModal__inputGroup">
-            <label
-              htmlFor="announcement_message"
-              className="announcementModal__label"
-            >
-              Message
-            </label>
-
-            <TextField
-              id="announcement_message"
-              multiline
-              rows={4}
-              value={message}
-              onChange={(e) => setMessage(e.target.value.slice(0, 500))}
-              fullWidth
-              placeholder="Enter announcement message"
-            />
-
-            <span className="announcementModal__counter">
-              {message.length}/500 characters
-            </span>
-          </div>
-
+          {/* PRIORITY & AUDIENCE ROW */}
           <div className="announcementModal__row">
+            {/* PRIORITY */}
             <div className="announcementModal__inputGroup">
-              <label className="announcementModal__label__priority">
-                Priority Level
-              </label>
+              <label className="announcementModal__label">Priority Level</label>
 
               <TextField
                 select
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
+                name="priorityLevel"
+                value={announcementFormData.priorityLevel || ""}
+                onChange={handleChange}
                 fullWidth
                 SelectProps={{ MenuProps: { disablePortal: true } }}
               >
-                <MenuItem value="Normal">
+                <MenuItem value="NORMAL">
                   <div className="announcementModal__dropdownItem">
                     <CircleCheckBig
                       size={18}
@@ -157,7 +139,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
                   </div>
                 </MenuItem>
 
-                <MenuItem value="High Priority">
+                <MenuItem value="HIGH">
                   <div className="announcementModal__dropdownItem">
                     <CircleAlert
                       size={18}
@@ -169,67 +151,128 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
               </TextField>
             </div>
 
+            {/* AUDIENCE/roles */}
             <div className="announcementModal__inputGroup">
               <label className="announcementModal__label">Audience</label>
 
               <TextField
                 select
-                value={audience}
-                onChange={(e) => setAudience(e.target.value)}
+                name="audience"
+                value={
+                  announcementFormData.allUser
+                    ? "allUsers"
+                    : String(announcementFormData.roleId)
+                }
+                onChange={(e) => {
+                  const selected = e.target.value;
+
+                  if (selected === "allUsers") {
+                    setAnnouncementFormData((prev) => ({
+                      ...prev,
+                      allUser: true,
+                      roleId: undefined,
+                    }));
+                  } else {
+                    setAnnouncementFormData((prev) => ({
+                      ...prev,
+                      allUser: false,
+                      roleId: Number(selected),
+                    }));
+                  }
+                }}
                 fullWidth
                 SelectProps={{ MenuProps: { disablePortal: true } }}
               >
-                <MenuItem value="All Users">
+                <MenuItem value="allUsers">
                   <div className="announcementModal__dropdownItem">
                     <Users
-                      className="announcementModal__icon--purple"
                       size={18}
+                      className="announcementModal__icon--purple"
                     />
                     <span>All Users</span>
                   </div>
                 </MenuItem>
 
-                <MenuItem value="Admins Only">
+                <MenuItem value="1">
                   <div className="announcementModal__dropdownItem">
                     <Users
-                      className="announcementModal__icon--red"
                       size={18}
+                      className="announcementModal__icon--red"
                     />
                     <span>Admins Only</span>
                   </div>
                 </MenuItem>
 
-                <MenuItem value="Authorized Personnel">
+                <MenuItem value="2">
                   <div className="announcementModal__dropdownItem">
                     <Users
                       size={18}
                       className="announcementModal__icon--blue"
                     />
-                    <span>Authorized Personnel </span>
+                    <span>Authorized Personnel</span>
                   </div>
                 </MenuItem>
 
-                <MenuItem value="View-Only Staff">
+                <MenuItem value="3">
                   <div className="announcementModal__dropdownItem">
                     <Users
                       size={18}
                       className="announcementModal__icon--grey"
                     />
-                    <span>View-Only Staff </span>
+                    <span>View-Only Staff</span>
+                  </div>
+                </MenuItem>
+
+                <MenuItem value="4">
+                  <div className="announcementModal__dropdownItem">
+                    <FolderPlus
+                      size={18}
+                      className="announcementModal__icon--grey"
+                    />
+                    <span>Engineering Leadership</span>
+                  </div>
+                </MenuItem>
+
+                <MenuItem value="5">
+                  <div className="announcementModal__dropdownItem">
+                    <FolderPlus
+                      size={18}
+                      className="announcementModal__icon--grey"
+                    />
+                    <span>Product Team</span>
+                  </div>
+                </MenuItem>
+
+                <MenuItem value="6">
+                  <div className="announcementModal__dropdownItem">
+                    <FolderPlus
+                      size={18}
+                      className="announcementModal__icon--grey"
+                    />
+                    <span>Finance Department</span>
                   </div>
                 </MenuItem>
               </TextField>
             </div>
           </div>
+
+          {/* CHECKBOX */}
           <div className="announcementModal__checkbox">
             <FormControlLabel
-              control={<Checkbox color="secondary" />}
+              control={
+                <Checkbox
+                  color="secondary"
+                  checked={announcementFormData.pinned}
+                  onChange={(e) =>
+                    setAnnouncementFormData((prev) => ({
+                      ...prev,
+                      pinned: e.target.checked,
+                    }))
+                  }
+                />
+              }
               label={
-                <span
-                  className="announcementModal__checkbox-style"
-                  style={{}}
-                  aria-disabled
-                >
+                <span className="announcementModal__checkbox-style">
                   <Pin size={16} />
                   <Typography variant="h4">
                     Pin this announcement to the top
@@ -238,40 +281,6 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
               }
             />
           </div>
-
-          <div className="announcementModal__author">
-            <label
-              htmlFor="announcement_title"
-              className="announcementModal__label"
-            >
-              Author
-            </label>
-
-            <TextField
-              id="announcement_title"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              fullWidth
-              placeholder="Enter author name"
-            />
-          </div>
-
-          {/* <div className={`announcementModal__preview `}>
-            <Typography className="announcementModal__previewTitle">
-              <Megaphone size={12} />
-              Preview
-            </Typography>
-
-            <div
-              className={`announcementModal__main ${priority === "High Priority" ? "high-priority" : ""} `}
-            >
-              <h3>{title || "Announcement Title"}</h3>
-              <p>{message || "Announcement message will appear here..."}</p>
-              <span className="announcementModal__meta">
-                {today} • {audience} • {author || "Author"}
-              </span>
-            </div>
-          </div> */}
         </DialogContent>
 
         <Divider className="announcementModal__divider" />
@@ -280,7 +289,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
           <Button
             variant="outlined"
             className="announcement__button__cancel"
-            onClick={handleModalClose}
+            onClick={closeAnnouncementForm}
           >
             Cancel
           </Button>
@@ -288,7 +297,7 @@ const AnnouncementModal = ({ open, handleClose }: any) => {
           <Button
             variant="contained"
             className="announcement__button__publish"
-            onClick={handlePublish}
+            onClick={handleSubmit}
           >
             <Megaphone size={20} />
             Publish Announcement
