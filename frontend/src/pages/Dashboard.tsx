@@ -11,6 +11,7 @@ import {
   TriangleAlert,
   UsersRound,
 } from "lucide-react";
+import Announcements from "./Announcements";
 
 export default function Dashboard() {
   const accessToken = localStorage.getItem("accessToken");
@@ -117,6 +118,9 @@ export default function Dashboard() {
     <div className="dashboard-container">
       <main className="dashboard-content">
         <DashboardCard cards={cards} />
+        <div className="dashboard__announcements">
+          <Announcements />
+        </div>
       </main>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Button, Card, TextField } from "@mui/material";
+import { Button, Card, TextField, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import type { ProfileSettings } from "../../models/settings.model";
 import { toast } from "react-toastify";
@@ -25,8 +25,8 @@ const ProfileSection = ({
   const ErrorText = ({ error }: { error?: string }) =>
     error ? <Typography className="error-text">{error}</Typography> : null;
   return (
-
-    <> 
+    <>
+      <Typography variant="h2">Edit User Information</Typography>
       <Card className="settings-card">
         <div className="name">
           <div className="field">
@@ -160,7 +160,7 @@ const ProfileSection = ({
         </div>
       </Card>
     </>
-  )
-}
+  );
+};
 
 export default ProfileSection;

@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import type { Meeting, Column } from "../models/meetingReport.model";
-import { exportReports, getAllReports } from "../services/report.service";
+import {
+  exportReports,
+  filterReport,
+  getAllReports,
+  fetchUser,
+  fetchRoom,
+  fetchDepartment,
+} from "../services/report.service";
 
 export const columns: Column[] = [
   { id: "roomName", label: "Room" },
@@ -13,34 +20,76 @@ export const columns: Column[] = [
 
 export function useMeetingReportViewModel() {
   const [rows, setRows] = useState<Meeting[]>([]);
-  const [reportData, setReportData] = useState<Meeting[]>([]);
-
-  const [exportReportData, setExportReportData] = useState([]);
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [users, setUsers] = useState<string[]>([]);
+  const [rooms, setRooms] = useState<string[]>([]);
+  const [departments, setDepartments] = useState<string[]>([]);
 
   const fetchReports = async () => {
-    const res = await getAllReports();
-    setRows(res.data);
-    // console.log(res);
+    try {
+      const res = await getAllReports();
+      setRows(res.data);
+      setIsFiltered(false);
+    } catch (error) {
+      console.error("Error fetching reports", error);
+    }
+  };
+
+  const filterReports = async (filters: any) => {
+    try {
+      const res = await filterReport(filters);
+      setRows(res ?? []);
+      setIsFiltered(true);
+    } catch (error) {
+      console.error("Filter failed", error);
+    }
   };
 
   const exportReport = async () => {
-    const res = await exportReports();
-
-    const data = res.data;
-    console.log(data);
+    try {
+      const blob = await exportReports();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "meeting-report.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export failed", error);
+    }
   };
 
+  const loadFilterOptions = async () => {
+    try {
+      const [userRes, roomRes, deptRes] = await Promise.all([
+        fetchUser(),
+        fetchRoom(),
+        fetchDepartment(),
+      ]);
+
+      setUsers(userRes.data.content?.map((u: any) => u.firstname) ?? []);
+      setRooms(roomRes.data?.map((r: any) => r.roomName) ?? []);
+      setDepartments(deptRes.data?.map((d: any) => d.departmentName) ?? []);
+    } catch (error) {
+      console.error("Failed to load filter options", error);
+    }
+  };
   useEffect(() => {
     fetchReports();
+    loadFilterOptions();
   }, []);
 
   return {
     columns,
     rows,
-    reportData,
-    setReportData,
+    filterReports,
     exportReport,
-    exportReportData,
-    setExportReportData,
+    isFiltered,
+    fetchReports,
+    users,
+    rooms,
+    departments,
   };
 }

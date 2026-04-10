@@ -3,146 +3,235 @@ import {
   CardContent,
   Typography,
   Chip,
-  Checkbox,
   Button,
   Menu,
   MenuItem,
-  FormControlLabel,
 } from "@mui/material";
 import "../../assets/scss/pages/Announcements.scss";
-import { EllipsisVertical, Pin } from "lucide-react";
+import {
+  EllipsisVertical,
+  Eye,
+  Pin,
+  PinOff,
+  SquarePen,
+  Trash2,
+  Users,
+} from "lucide-react";
 import React, { useState } from "react";
 import AnnouncementModal from "./AnnouncementModal";
+import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
+import AnnouncementDetailModal from "./AnnouncementDetailModal";
+
+const audienceMap: Record<number, string> = {
+  1: "Admins Only",
+  2: "Authorized Personnel",
+  3: "View-Only Staff",
+  4: "Engineering Leadership",
+  5: "Product Team",
+  6: "Finance Department",
+};
 
 const AnnouncementCard = ({
   item,
   onDelete,
-  selectionMode,
-  selected,
-  onSelect,
+  onUpdate,
+  refreshAnnouncements,
 }: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
   const [openModal, setOpenModal] = useState(false);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  const handleOpenDetail = () => {
     setAnchorEl(null);
+    setOpenDetailModal(true);
   };
 
+  const handleOpenEdit = () => {
+    setOpenDetailModal(false);
+    setEditingItem(item);
+    setOpenEditModal(true);
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEditModal(false);
+    setEditingItem(null);
+  };
+
+  const { handlePinChange } = useAnnouncementViewModel(
+    () => {},
+    refreshAnnouncements,
+    item,
+    onUpdate,
+  );
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => setAnchorEl(null);
+
   const handleOpenModal = () => {
+    setEditingItem(item);
     setOpenModal(true);
     handleClose();
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setEditingItem(null);
   };
+
+  const audienceLabel = item.allUser
+    ? "All Users"
+    : (audienceMap[item.roleId] ?? "All Users");
 
   return (
     <>
       <Card
-        className="announcement__card"
+        className={`announcement__card ${item.pinned ? "pinned" : ""}`}
         variant="outlined"
       >
-        <CardContent>
-          <div className="announcement__card-header">
-            <FormControlLabel
-              className={`announcement__checkbox ${
-                selectionMode ? "show" : ""
-              }`}
-              control={
-                <Checkbox
-                  checked={selected}
-                  onChange={(e) => onSelect(item.id, e.target.checked)}
-                />
-              }
-              label={
-                <Typography
-                  className="announcement__card-title"
-                  variant="h4"
-                >
-                  {item.title}
-                  <Pin
-                    size={18}
-                    color="purple"
-                  />
-                </Typography>
-              }
-            />
+        {item.pinned && (
+          <Pin
+            size={33}
+            fill="#8646c3"
+            color="#8646c3"
+            className="announcement__pin-icon"
+          />
+        )}
+        <CardContent className="announcement__card-content">
+          <div className="announcement__card-top">
+            <div className="announcement__card-top-left">
+              <Typography
+                className="announcement__author-date"
+                variant="subtitle2"
+              >
+                By {item.createdBy ?? "Sushant"}&nbsp;&nbsp;•&nbsp;&nbsp;
+                {item.modifiedAt}
+              </Typography>
+            </div>
 
-            <div className="announcement__tags">
-              {item.priorityLevel == "HIGH" && (
+            <div className="announcement__card-top-right">
+              {item.priorityLevel === "HIGH" && (
                 <Chip
-                  label={item.priorityLevel}
+                  label="HIGH"
                   className="chip__one"
                   size="small"
                 />
               )}
-
-              <div>
-                <Button
-                  id="basic-button"
-                  aria-controls={open ? "basic-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  onClick={handleClick}
+              <Button
+                id={`announcement-button-${item.id}`}
+                aria-controls={
+                  open ? `announcement-menu-${item.id}` : undefined
+                }
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleMenuClick}
+                className="announcement__menu-btn"
+              >
+                <EllipsisVertical
+                  color="black"
+                  size={18}
+                />
+              </Button>
+              <Menu
+                id={`announcement-menu-${item.id}`}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "center",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <MenuItem onClick={handleOpenDetail}>
+                  <Eye size={16} />
+                  <Typography variant="body1">View Details</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleOpenEdit}>
+                  <SquarePen size={16} />
+                  <Typography variant="body1">Edit</Typography>
+                </MenuItem>
+                {/* <MenuItem
+                  onClick={() => {
+                    handlePinChange(item.id);
+                    handleClose();
+                  }}
                 >
-                  <EllipsisVertical
-                    color="black"
-                    size={20}
+                  {item.pinned ? <PinOff size={16} /> : <Pin size={16} />}
+                  <Typography variant="body1">
+                    {item.pinned ? "Unpin" : "Pin"}
+                  </Typography>
+                </MenuItem> */}
+                <MenuItem
+                  onClick={() => {
+                    onDelete(item.id);
+                    handleClose();
+                  }}
+                >
+                  <Trash2
+                    size={16}
+                    color="red"
                   />
-                </Button>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>View Details</MenuItem>
-
-                  <MenuItem onClick={handleOpenModal}>
-                    Edit Announcement
-                  </MenuItem>
-
-                  <MenuItem onClick={handleClose}>Pin Announcement</MenuItem>
-
-                  <MenuItem onClick={() => onDelete(item.id)}>
-                    Delete Announcement
-                  </MenuItem>
-                </Menu>
-              </div>
-
-              {/* {item.isNew && (
-              <Chip
-                label="New"
-                className="chip__two"
-                size="small"
-              />
-            )} */}
+                  <Typography
+                    variant="body1"
+                    style={{ color: "red" }}
+                  >
+                    Delete
+                  </Typography>
+                </MenuItem>
+              </Menu>
             </div>
           </div>
 
           <Typography
-            variant="body2"
+            className="announcement__card-title"
+            variant="h3"
+          >
+            {item.title}
+          </Typography>
+
+          <Typography
+            variant="subtitle2"
             className="announcement__description"
           >
             {item.message}
           </Typography>
 
-          <Typography
-            variant="caption"
-            className="announcement__date"
-          >
-            {item.modifiedAt} • By {"Sushant"}
-          </Typography>
+          <div className="announcement__card-bottom">
+            <span className="announcement__audience">
+              <Users size={13} />
+              <p>{audienceLabel}</p>
+            </span>
+          </div>
         </CardContent>
       </Card>
+
+      <AnnouncementDetailModal
+        open={openDetailModal}
+        onClose={() => setOpenDetailModal(false)}
+        item={item}
+        onEdit={handleOpenEdit}
+        onDelete={onDelete}
+        onPin={(id: number) => {
+          handlePinChange(id);
+        }}
+      />
+
       <AnnouncementModal
-        open={openModal}
-        handleClose={handleCloseModal}
+        open={openEditModal}
+        handleClose={handleCloseEdit}
+        initialData={editingItem}
+        onUpdate={onUpdate}
+        refreshAnnouncements={refreshAnnouncements}
       />
     </>
   );

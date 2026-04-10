@@ -30,15 +30,22 @@ const AnnouncementModal = ({
   open,
   handleClose,
   refreshAnnouncements,
+  initialData,
+  onUpdate,
 }: any) => {
-  
   const {
     handleSubmit,
     handleChange,
     announcementFormData,
     setAnnouncementFormData,
     closeAnnouncementForm,
-  } = useAnnouncementViewModel(handleClose, refreshAnnouncements);
+    isEditing,
+  } = useAnnouncementViewModel(
+    handleClose,
+    refreshAnnouncements,
+    initialData,
+    onUpdate,
+  );
 
   const fields: {
     label: string;
@@ -78,7 +85,9 @@ const AnnouncementModal = ({
         <DialogTitle className="announcementModal__header">
           <div className="announcementModal__header__main">
             <Megaphone size={20} />
-            <span>Add New Announcement</span>
+            <span>
+              {isEditing ? "Edit Announcement" : "Add New Announcement"}
+            </span>
           </div>
 
           <X
@@ -95,9 +104,15 @@ const AnnouncementModal = ({
               className="announcementModal__inputGroup"
               key={field.name}
             >
-              <label className="announcementModal__label">{field.label}</label>
+              <label
+                htmlFor={field.name}
+                className="announcementModal__label"
+              >
+                {field.label}
+              </label>
 
               <TextField
+                id={field.name}
                 name={field.name}
                 value={announcementFormData[field.name] || ""}
                 onChange={handleChange}
@@ -300,7 +315,7 @@ const AnnouncementModal = ({
             onClick={handleSubmit}
           >
             <Megaphone size={20} />
-            Publish Announcement
+            {isEditing ? "Save Changes" : " Publish Announcement"}
           </Button>
         </DialogActions>
       </div>
