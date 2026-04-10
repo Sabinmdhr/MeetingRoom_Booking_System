@@ -13,7 +13,6 @@ import "../../assets/scss/global.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { toast } from "react-toastify";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
-import { useState } from "react";
 
 interface CalendarModalProps {
   open: boolean;
@@ -22,6 +21,9 @@ interface CalendarModalProps {
   onEdit: () => void;
 }
 
+// FIX: Removed the nested component definition. There was an inner CalendarModal
+// defined inside the outer one that was never returned, causing the component
+// to render nothing. Flattened into a single component with a proper return.
 export const CalendarModal = ({
   open,
   event,
@@ -36,126 +38,119 @@ export const CalendarModal = ({
     });
   };
 
-  const CalendarModal = ({ open, event, onClose }: CalendarModalProps) => {
-    const [openEdit, setOpenEdit] = useState(false);
-    const { users } = useparticipantsViewModel();
-
-    return (
-      <div>
-        {/* View Modal */}
-        <Dialog
-          className="calendar-modal-main"
-          open={open}
-          onClose={onClose}
-          fullWidth
-          maxWidth="sm"
+  return (
+    <Dialog
+      className="calendar-modal-main"
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle className="calendar-modal-title">
+        <h2 className="modal-title">{event?.title}</h2>
+        <span
+          className={`modal-category ${
+            event?.category === "client"
+              ? "client"
+              : event?.category === "internal"
+                ? "internal"
+                : "executive"
+          }`}
         >
-          <DialogTitle className="calendar-modal-title">
-            <h2 className="modal-title">{event?.title}</h2>
-            <span
-              className={`modal-category ${
-                event?.category === "client"
-                  ? "client"
-                  : event?.category === "internal"
-                    ? "internal"
-                    : "executive"
-              }`}
-            >
-              {event?.category}
-            </span>
-          </DialogTitle>
-          <Divider />
+          {event?.category}
+        </span>
+      </DialogTitle>
 
-          <DialogContent className="calendar-modal-content">
-            <div className="modal-section">
-              <p className="section-title">Date & Time</p>
-              <div className="datetime-grid">
-                <div>
-                  <p className="section-title">Date</p>
-                  <p className="section-text">{event?.date}</p>
-                </div>
-                <div>
-                  <p className="section-title">Time</p>
-                  <p className="section-text">
-                    {event?.startTime} - {event?.endTime}
-                  </p>
-                </div>
-              </div>
+      <Divider />
+
+      <DialogContent className="calendar-modal-content">
+        <div className="modal-section">
+          <p className="section-title">Date & Time</p>
+          <div className="datetime-grid">
+            <div>
+              <p className="section-title">Date</p>
+              <p className="section-text">{event?.date}</p>
             </div>
-
-            <Divider />
-
-            <div className="modal-section">
-              <p className="section-title">Location</p>
-              <p className="section-text">{event?.location}</p>
+            <div>
+              <p className="section-title">Time</p>
+              <p className="section-text">
+                {event?.startTime} - {event?.endTime}
+              </p>
             </div>
+          </div>
+        </div>
 
-            <Divider />
+        <Divider />
 
-            <div className="modal-section">
-              <p className="section-title">Organizer</p>
-              <p className="section-text">{event?.organizer}</p>
+        <div className="modal-section">
+          <p className="section-title">Location</p>
+          <p className="section-text">{event?.location}</p>
+        </div>
+
+        <Divider />
+
+        <div className="modal-section">
+          <p className="section-title">Organizer</p>
+          <p className="section-text">{event?.organizer}</p>
+        </div>
+
+        <Divider />
+
+        <ParticipantsCard
+          type=""
+          displayOn="calendar"
+          users={users}
+        />
+
+        <Divider />
+
+        <div className="modal-section">
+          <div className="datetime-grid">
+            <div>
+              <p className="section-title">Meeting Type</p>
+              <p className="section-text">{event?.category}</p>
             </div>
-
-            <Divider />
-
-            <ParticipantsCard
-              type=""
-              displayOn="calendar"
-              users={users}
-            />
-
-            <Divider />
-
-            <div className="modal-section">
-              <div className="datetime-grid">
-                <div>
-                  <p className="section-title">Meeting Type</p>
-                  <p className="section-text">{event?.category}</p>
-                </div>
-                <div>
-                  <p className="section-title">Department</p>
-                  <p className="section-text">{event?.department}</p>
-                </div>
-              </div>
+            <div>
+              <p className="section-title">Department</p>
+              <p className="section-text">{event?.department}</p>
             </div>
+          </div>
+        </div>
 
-            <Divider />
+        <Divider />
 
-            <div className="modal-section">
-              <p className="section-title">Description</p>
-              <p className="section-text">{event?.description}</p>
-            </div>
-          </DialogContent>
+        <div className="modal-section">
+          <p className="section-title">Description</p>
+          <p className="section-text">{event?.description}</p>
+        </div>
+      </DialogContent>
 
-          <DialogActions className="calendar-modal-actions">
-            <Button
-              className="close-button"
-              onClick={onClose}
-              variant="contained"
-            >
-              Close
-            </Button>
-            <Button
-              className="delete-button"
-              variant="contained"
-              startIcon={<DeleteOutlineIcon />}
-              onClick={handleDelete}
-            >
-              Delete Meeting
-            </Button>
-            <Button
-              className="edit-button"
-              variant="text"
-              onClick={onEdit}
-            >
-              Edit Meeting
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  };
+      <DialogActions className="calendar-modal-actions">
+        <Button
+          className="close-button"
+          onClick={onClose}
+          variant="contained"
+        >
+          Close
+        </Button>
+        <Button
+          className="delete-button"
+          variant="contained"
+          startIcon={<DeleteOutlineIcon />}
+          onClick={handleDelete}
+        >
+          Delete Meeting
+        </Button>
+        <Button
+          className="edit-button"
+          variant="text"
+          onClick={onEdit}
+        >
+          Edit Meeting
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 export default CalendarModal;

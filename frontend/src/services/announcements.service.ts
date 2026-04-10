@@ -5,12 +5,6 @@ import api from "../api/api";
 export const addAnnouncement = async (data: Announcements) => {
   try {
     console.log("Sending payload:", data);
-    // const res = await api.post(
-    //   // "http://localhost:8081/api/v1/announcement/add",
-    //   data,
-
-    // );
-
     const res = await api.post("/api/v1/announcement/add", data);
     return res.data;
   } catch (error) {
@@ -33,17 +27,17 @@ export const getAnnouncements = async (page = 0, size = 5) => {
   }
 };
 
-export const getPinnedAnnouncements = async (page = 0, size = 5) => {
-  try {
-    const res = await api.get(
-      `/api/v1/announcement/pinned-list?page=${page}&size=${size}`,
-    );
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching pinned announcements", error);
-    throw error;
-  }
-};
+// export const getPinnedAnnouncements = async (page = 0, size = 5) => {
+//   try {
+//     const res = await api.get(
+//       `/api/v1/announcement/pinned-list?page=${page}&size=${size}`,
+//     );
+//     return res.data;
+//   } catch (error) {
+//     console.error("Error fetching pinned announcements", error);
+//     throw error;
+//   }
+// };
 
 export const deleteAnnouncement = async (id: number) => {
   try {
@@ -52,6 +46,32 @@ export const deleteAnnouncement = async (id: number) => {
     console.log("Successfully deleted the announcement.");
   } catch (error) {
     console.error("Error deleting announcement", error);
+    throw error;
+  }
+};
+
+export const updateAnnouncement = async (id: number, data: Announcements) => {
+  try {
+    const res = await api.put(`/api/v1/announcement/${id}/update`, data);
+    console.log(res);
+
+    return res.data;
+  } catch (error) {
+    console.error("Error updating announcement", error);
+    throw error;
+  }
+};
+
+export const updatePinStatus = async (id: number) => {
+  console.log(id);
+
+  try {
+    const res = await api.patch(`/api/v1/announcement/${id}/change-pin-status`);
+    console.log(res.data);
+
+    return res.data;
+  } catch (error) {
+    console.error("Error updating announcement", error);
     throw error;
   }
 };

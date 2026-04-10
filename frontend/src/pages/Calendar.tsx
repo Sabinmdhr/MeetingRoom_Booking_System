@@ -16,7 +16,7 @@ import CalendarModal from "../components/Calendar/CalendarModal";
 import "../assets/scss/global.scss";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import React, { Activity, useState } from "react";
+import React, { useState } from "react";
 import { Popover } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -28,7 +28,6 @@ export const Calendar = () => {
     null,
   );
   const [eventFilter, setEventFilter] = useState("all");
-
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
 
   const handleDateButtonClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -45,6 +44,7 @@ export const Calendar = () => {
   const handleDatePickerClose = () => {
     setDatePickerAnchor(null);
   };
+
   const navigate = useNavigate();
   const {
     currentMonth,
@@ -79,7 +79,6 @@ export const Calendar = () => {
             <div className="calendar__topbar__main__left__buttons">
               <button onClick={goToPrev}>{"<"}</button>
 
-              {/* Custom date button that opens popup */}
               <button
                 onClick={handleDateButtonClick}
                 className="date-button"
@@ -88,7 +87,6 @@ export const Calendar = () => {
                 <span>{currentMonth.format("MMMM D, YYYY")}</span>
               </button>
 
-              {/* Date Picker Popover */}
               <Popover
                 open={Boolean(datePickerAnchor)}
                 anchorEl={datePickerAnchor}
@@ -141,6 +139,7 @@ export const Calendar = () => {
                   value="mine"
                 />
               </Tabs>
+
               <Tabs
                 value={view}
                 onChange={(_, value) => setView(value)}
@@ -174,10 +173,8 @@ export const Calendar = () => {
             <div className="meeting-category">
               <div className="category internal"></div>
               <span>Internal</span>
-
               <div className="category client"></div>
               <span>Client</span>
-
               <div className="category executive"></div>
               <span>Executive</span>
             </div>
@@ -186,7 +183,8 @@ export const Calendar = () => {
       </CardContent>
 
       <CardContent className="calendar__main">
-        <React.Activity mode={isDayView ? "visible" : "hidden"}>
+        {/* DAY VIEW */}
+        {isDayView && (
           <div className="day">
             <div className="day__header">
               {currentMonth.format("dddd, MMMM D")}
@@ -223,11 +221,13 @@ export const Calendar = () => {
               })}
             </div>
           </div>
-        </React.Activity>
-        <React.Activity mode={isWeekView ? "visible" : "hidden"}>
+        )}
+
+        {/* WEEK VIEW */}
+        {isWeekView && (
           <div className="week">
             <div className="week__header">
-              <div className="week__corner"></div>
+              <div className="week__corner">Rooms</div>
               {weekDaysWithDates.map((day) => (
                 <div
                   key={day.format("YYYY-MM-DD")}
@@ -235,7 +235,9 @@ export const Calendar = () => {
                 >
                   <span className="week__day__name">{day.format("ddd")}</span>
                   <span
-                    className={`week__day__date ${day.format("YYYY-MM-DD") === today ? "today" : ""}`}
+                    className={`week__day__date ${
+                      day.format("YYYY-MM-DD") === today ? "today" : ""
+                    }`}
                   >
                     {day.format("D")}
                   </span>
@@ -247,13 +249,13 @@ export const Calendar = () => {
               <div className="week__grid">
                 {hours.map((hour) => (
                   <React.Fragment key={hour}>
+                    {/* FIX: render the hour label, not a hardcoded array */}
                     <div className="week__hour">
                       {dayjs().hour(hour).format("h A")}
                     </div>
 
                     {weekDaysWithDates.map((day) => {
                       const dateKey = day.format("YYYY-MM-DD");
-
                       const cellEvents =
                         eventsByDateHour[dateKey]?.[hour] || [];
 
@@ -278,12 +280,6 @@ export const Calendar = () => {
                               <span className="event-title">{event.title}</span>
                             </div>
                           ))}
-
-                          {/* {cellEvents.length > 2 && (
-                            <span className="month__more">
-                              +{cellEvents.length - 2} more
-                            </span>
-                          )} */}
                         </div>
                       );
                     })}
@@ -292,8 +288,10 @@ export const Calendar = () => {
               </div>
             </div>
           </div>
-        </React.Activity>
-        <Activity mode={isMonthView ? "visible" : "hidden"}>
+        )}
+
+        {/* MONTH VIEW */}
+        {isMonthView && (
           <div className="month">
             <div className="month__header">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -335,12 +333,6 @@ export const Calendar = () => {
                             <br /> {event.title}
                           </div>
                         ))}
-
-                        {/* {dayEvents.length > 3 && (
-                          <span className="month__more">
-                            +{dayEvents.length - 3} more
-                          </span>
-                        )} */}
                       </>
                     )}
                   </div>
@@ -348,8 +340,9 @@ export const Calendar = () => {
               })}
             </div>
           </div>
-        </Activity>
+        )}
       </CardContent>
+
       <CalendarModal
         open={mode === "view"}
         event={selectedEvent}

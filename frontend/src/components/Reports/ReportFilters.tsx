@@ -11,19 +11,50 @@ import {
 import { Calendar, X } from "lucide-react";
 import "../../assets/scss/pages/ReportFilters.scss";
 import { useState } from "react";
-import "../../assets/scss/global.scss";
+// import { CommonDropdown } from "../CommonDropdown";
 
-const ReportFilters = ({ open, onClose }: any) => {
-  const [department, setDepartment] = useState("All Department");
-  const [room, setRoom] = useState("All Rooms");
-  const [user, setUser] = useState("All Users");
-  const [meetingType, setMeetingType] = useState("All Types");
+const defaultState = {
+  department: "All Department",
+  startDate: "",
+  endDate: "",
+  room: "All Rooms",
+  user: "",
+  meetingType: "",
+};
 
-  const handleClear = () => {
-    setDepartment("All Department");
-    setRoom("All Rooms");
-    setUser("All Users");
-    setMeetingType("All Types");
+const ReportFilters = ({
+  open,
+  onClose,
+  onApply,
+  users,
+  rooms,
+  departments,
+}: any) => {
+  const [filters, setFilters] = useState(defaultState);
+
+  const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFilters((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const handleClear = () => setFilters(defaultState);
+
+  const handleApply = () => {
+    const payload: any = {
+      pageNo: 0,
+      pageSize: 10,
+      sortBy: "date",
+      sortDir: "desc",
+    };
+
+    if (filters.startDate) payload.startDate = filters.startDate;
+    if (filters.endDate) payload.endDate = filters.endDate;
+    if (filters.meetingType)
+      payload.meetingType = filters.meetingType.toUpperCase();
+    if (filters.room) payload.roomName = filters.room;
+    if (filters.user) payload.createdBy = filters.user;
+    if (filters.department) payload.department = filters.department;
+
+    onApply(payload);
+    onClose();
   };
 
   return (
@@ -34,23 +65,19 @@ const ReportFilters = ({ open, onClose }: any) => {
       slotProps={{ paper: { className: "report-filter" } }}
     >
       <div className="report-filter__inner">
-        {/* Header */}
         <div className="report-filter__header">
           <Typography variant="h6">Filters</Typography>
-          <div className="report-filter__header__right">
-            <IconButton
-              onClick={onClose}
-              size="small"
-            >
-              <X size={20} />
-            </IconButton>
-          </div>
+          <IconButton
+            onClick={onClose}
+            size="small"
+          >
+            <X size={20} />
+          </IconButton>
         </div>
 
         <Divider />
 
         <div className="report-filter__content">
-          {/* Row 1: Start Date + End Date */}
           <Grid
             container
             spacing={2}
@@ -61,6 +88,8 @@ const ReportFilters = ({ open, onClose }: any) => {
               </label>
               <TextField
                 type="date"
+                value={filters.startDate}
+                onChange={set("startDate")}
                 fullWidth
                 className="report-filter__input"
               />
@@ -71,13 +100,14 @@ const ReportFilters = ({ open, onClose }: any) => {
               </label>
               <TextField
                 type="date"
+                value={filters.endDate}
+                onChange={set("endDate")}
                 fullWidth
                 className="report-filter__input"
               />
             </Grid>
           </Grid>
 
-          {/* Row 2: Meeting Type + Department */}
           <Grid
             container
             spacing={2}
@@ -88,11 +118,14 @@ const ReportFilters = ({ open, onClose }: any) => {
               <TextField
                 select
                 fullWidth
-                value={meetingType}
-                onChange={(e) => setMeetingType(e.target.value)}
+                value={filters.meetingType}
+                onChange={set("meetingType")}
                 className="report-filter__select"
               >
-                {["All Types", "Internal", "Client", "Executive"].map((opt) => (
+                <MenuItem value="All Types">
+                  <p>All Types</p>
+                </MenuItem>
+                {["Internal", "Client", "Executive"].map((opt) => (
                   <MenuItem
                     key={opt}
                     value={opt}
@@ -107,30 +140,25 @@ const ReportFilters = ({ open, onClose }: any) => {
               <TextField
                 select
                 fullWidth
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
+                value={filters.department}
+                onChange={set("department")}
                 className="report-filter__select"
               >
-                {[
-                  "All Department",
-                  "Engineering",
-                  "Sales",
-                  "Product",
-                  "Finance",
-                  "Marketing",
-                ].map((opt) => (
+                <MenuItem value="All Department">
+                  <p>All Departments</p>
+                </MenuItem>
+                {departments.map((d: string) => (
                   <MenuItem
-                    key={opt}
-                    value={opt}
+                    key={d}
+                    value={d}
                   >
-                    {opt}
+                    {d}
                   </MenuItem>
                 ))}
               </TextField>
             </Grid>
           </Grid>
 
-          {/* Row 3: Room + User */}
           <Grid
             container
             spacing={2}
@@ -141,21 +169,20 @@ const ReportFilters = ({ open, onClose }: any) => {
               <TextField
                 select
                 fullWidth
-                value={room}
-                onChange={(e) => setRoom(e.target.value)}
+                // defaultValue={"All Rooms"}
+                value={filters.room}
+                onChange={set("room")}
                 className="report-filter__select"
               >
-                {[
-                  "All Rooms",
-                  "Executive Room 3A",
-                  "Conference Room 2B",
-                  "Meeting Room 1C",
-                ].map((opt) => (
+                <MenuItem value="All Rooms">
+                  <p>All Rooms</p>
+                </MenuItem>
+                {rooms.map((r: string) => (
                   <MenuItem
-                    key={opt}
-                    value={opt}
+                    key={r}
+                    value={r}
                   >
-                    {opt}
+                    {r}
                   </MenuItem>
                 ))}
               </TextField>
@@ -165,23 +192,19 @@ const ReportFilters = ({ open, onClose }: any) => {
               <TextField
                 select
                 fullWidth
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
+                value={filters.user}
+                onChange={set("user")}
                 className="report-filter__select"
               >
-                {[
-                  "All Users",
-                  "Sarah Johnson",
-                  "Michael Chen",
-                  "James Taylor",
-                  "Jennifer Williams",
-                  "Emily Rodriguez",
-                ].map((opt) => (
+                <MenuItem value="">
+                  <p>All Users</p>
+                </MenuItem>
+                {users.map((u: string) => (
                   <MenuItem
-                    key={opt}
-                    value={opt}
+                    key={u}
+                    value={u}
                   >
-                    {opt}
+                    {u}
                   </MenuItem>
                 ))}
               </TextField>
@@ -193,16 +216,16 @@ const ReportFilters = ({ open, onClose }: any) => {
 
         <div className="report-filter__footer">
           <Button
-            className="report-filter__footer__clear"
-            onClick={handleClear}
-            // variant="contained"
             color="error"
+            onClick={handleClear}
+            className="report-filter__footer__clear"
           >
             Clear All
           </Button>
           <Button
-            className="report-filter__footer__apply"
             variant="outlined"
+            onClick={handleApply}
+            className="report-filter__footer__apply"
           >
             Apply Filter
           </Button>

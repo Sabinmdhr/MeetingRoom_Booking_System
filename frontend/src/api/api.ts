@@ -32,7 +32,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem("refreshToken");
       try {
-        console.log("refresih");
+        console.log("refresh");
 
         const response = await axios.post(`${BASE_URL}/api/v1/access/token`, {
           "refreshToken": refreshToken,

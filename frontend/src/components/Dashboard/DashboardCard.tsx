@@ -2,11 +2,9 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-// import CardActionArea from "@mui/material/CardActionArea";
 
 // import { useState } from "react";
 import "../../assets/scss/pages/DashboardCard.scss";
-import Announcements from "../../pages/Announcements";
 
 function DashboardCard({ cards }: any) {
   return (
@@ -50,10 +48,6 @@ function DashboardCard({ cards }: any) {
           </Card>
         ))}
       </Box>
-
-      <div className="dashboard__announcements">
-        <Announcements />
-      </div>
     </div>
   );
 }

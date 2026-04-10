@@ -26,7 +26,7 @@ import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
 import Logout from "./Auth/Logout";
 
 const menuItems = [
-  { 
+  {
     text: "Dashboard",
     icon: <LayoutDashboard size={20} />,
     path: "/dashboard",
@@ -48,16 +48,21 @@ const menuItems = [
   { text: "Settings", icon: <Settings size={20} />, path: "/settings" },
 ];
 
-// const logoutItem = {
-//   text: "Logout",
-//   icon: ,
-// };
+const logoutItem = {
+  text: "Logout",
+  icon: <LogOut />,
+};
 
 export default function Sidebar() {
   const location = useLocation();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-  const {logoutOpen,handleLogoutOpen,handleLogoutClose,handleLogoutConfirm} = useLogoutViewModel();
+  const {
+    logoutOpen,
+    handleLogoutOpen,
+    handleLogoutClose,
+    handleLogoutConfirm,
+  } = useLogoutViewModel();
   // const { logout } = useLoginViewModel();
 
   // const[logoutOpen, setLogoutOpen]= useState(false);
@@ -119,8 +124,8 @@ export default function Sidebar() {
             <ListItemButton
               className="sidebar-item logout"
               onClick={handleLogoutOpen}
-            > 
-              {/* <ListItemIcon>{logoutItem.icon}</ListItemIcon> */}
+            >
+              <ListItemIcon>{logoutItem.icon}</ListItemIcon>
               <ListItemText
                 primary={"Logout"}
                 className={`sidebar-text ${open ? "show" : "hide"}`}
@@ -129,10 +134,10 @@ export default function Sidebar() {
           </ListItem>
         </List>
 
-        <Logout 
-        open={logoutOpen}
-        handleConfirm={handleLogoutConfirm}
-        handleClose={handleLogoutClose}
+        <Logout
+          open={logoutOpen}
+          handleConfirm={handleLogoutConfirm}
+          handleClose={handleLogoutClose}
         />
       </div>
     </Drawer>

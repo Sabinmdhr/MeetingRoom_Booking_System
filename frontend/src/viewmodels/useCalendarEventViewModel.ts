@@ -106,7 +106,7 @@ export const useCalendarEventViewModel = () => {
   );
 
   //this will create time slots
-  const hours = Array.from({ length: 10 }, (_, i) => 9 + i);
+  const hours = Array.from({ length: 3 }, (_, i) => 9 + i);
 
   //  INDEX EVENTS BY DATE
 
