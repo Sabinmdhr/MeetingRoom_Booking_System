@@ -18,15 +18,14 @@ import { useAppSelector } from "../../redux/store";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 export const AddGroupForm = () => {
   const {
-    handleAddGroup,
     openGroupForm,
     groupFormData,
     setOpenGroupForm,
-    handleClose,
     handleChange,
+    setGroupFormData,
+    handleSubmitGroup,
+    closeGroupForm,
   } = useAddGroupViewModel();
-
-  const {users} = useparticipantsViewModel()
 
   // const { selectedGroup, isEditOpen } = useAppSelector(
   //   (state) => state.participants,
@@ -43,7 +42,7 @@ export const AddGroupForm = () => {
         <Plus size={18} /> Create New Group
       </Button>
 
-      <Dialog open={openGroupForm} onClose={() => setOpenGroupForm(false)}>
+      <Dialog open={openGroupForm} onClose={() =>closeGroupForm() }>
         <DialogTitle>ADD Group</DialogTitle>
         <DialogContent>
           <label className="label" htmlFor="group-name">
@@ -58,7 +57,9 @@ export const AddGroupForm = () => {
             onChange={handleChange}
             placeholder="Write group name"
           ></TextField>
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description" className="label">
+            Description
+          </label>
           <TextField
             className="customTextField"
             fullWidth
@@ -68,11 +69,11 @@ export const AddGroupForm = () => {
             onChange={handleChange}
             placeholder="Write group name"
           ></TextField>
-          <ParticipantsCard displayOn="participant" type="" users = { users}/>
+          <ParticipantsCard formData={groupFormData} setFormData={setGroupFormData} type="internal" />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAddGroup}>Create</Button>
+          <Button>Cancel</Button>
+          <Button onClick={handleSubmitGroup}>Create</Button>
         </DialogActions>
       </Dialog>
 

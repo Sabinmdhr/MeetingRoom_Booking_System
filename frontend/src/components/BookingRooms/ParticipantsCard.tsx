@@ -1,39 +1,43 @@
 import {
-  Card,
   Typography,
   Tab,
   TextField,
   Button,
   InputAdornment,
+  AccordionSummary,
+  AccordionDetails,
+  Chip,
 } from "@mui/material";
 import "../../assets/scss/components/ParticipantsCard.scss";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { UserPlus, Search } from "lucide-react";
-
+import { UserPlus, Search, ChevronDown, X } from "lucide-react";
+import Accordion from "@mui/material/Accordion";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import { useState } from "react";
-import { useAppSelector } from "../../redux/store";
-import type { ParticipantResponse } from "../../models/participants.model";
-import { getAllUser } from "../../services/participants.service";
+import { useGroupCardViewModel } from "../../viewmodels/useGroupCardViewModel";
+import type { groupCardRequest } from "../../models/groupCard.model";
 
 interface ParticipantsCardProps {
   type: "internal" | "external" | "";
-  displayOn: "participant" | "book-room" | "calendar";
-  users: ParticipantResponse[] | [];
+  formData: groupCardRequest;
+  setFormData: React.Dispatch<React.SetStateAction<groupCardRequest>>;
 }
 
 const ParticipantsCard = ({
   type,
-  displayOn,
-  users,
+  formData,
+  setFormData,
 }: ParticipantsCardProps) => {
   const [tabValue, setTabValue] = useState("people");
-
+  const { users } = useparticipantsViewModel();
+  const { group } = useGroupCardViewModel();
   // const [participants, setParticipants] = useState<participantsApi[]>([]);
 
   const [search, setSearch] = useState("");
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
+
+  const [expandedGroup, setExpandedGroup] = useState<string | false>(false);
   // const { selectedParticipants, setSelectedParticipants } =
   //   useparticipantsViewModel();
   // const {selectedParticipants, setSelectedParticipants} = useparticipantsViewModel();
@@ -42,11 +46,11 @@ const ParticipantsCard = ({
   //   setParticipants(data);
   // }, []);
 
-  const { handleToggle } = useparticipantsViewModel();
-  const { selectedParticipants } = useAppSelector(
-    (state) => state.participants,
-  );
-
+  // const { handleToggle } = useparticipantsViewModel();
+  // const { toggleMemberSelection, groupFormData } = useAddGroupViewModel();
+  // const { selectedParticipants } = useAppSelector(
+  //   (state) => state.participants,
+  // );
 
   const filteredParticipants = users.filter(
     (p) =>
@@ -54,6 +58,29 @@ const ParticipantsCard = ({
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
 
+  const selectedParticipants = formData.member || [];
+
+  const toggleParticipantSelection = (id: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      member: prev.member?.includes(id)
+        ? prev.member.filter((pid) => pid !== id)
+        : [...(prev.member || []), id],
+    }));
+  };
+
+  const toggleGroupSelection = (ids: number[]) => {
+    setFormData((prev) => {
+      const allSelected = ids.every((id) => prev.member.includes(id));
+
+      return {
+        ...prev,
+        member: allSelected
+          ? prev.member.filter((id) => !ids.includes(id))
+          : [...new Set([...prev.member, ...ids])],
+      };
+    });
+  };
   // const handleSelectParticipant = (id: string) => {
   //   setSelectedParticipants((prev) =>
   //     prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
@@ -74,8 +101,40 @@ const ParticipantsCard = ({
 
   return (
     <>
-      {displayOn == "book-room" && (
-        <Card className="participants-card">
+      <>
+        <label htmlFor="description" className="label">
+          Participants
+        </label>
+        <Typography>
+          Add internal and external participants to your meeting.
+        </Typography>
+        {selectedParticipants.length > 0 && (
+          <div className="selected-participants">
+            <Typography variant="subtitle2">Selected Participants:</Typography>
+            {selectedParticipants.map((id) => {
+              const participant = users.find((p) => p.id === id);
+              return participant ? (
+                <Chip
+                  label={`${participant.firstname} ${participant.lastname}`}
+                  key={id}
+                  icon={
+                    <X
+                      size={18}
+                      onClick={() => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          member: prev.member?.filter((pid) => pid !== id),
+                        }));
+                      }}
+                    />
+                  }
+                  className="selected-participant"
+                />
+              ) : null;
+            })}
+          </div>
+        )}
+        <div className="participants-card">
           {type === "internal" && (
             <div className="internal-participants">
               <Typography className="group-title">Group by</Typography>
@@ -84,24 +143,12 @@ const ParticipantsCard = ({
                   onChange={(_e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab
-                    label="People"
-                    value="people"
-                  />
-                  <Tab
-                    label="Teams"
-                    value="teams"
-                  />
-                  <Tab
-                    label="All"
-                    value="all"
-                  />
+                  <Tab label="People" value="people" />
+                  <Tab label="Teams" value="teams" />
+                  <Tab label="All" value="all" />
                 </TabList>
 
-                <TabPanel
-                  value="people"
-                  className="tab-panel"
-                >
+                <TabPanel value="people" className="tab-panel">
                   <TextField
                     fullWidth
                     size="small"
@@ -111,16 +158,13 @@ const ParticipantsCard = ({
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search
-                            size={18}
-                            color="gray"
-                          />
+                          <Search size={18} color="gray" />
                         </InputAdornment>
                       ),
                     }}
                   />
 
-                  <div className="participants-list">
+                  <div className={`participants-list `}>
                     {filteredParticipants.map((p) => (
                       <div
                         key={p.id}
@@ -128,25 +172,32 @@ const ParticipantsCard = ({
                           p.id && selectedParticipants.includes(p.id)
                             ? "selected"
                             : ""
-                        }`}
-                        onClick={() => p.id && handleToggle(p.id)}
+                        }   `}
+                        onClick={() => p.id && toggleParticipantSelection(p.id)}
                       >
                         <input
+                          // color="red"
+                          className="check"
                           type="checkbox"
                           checked={
                             p.id ? selectedParticipants.includes(p.id) : false
                           }
-                          onChange={() => p.id && handleToggle(p.id)}
+                          onChange={() =>
+                            p.id && toggleParticipantSelection(p.id)
+                          }
                         />
 
                         <div className="participant-info">
-                          <Typography className="name">
+                          <Typography variant="subtitle2" className="name">
                             {p.firstname} {p.lastname}
                           </Typography>
-                          <Typography className="email">{p.email}</Typography>
-                          <Typography className="department">
-                            {p.departmentId}
-                          </Typography>
+                          <div className="participant-Subinfo">
+                            <Typography className="department">
+                              {p.department}
+                            </Typography>
+                            &bull;
+                            <Typography className="role">{p.role}</Typography>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -155,7 +206,61 @@ const ParticipantsCard = ({
 
                 <TabPanel value="teams">Teams view</TabPanel>
 
-                <TabPanel value="all">All participants</TabPanel>
+                <TabPanel value="all">
+                  {group.map((g, index) => {
+                    return (
+                      <>
+                        <Accordion
+                          expanded={expandedGroup === g.groupName}
+                          onChange={() => {
+                            setExpandedGroup(
+                              expandedGroup === g.groupName
+                                ? false
+                                : g.groupName,
+                            );
+                          }}
+                          key={g.id}
+                        >
+                          <AccordionSummary
+                            expandIcon={<ChevronDown />}
+                            aria-controls={`panel${index}-content`}
+                          >
+                            <input
+                              type="checkbox"
+                              className="check"
+                              checked={g.members.every((m) =>
+                                selectedParticipants.includes(m.id),
+                              )}
+                              onClick={() =>
+                                toggleGroupSelection(g.members.map((m) => m.id))
+                              }
+                            />
+                            <Typography>{g.groupName}</Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <div className={`participants-list `}>
+                              {g.members.map((p) => (
+                                <div
+                                  key={p.id}
+                                  className={`participant-item   `}
+                                >
+                                  <div className="participant-info">
+                                    <Typography
+                                      variant="subtitle2"
+                                      className="name"
+                                    >
+                                      {p.name}
+                                    </Typography>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </AccordionDetails>
+                        </Accordion>
+                      </>
+                    );
+                  })}
+                </TabPanel>
               </TabContext>
             </div>
           )}
@@ -212,104 +317,8 @@ const ParticipantsCard = ({
               </div>
             </div>
           )}
-        </Card>
-      )}
-
-      {/* -----------------------------------------------------Participant_list to show in AddNewGroup-From ------------------------------ */}
-
-      {displayOn == "participant" && (
-        <div>
-          {" "}
-          <label htmlFor="searchField">
-            Select Members ({selectedParticipants.length} selected){" "}
-          </label>
-          <label htmlFor="searchField">
-            Select Members ({selectedParticipants.length} selected){" "}
-          </label>
-          <TextField
-            fullWidth
-            id="searchField"
-            className="customTextField search-field"
-            size="small"
-            placeholder="Search by name or email..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search
-                    size={14}
-                    color="gray"
-                  />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <div className={`participants-list `}>
-            {filteredParticipants.map((p) => (
-              <div
-                key={p.id}
-                className={`participant-item ${
-                  p.id && selectedParticipants.includes(p.id) ? "selected" : ""
-                }   `}
-                onClick={() => p.id && handleToggle(p.id)}
-              >
-                <input
-                  // color="red"
-                  className="check"
-                  type="checkbox"
-                  checked={p.id ? selectedParticipants.includes(p.id) : false}
-                  onChange={() => p.id && handleToggle(p.id)}
-                />
-
-                <div className="participant-info">
-                  <Typography
-                    variant="subtitle2"
-                    className="name"
-                  >
-                    {p.firstname} {p.lastname}
-                  </Typography>
-                  <div className="participant-Subinfo">
-                    <Typography className="department">
-                      {p.department}
-                    </Typography>
-                    &bull;
-                    <Typography className="role">{p.role}</Typography>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
-      )}
-
-      {displayOn == "calendar" && (
-        <div>
-          <Typography>{filteredParticipants.length} Participants</Typography>
-          <div className={`participants-list `}>
-            {filteredParticipants.map((p) => (
-              <div
-                key={p.id}
-                className={`participant-item ${
-                  p.id && selectedParticipants.includes(p.id) ? "selected" : ""
-                }   `}
-              >
-                <div className="participant-info">
-                  <Typography
-                    variant="subtitle2"
-                    className="name"
-                  >
-                    {p.firstname} {p.lastname}
-                  </Typography>
-                  <div className="participant-Subinfo">
-                    <Typography className="department">{p.email}</Typography>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      </>
     </>
   );
 };

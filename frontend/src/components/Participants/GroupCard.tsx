@@ -3,15 +3,14 @@ import { useGroupCardViewModel } from "../../viewmodels/useGroupCardViewModel";
 import { Building2, Pen, Trash2 } from "lucide-react";
 import "../../assets/scss/components/GroupCard.scss";
 import { useAddGroupViewModel } from "../../viewmodels/useAddGroupViewModel";
-
+import { deleteGroupCard } from "../../services/groupCard.services";
 export const GroupCard = () => {
   const { group } = useGroupCardViewModel();
-  const {handleEditGroup} = useAddGroupViewModel()
+  // const {handleEditGroup} = useAddGroupViewModel()
   // const { handleEditGroup } = useAddGroupViewModel();
   return (
     <div className="groupCard-Container">
       {group.map((group, index) => {
-        const numOfMembers = group.members.length;
         return (
           <Card className="groupCard" key={index}>
             <CardHeader
@@ -23,16 +22,22 @@ export const GroupCard = () => {
                 </div>
               }
               action={
-                  <div className="title-icons">
-                    <Pen size={17} onClick={()=>handleEditGroup(group)} />
-                    <Trash2 size={17} color="red" />
-                  </div>
+                <div className="title-icons">
+                  <Pen size={17} />
+                  <Trash2
+                    size={17}
+                    color="red"
+                    onClick={() => {
+                      deleteGroupCard(group.id);
+                    }}
+                  />
+                </div>
               }
               subheader={<span className="subtitle">{group.description}</span>}
             ></CardHeader>
             <CardContent>
               <Typography className="group-info">
-                <span>Members: {numOfMembers}</span>
+                <span>Members:</span>
                 {/* <span>Created: {group.createdAt}</span> */}
               </Typography>
               <div className="group-members">

@@ -43,7 +43,7 @@ open: false,
         // const data = await getMeetingRoomById(meetingId);
         const data = await getMeetingRooms()
         // console.log(data);
-        setMeeting(data.data);
+        setMeeting(data.data.content);
       } catch (err: any) {
         setError(err.message || "Failed to load meeting room");
       } finally {

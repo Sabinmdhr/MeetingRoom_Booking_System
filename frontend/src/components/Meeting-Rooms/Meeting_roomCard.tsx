@@ -2,6 +2,7 @@ import { Button, Card,Grid, CardActions, CardContent, Menu, MenuItem, Typography
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import "../../assets/scss/components/Meeting_roomCard.scss";
 import "../../assets/scss/global.scss";
+import { deleteMeetingRoom } from "../../services/Meetinf_room.service";
 import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from "lucide-react";
 // import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
 import { useState } from "react";
@@ -91,7 +92,7 @@ export const Meeting_roomCard = ({
               </Button>
 
               <Button>
-                <Trash2 size={18} color="red" />
+                <Trash2 size={18} color="red" onClick={()=> deleteMeetingRoom(m.id)}/>
               </Button>
             </CardActions>
           </Card>

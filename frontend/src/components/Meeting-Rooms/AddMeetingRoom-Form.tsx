@@ -160,14 +160,14 @@ export const AddMeetingRoomForm = ({
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value="VIDEO CONFERENCE"
+                        value="TV"
                         onChange={handleCheckboxChange}
                         checked={addRoomFormData.resources.includes(
-                          "VIDEO CONFERENCE",
+                          "TV",
                         )}
                       />
                     }
-                    label="Video Conference"
+                    label="TV"
                   />
                 </Grid>
               </Grid>
