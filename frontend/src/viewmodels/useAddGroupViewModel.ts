@@ -1,54 +1,52 @@
 import { useEffect, useState, type ReactEventHandler } from "react";
-import type { groupCard } from "../models/groupCard.model";
 import { useDispatch } from "react-redux";
-import { setSelectedGroup, closeEditForm } from "../redux/ParticipantsSlice";
+import type { groupCardRequest } from "../models/groupCard.model";
+import { addGroupCard } from "../services/groupCard.services";
+import { set } from "zod";
+
 export const useAddGroupViewModel = () => {
   const [openGroupForm, setOpenGroupForm] = useState(false);
 
-  const initialGroupFormData = {
+  const initialGroupFormData: groupCardRequest = {
     groupName: "",
     description: "",
-    createdAt: "",
-    groupMembers: [],
+    member: [],
   };
 
-  const [groupFormData, setGroupFormData] = useState(initialGroupFormData);
-  const dispatch = useDispatch();
+  const [groupFormData, setGroupFormData] =
+    useState<groupCardRequest>(initialGroupFormData);
+const closeGroupForm = () => {
+  setOpenGroupForm(false);
+  setGroupFormData(initialGroupFormData); // Reset form data when closing
+}
 
-  const handleAddGroup = () => {
-    const newGroup = {
-      groupFormData,
-    };
-    console.log("new added group: ", newGroup);
+  const handleSubmitGroup = async () => {
+    await addGroupCard(groupFormData);
+    setGroupFormData(initialGroupFormData); // Reset form after submission
+    console.log(groupFormData);
+
   };
 
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
-    const {name , value} = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-    setGroupFormData((prev)=> ({
+    setGroupFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
-
-  const handleEditGroup = (group: any) => {
-    dispatch(setSelectedGroup(group));
-    // setOpenGroupForm(true)
+    }));
   };
 
-  const handleClose = () => {
-    dispatch(closeEditForm());
-  };
 
   return {
-    handleAddGroup,
+    // handleAddGroup,
     openGroupForm,
     groupFormData,
     handleChange,
     setGroupFormData,
     setOpenGroupForm,
-    handleEditGroup,
-    handleClose,
+    handleSubmitGroup,
+
+    closeGroupForm,
   };
 };

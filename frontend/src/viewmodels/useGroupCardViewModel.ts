@@ -1,9 +1,9 @@
-import type { groupCard } from "../models/groupCard.model";
+import type {groupCardResponse } from "../models/groupCard.model";
 import { fetchGroupCards } from "../services/groupCard.services";
 import { useEffect, useState } from "react";
 
 export const useGroupCardViewModel = () => {
-  const [group, setGroup] = useState<groupCard[]>([]);
+  const [group, setGroup] = useState<groupCardResponse[]>([]);
   const numOfGroup = group.length
   useEffect(() => {
     const fetchData = async () => {

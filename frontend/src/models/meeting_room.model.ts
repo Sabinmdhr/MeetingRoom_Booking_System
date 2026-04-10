@@ -10,7 +10,7 @@
 // }
 
 export interface meeting_rooms{
-  id: string;
+  id: number;
   roomName: string;
   capacity: number;
   resources: string[];

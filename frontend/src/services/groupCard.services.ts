@@ -1,31 +1,5 @@
 import api from "../api/api";
-import type { groupCard } from "../models/groupCard.model";
-
-// export const demoGroupCards = (): groupCard[] => {
-//   return [
-//     {
-//       id: "1",
-//       createdAt: " 2024-12-8",
-//       description: "Frontend Team Members",
-//       groupMembers: ["Sushant Basnet", "Shristi Yakami", "Sabin Mdhr"],
-//       groupName: "Frontend Developers",
-//     },
-//     {
-//       id: "3",
-//       createdAt: " 2024-12-8",
-//       description: "Frontend Team Members",
-//       groupMembers: ["Sushant Basnet", "Shristi Yakami", "Sabin Mdhr"],
-//       groupName: "Frontend Developers",
-//     },
-//     {
-//       id: "2",
-//       createdAt: " 2025-02-18",
-//       description: "Complete product development team",
-//       groupMembers: ["Jennifer Williams", "Robert Martinez", "Lisa Anderson"],
-//       groupName: "Product Team",
-//     },
-//   ];
-// };
+import type { groupCardRequest } from "../models/groupCard.model";
 
 export const fetchGroupCards = async () => {
   try {
@@ -34,6 +8,27 @@ export const fetchGroupCards = async () => {
     return response.data.data;
   } catch (error) {
     console.error("Error fetching group cards:", error);
+    throw error;
+  }
+};
+
+export const deleteGroupCard = async (groupId: number) => {
+  try {
+    const response = await api.delete(`/api/v1/group/${groupId}/delete`);
+    console.log("Group card deleted:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting group card:", error);
+    throw error;
+  }
+};
+export const addGroupCard = async (groupData: groupCardRequest) => {
+  try {
+    const response = await api.post("/api/v1/group/add", groupData);
+    console.log("Group card created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating group card:", error);
     throw error;
   }
 };

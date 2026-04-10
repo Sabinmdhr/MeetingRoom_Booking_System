@@ -1,12 +1,17 @@
-export interface groupCard {
-  id: string;
+export interface groupCardResponse {
+  id: number;
   groupName: string;
   description: string;
-  createdAt: string;
   members: [
     {
       id: number;
       name: string;
-    }
-  ]
+    },
+  ];
+}
+
+export interface groupCardRequest {
+  groupName: string;
+  description: string;
+  member: number[];
 }

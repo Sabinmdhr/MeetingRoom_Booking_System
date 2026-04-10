@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { groupCard } from "../models/groupCard.model";
-import type { participantsApi } from "../models/participants.model";
+import type { ParticipantResponse } from "../models/participants.model";
 interface ParticipantsState {
-  participants: participantsApi[];
-  selectedParticipant: participantsApi | null;
+  participants: ParticipantResponse[];
+  selectedParticipant: ParticipantResponse | null;
   isEditOpen: boolean;
-  selectedParticipants: string[];
+  selectedParticipants: number[];
   selectedGroup: groupCard | null;
 }
 
@@ -22,7 +22,7 @@ const participantsSlice = createSlice({
   name: "participants",
   initialState,
   reducers: {
-    setParticipants: (state, action: PayloadAction<participantsApi[]>) => {
+    setParticipants: (state, action: PayloadAction<ParticipantResponse[]>) => {
       state.participants = action.payload;
     },
 
@@ -45,7 +45,7 @@ const participantsSlice = createSlice({
       state.selectedParticipants = [];
     },
 
-    openEditForm: (state, action: PayloadAction<participantsApi>) => {
+    openEditForm: (state, action: PayloadAction<ParticipantResponse>) => {
       state.selectedParticipant = action.payload;
       state.isEditOpen = true;
     },
