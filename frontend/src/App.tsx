@@ -18,8 +18,12 @@ import Settings from "./pages/Settings";
 import Calendar from "./pages/Calendar";
 import BookRoom from "./pages/BookRoom";
 import UserProfile from "./pages/UserProfile";
+import RoomTimeslot from "./pages/RoomTimeslot/RoomTimeslot";
+// import TestTimeline from "./pages/TestTimeline";
+
 
 function App() {
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -63,6 +67,10 @@ function App() {
             element={<MeetingRooms />}
           />
           <Route
+            path="room-timeslot"
+            element={<RoomTimeslot />}
+          />
+          <Route
             path="announcements"
             element={<Announcements />}
           />
@@ -82,6 +90,10 @@ function App() {
             path="profile"
             element={<UserProfile />}
           />
+          {/* <Route
+          path="/test"
+          element={<TestTimeline/>  }
+          /> */}
         </Route>
       </Routes>
     </BrowserRouter>

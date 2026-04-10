@@ -1,0 +1,43 @@
+.room-timeslot{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;  
+}
+.timeslot-heading{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.timeslot-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.timeslot-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+}
+
+.timeslot-date {
+  font-weight: 800 !important;
+  font-size: 16px;
+  text-align: center;
+}
+
+.date {
+  text-align: center;
+
+.jump-today {
+    color: purple;
+    cursor: pointer;
+    font-size: 12px !important;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

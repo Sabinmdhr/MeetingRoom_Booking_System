@@ -1,13 +1,12 @@
-import { Button, Card,Grid, CardActions, CardContent, Menu, MenuItem, Typography } from "@mui/material";
+import { Button, Card, Grid, CardActions, CardContent, Menu, MenuItem, Typography } from "@mui/material";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import "../../assets/scss/components/Meeting_roomCard.scss";
 import "../../assets/scss/global.scss";
 import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from "lucide-react";
 // import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
-import { useState } from "react";
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import type { meeting_rooms } from "../../models/meeting_room.model";
-import RoomSchedule from "../../pages/RoomSchedule/RoomSchedule";
+import { useNavigate } from "react-router-dom";
 // interface MeetingCardProps {
 //   meetingId: string;
 // }
@@ -23,13 +22,10 @@ export const Meeting_roomCard = ({
   roomFormState,
   handleRoomFormOpen,
 }: props) => {
-  // const [open , setOpen] = useState(false)
-  const { meeting, error, selectedRoom, setSelectedRoom } = useMeetingCardViewModel();
-  const handleClose= ()=>{
-    setSelectedRoom(null);
-  }
 
-  const [openDetails, setOpenDetails] = useState(false);
+  // const [open , setOpen] = useState(false)
+  const navigate= useNavigate();
+  const { meeting, error, selectedRoom, setSelectedRoom } = useMeetingCardViewModel();
 
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -87,11 +83,10 @@ export const Meeting_roomCard = ({
             <CardActions className="Meeting-Card--Actions">
               <Button
                 className="Meeting_room-Book Available"
-                onClick={() => setSelectedRoom(m)}
+                onClick={() =>{navigate("/room-timeslot", {state: {room: m}})}}
               >
                 Book Now
               </Button>
-              <RoomSchedule room={selectedRoom} onClose={handleClose}/>
 
               <Button onClick={() => handleRoomFormOpen("edit", m)}>
                 <Pen size={18} />

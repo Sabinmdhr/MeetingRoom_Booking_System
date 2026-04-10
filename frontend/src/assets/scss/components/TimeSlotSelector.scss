@@ -1,0 +1,149 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 12px;
+  // overflow: hidden;
+  user-select: none;
+  font-family: inherit;
+}
+
+.header {
+  padding: 16px;
+  border-bottom: 1px solid var(--colorNeutral200);
+  
+  .day {
+    color: var(--colorsNeutral600);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .date {
+    color: var(--colorNeutral1000);
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.timelineWrapper {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+}
+
+.timeGutter {
+  width: 60px;
+  border-right: 1px solid var(--colorNeutral200);
+  background: #fdfdfd;
+  flex-shrink: 0;
+  height: max-content;
+}
+
+.timeLabel {
+  height: 60px; // Pixels per hour
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 8px;
+  color: var(--colorsNeutral600);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.grid {
+  flex: 1;
+  position: relative;
+  background-size: 100% 60px;
+  background-image: 
+    linear-gradient(to bottom, var(--colorNeutral200) 1px, transparent 1px);
+}
+
+.slot {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  background: rgba(148, 102, 255, 0.1);
+  border: 1.5px solid var(--primary);
+  border-radius: 8px;
+  box-sizing: border-box;
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px 8px;
+  transition: box-shadow 0.2s;
+  z-index: 10;
+
+  &:active {
+    cursor: grabbing;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .slotHandle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 10px;
+    cursor: ns-resize;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.top {
+      top: -5px;
+    }
+
+    &.bottom {
+      bottom: -5px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary500);
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  }
+}
+
+.footer {
+  padding: 16px;
+  border-top: 1px solid var(--colorNeutral200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeDisplayWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.timeBox {
+  border-radius: 8px;
+  color: var(--ColorsPrimary500);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.content{
+  display: flex;
+  gap:8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.separator {
+  color: var(--ColorsPrimary500); 
+  font-weight: 700;
+}
+
+.durationDisplay {
+  color: var(--primary200);
+  font-weight: 500;
+  font-size: 14px;
+}

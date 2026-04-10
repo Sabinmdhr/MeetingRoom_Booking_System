@@ -41,7 +41,7 @@ export const useAddRoomViewModel = () => {
       };
 
       await addRoom(data);
-      console.log("succes");
+      console.log("success");
     } catch (error) {
       console.log(error);
     }
