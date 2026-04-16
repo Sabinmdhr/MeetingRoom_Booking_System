@@ -16,15 +16,15 @@ export const useRoomDetailsCard = ()=>{
         fetchRooms();
       }, []);
 
-    const handleRoomChange = async(id:string) =>{
-        setRoomId(id);
+    // const handleRoomChange = async(id:string) =>{
+    //     setRoomId(id);
 
-        const roomData=await getMeetingRoomById(id);
-        setSelectedRoom(roomData);
-    }
+    //     const roomData=await getMeetingRoomById(id);
+    //     setSelectedRoom(roomData);
+    // }
 
     return{
-        handleRoomChange,
+        // handleRoomChange,
         rooms, roomId, selectedRoom
     }
 }

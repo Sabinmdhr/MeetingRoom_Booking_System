@@ -42,7 +42,7 @@ export const AddGroupForm = () => {
         <Plus size={18} /> Create New Group
       </Button>
 
-      <Dialog open={openGroupForm} onClose={() =>closeGroupForm() }>
+      <Dialog open={openGroupForm} onClose={() => closeGroupForm()}>
         <DialogTitle>ADD Group</DialogTitle>
         <DialogContent>
           <label className="label" htmlFor="group-name">
@@ -69,7 +69,16 @@ export const AddGroupForm = () => {
             onChange={handleChange}
             placeholder="Write group name"
           ></TextField>
-          <ParticipantsCard formData={groupFormData} setFormData={setGroupFormData} type="internal" />
+          <ParticipantsCard
+            participants={groupFormData.member}
+            onChange={(updated) => {
+              setGroupFormData((prev) => ({
+                ...prev,
+                member: updated,
+              }));
+            }}
+            type="internal"
+          />
         </DialogContent>
         <DialogActions>
           <Button>Cancel</Button>

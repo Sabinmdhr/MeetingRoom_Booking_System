@@ -38,10 +38,10 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
           "refreshToken": refreshToken,
         });
 
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
         const newAccessToken = response.data.accessToken;
         const newRefreshToken = response.data.refreshToken;
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         localStorage.setItem("accessToken", newAccessToken);
         localStorage.setItem("refreshToken", newRefreshToken);
 

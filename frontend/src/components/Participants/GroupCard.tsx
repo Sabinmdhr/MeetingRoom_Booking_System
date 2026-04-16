@@ -46,9 +46,9 @@ export const GroupCard = () => {
                   {group.members.map((groupMember, index) => {
                     return (
                       <Chip
-                        label={groupMember.name}
+                        label={groupMember.memberName}
                         className="member-chip"
-                        key={groupMember.id}
+                        key={groupMember.memberId}
                       ></Chip>
                     );
                   })}

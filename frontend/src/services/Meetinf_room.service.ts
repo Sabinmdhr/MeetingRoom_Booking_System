@@ -29,10 +29,10 @@ export const getMeetingRooms = async () => {
 export const deleteMeetingRoom = async (roomId: number) => {
   try {
     const response = await api.patch(`/api/v1/room/${roomId}/change-status`, {
-      status: "INACTIVE",
+      "status": "INACTIVE",
     });
     console.log("deleted");
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error deleting meeting room:", error);
     throw error;
