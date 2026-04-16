@@ -4,8 +4,8 @@ export interface groupCardResponse {
   description: string;
   members: [
     {
-      id: number;
-      name: string;
+      memberId: number;
+      memberName: string;
     },
   ];
 }

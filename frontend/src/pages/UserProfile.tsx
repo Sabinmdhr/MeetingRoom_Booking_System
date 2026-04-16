@@ -3,6 +3,7 @@ import "../assets/scss/pages/UserProfile.scss";
 import { useState } from "react";
 import ProfileSection from "../components/Settings/ProfileSection";
 import { useSettingsViewModel } from "../viewmodels/useSettingsViewModel";
+import MyButton from "../components/ui/Button";
 const UserProfile = () => {
   const {
     settings,
@@ -82,13 +83,13 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              <Button
-                className="profile__button"
+              <MyButton
+                text="Edit Info"
                 variant="contained"
+                className="profile__user-button"
+                customVariant="dark"
                 onClick={() => setIsEditing(!isEditing)}
-              >
-                Edit Info
-              </Button>
+              />
             </div>
           </CardContent>
         </Card>

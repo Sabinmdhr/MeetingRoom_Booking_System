@@ -1,0 +1,150 @@
+// // .my-button {
+// // }
+
+// .my-button-logout {
+//   background-color: black !important;
+//   color: white !important;
+//   &:hover {
+//     background-color: #222 !important;
+//   }
+// }
+
+// // Announcement page
+// .announcement__top-button {
+//   background-color: black !important;
+//   &:hover {
+//     background-color: #222 !important;
+//   }
+// }
+
+// .announcement__bottom-button {
+//   color: black !important;
+//   border-color: black !important;
+//   &:hover {
+//     background-color: #efeded !important;
+//   }
+// }
+
+// // announcement modal component
+// .announcement__button__publish {
+//   background: black !important;
+//   &:hover {
+//     background-color: #222 !important;
+//   }
+// }
+// .announcement__button__cancel {
+//   border: 1px solid #e5e5e5 !important;
+//   color: black !important;
+//   &:hover {
+//     background-color: #efeded !important;
+//   }
+// }
+
+// //  meeting rooms page
+// .add-btn {
+//   background-color: black !important;
+//   color: white !important;
+//   &:hover {
+//     background-color: #222 !important;
+//   }
+// }
+
+// // auth top bar component
+// .topbar-btn {
+//   background-color: #653bc6 !important;
+// }
+
+// // participants page (modal)
+// .cancel-btn {
+//   color: #0a0e19 !important;
+//   border: 1px solid #e5e5e5 !important;
+//   &:hover {
+//     background-color: #efeded !important;
+//   }
+// }
+
+// .delete-button {
+//   border-color: red !important;
+// }
+
+// .edit-button {
+//   color: white;
+//   background-color: black !important;
+//   &:hover {
+//     background-color: #222 !important;
+//   }
+// }
+
+// // Edit Calendar Modal
+// .cancel-button {
+//   border: 1px solid #d1d5db !important;
+//   color: black !important;
+
+//   &:hover {
+//     background-color: #efeded !important;
+//   }
+// }
+
+// .save-button {
+//   background: black !important;
+//   color: white !important;
+
+//   &:hover {
+//     background: #222 !important;
+//   }
+// }
+// // Calendar Modal
+.close-button {
+  background: white !important;
+  color: black !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: none !important;
+  &:hover {
+    background-color: #efeded !important;
+  }
+}
+
+/* BASE */
+.my-button {
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* VARIANTS */
+.my-button--primary {
+  background-color: #653bc6 !important;
+  color: white !important;
+
+  &:hover {
+    background-color: #4b2ea3 !important;
+  }
+}
+
+.my-button--dark {
+  background-color: black !important;
+  color: white !important;
+
+  &:hover {
+    background-color: #222 !important;
+  }
+}
+
+.my-button--danger {
+  color: red !important;
+}
+
+.my-button--ghost {
+  background: transparent !important;
+  color: black !important;
+  border: 1px solid #d1d5db !important;
+
+  &:hover {
+    background-color: #efeded !important;
+  }
+}
+
+.profile__user-button {
+  margin-top: 10px !important;
+  width: 90px;
+}

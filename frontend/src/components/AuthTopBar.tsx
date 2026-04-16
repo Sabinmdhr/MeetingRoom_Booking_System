@@ -1,6 +1,7 @@
 import "../assets/scss/pages/AuthTopBar.scss";
-import { TextField, Button } from "@mui/material";
+import { TextField } from "@mui/material";
 import logo from "../assets/swift-logo.svg";
+import MyButton from "./ui/Button";
 
 const AuthTopBar = () => {
   return (
@@ -25,12 +26,12 @@ const AuthTopBar = () => {
           type="password"
           variant="outlined"
         />
-        <Button
+        <MyButton
+          onClick={() => {}}
           className="topbar-btn"
           variant="contained"
-        >
-          Login
-        </Button>
+          text="Login"
+        />
       </div>
     </div>
   );

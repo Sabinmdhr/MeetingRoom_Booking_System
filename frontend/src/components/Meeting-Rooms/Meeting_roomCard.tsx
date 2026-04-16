@@ -8,6 +8,8 @@ import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from 
 import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateBookingRoomFormData } from "../../redux/bookRoomSlice";
 // interface MeetingCardProps {
 //   meetingId: string;
 // }
@@ -26,6 +28,7 @@ export const Meeting_roomCard = ({
 
   // const [open , setOpen] = useState(false)
   const navigate= useNavigate();
+  const dispatch = useDispatch()
   const { meeting, error, selectedRoom, setSelectedRoom } = useMeetingCardViewModel();
 
   // if (loading) return <CircularProgress />;
@@ -80,11 +83,14 @@ export const Meeting_roomCard = ({
                 </Typography>
               </div>
             </CardContent>
-            
+
             <CardActions className="Meeting-Card--Actions">
               <Button
                 className="Meeting_room-Book Available"
-                onClick={() =>{navigate("/room-timeslot", {state: {room: m}})}}
+                onClick={() => {
+                  navigate("/room-timeslot", { state: { room: m } });
+                  dispatch(updateBookingRoomFormData({roomId: m.id}))
+                }}
               >
                 Book Now
               </Button>
@@ -92,8 +98,8 @@ export const Meeting_roomCard = ({
               <Button onClick={() => handleRoomFormOpen("edit", m)}>
                 <Pen size={18} />
               </Button>
-              <Button>
-                <Trash2 size={18} color="red" onClick={()=> deleteMeetingRoom(m.id)}/>
+              <Button onClick={() => deleteMeetingRoom(m.id)}>
+                <Trash2 size={18} color="red" />
               </Button>
             </CardActions>
           </Card>

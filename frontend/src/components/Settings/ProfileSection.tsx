@@ -2,6 +2,7 @@ import { Button, Card, TextField, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import type { ProfileSettings } from "../../models/settings.model";
 import { toast } from "react-toastify";
+import MyButton from "../ui/Button";
 // import { useSettingsViewModel } from "../../viewmodels/useSettingsViewModel";
 
 interface ProfileProps {
@@ -138,25 +139,23 @@ const ProfileSection = ({
         </div>
 
         <div className="settings-buttons">
-          <Button
-            className="settings-btn"
+          <MyButton
+            text="Save Changes"
             variant="contained"
-            size="small"
+            // className="profile__button"
             onClick={async () => {
               const success = await onSave();
               if (success) handleSave();
             }}
-          >
-            Save Changes
-          </Button>
-          <Button
-            className="settings-btn"
+            customVariant="dark"
+          />
+          <MyButton
+            text="Cancel"
             variant="contained"
-            size="small"
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
+            // className="profile__button"
+            onClick={() => onCancel()}
+            customVariant="ghost"
+          />
         </div>
       </Card>
     </>

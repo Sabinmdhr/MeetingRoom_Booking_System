@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Chip,
   Button,
   Menu,
   MenuItem,
@@ -15,21 +14,13 @@ import {
   PinOff,
   SquarePen,
   Trash2,
-  Users,
 } from "lucide-react";
 import React, { useState } from "react";
 import AnnouncementModal from "./AnnouncementModal";
 import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
 import AnnouncementDetailModal from "./AnnouncementDetailModal";
 
-const audienceMap: Record<number, string> = {
-  1: "Admins Only",
-  2: "Authorized Personnel",
-  3: "View-Only Staff",
-  4: "Engineering Leadership",
-  5: "Product Team",
-  6: "Finance Department",
-};
+
 
 const AnnouncementCard = ({
   item,
@@ -85,10 +76,6 @@ const AnnouncementCard = ({
     setEditingItem(null);
   };
 
-  const audienceLabel = item.allUser
-    ? "All Users"
-    : (audienceMap[item.roleId] ?? "All Users");
-
   return (
     <>
       <Card
@@ -97,6 +84,10 @@ const AnnouncementCard = ({
       >
         {item.pinned && (
           <Pin
+            onClick={() => {
+              handlePinChange(item.id);
+              // handleClose();
+            }}
             size={33}
             fill="#8646c3"
             color="#8646c3"
@@ -110,19 +101,11 @@ const AnnouncementCard = ({
                 className="announcement__author-date"
                 variant="subtitle2"
               >
-                By {item.createdBy ?? "Sushant"}&nbsp;&nbsp;•&nbsp;&nbsp;
                 {item.modifiedAt}
               </Typography>
             </div>
 
             <div className="announcement__card-top-right">
-              {item.priorityLevel === "HIGH" && (
-                <Chip
-                  label="HIGH"
-                  className="chip__one"
-                  size="small"
-                />
-              )}
               <Button
                 id={`announcement-button-${item.id}`}
                 aria-controls={
@@ -160,7 +143,7 @@ const AnnouncementCard = ({
                   <SquarePen size={16} />
                   <Typography variant="body1">Edit</Typography>
                 </MenuItem>
-                {/* <MenuItem
+                <MenuItem
                   onClick={() => {
                     handlePinChange(item.id);
                     handleClose();
@@ -170,7 +153,7 @@ const AnnouncementCard = ({
                   <Typography variant="body1">
                     {item.pinned ? "Unpin" : "Pin"}
                   </Typography>
-                </MenuItem> */}
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     onDelete(item.id);
@@ -194,7 +177,7 @@ const AnnouncementCard = ({
 
           <Typography
             className="announcement__card-title"
-            variant="h3"
+            variant="h4"
           >
             {item.title}
           </Typography>
@@ -205,13 +188,6 @@ const AnnouncementCard = ({
           >
             {item.message}
           </Typography>
-
-          <div className="announcement__card-bottom">
-            <span className="announcement__audience">
-              <Users size={13} />
-              <p>{audienceLabel}</p>
-            </span>
-          </div>
         </CardContent>
       </Card>
 

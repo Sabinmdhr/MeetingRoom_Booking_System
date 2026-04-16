@@ -19,14 +19,14 @@ import type { groupCardRequest } from "../../models/groupCard.model";
 
 interface ParticipantsCardProps {
   type: "internal" | "external" | "";
-  formData: groupCardRequest;
-  setFormData: React.Dispatch<React.SetStateAction<groupCardRequest>>;
+  participants: number[];
+  onChange: (updated: number[]) => void;
 }
 
 const ParticipantsCard = ({
   type,
-  formData,
-  setFormData,
+  participants,
+  onChange,
 }: ParticipantsCardProps) => {
   const [tabValue, setTabValue] = useState("people");
   const { users } = useparticipantsViewModel();
@@ -58,28 +58,23 @@ const ParticipantsCard = ({
       p.email.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const selectedParticipants = formData.member || [];
+  const selectedParticipants = participants ?? [];
 
   const toggleParticipantSelection = (id: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      member: prev.member?.includes(id)
-        ? prev.member.filter((pid) => pid !== id)
-        : [...(prev.member || []), id],
-    }));
+    const updated = selectedParticipants?.includes(id)
+      ? selectedParticipants.filter((pid) => pid !== id)
+      : [...selectedParticipants, id];
+    onChange(updated);
   };
 
   const toggleGroupSelection = (ids: number[]) => {
-    setFormData((prev) => {
-      const allSelected = ids.every((id) => prev.member.includes(id));
+    const allSelected = ids.every((id) => selectedParticipants.includes(id));
 
-      return {
-        ...prev,
-        member: allSelected
-          ? prev.member.filter((id) => !ids.includes(id))
-          : [...new Set([...prev.member, ...ids])],
-      };
-    });
+    const updated = allSelected
+      ? selectedParticipants.filter((id) => !ids.includes(id))
+      : [...new Set([...selectedParticipants, ...ids])];
+
+      onChange(updated)
   };
   // const handleSelectParticipant = (id: string) => {
   //   setSelectedParticipants((prev) =>
@@ -120,11 +115,7 @@ const ParticipantsCard = ({
                   icon={
                     <X
                       size={18}
-                      onClick={() => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          member: prev.member?.filter((pid) => pid !== id),
-                        }));
+                      onClick={() => {toggleParticipantSelection(id)
                       }}
                     />
                   }
@@ -229,10 +220,12 @@ const ParticipantsCard = ({
                               type="checkbox"
                               className="check"
                               checked={g.members.every((m) =>
-                                selectedParticipants.includes(m.id),
+                                selectedParticipants.includes(m.memberId),
                               )}
                               onClick={() =>
-                                toggleGroupSelection(g.members.map((m) => m.id))
+                                toggleGroupSelection(
+                                  g.members.map((m) => m.memberId),
+                                )
                               }
                             />
                             <Typography>{g.groupName}</Typography>
@@ -241,7 +234,7 @@ const ParticipantsCard = ({
                             <div className={`participants-list `}>
                               {g.members.map((p) => (
                                 <div
-                                  key={p.id}
+                                  key={p.memberId}
                                   className={`participant-item   `}
                                 >
                                   <div className="participant-info">
@@ -249,7 +242,7 @@ const ParticipantsCard = ({
                                       variant="subtitle2"
                                       className="name"
                                     >
-                                      {p.name}
+                                      {p.memberName}
                                     </Typography>
                                   </div>
                                 </div>
@@ -265,7 +258,7 @@ const ParticipantsCard = ({
             </div>
           )}
 
-          {type === "external" && (
+          {/* {type === "external" && (
             <div className="external-members">
               <div className="external-header">
                 <UserPlus size={18} />
@@ -316,7 +309,7 @@ const ParticipantsCard = ({
                 </Button>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </>
     </>

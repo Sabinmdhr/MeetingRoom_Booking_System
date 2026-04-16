@@ -1,8 +1,11 @@
-import { Button, Card, Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import { Palette } from "lucide-react";
+import RoomSchedule from "../../pages/RoomSchedule/RoomSchedule";
+import MyButton from "../ui/Button";
 
 const ColorSection = () => {
+  // const { openSchedule, handleOpen, handleClose } = useRoomScheduleViewModel();
 
   return (
     <>
@@ -11,7 +14,10 @@ const ColorSection = () => {
           <Palette size={22} />
           Meeting Type Colors
         </div>
-        <Typography variant="body2" className="third-subheader">
+        <Typography
+          variant="body2"
+          className="third-subheader"
+        >
           Customize the color scheme for different meeting types across the
           dashboard
         </Typography>
@@ -46,17 +52,29 @@ const ColorSection = () => {
           </div>
 
           <div className="color-btn">
-            <Button className="reset-btn" variant="contained" size="small">
-              Reset to Defaults
-            </Button>
-            <Button className="colors-btn" variant="contained" size="small">
-              Save Colors
-            </Button>
+            <MyButton
+              // className="reset-btn"
+              variant="contained"
+              // size="small"
+              customVariant="dark"
+              onClick={() => {}}
+              text="Reset to Defaults"
+            ></MyButton>
+            <MyButton
+              className="colors-btn"
+              variant="contained"
+              // size="small"
+              onClick={()=>{}}
+              text="Save Colors"
+              customVariant="dark"
+            ></MyButton>
+           
           </div>
         </div>
       </Card>
+      {/* {openSchedule && <RoomSchedule onClose={handleClose} />} */}
     </>
-  )
-}
+  );
+};
 
-export default ColorSection
+export default ColorSection;

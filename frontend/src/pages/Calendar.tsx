@@ -2,7 +2,6 @@ import "../assets/scss/pages/Calendar.scss";
 import {
   Tab,
   Tabs,
-  Button,
   Card,
   CardContent,
   TextField,
@@ -19,8 +18,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import React, { useState } from "react";
 import { Popover } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Plus } from "lucide-react";
 import EditCalendarModal from "../components/Calendar/EditCalendarModal";
+import MyButton from "../components/ui/Button";
 
 export const Calendar = () => {
   const [room, setRoom] = useState("All Rooms");
@@ -162,13 +162,24 @@ export const Calendar = () => {
           </div>
 
           <div className="calendar__topbar__main__right">
-            <Button
+            {/* <Button
               variant="text"
               className="meeting-button"
               onClick={() => navigate("/book-room")}
             >
               + New Meeting
-            </Button>
+            </Button> */}
+
+            <MyButton
+              onClick={() => {
+                navigate("/book-room");
+              }}
+              variant="contained"
+              customVariant="dark"
+              startIcon={<Plus size={17} />}
+              text="New Meeting"
+              // className="meeting-button"
+            />
 
             <div className="meeting-category">
               <div className="category internal"></div>

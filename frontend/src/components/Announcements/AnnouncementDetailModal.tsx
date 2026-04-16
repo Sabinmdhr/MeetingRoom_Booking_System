@@ -3,20 +3,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
   Typography,
-  Chip,
   Divider,
 } from "@mui/material";
-import {
-  X,
-  Megaphone,
-  Pin,
-  PinOff,
-  SquarePen,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { X, Megaphone, Pin, SquarePen, Trash2 } from "lucide-react";
+import MyButton from "../ui/Button";
+import "../../assets/scss/components/Announcement/AnnouncementDetailModal.scss";
 
 const audienceMap: Record<number, string> = {
   1: "Admins Only",
@@ -76,66 +68,48 @@ const AnnouncementDetailModal = ({
                 color="#9333ea"
               />
             )}
-            {item.priorityLevel === "HIGH" && (
-              <Chip
-                label="HIGH"
-                className="chip__one"
-                size="small"
-              />
-            )}{" "}
+
             <Typography
-              variant="h3"
+              variant="h4"
               className="announcement__card-title"
             >
               {item.title}
             </Typography>
           </div>
 
-          <Typography
-            variant="body2"
-            style={{ color: "#555" }}
-          >
-            {item.message}
-          </Typography>
+          <Typography variant="body2">{item.message}</Typography>
 
           <Divider />
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <Typography
-              variant="subtitle2"
-              style={{ color: "#888" }}
-            >
-              <Typography variant="subtitle1">Posted by:</Typography>
-              {/* {item.createdBy ?? "Sushant"} */}
-              {"Sushant"}
-            </Typography>
-            <Typography
-              variant="subtitle2"
-              style={{ color: "#888" }}
-            >
-              <p>Date:</p> {item.modifiedAt}
-            </Typography>
+            <div style={{ display: "flex", gap: "50px" }}>
+              <Typography variant="subtitle2">
+                <Typography variant="h4">Posted by:</Typography>
+                <p style={{ color: "#3d3c3c" }}>{"Sushant"}</p>
+              </Typography>
+              <Typography variant="subtitle2">
+                <Typography variant="h4">Date:</Typography>{" "}
+                <p style={{ color: "#3d3c3c" }}>{item.modifiedAt}</p>
+              </Typography>
+            </div>
+
             <Typography
               variant="subtitle2"
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                color: "#888",
               }}
             >
-              <Users size={14} />
-              <p>Audience:</p>
-              {audienceLabel}
+              <Typography variant="h4">Audience:</Typography>
+              <p style={{ color: "#3d3c3c" }}>{audienceLabel}</p>
             </Typography>
           </div>
         </DialogContent>
 
-        <Divider className="announcementModal__divider" />
-
         {/* ACTIONS */}
         <DialogActions className="announcementModal__actions">
-          <Button
+          <MyButton
             variant="outlined"
             color="error"
             startIcon={<Trash2 size={16} />}
@@ -143,18 +117,16 @@ const AnnouncementDetailModal = ({
               onDelete(item.id);
               onClose();
             }}
-          >
-            Delete
-          </Button>
+            text="Delete"
+          />
 
-          <Button
+          <MyButton
             variant="contained"
             startIcon={<SquarePen size={16} />}
-            className="announcement__button__publish"
+            // className="announcement__button__publish"
             onClick={onEdit}
-          >
-            Edit
-          </Button>
+            text="Edit"
+          ></MyButton>
         </DialogActions>
       </div>
     </Dialog>

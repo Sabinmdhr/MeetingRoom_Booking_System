@@ -23,27 +23,27 @@
     gap: 10px;
     padding: 16px;
 
-    button {
-      text-transform: none;
-      font-weight: 500;
-      border-radius: 8px;
-      padding: 6px 16px;
-    }
+    // button {
+    //   text-transform: none;
+    //   font-weight: 500;
+    //   border-radius: 8px;
+    //   padding: 6px 16px;
+    // }
 
-    button:first-child {
-        background-color: white;
-        color: #555;
-        border: 1px solid #d8d5d5;
-    }
+    // button:first-child {
+    //     background-color: white;
+    //     color: #555;
+    //     border: 1px solid #d8d5d5;
+    // }
 
-    button:last-child {
-    border: 1px solid #d8d5d5;
-    background-color: black;
-    color: white;
+    // button:last-child {
+    // border: 1px solid #d8d5d5;
+    // background-color: black;
+    // color: white;
 
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+    //   &:hover {
+    //     opacity: 0.8;
+    //   }
+    // }
   }
 }
