@@ -3,16 +3,17 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
   Divider,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import type { CalendarEvent } from "../../models/calendar.model";
-import "../../assets/scss/pages/CalendarModal.scss";
+import "../../assets/scss/components/Calendar/CalendarModal.scss";
 import "../../assets/scss/global.scss";
-import ParticipantsCard from "../BookingRooms/ParticipantsCard";
+// import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { toast } from "react-toastify";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
+import MyButton from "../ui/Button";
+import { SquarePen } from "lucide-react";
 
 interface CalendarModalProps {
   open: boolean;
@@ -96,11 +97,11 @@ export const CalendarModal = ({
 
         <Divider />
 
-        <ParticipantsCard
+        {/* <ParticipantsCard
           type=""
           displayOn="calendar"
           users={users}
-        />
+        /> */}
 
         <Divider />
 
@@ -126,28 +127,29 @@ export const CalendarModal = ({
       </DialogContent>
 
       <DialogActions className="calendar-modal-actions">
-        <Button
+        <MyButton
           className="close-button"
           onClick={onClose}
           variant="contained"
-        >
-          Close
-        </Button>
-        <Button
-          className="delete-button"
-          variant="contained"
+          text="Close"
+        />
+        <MyButton
+          // className="delete-button"
+          customVariant="danger"
+          variant="outlined"
+          color="error"
           startIcon={<DeleteOutlineIcon />}
           onClick={handleDelete}
-        >
-          Delete Meeting
-        </Button>
-        <Button
-          className="edit-button"
-          variant="text"
+          text="Delete Meeting"
+        />
+        <MyButton
+          // className="edit-button"
+          customVariant="dark"
+          variant="contained"
           onClick={onEdit}
-        >
-          Edit Meeting
-        </Button>
+          startIcon={<SquarePen size={16} />}
+          text="Edit Meeting"
+        />
       </DialogActions>
     </Dialog>
   );

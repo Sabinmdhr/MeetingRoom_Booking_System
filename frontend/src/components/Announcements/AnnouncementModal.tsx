@@ -1,31 +1,21 @@
 import {
-  Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
-  MenuItem,
   Divider,
   Typography,
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
 
-import {
-  Megaphone,
-  X,
-  CircleCheckBig,
-  CircleAlert,
-  Users,
-  Pin,
-  FolderPlus,
-} from "lucide-react";
+import { Megaphone, X, Pin, Calendar } from "lucide-react";
 
-import "../../assets/scss/global.scss";
-import "../../assets/scss/pages/AnnouncementModal.scss";
+import "../../assets/scss/components/Announcement/AnnouncementModal.scss";
 
 import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
+import MyButton from "../ui/Button";
 const AnnouncementModal = ({
   open,
   handleClose,
@@ -134,140 +124,35 @@ const AnnouncementModal = ({
           <div className="announcementModal__row">
             {/* PRIORITY */}
             <div className="announcementModal__inputGroup">
-              <label className="announcementModal__label">Priority Level</label>
+              <label className="announcementModal__label">
+                {" "}
+                <Calendar size={14} /> Start Date
+              </label>
 
               <TextField
-                select
+                type="date"
                 name="priorityLevel"
                 value={announcementFormData.priorityLevel || ""}
                 onChange={handleChange}
                 fullWidth
                 SelectProps={{ MenuProps: { disablePortal: true } }}
-              >
-                <MenuItem value="NORMAL">
-                  <div className="announcementModal__dropdownItem">
-                    <CircleCheckBig
-                      size={18}
-                      className="announcementModal__icon--blue"
-                    />
-                    <span>Normal</span>
-                  </div>
-                </MenuItem>
-
-                <MenuItem value="HIGH">
-                  <div className="announcementModal__dropdownItem">
-                    <CircleAlert
-                      size={18}
-                      className="announcementModal__icon--red"
-                    />
-                    <span>High Priority</span>
-                  </div>
-                </MenuItem>
-              </TextField>
+              ></TextField>
             </div>
 
             {/* AUDIENCE/roles */}
             <div className="announcementModal__inputGroup">
-              <label className="announcementModal__label">Audience</label>
+              <label className="announcementModal__label">
+                <Calendar size={14} /> End Date
+              </label>
 
               <TextField
-                select
+                type="date"
                 name="audience"
-                value={
-                  announcementFormData.allUser
-                    ? "allUsers"
-                    : String(announcementFormData.roleId)
-                }
-                onChange={(e) => {
-                  const selected = e.target.value;
-
-                  if (selected === "allUsers") {
-                    setAnnouncementFormData((prev) => ({
-                      ...prev,
-                      allUser: true,
-                      roleId: undefined,
-                    }));
-                  } else {
-                    setAnnouncementFormData((prev) => ({
-                      ...prev,
-                      allUser: false,
-                      roleId: Number(selected),
-                    }));
-                  }
-                }}
+                value={announcementFormData.priorityLevel || ""}
+                onChange={handleChange}
                 fullWidth
                 SelectProps={{ MenuProps: { disablePortal: true } }}
-              >
-                <MenuItem value="allUsers">
-                  <div className="announcementModal__dropdownItem">
-                    <Users
-                      size={18}
-                      className="announcementModal__icon--purple"
-                    />
-                    <span>All Users</span>
-                  </div>
-                </MenuItem>
-
-                <MenuItem value="1">
-                  <div className="announcementModal__dropdownItem">
-                    <Users
-                      size={18}
-                      className="announcementModal__icon--red"
-                    />
-                    <span>Admins Only</span>
-                  </div>
-                </MenuItem>
-
-                <MenuItem value="2">
-                  <div className="announcementModal__dropdownItem">
-                    <Users
-                      size={18}
-                      className="announcementModal__icon--blue"
-                    />
-                    <span>Authorized Personnel</span>
-                  </div>
-                </MenuItem>
-
-                <MenuItem value="3">
-                  <div className="announcementModal__dropdownItem">
-                    <Users
-                      size={18}
-                      className="announcementModal__icon--grey"
-                    />
-                    <span>View-Only Staff</span>
-                  </div>
-                </MenuItem>
-
-                <MenuItem value="4">
-                  <div className="announcementModal__dropdownItem">
-                    <FolderPlus
-                      size={18}
-                      className="announcementModal__icon--grey"
-                    />
-                    <span>Engineering Leadership</span>
-                  </div>
-                </MenuItem>
-
-                <MenuItem value="5">
-                  <div className="announcementModal__dropdownItem">
-                    <FolderPlus
-                      size={18}
-                      className="announcementModal__icon--grey"
-                    />
-                    <span>Product Team</span>
-                  </div>
-                </MenuItem>
-
-                <MenuItem value="6">
-                  <div className="announcementModal__dropdownItem">
-                    <FolderPlus
-                      size={18}
-                      className="announcementModal__icon--grey"
-                    />
-                    <span>Finance Department</span>
-                  </div>
-                </MenuItem>
-              </TextField>
+              ></TextField>
             </div>
           </div>
 
@@ -288,7 +173,11 @@ const AnnouncementModal = ({
               }
               label={
                 <span className="announcementModal__checkbox-style">
-                  <Pin size={16} />
+                  <Pin
+                    fill="#8646C3"
+                    size={18}
+                    color="#8646C3"
+                  />
                   <Typography variant="h4">
                     Pin this announcement to the top
                   </Typography>
@@ -301,22 +190,22 @@ const AnnouncementModal = ({
         <Divider className="announcementModal__divider" />
 
         <DialogActions className="announcementModal__actions">
-          <Button
+          <MyButton
             variant="outlined"
-            className="announcement__button__cancel"
+            // className="announcement__button__cancel"
+            customVariant="ghost"
             onClick={closeAnnouncementForm}
-          >
-            Cancel
-          </Button>
+            text="Cancel"
+          />
 
-          <Button
+          <MyButton
             variant="contained"
-            className="announcement__button__publish"
+            text={isEditing ? "Save Changes" : " Publish Announcement"}
+            startIcon={<Megaphone size={20} />}
             onClick={handleSubmit}
-          >
-            <Megaphone size={20} />
-            {isEditing ? "Save Changes" : " Publish Announcement"}
-          </Button>
+            customVariant="dark"
+            // className="announcement__button__publish"
+          ></MyButton>
         </DialogActions>
       </div>
     </Dialog>

@@ -10,13 +10,16 @@ import {
 } from "@mui/material";
 import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 import { Plus } from "lucide-react";
-import "../../assets/scss/global.scss";
 import "../../assets/scss/components/AddParticipants-Form.scss";
 import { useEffect } from "react";
-import type {  ParticipantResponse, ParticipantsRequest } from "../../models/participants.model";
+import type {
+  ParticipantResponse,
+  ParticipantsRequest,
+} from "../../models/participants.model";
 import { DepartmentList } from "./DepartmentList";
 import { RoleDropdown } from "./RoleDropdown";
 import { mapParticipantResponseToRequest } from "../../models/mapper/ParticipantMapper";
+import MyButton from "../ui/Button";
 
 type props = {
   participantsFormState: {
@@ -72,8 +75,9 @@ export const AddParticipantsForm = ({
       participantsFormState.mode === "edit" &&
       participantsFormState.participant
     ) {
-      setParticipantFormData(mapParticipantResponseToRequest(participantsFormState.participant));
-
+      setParticipantFormData(
+        mapParticipantResponseToRequest(participantsFormState.participant),
+      );
     } else {
       setParticipantFormData(initialFormData);
     }
@@ -97,13 +101,14 @@ export const AddParticipantsForm = ({
 
   return (
     <>
-      <Button
-        className="add-btn"
-        variant="outlined"
+      <MyButton
+        // className="add-btn"
+        customVariant="dark"
+        startIcon={<Plus size={17} />}
+        variant="contained"
         onClick={() => handleParticipantFormOpen("add")}
-      >
-        <Plus size={14} /> Add Participant
-      </Button>
+        text="Add Participant"
+      />
 
       <Dialog
         open={participantsFormState.open}
@@ -169,9 +174,12 @@ export const AddParticipantsForm = ({
           </TextField> */}
           <DepartmentList
             onChange={handleDepartmentChange}
-            value={ participantFormData.departmentId}
+            value={participantFormData.departmentId}
           />
-          <RoleDropdown onChange={handleRoleChange} value={participantFormData.roleId} />
+          <RoleDropdown
+            onChange={handleRoleChange}
+            value={participantFormData.roleId}
+          />
           {/*
           <label htmlFor="Role">Role</label>
           <TextField
@@ -267,17 +275,21 @@ export const AddParticipantsForm = ({
           )}
         </DialogContent>
         <DialogActions>
-          <Button
-            className="cancel-btn"
+          <MyButton
+            variant="outlined"
+            // className="cancel-btn"
+            customVariant="ghost"
             onClick={() => {
               handleParticipantsFormClose();
               resetForm();
             }}
-          >
-            Close
-          </Button>
-          <Button
-            className="add-btn"
+            text="Close"
+          />
+
+          <MyButton
+            variant="contained"
+            // className="add-btn"
+            customVariant="dark"
             onClick={async () => {
               const success = await handleSubmit();
 
@@ -285,9 +297,8 @@ export const AddParticipantsForm = ({
                 handleParticipantsFormClose();
               }
             }}
-          >
-            ADD
-          </Button>
+            text="Add"
+          />
         </DialogActions>
       </Dialog>
     </>

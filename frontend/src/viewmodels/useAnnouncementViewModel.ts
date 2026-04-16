@@ -10,11 +10,7 @@ import { toast } from "react-toastify";
 const initialFormData: Announcements = {
   title: "",
   message: "",
-  priorityLevel: "NORMAL",
   pinned: false,
-  roleId: 0,
-  groupId: 1,
-  allUser: true,
 };
 
 const useAnnouncementViewModel = (
@@ -26,19 +22,13 @@ const useAnnouncementViewModel = (
   const [announcementFormData, setAnnouncementFormData] =
     useState<Announcements>(initialFormData);
 
-  //  FIX: depend on initialData.id only, not the whole object
-  // (object reference changes every render, causing infinite re-population)
-  
+  // Populate form when editing
   useEffect(() => {
     if (initialData?.id) {
       setAnnouncementFormData({
         title: initialData.title ?? "",
         message: initialData.message ?? "",
-        priorityLevel: initialData.priorityLevel ?? "NORMAL",
         pinned: initialData.pinned ?? false,
-        roleId: initialData.roleId ?? 0,
-        groupId: initialData.groupId ?? 1,
-        allUser: initialData.allUser ?? true,
       });
     } else {
       setAnnouncementFormData(initialFormData);
@@ -52,25 +42,26 @@ const useAnnouncementViewModel = (
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setAnnouncementFormData((prev) => ({ ...prev, [name]: value }));
+    setAnnouncementFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async () => {
-    if (!announcementFormData.title.trim()) {
+    const { title, message, pinned } = announcementFormData;
+
+    if (!title.trim()) {
       toast.error("Title is required");
       return;
     }
-    if (!announcementFormData.message.trim()) {
+
+    if (!message.trim()) {
       toast.error("Message is required");
       return;
     }
-    if (!announcementFormData.priorityLevel.trim()) {
-      toast.error("Priority level is required");
-      return;
-    }
 
-    const payload = { ...announcementFormData };
-    if (payload.allUser) delete payload.roleId;
+    const payload: Announcements = { title, message, pinned };
 
     try {
       if (initialData?.id) {
@@ -81,6 +72,7 @@ const useAnnouncementViewModel = (
         await addAnnouncement(payload);
         toast.success("Announcement added successfully");
       }
+
       refreshAnnouncements?.();
       closeAnnouncementForm();
     } catch (error) {
@@ -92,6 +84,7 @@ const useAnnouncementViewModel = (
       );
     }
   };
+
   const handlePinChange = async (id: number) => {
     try {
       await updatePinStatus(id);
@@ -109,7 +102,7 @@ const useAnnouncementViewModel = (
     handleChange,
     announcementFormData,
     setAnnouncementFormData,
-    isEditing: !!initialData?.id,
+    isEditing: Boolean(initialData?.id),
     handlePinChange,
   };
 };

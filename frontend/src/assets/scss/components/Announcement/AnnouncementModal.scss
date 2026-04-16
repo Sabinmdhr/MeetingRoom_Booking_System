@@ -63,32 +63,11 @@
   }
 
   &__actions {
-    margin-top: 20px !important;
+    margin-top: 10px !important;
     display: flex;
     justify-content: flex-end;
     gap: 5px;
     margin: 8px;
-
-    .announcement__button__publish {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-transform: none !important;
-      color: white !important;
-      border-radius: 8px !important;
-      background: black !important;
-      padding: 6px 14px !important;
-      font-weight: 500;
-    }
-
-    .announcement__button__cancel {
-      font-size: 14px !important;
-      text-transform: none !important;
-      color: black !important;
-      border-radius: 8px !important;
-      border-color: black !important;
-      padding: 6px 14px !important;
-    }
   }
 
   .MuiOutlinedInput-root {

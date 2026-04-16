@@ -16,6 +16,7 @@ import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { useEffect } from "react";
 import { useAppSelector } from "../../redux/store";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
+import MyButton from "../ui/Button";
 export const AddGroupForm = () => {
   const {
     openGroupForm,
@@ -33,14 +34,15 @@ export const AddGroupForm = () => {
 
   return (
     <>
-      <Button
-        className="add-btn"
+      <MyButton
+        text="Create New Group"
+        // className="add-btn"
+        customVariant="dark"
+        startIcon={<Plus size={17} />}
         onClick={() => {
           setOpenGroupForm(true);
         }}
-      >
-        <Plus size={18} /> Create New Group
-      </Button>
+      />
 
       <Dialog open={openGroupForm} onClose={() => closeGroupForm()}>
         <DialogTitle>ADD Group</DialogTitle>
@@ -81,8 +83,22 @@ export const AddGroupForm = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button>Cancel</Button>
-          <Button onClick={handleSubmitGroup}>Create</Button>
+          <MyButton
+            text="Cancel"
+            onClick={() => {
+              closeGroupForm();
+            }}
+            variant="outlined"
+            customVariant="ghost"
+            // className="cancel-btn"
+          />
+          <MyButton
+            text="Create"
+            onClick={handleSubmitGroup}
+            variant="contained"
+            // className="add-btn"
+            customVariant="dark"
+          />
         </DialogActions>
       </Dialog>
 

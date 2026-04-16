@@ -1,5 +1,4 @@
 import {
-  Button,
   Divider,
   Drawer,
   Grid,
@@ -9,8 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Calendar, X } from "lucide-react";
-import "../../assets/scss/pages/ReportFilters.scss";
+import "../../assets/scss/components/Report/ReportFilters.scss";
 import { useState } from "react";
+import MyButton from "../ui/Button";
 // import { CommonDropdown } from "../CommonDropdown";
 
 const defaultState = {
@@ -31,6 +31,7 @@ const ReportFilters = ({
   departments,
 }: any) => {
   const [filters, setFilters] = useState(defaultState);
+  // const [loading, setLoading] = useState(true);
 
   const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setFilters((prev) => ({ ...prev, [key]: e.target.value }));
@@ -56,6 +57,8 @@ const ReportFilters = ({
     onApply(payload);
     onClose();
   };
+
+  // setLoading(false);
 
   return (
     <Drawer
@@ -123,7 +126,7 @@ const ReportFilters = ({
                 className="report-filter__select"
               >
                 <MenuItem value="All Types">
-                  <p>All Types</p>
+                  <Typography variant="subtitle1">All Types</Typography>
                 </MenuItem>
                 {["Internal", "Client", "Executive"].map((opt) => (
                   <MenuItem
@@ -145,7 +148,7 @@ const ReportFilters = ({
                 className="report-filter__select"
               >
                 <MenuItem value="All Department">
-                  <p>All Departments</p>
+                  <Typography variant="h5">All Departments</Typography>
                 </MenuItem>
                 {departments.map((d: string) => (
                   <MenuItem
@@ -175,7 +178,7 @@ const ReportFilters = ({
                 className="report-filter__select"
               >
                 <MenuItem value="All Rooms">
-                  <p>All Rooms</p>
+                  <Typography variant="h5">All Rooms</Typography>
                 </MenuItem>
                 {rooms.map((r: string) => (
                   <MenuItem
@@ -197,7 +200,7 @@ const ReportFilters = ({
                 className="report-filter__select"
               >
                 <MenuItem value="">
-                  <p>All Users</p>
+                  <Typography variant="h5">All Users</Typography>
                 </MenuItem>
                 {users.map((u: string) => (
                   <MenuItem
@@ -215,20 +218,21 @@ const ReportFilters = ({
         <Divider />
 
         <div className="report-filter__footer">
-          <Button
-            color="error"
-            onClick={handleClear}
-            className="report-filter__footer__clear"
-          >
-            Clear All
-          </Button>
-          <Button
+          <MyButton
+            text="Clear All"
             variant="outlined"
+            onClick={handleClear}
+            type="reset"
+            color="error"
+            className="report-filter__footer__clear"
+          />
+
+          <MyButton
+            text="Apply Filter"
+            variant="contained"
             onClick={handleApply}
             className="report-filter__footer__apply"
-          >
-            Apply Filter
-          </Button>
+          />
         </div>
       </div>
     </Drawer>

@@ -15,9 +15,8 @@ import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import { Plus } from "lucide-react";
 import "../../assets/scss/components/AddMeetingRoom-Form.scss";
 import { useEffect } from "react";
-import type {
-  meeting_rooms,
-} from "../../models/meeting_room.model";
+import type { meeting_rooms } from "../../models/meeting_room.model";
+import MyButton from "../ui/Button";
 
 type props = {
   roomFormState: {
@@ -71,13 +70,14 @@ export const AddMeetingRoomForm = ({
 
   return (
     <div className="add-Form">
-      <Button
-        className="add-btn"
+      <MyButton
+        startIcon={<Plus size={17} />}
+        text="Add Room"
+        // className="add-btn"
+        customVariant="dark"
         variant="outlined"
         onClick={() => handleRoomFormOpen("add")}
-      >
-        <Plus size={14} /> Add Room
-      </Button>
+      />
 
       <Dialog
         open={roomFormState.open}
@@ -164,9 +164,7 @@ export const AddMeetingRoomForm = ({
                       <Checkbox
                         value="TV"
                         onChange={handleCheckboxChange}
-                        checked={addRoomFormData.resources.includes(
-                          "TV",
-                        )}
+                        checked={addRoomFormData.resources.includes("TV")}
                       />
                     }
                     label="TV"

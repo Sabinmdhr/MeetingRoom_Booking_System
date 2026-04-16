@@ -12,7 +12,7 @@ export const getAllReports = async () => {
 
 export const exportReports = async () => {
   try {
-    const res = await api.get("/api/v1/reports/export", {
+    const res = await api.post("/api/v1/reports/export", {
       responseType: "blob",
     });
     return res.data;

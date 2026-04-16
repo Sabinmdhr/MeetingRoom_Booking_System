@@ -7,13 +7,15 @@ import {
   Divider,
   TextField,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
-import "../../assets/scss/pages/EditCalendarModal.scss";
-import ParticipantsCard from "../BookingRooms/ParticipantsCard";
+import "../../assets/scss/components/Calendar/EditCalendarModal.scss";
+// import ParticipantsCard from "../BookingRooms/ParticipantsCard";
 import { toast } from "react-toastify";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
+import MyButton from "../ui/Button";
 
 interface Props {
   event: any;
@@ -41,7 +43,7 @@ const EditCalendarModal = ({ event, openEdit, onCloseAll, onBack }: Props) => {
     department: "",
     description: "",
   });
-  const { users } = useparticipantsViewModel();
+  // const { users } = useparticipantsViewModel();
   useEffect(() => {
     if (event) {
       const convertTime = (time: string) => {
@@ -90,7 +92,7 @@ const EditCalendarModal = ({ event, openEdit, onCloseAll, onBack }: Props) => {
     >
       {/* HEADER */}
       <DialogTitle className="edit-modal-header">
-        <p> Edit Meeting</p>
+        <Typography variant="h3"> Edit Meeting</Typography>
         <span className={`modal-category ${eventData.category}`}>
           {eventData.category}
         </span>
@@ -184,11 +186,11 @@ const EditCalendarModal = ({ event, openEdit, onCloseAll, onBack }: Props) => {
         <div className="modal-section">
           <div>
             {/* <Users /> */}
-            <ParticipantsCard
+            {/* <ParticipantsCard
               type=""
               displayOn="calendar"
               users={users}
-            />
+            /> */}
           </div>
           {/* <ParticipantsCard
             type=""
@@ -197,7 +199,7 @@ const EditCalendarModal = ({ event, openEdit, onCloseAll, onBack }: Props) => {
           /> */}
         </div>
 
-        <Divider />
+        {/* <Divider /> */}
 
         {/* Meeting Type + Department */}
         <div className="modal-section">
@@ -243,24 +245,26 @@ const EditCalendarModal = ({ event, openEdit, onCloseAll, onBack }: Props) => {
       </DialogContent>
       {/* ACTIONS */}
       <DialogActions className="edit-modal-actions">
-        <Button
-          className="cancel-button"
+        <MyButton
+          variant="outlined"
+          // className="cancel-button"
+          customVariant="ghost"
           onClick={onBack}
-        >
-          Cancel
-        </Button>
-        <Button
-          className="save-button"
+          text="Cancel"
+        />
+
+        <MyButton
+          // className="save-button"
+          customVariant="dark"
+          text="Save Changes"
+          startIcon={<Save size={18} />}
           variant="contained"
           onClick={() => {
             // console.log(eventData);
             handleSave();
             onBack();
           }}
-        >
-          <Save size={18} />
-          Save Changes
-        </Button>
+        />
       </DialogActions>
     </Dialog>
   );

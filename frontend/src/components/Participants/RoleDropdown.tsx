@@ -1,11 +1,10 @@
-import { CommonDropdown } from "../CommonDropdown"
+import { CommonDropdown } from "../ui/Dropdown/CommonDropdown";
 
 type props = {
-  value: number ;
-  onChange: (id: number ) => void;
+  value: number;
+  onChange: (id: number) => void;
 };
 export const RoleDropdown = ({ value, onChange }: props) => {
-
   const roles = [
     { id: 1, label: "ADMIN" },
     { id: 2, label: "MANAGER" },
@@ -20,4 +19,4 @@ export const RoleDropdown = ({ value, onChange }: props) => {
       onChange={onChange}
     />
   );
-}
+};
