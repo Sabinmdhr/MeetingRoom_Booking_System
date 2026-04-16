@@ -9,7 +9,7 @@ export interface ButtonProps {
   color?: "primary" | "secondary" | "success" | "error" | "warning" | "info";
   text: string;
   onClick: () => void;
-  startIcon?: ReactElement;
+  startIcon?: ReactElement | string;
   endIcon?: ReactElement;
   type?: "button" | "submit" | "reset";
   className?: string;
