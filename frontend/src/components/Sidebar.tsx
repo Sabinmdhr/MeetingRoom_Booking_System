@@ -32,7 +32,6 @@ const menuItems = [
     path: "/dashboard",
   },
   { text: "Calendar", icon: <Calendar size={20} />, path: "/calendar" },
-  { text: "Book Room", icon: <DoorOpen size={20} />, path: "/book-room" },
   {
     text: "Meeting Rooms",
     icon: <Building2 size={20} />,
