@@ -10,7 +10,7 @@ import {
 } from "../../utils/timeUtils";
 import dayjs from "dayjs";
 import { useRoomTimeslotViewModel } from "../../viewmodels/useRoomTimeslotViewModel";
-import { Button, Divider, Typography, Box } from "@mui/material";
+import { Button, Divider, Typography, Box, Stack } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
  
 interface TimeSlotSelectorProps {
@@ -224,15 +224,12 @@ export const TimeSlotSelector = ({
       </div>
  
       <div className="footer">
-        <div className="timeDisplayWrapper">
-          <div className="timeBox">{formatDisplayTime(startTime)}</div>
-          <div className="separator">-</div>
-          <div className="timeBox">{formatDisplayTime(endTime)}</div>
-        </div>
-        <div className="durationDisplay">
-          Duration: {formatDuration(startTime, endTime)}
-        </div>
+          <Stack className="footer-btn" direction="row">
+            <Button className="cancel-btn">Cancel</Button>
+            <Button className="proceed-btn">Proceed to booking</Button>
+          </Stack>
       </div>
+
     </div>
   );
 };
