@@ -21,11 +21,13 @@ export const useRoomTimeslotViewModel = () => {
     month: "long",
     day: "numeric",
   })
+  const backendFormattedDate = currentDate.toISOString().split("T") [0];
 
   return {
     room,
     formattedDate,
     changeDate,
     jumpToToday,
-  }
+    backendFormattedDate,
+  };
 }
