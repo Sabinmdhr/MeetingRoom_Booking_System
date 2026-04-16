@@ -9,6 +9,7 @@ import "../assets/scss/pages/Report.scss";
 import { Download, Funnel, X } from "lucide-react";
 import ReportFilters from "../components/Reports/ReportFilters";
 import { useEffect, useState } from "react";
+import MyButton from "../components/ui/Button";
 
 function CustomToolbar() {
   return (
@@ -63,28 +64,32 @@ export default function Report() {
         </div>
         <div className="meeting-table__buttons">
           {isFiltered && (
-            <Button
-              variant="outlined"
-              color="error"
+            <MyButton
               onClick={fetchReports}
-            >
-              <X size={16} /> Clear
-            </Button>
+              variant="outlined"
+              text="Clear"
+              startIcon={<X size={16} />}
+              color="error"
+              size="small"
+            />
           )}
-          <Button
+
+          <MyButton
+            variant="outlined"
             onClick={() => setFilterOpen(true)}
-            variant="outlined"
-            className="meeting-table__buttons__filter"
-          >
-            <Funnel size={16} /> Filters
-          </Button>
-          <Button
-            variant="outlined"
-            className="meeting-table__buttons__export"
+            startIcon={<Funnel size={16} />}
+            text="Filters"
+            customVariant="ghost"
+            // className="filter"
+          />
+
+          <MyButton
+            variant="contained"
             onClick={exportReport}
-          >
-            <Download size={16} /> Export
-          </Button>
+            startIcon={<Download size={16} />}
+            color="success"
+            text="Export"
+          />
         </div>
       </div>
 

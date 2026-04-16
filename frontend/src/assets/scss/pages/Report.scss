@@ -37,15 +37,15 @@
     gap: 10px;
 
     &__filter {
-      font-size: 13px !important;
-      text-transform: none !important;
-      color: black !important;
-      border-radius: 8px !important;
-      font-weight: 600 !important;
-      background: white !important;
-      padding: 6px 12px !important;
-      border: 1px solid rgb(170, 165, 165) !important;
-      gap: 7px;
+      // font-size: 13px !important;
+      // text-transform: none !important;
+      // color: black !important;
+      // border-radius: 8px !important;
+      // font-weight: 600 !important;
+      // background: white !important;
+      // padding: 6px 12px !important;
+      // border: 1px solid rgb(170, 165, 165) !important;
+      // gap: 7px;
 
       &.active {
         background-color: black !important;
@@ -53,16 +53,9 @@
       }
     }
 
-    &__export {
-      font-size: 13px !important;
-      text-transform: none !important;
-      color: white !important;
-      font-weight: 600 !important;
-      border-radius: 8px !important;
-      background: #00a63e !important;
-      padding: 6px 12px !important;
-      gap: 7px;
-    }
+    // &__export {
+    //   font-weight: 600 !important;
+    // }
   }
 
   &__grid {
@@ -151,6 +144,12 @@
 }
 
 .meeting-table__grid {
-  overflow: hidden; // prevents white flash
+  overflow: hidden; 
   width: 100%;
+}
+
+.filter {
+  color: black !important;
+  border: 1px solid #c5b6b6 !important;
+  // padding: 4px 8px!important;
 }
