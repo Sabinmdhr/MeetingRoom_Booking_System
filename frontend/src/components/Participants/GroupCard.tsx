@@ -4,32 +4,74 @@ import { Building2, Pen, Trash2 } from "lucide-react";
 import "../../assets/scss/components/GroupCard.scss";
 import { useAddGroupViewModel } from "../../viewmodels/useAddGroupViewModel";
 import { deleteGroupCard } from "../../services/groupCard.services";
+import MyButton from "../ui/Button";
+import { useState } from "react";
+import ConfirmDialog from "../ui/ConfirmDialog";
 export const GroupCard = () => {
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+
   const { group } = useGroupCardViewModel();
   // const {handleEditGroup} = useAddGroupViewModel()
   // const { handleEditGroup } = useAddGroupViewModel();
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedGroupId(id);
+    setOpenConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedGroupId !== null) {
+      await deleteGroupCard(selectedGroupId);
+      setOpenConfirm(false);
+      setSelectedGroupId(null);
+    }
+  };
   return (
     <div className="groupCard-Container">
       {group.map((group, index) => {
         return (
-          <Card className="groupCard" key={index}>
+          <Card
+            className="groupCard"
+            key={index}
+          >
             <CardHeader
               className="groupCard-title"
               title={
                 <div className="title-wrapper">
-                  <Building2 size={22} color="#155DFC" />
+                  <Building2
+                    size={22}
+                    color="#155DFC"
+                  />
                   <span className="title-text">{group.groupName}</span>
                 </div>
               }
               action={
                 <div className="title-icons">
-                  <Pen size={17} />
-                  <Trash2
-                    size={17}
-                    color="red"
-                    onClick={() => {
-                      deleteGroupCard(group.id);
-                    }}
+                  <MyButton
+                    text=""
+                    startIcon={
+                      <Pen
+                        size={17}
+                        style={{ marginLeft: "10px" }}
+                      />
+                    }
+                    variant="outlined"
+                    customVariant="ghost"
+                    onClick={() => {}}
+                  />
+                  <MyButton
+                    text=""
+                    startIcon={
+                      <Trash2
+                        size={17}
+                        color="red"
+                        style={{ marginLeft: "10px" }}
+                      />
+                    }
+                    variant="outlined"
+                    customVariant="ghost"
+                    onClick={() => handleDeleteClick(group.id)}
                   />
                 </div>
               }
@@ -58,6 +100,19 @@ export const GroupCard = () => {
           </Card>
         );
       })}
+      <ConfirmDialog
+        open={openConfirm}
+        title="Delete Group"
+        content={`Are you sure you want to delete "${
+          group.find((g) => g.id === selectedGroupId)?.groupName || ""
+        }"?`}
+        text="Delete"
+        onConfirm={handleConfirmDelete}
+        onClose={() => {
+          setOpenConfirm(false);
+          setSelectedGroupId(null);
+        }}
+      />
     </div>
   );
 };

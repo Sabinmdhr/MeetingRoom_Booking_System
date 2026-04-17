@@ -616,7 +616,6 @@
 // }
 
 // new
-
 .calendar {
   border-radius: 10px !important;
   background: #fff;
@@ -768,7 +767,6 @@
 
 .calendar__main {
   padding: 20px 25px !important;
-  // Prevent the card from collapsing; let inner views define their own height
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -856,103 +854,109 @@
   color: #fff;
 }
 
-/* ─── ROOM × DATE GRID VIEW ──────────────────────── */
+/* ─── ROOM × DATE GRID ───────────────────────────── */
+//
+// HOW ALIGNMENT WORKS:
+//   - $col-width   → every __date-cell AND __cell uses this exact width
+//   - $row-label-width → __corner AND __room-labels uses this exact width
+//   - __scroll has padding: $gap and gap: $gap between rows
+//   - __room-labels has the SAME padding and gap to stay in sync with rows
+//   - __date-header uses overflow-x: hidden and is scrolled via JS only
+//   - __cell keeps its full border + border-radius (card look) — the gap
+//     between cards is provided by padding/gap on __scroll and __row,
+//     NOT by margin on the cells themselves
+//   - The total column slot = $col-width (card) + $gap (space after) which
+//     is exactly what the date header cell occupies too
+//
+
+$col-width: 180px;
+$row-label-width: 220px;
+$cell-height: 170px;
+$gap: 8px;
 
 .room-grid {
   display: flex;
   flex-direction: column;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   overflow: hidden;
-  // Tall enough to feel like a proper calendar
-  min-height: 520px;
 
-  // ── Sticky header (corner + date labels) ──────────
+  // ── Header ───────────────────────────────────────
   &__header {
     display: flex;
     flex-shrink: 0;
-    border-bottom: 2px solid #e0e0e0;
-    background: #f5f5f5;
-    position: sticky;
-    top: 0;
-    z-index: 4;
+    border-bottom: 2px solid #e2e8f0;
+    overflow: hidden;
   }
 
   &__corner {
-    width: 200px;
-    min-width: 200px;
+    width: $row-label-width;
+    min-width: $row-label-width;
     flex-shrink: 0;
-    padding: 14px 18px;
+    padding: 14px 20px;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.09em;
-    color: #999;
+    color: #94a3b8;
     display: flex;
     align-items: center;
-    border-right: 1px solid #e0e0e0;
-    background: #f5f5f5;
+    background: #f8fafc;
+    border-right: 2px solid #e2e8f0;
   }
 
-  // The date header scrolls horizontally in sync with the body
+  // JS-synced — never scrolls independently
   &__date-header {
     display: flex;
     flex: 1;
-    overflow-x: auto;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    overflow-x: hidden;
+    background: #f8fafc;
+    // left padding matches __scroll so first date aligns with first card
+    padding-left: $gap;
   }
 
+  // Each date column header width = $col-width + $gap (the gap after each card)
+  // This way the label is centered over the card + its trailing gap exactly
   &__date-cell {
+    width: $col-width + $gap;
+    min-width: $col-width + $gap;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-right: 2px solid #e2e8f0 !important;
+
     justify-content: center;
-    padding: 10px 8px;
-    gap: 2px;
-    background: #f5f5f5;
-    border-right: 1px solid #e0e0e0;
-    // Each date column is exactly 160px wide — same as cells below
-    min-width: 160px;
-    width: 160px;
-    flex-shrink: 0;
+    padding: 12px 8px;
+    gap: 3px;
+    background: #f8fafc;
+    cursor: pointer;
 
-    &:last-child {
-      border-right: none;
-    }
-
+    // no border — the centering over card+gap handles alignment visually
     &--today {
-      background: #eef3ff;
-
+      background: #eff6ff;
       .room-grid__date-num {
-        background: #1a73e8;
+        background: #2563eb;
         color: #fff;
         border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
     }
   }
 
   &__date-day {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: #888;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
   }
 
   &__date-num {
     font-size: 20px;
-    font-weight: 700;
-    color: #1a1a1a;
-    width: 30px;
-    height: 30px;
+    font-weight: 800;
+    color: #0f172a;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -960,59 +964,62 @@
 
   &__date-month {
     font-size: 10px;
-    color: #bbb;
+    font-weight: 500;
+    color: #cbd5e1;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
-  // ── Body: room labels (sticky) + scrollable grid ──
+  // ── Body ─────────────────────────────────────────
+  // No padding/gap here — room-labels and scroll handle their own spacing
   &__body {
     display: flex;
     flex: 1;
-    overflow: hidden; // let only the inner scroll container scroll
+    overflow: hidden;
+
   }
 
-  // Sticky left column of room names
+  // Sticky room labels — padding/gap mirrors __scroll exactly
   &__room-labels {
-    width: 200px;
-    min-width: 200px;
+    width: $row-label-width;
+    min-width: $row-label-width;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #e0e0e0;
-    background: #fafafa;
+    background: #f8fafc;
+    border-right: 2px solid #e2e8f0;
     z-index: 2;
+    padding: $gap 0;
+    gap: $gap;
   }
 
   &__room-label {
-    flex: 1;
+    height: $cell-height;
+    min-height: $cell-height;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    padding: 16px 18px;
-    border-bottom: 1px solid #eeeeee;
-    min-height: 140px;
-
-    &:last-child {
-      border-bottom: none;
-    }
+    padding: 0 20px;
 
     span {
       font-size: 13px;
       font-weight: 600;
-      color: #333;
+      color: #334155;
       line-height: 1.4;
     }
   }
 
-  // The scrollable container for all event rows
+  // The ONE real scroll container
   &__scroll {
     flex: 1;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    // Show scrollbar so users know it's scrollable
+    padding: $gap;
+    gap: $gap;
     scrollbar-width: thin;
-    scrollbar-color: #d1d5db transparent;
+    scrollbar-color: #cbd5e1 transparent;
+
     &::-webkit-scrollbar {
       height: 6px;
     }
@@ -1020,79 +1027,74 @@
       background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-      background: #d1d5db;
+      background: #cbd5e1;
       border-radius: 3px;
     }
   }
 
-  // One row per room
   &__row {
     display: flex;
-    flex: 1;
-    border-bottom: 1px solid #eeeeee;
-    &:last-child {
-      border-bottom: none;
-    }
+    height: $cell-height;
+    min-height: $cell-height;
+    flex-shrink: 0;
+    gap: $gap;
   }
 
-  // Individual date tile
+  // ── Individual date/room card ─────────────────────
+  // Width = $col-width exactly (gap handled by __row gap)
   &__cell {
-    min-width: 160px;
-    width: 160px;
+    width: $col-width;
+    min-width: $col-width;
     flex-shrink: 0;
-    min-height: 140px;
-    padding: 10px;
-    border-right: 1px solid #eeeeee;
+    height: 100%;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
     display: flex;
     flex-direction: column;
     gap: 6px;
-    background: #ffffff;
-    transition: background 0.15s ease;
+    align-items: stretch;
+    justify-content: flex-start;
 
-    &:last-child {
-      border-right: none;
-    }
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      box-shadow 0.15s ease;
 
     &:hover {
-      background: #fafbff;
+      background: #f8fafc;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
     }
 
-    // Today column gets a subtle blue wash
     &--today {
-      background: #f4f8ff;
+      background: #f0f7ff;
+      border-color: #93c5fd;
     }
+
     &--today:hover {
-      background: #eef3ff;
+      background: #e8f0fe;
     }
   }
 
-  // "No bookings" placeholder
-  &__empty {
-    font-size: 11px;
-    color: #ccc;
-    font-style: italic;
-    margin: auto;
-    display: block;
-    text-align: center;
-    padding-top: 16px;
-  }
-
-  // Event chip / card
+  // ── Event tile ────────────────────────────────────
   &__event {
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 3px;
-    padding: 8px 10px;
+    padding: 7px 10px;
     border-radius: 7px;
     cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
     transition:
       transform 0.12s ease,
       box-shadow 0.12s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.11);
     }
 
     &.internal {
@@ -1100,13 +1102,11 @@
       color: #1d4ed8;
       border-left: 3px solid #2b7fff;
     }
-
     &.client {
       background: #ffedd5;
       color: #c2410c;
       border-left: 3px solid #ff6900;
     }
-
     &.executive {
       background: #f3e8ff;
       color: #7e22ce;
@@ -1117,7 +1117,7 @@
   &__event-time {
     font-size: 10px;
     font-weight: 600;
-    opacity: 0.75;
+    opacity: 0.7;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1129,5 +1129,16 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  &__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #e2e8f0;
+    font-style: italic;
+    user-select: none;
   }
 }

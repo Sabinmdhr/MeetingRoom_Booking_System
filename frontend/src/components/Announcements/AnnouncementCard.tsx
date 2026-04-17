@@ -13,14 +13,14 @@ import {
   Pin,
   PinOff,
   SquarePen,
+  Trash,
   Trash2,
 } from "lucide-react";
 import React, { useState } from "react";
 import AnnouncementModal from "./AnnouncementModal";
 import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
 import AnnouncementDetailModal from "./AnnouncementDetailModal";
-
-
+import ConfirmDialog from "../ui/ConfirmDialog";
 
 const AnnouncementCard = ({
   item,
@@ -36,6 +36,7 @@ const AnnouncementCard = ({
   const [openEditModal, setOpenEditModal] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
 
+  const [openConfirm, setOpenConfirm] = useState(false);
   const handleOpenDetail = () => {
     setAnchorEl(null);
     setOpenDetailModal(true);
@@ -50,6 +51,16 @@ const AnnouncementCard = ({
   const handleCloseEdit = () => {
     setOpenEditModal(false);
     setEditingItem(null);
+  };
+
+  const handleDeleteClick = () => {
+    setOpenConfirm(true);
+    handleClose();
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete(item.id);
+    setOpenConfirm(false);
   };
 
   const { handlePinChange } = useAnnouncementViewModel(
@@ -154,12 +165,7 @@ const AnnouncementCard = ({
                     {item.pinned ? "Unpin" : "Pin"}
                   </Typography>
                 </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    onDelete(item.id);
-                    handleClose();
-                  }}
-                >
+                <MenuItem onClick={handleDeleteClick}>
                   <Trash2
                     size={16}
                     color="red"
@@ -208,6 +214,24 @@ const AnnouncementCard = ({
         initialData={editingItem}
         onUpdate={onUpdate}
         refreshAnnouncements={refreshAnnouncements}
+      />
+      <ConfirmDialog
+        open={openConfirm}
+        title="Confirm Delete"
+        text="Delete"
+        startIcon={
+          <Trash
+            size={17}
+            style={{
+              // display: "flex",
+              // alignItems: "center",
+              marginBottom: "4px",
+            }}
+          />
+        }
+        content={`Are you sure you want to delete "${item.title}"?`}
+        onConfirm={handleConfirmDelete}
+        onClose={() => setOpenConfirm(false)}
       />
     </>
   );

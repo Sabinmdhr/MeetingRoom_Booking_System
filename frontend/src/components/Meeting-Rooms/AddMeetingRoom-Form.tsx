@@ -1,5 +1,4 @@
 import {
-  Button,
   Checkbox,
   Dialog,
   DialogActions,
@@ -175,14 +174,14 @@ export const AddMeetingRoomForm = ({
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button
+          <MyButton
             variant="contained"
+            text="Add"
+            customVariant="dark"
             onClick={() => {
               submitAddRomForm();
             }}
-          >
-            Add
-          </Button>
+          ></MyButton>
         </DialogActions>
       </Dialog>
     </div>

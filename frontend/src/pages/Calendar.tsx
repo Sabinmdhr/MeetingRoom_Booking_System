@@ -399,7 +399,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import React, { useState, useRef, useEffect } from "react";
 import { Popover } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { Calendar as CalendarIcon, Plus } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+} from "lucide-react";
 import EditCalendarModal from "../components/Calendar/EditCalendarModal";
 import MyButton from "../components/ui/Button";
 
@@ -409,7 +414,7 @@ const ROOMS = [
   { id: "room-1c", name: "Meeting Room 1C" },
 ];
 
-const GRID_VISIBLE_DAYS = 8;
+const GRID_VISIBLE_DAYS = 30;
 
 export const Calendar = () => {
   const [room, setRoom] = useState("All Rooms");
@@ -419,6 +424,7 @@ export const Calendar = () => {
   const [eventFilter, setEventFilter] = useState("all");
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
   const [dayOffset, setDayOffset] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Sync horizontal scroll between the sticky date header and the body grid
   const headerScrollRef = useRef<HTMLDivElement>(null);
@@ -497,7 +503,7 @@ export const Calendar = () => {
         <div className="calendar__topbar__main">
           <div className="calendar__topbar__main__left">
             <div className="calendar__topbar__main__left__buttons">
-              <button
+              {/* <button
                 onClick={
                   isGridView
                     ? () => setDayOffset((o) => o - GRID_VISIBLE_DAYS)
@@ -505,7 +511,7 @@ export const Calendar = () => {
                 }
               >
                 {"<"}
-              </button>
+              </button> */}
 
               <MyButton
                 onClick={
@@ -514,8 +520,10 @@ export const Calendar = () => {
                     : goToPrev
                 }
                 text=""
-                startIcon="<"
+                color="secondary"
+                startIcon={<ChevronLeft size={18} />}
               />
+
               <button
                 onClick={handleDateButtonClick}
                 className="date-button"
@@ -539,15 +547,16 @@ export const Calendar = () => {
                 </LocalizationProvider>
               </Popover>
 
-              <button
+              <MyButton
                 onClick={
                   isGridView
                     ? () => setDayOffset((o) => o + GRID_VISIBLE_DAYS)
                     : goToNext
                 }
-              >
-                {">"}
-              </button>
+                text=""
+                color="secondary"
+                startIcon={<ChevronRight size={18} />}
+              />
             </div>
 
             <div className="calendar__topbar__main__left__items">
@@ -733,25 +742,38 @@ export const Calendar = () => {
                       return (
                         <div
                           key={`${rm.id}-${dateKey}`}
-                          className={`room-grid__cell${dateKey === today ? " room-grid__cell--today" : ""}`}
+                          className={`room-grid__cell${dateKey === today ? " room-grid__cell--today" : ""} `}
+                          onMouseEnter={() => setIsHovered(true)}
+                          onMouseLeave={() => setIsHovered(false)}
+                          onClick={() => {
+                            goToToday(date);
+                            setView("day");
+                            setDayOffset(0);
+                          }}
                         >
                           {cellEvents.map((event) => (
                             <div
                               key={event.id}
                               className={`room-grid__event ${event.category}`}
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 openEvent(event);
                                 setMode("view");
                               }}
                             >
+                             
+
                               <span className="room-grid__event-time">
                                 {event.startTime} – {event.endTime}
                               </span>
                               <span className="room-grid__event-title">
                                 {event.title}
+                                
                               </span>
                             </div>
+                            
                           ))}
+                          
                         </div>
                       );
                     })}

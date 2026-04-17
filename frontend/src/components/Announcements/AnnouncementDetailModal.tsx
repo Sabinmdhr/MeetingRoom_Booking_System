@@ -9,6 +9,8 @@ import {
 import { X, Megaphone, Pin, SquarePen, Trash2 } from "lucide-react";
 import MyButton from "../ui/Button";
 import "../../assets/scss/components/Announcement/AnnouncementDetailModal.scss";
+import ConfirmDialog from "../ui/ConfirmDialog";
+import { useState } from "react";
 
 const audienceMap: Record<number, string> = {
   1: "Admins Only",
@@ -29,9 +31,16 @@ const AnnouncementDetailModal = ({
 }: any) => {
   if (!item) return null;
 
+  const [openConfirm, setOpenConfirm] = useState(false);
+
   const audienceLabel = item.allUser
     ? "All Users"
     : (audienceMap[item.roleId] ?? "All Users");
+  const handleConfirmDelete = () => {
+    onDelete(item.id);
+    setOpenConfirm(false);
+    onClose(); // close detail modal after delete
+  };
 
   return (
     <Dialog
@@ -114,8 +123,7 @@ const AnnouncementDetailModal = ({
             color="error"
             startIcon={<Trash2 size={16} />}
             onClick={() => {
-              onDelete(item.id);
-              onClose();
+              setOpenConfirm(true);
             }}
             text="Delete"
           />
@@ -126,9 +134,17 @@ const AnnouncementDetailModal = ({
             // className="announcement__button__publish"
             onClick={onEdit}
             text="Edit"
-          ></MyButton>
+          />
         </DialogActions>
       </div>
+      <ConfirmDialog
+        open={openConfirm}
+        title="Delete Announcement"
+        content={`Are you sure you want to delete "${item.title}"?`}
+        text="Delete"
+        onConfirm={handleConfirmDelete}
+        onClose={() => setOpenConfirm(false)}
+      />
     </Dialog>
   );
 };
