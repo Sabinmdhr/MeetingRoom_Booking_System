@@ -1,4 +1,4 @@
-import { Button, Card, TextField, Typography } from "@mui/material";
+import { Card, TextField, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import type { ProfileSettings } from "../../models/settings.model";
 import { toast } from "react-toastify";

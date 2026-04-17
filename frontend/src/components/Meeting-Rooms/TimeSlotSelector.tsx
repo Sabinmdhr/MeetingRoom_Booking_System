@@ -14,6 +14,7 @@ import { Button, Divider, Typography, Box, Stack } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
+import MyButton from "../ui/Button";
 interface TimeSlotSelectorProps {
   onSave?: (slot: { startTime: string; endTime: string }) => void;
   initialSlot?: { startTime: string; endTime: string };
@@ -147,10 +148,14 @@ export const TimeSlotSelector = ({
     (_, i) => START_HOUR + i,
   );
 
-  const { formattedDate, changeDate, jumpToToday,backendFormattedDate } = useRoomTimeslotViewModel();
+  const { formattedDate, changeDate, jumpToToday, backendFormattedDate } =
+    useRoomTimeslotViewModel();
 
   return (
-    <div className="container" style={{ height: TOTAL_HEIGHT }}>
+    <div
+      className="container"
+      style={{ height: TOTAL_HEIGHT }}
+    >
       <div className="header">
         {/* <div className="day">{dayjs().format("ddd")}</div> */}
         {/* <div className="date">{dayjs().format("MMM D")}</div> */}
@@ -164,7 +169,10 @@ export const TimeSlotSelector = ({
           />
           <Box className="date">
             <Typography className="timeslot-date">{formattedDate}</Typography>
-            <Typography className="jump-today" onClick={jumpToToday}>
+            <Typography
+              className="jump-today"
+              onClick={jumpToToday}
+            >
               Jump to Today
             </Typography>
           </Box>
@@ -178,10 +186,16 @@ export const TimeSlotSelector = ({
         </Box>
       </div>
 
-      <div className="timelineWrapper" ref={timelineRef}>
+      <div
+        className="timelineWrapper"
+        ref={timelineRef}
+      >
         <div className="timeGutter">
           {hours.map((hour) => (
-            <div key={hour} className="timeLabel">
+            <div
+              key={hour}
+              className="timeLabel"
+            >
               {hour.toString().padStart(2, "0")}:00
             </div>
           ))}
