@@ -14,7 +14,6 @@ import { Button, Divider, Typography, Box, Stack } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
-import MyButton from "../ui/Button";
 interface TimeSlotSelectorProps {
   onSave?: (slot: { startTime: string; endTime: string }) => void;
   initialSlot?: { startTime: string; endTime: string };
@@ -164,7 +163,7 @@ export const TimeSlotSelector = ({
             onClick={() => changeDate(-1)}
             variant="outlined"
             text="Previous"
-            customVariant="ghost" 
+            customVariant="ghost"
             startIcon={<ChevronLeft size={18} />}
           />
           <Box className="date">
@@ -180,7 +179,7 @@ export const TimeSlotSelector = ({
             onClick={() => changeDate(1)}
             variant="outlined"
             text="Next"
-            customVariant="ghost" 
+            customVariant="ghost"
             endIcon={<ChevronRight size={18} />}
           />
         </Box>
@@ -268,15 +267,16 @@ export const TimeSlotSelector = ({
         </div>
 
         <div className="bookRoomActions">
-          <MyButton 
-          variant="contained"
-          text="Cancel"
-          customVariant="ghost" 
-          onClick={()=>{}}/>
+          <MyButton
+            variant="contained"
+            text="Cancel"
+            customVariant="ghost"
+            onClick={() => {}}
+          />
           <MyButton
             variant="contained"
             text="Proceed to Booking"
-            customVariant="dark" 
+            customVariant="dark"
             onClick={() => {
               updateBookingTimeAndDate({
                 startTime: minutesToTimeString(startTime),
