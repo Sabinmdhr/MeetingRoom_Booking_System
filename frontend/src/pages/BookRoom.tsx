@@ -26,7 +26,8 @@ const meetings = [
 ];
 
 const BookRoom = () => {
-  const { handleChange, handleBookRoom } = useBookingRoomViewModel();
+  const { handleChange, handleBookRoom } =
+    useBookingRoomViewModel();
   const { participantType, handleInternalClick, handleExternalClick } =
     useparticipantsViewModel();
   const bookinRoomFormData = useAppSelector((state) => state.bookingRoom);
@@ -330,7 +331,12 @@ const BookRoom = () => {
                   multiline
                 />
               </div>
-              <Button variant="contained" onClick={handleBookRoom}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleBookRoom();
+                }}
+              >
                 Book Room
               </Button>
             </div>

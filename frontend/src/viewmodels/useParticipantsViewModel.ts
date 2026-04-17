@@ -18,7 +18,6 @@ export const useparticipantsViewModel = () => {
     fetchUsers();
   }, []);
 
-
   const [participantsFormState, setParticipantsFormState] = useState({
     open: false,
     mode: "edit" as "edit" | "add",

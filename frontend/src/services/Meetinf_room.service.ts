@@ -1,4 +1,5 @@
 // import { axiosInstance } from "../api/api";
+import { toast } from "react-toastify";
 import api from "../api/api";
 import type { AddRoomModal } from "../models/meeting_room.model";
 
@@ -18,7 +19,7 @@ export const addRoom = async (data: AddRoomModal) => {
 
 export const getMeetingRooms = async () => {
   try {
-    const response = await api.post("/api/v1/room/active-list", {"pageNo": 0});
+    const response = await api.post("/api/v1/room/active-list", { pageNo: 0 });
     return response.data;
   } catch (error) {
     console.error("Error fetching meeting rooms:", error);
@@ -29,9 +30,10 @@ export const getMeetingRooms = async () => {
 export const deleteMeetingRoom = async (roomId: number) => {
   try {
     const response = await api.patch(`/api/v1/room/${roomId}/change-status`, {
-      "status": "INACTIVE",
+      status: "INACTIVE",
     });
-    console.log("deleted");
+    // console.log("deleted");
+   
     return response;
   } catch (error) {
     console.error("Error deleting meeting room:", error);

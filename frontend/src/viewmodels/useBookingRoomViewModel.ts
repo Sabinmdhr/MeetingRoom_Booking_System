@@ -5,7 +5,10 @@ import type { BookingRoomData } from "../models/bookRoom.model";
 import { BookRoom } from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { updateBookingRoomFormData } from "../redux/bookRoomSlice";
+import {
+  clearBookingRoomFormData,
+  updateBookingRoomFormData,
+} from "../redux/bookRoomSlice";
 import { clamp, snapToInterval } from "../utils/timeUtils";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +22,7 @@ export const useBookingRoomViewModel = () => {
   //   useState<BookingRoomData>(initialBookingData);
   // const {startTime, endTime , date} = useAppSelector((state)=> state.bookingRoom)
   const dispatch = useDispatch();
+  const [successState, setSuccessState] = useState<boolean>(false);
   const navigate = useNavigate();
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
   const handleChange = (
@@ -42,6 +46,10 @@ export const useBookingRoomViewModel = () => {
     navigate("/book-room");
   };
 
+  // const handleClearFormData = () => {
+  //   dispatch(clearBookingRoomFormData());
+  //   navigate("/meeting-rooms");
+  // };
   // const submit = () =>{
   //     console.log(startTime);
   //   }
@@ -57,10 +65,12 @@ export const useBookingRoomViewModel = () => {
   //   };
   const handleBookRoom = async () => {
     try {
-      console.log("success", bookingRoomFormData);
+      // console.log("success", bookingRoomFormData);
       const response = await BookRoom(bookingRoomFormData);
-
-    } catch (error:any) {
+      dispatch(clearBookingRoomFormData());
+      navigate("/meeting-rooms");
+      return response;
+    } catch (error: any) {
       console.log("FULL ERROR:", error);
       console.log("STATUS:", error.response?.status);
       console.log("BACKEND MESSAGE:", error.response?.data);
@@ -74,5 +84,6 @@ export const useBookingRoomViewModel = () => {
     updateBookingTimeAndDate,
     handleChange,
     handleBookRoom,
+    successState,
   };
 };

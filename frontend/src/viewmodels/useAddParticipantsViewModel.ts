@@ -5,7 +5,7 @@ import {
   openEditForm,
   clearSelectedParticipants,
 } from "../redux/ParticipantsSlice";
-import { addUser } from "../services/participants.service";
+import { addUser, editUser } from "../services/participants.service";
 
 // import type { departmentList } from "../models/departmentList.model";
 import { ParticipantSchema, UserSchema } from "../models/scehma/user.schema";

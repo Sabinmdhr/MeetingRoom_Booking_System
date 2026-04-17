@@ -5,7 +5,6 @@ import "../../assets/scss/global.scss";
 import { deleteMeetingRoom } from "../../services/Meetinf_room.service";
 import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from "lucide-react";
 // import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
-import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";

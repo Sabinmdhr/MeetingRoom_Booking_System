@@ -20,6 +20,7 @@ import { DepartmentList } from "./DepartmentList";
 import { RoleDropdown } from "./RoleDropdown";
 import { mapParticipantResponseToRequest } from "../../models/mapper/ParticipantMapper";
 import MyButton from "../ui/Button";
+import { editUser } from "../../services/participants.service";
 
 type props = {
   participantsFormState: {
@@ -291,13 +292,16 @@ export const AddParticipantsForm = ({
             // className="add-btn"
             customVariant="dark"
             onClick={async () => {
-              const success = await handleSubmit();
+              const success = await (participantsFormState.mode === "edit" &&
+              participantsFormState.participant
+                ? editUser(participantsFormState?.participant?.id)
+                : handleSubmit());
 
               if (success) {
                 handleParticipantsFormClose();
               }
             }}
-            text="Add"
+            text={participantsFormState.mode === "edit" ? "Edit" : "Add"}
           />
         </DialogActions>
       </Dialog>
