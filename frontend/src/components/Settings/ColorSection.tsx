@@ -1,12 +1,11 @@
 import { Card, Typography } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
 import { Palette } from "lucide-react";
-import { useRoomScheduleViewModel } from "../../viewmodels/useRoomScheduleViewModel";
 import RoomSchedule from "../../pages/RoomSchedule/RoomSchedule";
 import MyButton from "../ui/Button";
 
 const ColorSection = () => {
-  const { openSchedule, handleOpen, handleClose } = useRoomScheduleViewModel();
+  // const { openSchedule, handleOpen, handleClose } = useRoomScheduleViewModel();
 
   return (
     <>
@@ -65,14 +64,15 @@ const ColorSection = () => {
               className="colors-btn"
               variant="contained"
               // size="small"
-              onClick={handleOpen}
+              onClick={()=>{}}
               text="Save Colors"
               customVariant="dark"
             ></MyButton>
+           
           </div>
         </div>
       </Card>
-      {openSchedule && <RoomSchedule onClose={handleClose} />}
+      {/* {openSchedule && <RoomSchedule onClose={handleClose} />} */}
     </>
   );
 };

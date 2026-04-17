@@ -1,7 +1,6 @@
 // import { useRoomScheduleViewModel } from "../../viewmodels/useRoomScheduleViewModel";
 // import TimeSlotGrid from "./TimeSlotGrid";
 // import TimeSlotCard from "./TimeSlotCard";
-import BookingFooter from "./BookingFooter";
 import {
   Dialog,
   DialogTitle,
@@ -11,7 +10,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { Calendar, X } from "lucide-react";
-import "../../assets/scss/pages/RoomSchedule.scss";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import { useLocation } from "react-router-dom";
 

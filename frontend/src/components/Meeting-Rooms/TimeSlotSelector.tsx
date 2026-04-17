@@ -10,9 +10,10 @@ import {
 } from "../../utils/timeUtils";
 import dayjs from "dayjs";
 import { useRoomTimeslotViewModel } from "../../viewmodels/useRoomTimeslotViewModel";
-import { Button, Divider, Typography, Box } from "@mui/material";
+import { Button, Divider, Typography, Box, Stack } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
+import MyButton from "../ui/Button";
 interface TimeSlotSelectorProps {
   onSave?: (slot: { startTime: string; endTime: string }) => void;
   initialSlot?: { startTime: string; endTime: string };
@@ -146,45 +147,54 @@ export const TimeSlotSelector = ({
     (_, i) => START_HOUR + i,
   );
 
-  const { formattedDate, changeDate, jumpToToday,backendFormattedDate } = useRoomTimeslotViewModel();
+  const { formattedDate, changeDate, jumpToToday, backendFormattedDate } =
+    useRoomTimeslotViewModel();
 
   return (
-    <div className="container" style={{ height: TOTAL_HEIGHT }}>
+    <div
+      className="container"
+      style={{ height: TOTAL_HEIGHT }}
+    >
       <div className="header">
         {/* <div className="day">{dayjs().format("ddd")}</div> */}
         {/* <div className="date">{dayjs().format("MMM D")}</div> */}
         <Box className="timeslot-nav">
-          <Button
-            className="timeslot-btn"
-            size="small"
+          <MyButton
             onClick={() => changeDate(-1)}
             variant="outlined"
-          >
-            <ChevronLeft size={18} />
-            Previous
-          </Button>
+            text="Previous"
+            customVariant="ghost"
+            startIcon={<ChevronLeft size={18} />}
+          />
           <Box className="date">
             <Typography className="timeslot-date">{formattedDate}</Typography>
-            <Typography className="jump-today" onClick={jumpToToday}>
+            <Typography
+              className="jump-today"
+              onClick={jumpToToday}
+            >
               Jump to Today
             </Typography>
           </Box>
-          <Button
-            className="timeslot-btn"
-            size="small"
+          <MyButton
             onClick={() => changeDate(1)}
             variant="outlined"
-          >
-            Next
-            <ChevronRight size={18} />
-          </Button>
+            text="Next"
+            customVariant="ghost"
+            endIcon={<ChevronRight size={18} />}
+          />
         </Box>
       </div>
 
-      <div className="timelineWrapper" ref={timelineRef}>
+      <div
+        className="timelineWrapper"
+        ref={timelineRef}
+      >
         <div className="timeGutter">
           {hours.map((hour) => (
-            <div key={hour} className="timeLabel">
+            <div
+              key={hour}
+              className="timeLabel"
+            >
               {hour.toString().padStart(2, "0")}:00
             </div>
           ))}
@@ -257,9 +267,16 @@ export const TimeSlotSelector = ({
         </div>
 
         <div className="bookRoomActions">
-          <Button variant="contained">Cancel</Button>
-          <Button
+          <MyButton
             variant="contained"
+            text="Cancel"
+            customVariant="ghost"
+            onClick={() => {}}
+          />
+          <MyButton
+            variant="contained"
+            text="Proceed to Booking"
+            customVariant="dark"
             onClick={() => {
               updateBookingTimeAndDate({
                 startTime: minutesToTimeString(startTime),
@@ -267,9 +284,7 @@ export const TimeSlotSelector = ({
                 date: backendFormattedDate,
               });
             }}
-          >
-            Proceed to Booking
-          </Button>
+          />
         </div>
       </div>
     </div>

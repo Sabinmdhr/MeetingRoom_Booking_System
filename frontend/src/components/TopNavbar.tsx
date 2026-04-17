@@ -20,7 +20,7 @@ import {
   Button,
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
-import Announcements from "../pages/Announcements";
+// import Announcements from "../pages/Announcements";
 import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
 import Logout from "./Auth/Logout";
 
@@ -52,76 +52,6 @@ export default function TopNavbar() {
         "Good news! Your reservation request has been approved. You can now proceed as planned.",
       read: false,
     },
-    // {
-    //   id: 4,
-    //   text: "Your password was changed successfully",
-    //   description:
-    //     "Your account password has been updated. If this wasn't you, please contact support immediately.",
-    //   read: false,
-    // },
-    // {
-    //   id: 5,
-    //   text: "New comment on your post",
-    //   description:
-    //     "Someone has commented on your post. Open it to view and respond if needed.",
-    //   read: false,
-    // },
-    // {
-    //   id: 6,
-    //   text: "System maintenance scheduled for tonight",
-    //   description:
-    //     "Scheduled maintenance will occur tonight. Some services may be temporarily unavailable.",
-    //   read: false,
-    // },
-    // {
-    //   id: 7,
-    //   text: "You have a new friend request",
-    //   description:
-    //     "You’ve received a new friend request. Review their profile and accept or decline.",
-    //   read: true,
-    // },
-    // {
-    //   id: 8,
-    //   text: "Your profile was viewed 10 times today",
-    //   description:
-    //     "Your profile is getting attention! Check insights to see who’s engaging with you.",
-    //   read: false,
-    // },
-    // {
-    //   id: 9,
-    //   text: "Reminder: Submit your report by 5 PM",
-    //   description:
-    //     "This is a reminder to submit your report before the deadline to avoid any delays.",
-    //   read: false,
-    // },
-    // {
-    //   id: 10,
-    //   text: "New message from support team",
-    //   description:
-    //     "You’ve received a response from the support team. Open your inbox to read the message.",
-    //   read: false,
-    // },
-    // {
-    //   id: 11,
-    //   text: "Your subscription is about to expire",
-    //   description:
-    //     "Your subscription will expire soon. Renew now to continue enjoying uninterrupted services.",
-    //   read: false,
-    // },
-    // {
-    //   id: 12,
-    //   text: "Update available for your application",
-    //   description:
-    //     "A new version of the application is available. Update now to access the latest features and fixes.",
-    //   read: false,
-    // },
-    // {
-    //   id: 13,
-    //   text: "You were tagged in a post",
-    //   description:
-    //     "Someone mentioned you in a post. Click to view and join the conversation.",
-    //   read: false,
-    // },
   ]);
 
   const navigate = useNavigate();
@@ -136,7 +66,7 @@ export default function TopNavbar() {
     handleProfileMenuClose();
   };
   const handleProfileMenuOpen = (event: any) => {
-    setProfileAnchorEl(event.currentTarget); 
+    setProfileAnchorEl(event.currentTarget);
   };
 
   const handleProfileMenuClose = () => {
@@ -170,7 +100,12 @@ export default function TopNavbar() {
 
   // const date = new Date().toDateString();
 
-  const {logoutOpen,handleLogoutOpen,handleLogoutClose,handleLogoutConfirm} = useLogoutViewModel();
+  const {
+    logoutOpen,
+    handleLogoutOpen,
+    handleLogoutClose,
+    handleLogoutConfirm,
+  } = useLogoutViewModel();
 
   return (
     <AppBar
@@ -330,10 +265,10 @@ export default function TopNavbar() {
           <MenuItem onClick={handleProfile}> Profile</MenuItem>
           <MenuItem onClick={handleLogoutOpen}>Logout</MenuItem>
         </Menu>
-        <Logout 
-        open={logoutOpen}
-        handleConfirm={handleLogoutConfirm}
-        handleClose={handleLogoutClose}
+        <Logout
+          open={logoutOpen}
+          handleConfirm={handleLogoutConfirm}
+          handleClose={handleLogoutClose}
         />
       </Toolbar>
     </AppBar>

@@ -1,5 +1,4 @@
 import {
-  Button,
   Checkbox,
   Dialog,
   DialogActions,
@@ -53,9 +52,9 @@ export const AddMeetingRoomForm = ({
   //   setRoomFormState,
   //   handleRoomFormOpen,
   // } = useMeetingCardViewModel();
-    // useEffect(() => {
-    //   fetchMeeting();
-    // }, [refresh]);
+  // useEffect(() => {
+  //   fetchMeeting();
+  // }, [refresh]);
   useEffect(() => {
     if (roomFormState.mode === "edit" && roomFormState.room) {
       setAddRoomFormData({
@@ -181,15 +180,14 @@ export const AddMeetingRoomForm = ({
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button
+          <MyButton
             variant="contained"
-            onClick={async() => {
-             const success = await submitAddRomForm();
-             if(success) handleRoomFormClose()
+            text={roomFormState.mode =="edit" ? "Edit" : "Add"}
+            onClick={async () => {
+              const success = await submitAddRomForm();
+              if (success) handleRoomFormClose();
             }}
-          >
-            Add
-          </Button>
+          ></MyButton>
         </DialogActions>
       </Dialog>
     </div>
