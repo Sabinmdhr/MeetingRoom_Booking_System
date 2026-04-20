@@ -1,12 +1,8 @@
-import { useRef, useState } from "react";
-import { validateBookingForm } from "../utils/bookingValidation";
-import type { SelectChangeEvent } from "@mui/material";
-import type { BookingRoomData } from "../models/bookRoom.model";
-import { BookRoom } from "../services/bookRoom.service";
+import { useState } from "react";
+import { BookRoom, getBookedDataById } from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateBookingRoomFormData } from "../redux/bookRoomSlice";
-import { clamp, snapToInterval } from "../utils/timeUtils";
 import { useNavigate } from "react-router-dom";
 
 type BookingTimeAndDatePeops = {
@@ -15,11 +11,11 @@ type BookingTimeAndDatePeops = {
   date: string;
 };
 export const useBookingRoomViewModel = () => {
-  // const [bookingRoomData, setBookingRoomData] =
-  //   useState<BookingRoomData>(initialBookingData);
-  // const {startTime, endTime , date} = useAppSelector((state)=> state.bookingRoom)
+  const [bookedSlots, setBookedSlots]= useState<{start: string, end:string}[]>([]);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const {roomId}= useAppSelector((state)=>state.bookingRoom);
+  
+  const navigate = useNavigate()
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -42,23 +38,11 @@ export const useBookingRoomViewModel = () => {
     navigate("/book-room");
   };
 
-  // const submit = () =>{
-  //     console.log(startTime);
-  //   }
-  //  const handleSubmit = () => {
-  //     console.log(startTime);
-  //     setBookingRoomData((prev) => ({
-  //       ...prev,
-  //       startTime:startTime,
-  //       endTime : endTime,
-  //       date : date,
-  //     }));
-
-  //   };
   const handleBookRoom = async () => {
     try {
-      console.log("success", bookingRoomFormData);
+      // console.log("success", bookingRoomFormData);
       const response = await BookRoom(bookingRoomFormData);
+      return response;
 
     } catch (error:any) {
       console.log("FULL ERROR:", error);
@@ -66,13 +50,22 @@ export const useBookingRoomViewModel = () => {
       console.log("BACKEND MESSAGE:", error.response?.data);
     }
   };
+
+  const handleGetBookedRoom= async () =>{
+    try {
+      const res= await getBookedDataById(roomId);
+      setBookedSlots([{start:res.startTime, end: res.endTime}]);
+      return res;
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  }
+
   return {
-    // bookingRoomData,
-    // setBookingRoomData,
-    // bookRoom,
-    // handleSubmit,
     updateBookingTimeAndDate,
     handleChange,
+    handleGetBookedRoom,
+    bookedSlots,
     handleBookRoom,
   };
 };
