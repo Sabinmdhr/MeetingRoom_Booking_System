@@ -3,26 +3,28 @@ import { Megaphone, Plus } from "lucide-react";
 import "../assets/scss/pages/Announcements.scss";
 import { useState } from "react";
 import AnnouncementModal from "../components/Announcements/AnnouncementModal";
-import "../assets/scss/global.scss";
 import AnnouncementCard from "../components/Announcements/AnnouncementCard";
 import useAnnouncementCardViewModel from "../viewmodels/useAnnouncementCardViewModel";
 
 import { deleteAnnouncement } from "../services/announcements.service";
 import { toast } from "react-toastify";
 import MyButton from "../components/ui/Button";
+import { Checkbox } from "@mui/material";
+import type { Announcements } from "../models/announcements.model";
 
 const Announcements = () => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [click, setClick] = useState(false);
   const {
     pinnedData,
     setPinnedData,
     setUnpinnedData,
     unpinnedData,
     fetchAnnouncements,
+    hasMore,
   } = useAnnouncementCardViewModel();
 
   const handleDelete = async (id: number) => {
@@ -30,7 +32,7 @@ const Announcements = () => {
       await deleteAnnouncement(id);
 
       toast.error("Announcement deleted successfully");
-      fetchAnnouncements();
+      fetchAnnouncements(true);
     } catch (error) {
       console.error("Delete failed", error);
     }
@@ -45,6 +47,19 @@ const Announcements = () => {
     );
   };
 
+  const handleTogglePin = (updatedItem: Announcements) => {
+    if (updatedItem.pinned) {
+      setPinnedData((prev) => [updatedItem, ...prev].slice(0, 5));
+      setUnpinnedData((prev) =>
+        prev.filter((item) => item.id !== updatedItem.id),
+      );
+    } else {
+      setUnpinnedData((prev) => [updatedItem, ...prev]);
+      setPinnedData((prev) =>
+        prev.filter((item) => item.id !== updatedItem.id),
+      );
+    }
+  };
   return (
     <div className="announcement__main">
       <Card className="announcement">
@@ -52,7 +67,7 @@ const Announcements = () => {
         <CardContent className="announcement__header">
           <div className="announcement__title-wrapper">
             <div className="announcement__title">
-              <Megaphone size={20} />
+              <Megaphone size={23} />
               <Typography variant="h1">Announcements</Typography>
             </div>
             <Typography
@@ -64,6 +79,14 @@ const Announcements = () => {
           </div>
 
           <div className="announcement__header-actions">
+            <MyButton
+              text={click ? "Cancel" : "Select"}
+              customVariant="ghost"
+              onClick={() => {
+                setClick(!click);
+              }}
+            />
+
             <MyButton
               variant="contained"
               text="New Announcement"
@@ -82,12 +105,21 @@ const Announcements = () => {
               {/* <Divider className="announcement__divider" /> */}
               <CardContent className="announcement__list">
                 {pinnedData.map((item) => (
-                  <AnnouncementCard
+                  <div
                     key={item.id}
-                    item={item}
-                    onDelete={handleDelete}
-                    onUpdate={handleUpdate}
-                  />
+                    className="checkbox__card"
+                  >
+                    {/* {click && <Checkbox />} */}
+                    <AnnouncementCard
+                      item={item}
+                      onDelete={handleDelete}
+                      onUpdate={handleUpdate}
+                      onTogglePin={handleTogglePin}
+                      pinnedCount={pinnedData.length}
+                      click={click}
+                      setClick={setClick}
+                    />
+                  </div>
                 ))}
               </CardContent>
             </div>
@@ -96,23 +128,39 @@ const Announcements = () => {
           <div className="announcement__section">
             <CardContent className="announcement__list">
               {unpinnedData.map((item) => (
-                <AnnouncementCard
+                <div
                   key={item.id}
-                  item={item}
-                  onDelete={handleDelete}
-                  onUpdate={handleUpdate}
-                />
+                  className="checkbox__card"
+                >
+                  <AnnouncementCard
+                    key={item.id}
+                    item={item}
+                    onDelete={handleDelete}
+                    onUpdate={handleUpdate}
+                    onTogglePin={handleTogglePin}
+                    pinnedCount={pinnedData.length}
+                    click={click}
+                    setClick={setClick}
+                  />
+                </div>
               ))}
             </CardContent>
           </div>
           <div className="announcement__bottom">
+            {click && (
+              <MyButton
+                onClick={() => {}}
+                text="Delete"
+                variant="outlined"
+                customVariant="danger"
+              />
+            )}
             <MyButton
               variant="outlined"
-              onClick={() => {}}
+              onClick={() => fetchAnnouncements(false)}
               text="Show More"
-              type="button"
-              // className="announcement__bottom-button"
-              customVariant="ghost"
+              customVariant={hasMore ? "dark" : "ghost"}
+              disabled={!hasMore}
             />
           </div>
         </div>

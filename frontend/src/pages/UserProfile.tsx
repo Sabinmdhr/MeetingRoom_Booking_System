@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Button, Avatar } from "@mui/material";
+import { Card, CardContent, Typography, Avatar } from "@mui/material";
 import "../assets/scss/pages/UserProfile.scss";
 import { useState } from "react";
 import ProfileSection from "../components/Settings/ProfileSection";
