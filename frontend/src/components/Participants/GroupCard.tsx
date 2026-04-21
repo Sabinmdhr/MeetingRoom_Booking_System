@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, Chip, Typography } from "@mui/material";
 import { useGroupCardViewModel } from "../../viewmodels/useGroupCardViewModel";
 import { Building2, Pen, Trash2 } from "lucide-react";
 import "../../assets/scss/components/GroupCard.scss";
-import { useAddGroupViewModel } from "../../viewmodels/useAddGroupViewModel";
 import { deleteGroupCard } from "../../services/groupCard.services";
 import MyButton from "../ui/Button";
 import { useState } from "react";

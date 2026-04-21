@@ -8,9 +8,8 @@ import {
   snapToInterval,
   timeStringToMinutes,
 } from "../../utils/timeUtils";
-import dayjs from "dayjs";
 import { useRoomTimeslotViewModel } from "../../viewmodels/useRoomTimeslotViewModel";
-import { Button, Divider, Typography, Box, Stack } from "@mui/material";
+import {  Typography, Box } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
