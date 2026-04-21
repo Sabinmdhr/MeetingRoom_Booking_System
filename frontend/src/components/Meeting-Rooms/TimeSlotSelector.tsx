@@ -45,19 +45,6 @@ export const TimeSlotSelector = ({
     initialSlot ? timeStringToMinutes(initialSlot.endTime) : 610, // 10:10 default
   );
 
-  const [currentTime, setCurrentTime] = useState<number>(() => {
-    const time = new Date();
-    return time.getHours() * 60 + time.getMinutes();
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const time = new Date();
-      setCurrentTime(time.getHours() * 60 + time.getMinutes());
-    }, 60000); // update garxa every minute
-    return () => clearInterval(interval);
-  }, []);
-
   const [interaction, setInteraction] = useState<{
     mode: InteractionMode;
     startY: number;
@@ -243,17 +230,7 @@ export const TimeSlotSelector = ({
           style={{ height: TOTAL_HEIGHT }}
           onPointerDown={handleGridClick}
         >
-          {currentTime >= START_MINUTES && currentTime <= END_MINUTES && (
-            <div
-              className="currentTimeLine"
-              style={{
-                top: getYFromMinutes(currentTime),
-              }}
-            >
-              <div className="dot" />
-            </div>
-          )}
-          
+
           {/* Horizontal grid lines */}
           {hours.map((hour) => (
             <div
@@ -282,7 +259,7 @@ export const TimeSlotSelector = ({
                 right: 0,
                 backgroundColor: "rgba(255, 0, 0, 0.3)",
                 border: "1px solid red",
-                pointerEvents: "none", // 👈 important
+                pointerEvents: "none", 
                 zIndex: 999,
               }}
             />
