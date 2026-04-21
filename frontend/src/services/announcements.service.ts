@@ -1,4 +1,7 @@
-import type { Announcements } from "../models/announcements.model";
+import type {
+  AnnouncementListRequest,
+  Announcements,
+} from "../models/announcements.model";
 import api from "../api/api";
 
 // const URL = "";
@@ -13,11 +16,9 @@ export const addAnnouncement = async (data: Announcements) => {
   }
 };
 
-export const getAnnouncements = async (page = 0, size = 5) => {
+export const getAnnouncements = async (data: AnnouncementListRequest) => {
   try {
-    const res = await api.get(
-      `/api/v1/announcement/list?page=${page}&size=${size}`,
-    );
+    const res = await api.post("/api/v1/announcement/list", data);
     // console.log(res);
 
     return res.data;

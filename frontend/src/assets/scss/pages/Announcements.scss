@@ -202,6 +202,10 @@
     flex-direction: column;
   }
 
+  &__header-actions {
+    display: flex;
+    gap: 8px;
+  }
   &__list {
     display: flex;
     flex-direction: column;
@@ -213,6 +217,7 @@
   &__bottom {
     margin: 10px auto;
     display: flex;
+    gap: 8px;
     justify-content: center;
   }
 
@@ -232,8 +237,10 @@
   }
 
   &__card.pinned {
-    border: 1px solid #8400ff !important;
-    background-color: #eee6f6 !important;
+    // border-left: 3px solid #8646c3 !important;
+    // border: 1px solid #8400ff !important;
+    // background-color: #eee6f6 !important;
+    background-color: #eeeaf9 !important;
   }
 
   .announcement__card.read {
@@ -244,14 +251,14 @@
   &__card-content {
     display: flex;
     flex-direction: column;
-    padding: 5px 14px !important;
+    padding: 8px 14px !important;
     // padding-top: 0px !important;
   }
 
   &__card-top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center !important;
   }
 
   &__author-date {
@@ -260,14 +267,14 @@
     color: #6b7280;
     font-size: 13px;
   }
-
   &__menu-btn {
     min-width: unset;
-    padding: 5px !important;
-    color: #6b7280;
+    padding: 0 !important;
+    background-color: transparent !important;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: transparent !important;
+      box-shadow: none !important;
     }
   }
 
@@ -276,8 +283,8 @@
   }
 
   &__description {
-    color: #4b5563;
-    line-height: 1.5;
+    color: #535e6c;
+    font-weight: 400 !important;
     display: -webkit-box;
     overflow: hidden;
   }
@@ -291,3 +298,64 @@
     // transform-origin: center;
   }
 }
+.checkbox__card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.checkbox__card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
+.checkbox__card .MuiCheckbox-root {
+  margin-top: 6px;
+  padding: 4px;
+}
+
+.checkbox__card .announcement__card {
+  flex: 1;
+}
+
+.announcement__card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LEFT SIDE */
+.announcement__card-top-left {
+  display: flex;
+  align-items: center;
+}
+
+/* RIGHT SIDE */
+.announcement__card-top-right {
+  display: flex;
+  align-items: center;
+}
+
+/* FIX BUTTON PADDING (MAIN ISSUE) */
+.announcement__menu-btn {
+  min-width: unset !important;
+  padding: 0px !important; //  match visual weight of text
+  margin: 0 !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: transparent !important;
+
+  &:hover {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+.announcemnet__circleCheck {
+  display: flex !important;
+}
+

@@ -3,9 +3,14 @@ export interface Announcements {
   title: string;
   message: string;
   pinned: boolean;
-  // priorityLevel: string;
-  // roleId?: number;
-  // groupId?: number;
-  // allUser: boolean;
+  startDate: string;
+  endDate: string;
   read?: boolean;
+}
+
+export interface AnnouncementListRequest {
+  pageNo?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDir?: string;
 }
