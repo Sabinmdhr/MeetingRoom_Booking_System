@@ -34,9 +34,11 @@ export const muiTheme = createTheme({
     h2: { fontSize: "25px", fontWeight: 500 },
 
     // Form / Section Titles
-    h3: { fontSize: "18px", fontWeight: 500 },
+    h3: { fontSize: "22px", fontWeight: 500 },
+    // h3: { fontSize: "18px", fontWeight: 500 },
+    // h4: { fontSize: "19px", fontWeight: 500 },
     h4: { fontSize: "16px", fontWeight: 500 },
-    h5: { fontSize: "16px", fontWeight: 400 },
+    h5: { fontSize: "17px", fontWeight: 400 },
 
     // Subtitle
     subtitle1: {

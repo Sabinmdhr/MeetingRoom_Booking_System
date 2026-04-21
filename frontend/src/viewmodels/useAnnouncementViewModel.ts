@@ -11,6 +11,8 @@ const initialFormData: Announcements = {
   title: "",
   message: "",
   pinned: false,
+  startDate: "",
+  endDate: "",
 };
 
 const useAnnouncementViewModel = (
@@ -29,11 +31,13 @@ const useAnnouncementViewModel = (
         title: initialData.title ?? "",
         message: initialData.message ?? "",
         pinned: initialData.pinned ?? false,
+        startDate: initialData.startDate ?? "",
+        endDate: initialData.endDate ?? "",
       });
     } else {
       setAnnouncementFormData(initialFormData);
     }
-  }, [initialData?.id]);
+  }, [initialData]);
 
   const closeAnnouncementForm = () => {
     setAnnouncementFormData(initialFormData);
@@ -49,7 +53,7 @@ const useAnnouncementViewModel = (
   };
 
   const handleSubmit = async () => {
-    const { title, message, pinned } = announcementFormData;
+    const { title, message, pinned, startDate, endDate } = announcementFormData;
 
     if (!title.trim()) {
       toast.error("Title is required");
@@ -61,7 +65,13 @@ const useAnnouncementViewModel = (
       return;
     }
 
-    const payload: Announcements = { title, message, pinned };
+    const payload: Announcements = {
+      title,
+      message,
+      pinned,
+      startDate,
+      endDate,
+    };
 
     try {
       if (initialData?.id) {
@@ -73,7 +83,7 @@ const useAnnouncementViewModel = (
         toast.success("Announcement added successfully");
       }
 
-      refreshAnnouncements?.();
+      refreshAnnouncements?.(true);
       closeAnnouncementForm();
     } catch (error) {
       console.error("Error saving announcement:", error);
@@ -88,8 +98,8 @@ const useAnnouncementViewModel = (
   const handlePinChange = async (id: number) => {
     try {
       await updatePinStatus(id);
-      toast.success("Pin status updated");
       refreshAnnouncements?.();
+      toast.success("Pin status updated");
     } catch (error) {
       console.error("Error updating pin status:", error);
       toast.error("Failed to update pin status");
