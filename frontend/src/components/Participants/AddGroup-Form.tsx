@@ -9,7 +9,6 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useAddGroupViewModel } from "../../viewmodels/useAddGroupViewModel";
 import { Plus, X } from "lucide-react";
 import "../../assets/scss/components/AddGroup-Form.scss";
 import ParticipantsCard from "../BookingRooms/ParticipantsCard";
@@ -17,7 +16,20 @@ import { useEffect } from "react";
 import { useAppSelector } from "../../redux/store";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import MyButton from "../ui/Button";
-export const AddGroupForm = () => {
+import { useGroupCardViewModel } from "../../viewmodels/useGroupCardViewModel";
+import { mappingGroupResponseToRequest, type groupCardRequest, type groupCardResponse } from "../../models/groupCard.model";
+import { EditGroupCard } from "../../services/groupCard.services";
+
+type props = {
+   groupFormState: {
+      open: boolean;
+      mode: "add" | "edit";
+      group: groupCardResponse | null;
+    };
+  handleGroupFormOpen: (mode: "add" | "edit", group?: groupCardResponse) => void;
+  handleGroupFormClose: () => void
+};
+export const AddGroupForm = ({ handleGroupFormOpen, handleGroupFormClose, groupFormState }: props) => {
   const {
     openGroupForm,
     groupFormData,
@@ -26,12 +38,19 @@ export const AddGroupForm = () => {
     setGroupFormData,
     handleSubmitGroup,
     closeGroupForm,
-  } = useAddGroupViewModel();
+    initialGroupFormData,
+  } = useGroupCardViewModel();
 
   // const { selectedGroup, isEditOpen } = useAppSelector(
   //   (state) => state.participants,
   // );
-
+useEffect(()=>{
+if(groupFormState.mode == "edit" && groupFormState.group){
+setGroupFormData(mappingGroupResponseToRequest(groupFormState.group))
+}else {
+  setGroupFormData(initialGroupFormData);
+}
+},[groupFormState])
   return (
     <>
       <MyButton
@@ -40,11 +59,12 @@ export const AddGroupForm = () => {
         customVariant="dark"
         startIcon={<Plus size={17} />}
         onClick={() => {
-          setOpenGroupForm(true);
+          // setOpenGroupForm(true);
+          handleGroupFormOpen("add")
         }}
       />
 
-      <Dialog open={openGroupForm} onClose={() => closeGroupForm()}>
+      <Dialog open={groupFormState.open} onClose={() => handleGroupFormClose()}>
         <DialogTitle>ADD Group</DialogTitle>
         <DialogContent>
           <label className="label" htmlFor="group-name">
@@ -93,8 +113,13 @@ export const AddGroupForm = () => {
             // className="cancel-btn"
           />
           <MyButton
-            text="Create"
-            onClick={handleSubmitGroup}
+            text= {
+              groupFormState.mode == "edit"? "Edit": "Add"
+            }
+            onClick={async () => {
+              const success = await ( groupFormState.mode == "edit" && groupFormState.group? EditGroupCard(groupFormState.group.id , groupFormData):handleSubmitGroup())
+              if (success) closeGroupForm();
+            }}
             variant="contained"
             // className="add-btn"
             customVariant="dark"

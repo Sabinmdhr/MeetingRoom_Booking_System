@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import type {  Columns, ParticipantResponse, ParticipantsRequest} from "../models/participants.model";
+import type {
+  Columns,
+  ParticipantResponse,
+  ParticipantsRequest,
+} from "../models/participants.model";
 import { DemoColumns, getAllUser } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -9,12 +13,12 @@ import {
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
+  const fetchUsers = async () => {
+    const data = await getAllUser();
+    setUsers(data);
+    console.log(data);
+  };
   useEffect(() => {
-    const fetchUsers = async () => {
-      const data = await getAllUser();
-      setUsers(data);
-      console.log(data);
-    };
     fetchUsers();
   }, []);
 
@@ -35,11 +39,12 @@ export const useparticipantsViewModel = () => {
     });
   };
 
-  const handleParticipantsFormClose = () => {
+  const handleParticipantsFormClose = async() => {
     setParticipantsFormState((prev) => ({
       ...prev,
       open: false,
     }));
+    await fetchUsers()
   };
 
   const [participantType, setParticipantType] = useState<

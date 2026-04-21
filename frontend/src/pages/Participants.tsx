@@ -26,6 +26,9 @@ const Participants = () => {
     handleParticipantFormOpen,
     participantsFormState,
   } = useparticipantsViewModel();
+
+  const { groupFormState, handleGroupFormOpen, handleGroupFormClose } =
+    useGroupCardViewModel();
   // console.log("thisis ",users);
 
   // const { open } = useAddParticipantsViewModel();
@@ -68,7 +71,11 @@ const Participants = () => {
             handleParticipantsFormClose={handleParticipantsFormClose}
           />
         ) : (
-          <AddGroupForm />
+          <AddGroupForm
+            handleGroupFormOpen={handleGroupFormOpen}
+            handleGroupFormClose={handleGroupFormClose}
+            groupFormState={groupFormState}
+          />
         )}
       </div>
 
@@ -77,7 +84,7 @@ const Participants = () => {
           <div className="participants-table">
             <ParticipantsTable
               users={users}
-              participantsFormState={participantsFormState}
+              // participantsFormState={participantsFormState}
               handleParticipantFormOpen={handleParticipantFormOpen}
               handleParticipantsFormClose={handleParticipantsFormClose}
             />
@@ -85,7 +92,11 @@ const Participants = () => {
         </div>
       ) : (
         <div>
-          <GroupCard/>
+          <GroupCard
+            handleGroupFormOpen={handleGroupFormOpen}
+            handleGroupFormClose={handleGroupFormClose}
+            groupFormState={groupFormState}
+          />
         </div>
       )}
     </div>

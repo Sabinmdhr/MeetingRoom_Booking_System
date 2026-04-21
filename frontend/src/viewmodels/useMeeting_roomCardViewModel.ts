@@ -80,27 +80,26 @@ export const useMeetingCardViewModel = () => {
       console.log(res);
 
       toast.success("Room Created Successfully");
-      setRefresh((prev) => !prev);
       // setMeeting((prev) => [...prev, res]);
-      await fetchMeeting();
       return true;
     } catch (error) {
       console.log(error);
     }
   };
-    useEffect(() => {
-      fetchMeeting();
-    }, []);
+  useEffect(() => {
+    fetchMeeting();
+  }, []);
 
   const handleRoomFormOpen = (mode: "edit" | "add", room?: meeting_rooms) => {
     setRoomFormState({ open: true, mode: mode, room: room || null });
   };
 
-  const handleRoomFormClose = () => {
+  const handleRoomFormClose = async () => {
     setRoomFormState((prev) => ({
       ...prev,
       open: false,
     }));
+    await fetchMeeting();
   };
 
   return {
