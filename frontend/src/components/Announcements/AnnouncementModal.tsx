@@ -125,14 +125,13 @@ const AnnouncementModal = ({
             {/* PRIORITY */}
             <div className="announcementModal__inputGroup">
               <label className="announcementModal__label">
-                {" "}
-                <Calendar size={14} /> Start Date
+                <Calendar size={15} /> Start Date
               </label>
 
               <TextField
                 type="date"
-                name="priorityLevel"
-                value={announcementFormData.priorityLevel || ""}
+                name="startDate"
+                value={announcementFormData.startDate || ""}
                 onChange={handleChange}
                 fullWidth
                 SelectProps={{ MenuProps: { disablePortal: true } }}
@@ -142,13 +141,13 @@ const AnnouncementModal = ({
             {/* AUDIENCE/roles */}
             <div className="announcementModal__inputGroup">
               <label className="announcementModal__label">
-                <Calendar size={14} /> End Date
+                <Calendar size={15} /> End Date
               </label>
 
               <TextField
                 type="date"
-                name="audience"
-                value={announcementFormData.priorityLevel || ""}
+                name="endDate"
+                value={announcementFormData.endDate || ""}
                 onChange={handleChange}
                 fullWidth
                 SelectProps={{ MenuProps: { disablePortal: true } }}
@@ -161,7 +160,7 @@ const AnnouncementModal = ({
             <FormControlLabel
               control={
                 <Checkbox
-                  color="secondary"
+                  color="primary"
                   checked={announcementFormData.pinned}
                   onChange={(e) =>
                     setAnnouncementFormData((prev) => ({
@@ -178,7 +177,7 @@ const AnnouncementModal = ({
                     size={18}
                     color="#8646C3"
                   />
-                  <Typography variant="h4">
+                  <Typography className="announcementModal__label">
                     Pin this announcement to the top
                   </Typography>
                 </span>

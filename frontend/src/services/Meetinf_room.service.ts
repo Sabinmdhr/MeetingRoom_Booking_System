@@ -33,10 +33,18 @@ export const deleteMeetingRoom = async (roomId: number) => {
       status: "INACTIVE",
     });
     // console.log("deleted");
-   
+
     return response;
   } catch (error) {
     console.error("Error deleting meeting room:", error);
     throw error;
+  }
+};
+export const EditMeetingRoom = async (id: number, data: AddRoomModal) => {
+  try {
+    await api.put(`/api/v1/room/${id}/update`, data);
+    return true;
+  } catch (error) {
+    console.log(error);
   }
 };

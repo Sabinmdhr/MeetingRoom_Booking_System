@@ -5,9 +5,12 @@ import {
   Button,
   Menu,
   MenuItem,
+  Checkbox,
 } from "@mui/material";
 import "../../assets/scss/pages/Announcements.scss";
 import {
+  Circle,
+  CircleCheck,
   EllipsisVertical,
   Eye,
   Pin,
@@ -27,10 +30,13 @@ const AnnouncementCard = ({
   onDelete,
   onUpdate,
   refreshAnnouncements,
+  onTogglePin,
+  click,
+  setClick,
 }: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
 
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -46,6 +52,7 @@ const AnnouncementCard = ({
     setOpenDetailModal(false);
     setEditingItem(item);
     setOpenEditModal(true);
+    handleClose();
   };
 
   const handleCloseEdit = () => {
@@ -76,16 +83,16 @@ const AnnouncementCard = ({
   };
   const handleClose = () => setAnchorEl(null);
 
-  const handleOpenModal = () => {
-    setEditingItem(item);
-    setOpenModal(true);
-    handleClose();
-  };
+  // const handleOpenModal = () => {
+  //   setEditingItem(item);
+  //   setOpenModal(true);
+  //   handleClose();
+  // };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setEditingItem(null);
-  };
+  // const handleCloseModal = () => {
+  //   setOpenModal(false);
+  //   setEditingItem(null);
+  // };
 
   return (
     <>
@@ -94,13 +101,24 @@ const AnnouncementCard = ({
         variant="outlined"
       >
         {item.pinned && (
+          // <Pin
+          //   onClick={() => {
+          //     handlePinChange(item.id);
+          //   }}
+          //   size={33}
+          //   fill="#8646c3"
+          //   color="#8646c3"
+          //   className="announcement__pin-icon"
+          // />
           <Pin
             onClick={() => {
-              handlePinChange(item.id);
-              // handleClose();
+              const updated = { ...item, pinned: !item.pinned };
+
+              onTogglePin(updated); //  instant UI
+              handlePinChange(item.id); //  backend sync
             }}
             size={33}
-            fill="#8646c3"
+            fill={item.pinned ? "#8646c3" : "transparent"}
             color="#8646c3"
             className="announcement__pin-icon"
           />
@@ -112,7 +130,7 @@ const AnnouncementCard = ({
                 className="announcement__author-date"
                 variant="subtitle2"
               >
-                {item.modifiedAt}
+                {item.authorName} • {item.startDate}
               </Typography>
             </div>
 
@@ -127,10 +145,16 @@ const AnnouncementCard = ({
                 onClick={handleMenuClick}
                 className="announcement__menu-btn"
               >
-                <EllipsisVertical
-                  color="black"
-                  size={18}
-                />
+                <div className="announcemnet__circleCheck">
+                  <div>
+                    <EllipsisVertical
+                      className="vertical-ellipsis"
+                      color="black"
+                      size={18}
+                    />
+                  </div>
+                  <div>{click && <Circle />}</div>
+                </div>
               </Button>
               <Menu
                 id={`announcement-menu-${item.id}`}
@@ -150,13 +174,21 @@ const AnnouncementCard = ({
                   <Eye size={16} />
                   <Typography variant="body1">View Details</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleOpenEdit}>
+                <MenuItem
+                  onClick={() => {
+                    handleOpenEdit();
+                  }}
+                >
                   <SquarePen size={16} />
                   <Typography variant="body1">Edit</Typography>
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    handlePinChange(item.id);
+                    const updated = { ...item, pinned: !item.pinned };
+
+                    onTogglePin(updated); // instant move
+                    handlePinChange(item.id); //  API call
+
                     handleClose();
                   }}
                 >
@@ -183,7 +215,7 @@ const AnnouncementCard = ({
 
           <Typography
             className="announcement__card-title"
-            variant="h4"
+            variant="body1"
           >
             {item.title}
           </Typography>
