@@ -15,3 +15,12 @@ export interface groupCardRequest {
   description: string;
   member: number[];
 }
+
+
+export const mappingGroupResponseToRequest = (p:groupCardResponse): groupCardRequest =>{
+return {
+  description: p.description,
+  groupName: p.groupName,
+  member: p.members.map((m) => m.memberId)
+};
+}

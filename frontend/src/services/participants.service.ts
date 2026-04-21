@@ -2,6 +2,7 @@
 import api from "../api/api";
 import type {
   Columns,
+  ParticipantResponse,
   ParticipantsRequest,
 } from "../models/participants.model";
 // export const DemoParticipants = (): Participants[] => {
@@ -88,7 +89,7 @@ export const addUser = async (data: ParticipantsRequest) => {
   return response.data;
 };
 
-export const editUser = async (id: number) => {
-  const response = await api.put(`/api/v1/user/${id}/update`);
+export const editUser = async (id: number, data: ParticipantsRequest) => {
+  const response = await api.put(`/api/v1/user/${id}/update`, data);
   return response.data;
 };

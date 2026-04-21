@@ -29,11 +29,11 @@ import { useState } from "react";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 type props = {
   users: ParticipantResponse[];
-  participantsFormState: {
-    open: boolean;
-    mode: "add" | "edit";
-    participant: ParticipantResponse | null;
-  };
+  // participantsFormState: {
+  //   open: boolean;
+  //   mode: "add" | "edit";
+  //   participant: ParticipantResponse | null;
+  // };
   handleParticipantFormOpen: (
     mode: "add" | "edit",
     participant?: ParticipantResponse,
@@ -130,7 +130,7 @@ export const ParticipantsTable = ({
                       </TableCell>
                     );
 
-                 
+
 
                   case "actions":
                     return (

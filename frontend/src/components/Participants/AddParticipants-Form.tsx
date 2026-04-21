@@ -294,7 +294,7 @@ export const AddParticipantsForm = ({
             onClick={async () => {
               const success = await (participantsFormState.mode === "edit" &&
               participantsFormState.participant
-                ? editUser(participantsFormState?.participant?.id)
+                ? editUser(participantsFormState?.participant?.id ,participantFormData )
                 : handleSubmit());
 
               if (success) {

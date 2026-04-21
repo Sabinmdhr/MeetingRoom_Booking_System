@@ -6,13 +6,29 @@ import { deleteGroupCard } from "../../services/groupCard.services";
 import MyButton from "../ui/Button";
 import { useState } from "react";
 import ConfirmDialog from "../ui/ConfirmDialog";
-export const GroupCard = () => {
+import { mappingGroupResponseToRequest, type groupCardRequest, type groupCardResponse } from "../../models/groupCard.model";
+
+type props = {
+  groupFormState: {
+    open: boolean;
+    mode: "add" | "edit";
+    group: groupCardResponse | null;
+  };
+  handleGroupFormOpen: (
+    mode: "add" | "edit",
+    group?: groupCardResponse,
+  ) => void;
+  handleGroupFormClose: () => void;
+};
+export const GroupCard = ({
+  handleGroupFormOpen,
+  handleGroupFormClose,
+  groupFormState,
+}: props) => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
 
   const { group } = useGroupCardViewModel();
-  // const {handleEditGroup} = useAddGroupViewModel()
-  // const { handleEditGroup } = useAddGroupViewModel();
 
   const handleDeleteClick = (id: number) => {
     setSelectedGroupId(id);
@@ -30,18 +46,12 @@ export const GroupCard = () => {
     <div className="groupCard-Container">
       {group.map((group, index) => {
         return (
-          <Card
-            className="groupCard"
-            key={index}
-          >
+          <Card className="groupCard" key={index}>
             <CardHeader
               className="groupCard-title"
               title={
                 <div className="title-wrapper">
-                  <Building2
-                    size={22}
-                    color="#155DFC"
-                  />
+                  <Building2 size={22} color="#155DFC" />
                   <span className="title-text">{group.groupName}</span>
                 </div>
               }
@@ -49,15 +59,12 @@ export const GroupCard = () => {
                 <div className="title-icons">
                   <MyButton
                     text=""
-                    startIcon={
-                      <Pen
-                        size={17}
-                        style={{ marginLeft: "10px" }}
-                      />
-                    }
+                    startIcon={<Pen size={17} style={{ marginLeft: "10px" }} />}
                     variant="outlined"
                     customVariant="ghost"
-                    onClick={() => {}}
+                    onClick={() => {
+                      if (group) handleGroupFormOpen("edit", group);
+                    }}
                   />
                   <MyButton
                     text=""

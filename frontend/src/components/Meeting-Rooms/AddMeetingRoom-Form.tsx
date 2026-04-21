@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import MyButton from "../ui/Button";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
+import { EditMeetingRoom } from "../../services/Meetinf_room.service";
 
 type props = {
   roomFormState: {
@@ -181,10 +182,13 @@ export const AddMeetingRoomForm = ({
         </DialogContent>
         <DialogActions>
           <MyButton
-            variant="contained"
-            text={roomFormState.mode =="edit" ? "Edit" : "Add"}
+            customVariant="ghost"
+            text={roomFormState.mode == "edit" ? "Edit" : "Add"}
             onClick={async () => {
-              const success = await submitAddRomForm();
+              const success = await (roomFormState.mode == "edit" &&
+              roomFormState.room?.id
+                ? EditMeetingRoom(roomFormState.room?.id, addRoomFormData)
+                : submitAddRomForm());
               if (success) handleRoomFormClose();
             }}
           ></MyButton>

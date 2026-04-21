@@ -32,3 +32,11 @@ export const addGroupCard = async (groupData: groupCardRequest) => {
     throw error;
   }
 };
+export const EditGroupCard = async(id: number, data:groupCardRequest) =>{
+  try {
+    const res = await api.put(`/api/v1/group/${id}/update`, data);
+  } catch (error) {
+console.log(error);
+
+  }
+}
