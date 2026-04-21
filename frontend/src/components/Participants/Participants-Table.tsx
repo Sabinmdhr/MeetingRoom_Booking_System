@@ -130,13 +130,7 @@ export const ParticipantsTable = ({
                       </TableCell>
                     );
 
-                  case "numOfMeetings":
-                    return (
-                      <TableCell key={col.id}>
-                        {/* {participant.email} */}
-                        12
-                      </TableCell>
-                    );
+                 
 
                   case "actions":
                     return (

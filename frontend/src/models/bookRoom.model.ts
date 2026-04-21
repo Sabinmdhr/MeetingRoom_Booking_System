@@ -53,7 +53,7 @@ export interface BookingRoomData {
   date: string;
   startTime: string;
   endTime: string;
-  meetingType: MeetingType;
+  meetingTypeId: number;
   description: string;
   externalParticipants: ExternalParticipant[];
   internalParticipantIds: number[];
@@ -62,19 +62,14 @@ export interface BookingRoomData {
   recurrenceType: RecurrenceType;
   weekDays: WeekDays[];
 }
-
-export interface GetBookedRoomData{
-  id: number;
-  meetingTitle: string;
-  date: string;
+export interface GetBookedRoomData {
+  roomId: number;
+  roomBookingId: number;
   startTime: string;
   endTime: string;
-  meetingType: string;
-  description:string;
-  externalParticipant: BookedExternalParticipant[];
-  internalParticipant: BookedInternalParticipant[];
-  room: Room;
-  status: "ACTIVE" | string;
-  meetingStatus: "UPCOMING" | string;
-  roomBooker: RoomBooker;
 }
+export interface GetBookedRoomDataResponse {
+  data:GetBookedRoomData[];
+  success: boolean;
+  message: string; 
+} 

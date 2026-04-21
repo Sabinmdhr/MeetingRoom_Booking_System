@@ -1,25 +1,25 @@
-.Meeting-Card{
- flex: 0 0  calc(50% - 30px);
+.Meeting-Card {
+  flex: 0 0 calc(50% - 30px);
   // padding: 8px !important;
   border-radius: 12px !important;
-  border: 0.5px solid #E5E5E5;
+  border: 0.5px solid #e5e5e5;
   box-shadow: none !important;
   margin: 10px 0px;
 }
-.room-Card--Container{
-   display: flex;
+.room-Card--Container {
+  display: flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.Meeting-title{
+.Meeting-title {
   font-size: var(--titleSmallSize) !important;
   font-weight: 600 !important;
   letter-spacing: var(--titleSmallTracking) !important;
   line-height: var(--titleSmallLineht) !important;
   color: black !important;
 }
-.Meeting-Card--content{
+.Meeting-Card--content {
   display: flex;
   flex-direction: column;
   // gap: 28px;
@@ -32,55 +32,50 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 0.8px solid #DDE5FD;
+  border-bottom: 0.8px solid #dde5fd;
 }
-.TimeCapacity{
+.TimeCapacity {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 8px 0;
 
-  .Time, .Capacity{
-  // color: var(--colors-Red-200);
-  color: #4A5565;
-  font-weight: 400;
+  .Time,
+  .Capacity {
+    // color: var(--colors-Red-200);
+    color: #4a5565;
+    font-weight: 400;
     font-size: var(--bodySmallSize);
-  line-height: var(--bodySmallLineht);
-  letter-spacing: var(--bodySmallTracking);
+    line-height: var(--bodySmallLineht);
+    letter-spacing: var(--bodySmallTracking);
   }
-
-
 }
-.Features-Tabs{
-  display:flex;
-gap: 4px;
-margin-top: 8px;
-align-items: center ;
-justify-content: start;
-
-}
-.Meeitng_room-Feature{
+.Features-Tabs {
   display: flex;
-  background-color: #F3F4F6;
+  gap: 4px;
+  margin-top: 8px;
+  align-items: center;
+  justify-content: start;
+}
+.Meeitng_room-Feature {
+  display: flex;
+  background-color: #f3f4f6;
   border-radius: 4px;
   padding: 2px 4px;
   gap: 4px;
   text-align: center;
   // align-items: center;
 
-   .Feature-title{
-   font-size: var(--bodySmallSize);
-   letter-spacing: var(--bodySmallTracking);
-   line-height: var(--bodySmallLineht);
-   color: #4A5565;
-   }
-
-
-
+  .Feature-title {
+    font-size: var(--bodySmallSize);
+    letter-spacing: var(--bodySmallTracking);
+    line-height: var(--bodySmallLineht);
+    color: #4a5565;
+  }
 }
-.Meeting_room-Available{
+.Meeting_room-Available {
   padding: 4px 17px;
-  border-radius:8px;
+  border-radius: 8px;
   // font-size: 12px !important;
   font-size: var(--labelSmallSize) !important;
   line-height: var(--labelSmallLineht) !important;
@@ -94,34 +89,26 @@ justify-content: start;
     background-color: var(--colors-Yellow-Alpha-10);
   }
 }
-.Meeting_room-Book{
-  padding: 8px 24px;
-  border-radius:10px !important;
-  border: 1px solid var(--colorNeutral300);
-  color: white !important;
-  cursor: pointer;
-    width: 100%;
-  text-transform: none !important;
+.Meeting_room-Book {
+  width: 100%;
 
- &.Available {
+  &.Available {
     background-color: black;
   }
   &.Unavailable {
     background-color: var(--colorNeutral200);
     color: black !important;
     &:hover {
-       background-color: #e0e0e0;
+      background-color: #e0e0e0;
     }
   }
 }
-.Meeting-Card--Actions{
+.Meeting-Card--Actions {
   display: flex;
   width: 100%;
   justify-content: space-between;
 
-
-.Meeting-card-editbtns{
-  display: flex;
-
-}
+  .Meeting-card-editbtns {
+    display: flex;
+  }
 }

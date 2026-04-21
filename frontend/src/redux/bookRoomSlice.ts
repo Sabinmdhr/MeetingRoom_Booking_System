@@ -7,7 +7,7 @@ const initialState: BookingRoomData = {
   date: "",
   startTime: "",
   endTime: "",
-  meetingType: "INTERNAL",
+  meetingTypeId: 0,
   description: "",
   externalParticipants: [],
   internalParticipantIds: [],
@@ -20,15 +20,23 @@ const BookingRoomSlice = createSlice({
   name: "BookingRoom",
   initialState,
   reducers: {
-    updateBookingRoomFormData: (state, action: PayloadAction<Partial<BookingRoomData>>) => {
+    updateBookingRoomFormData: (
+      state,
+      action: PayloadAction<Partial<BookingRoomData>>,
+    ) => {
       return {
         ...state,
         ...action.payload,
       };
     },
+    clearBookingRoomFormData: (
+     
+    ) => {
+      return initialState;
+    },
   },
 });
 
-export const {updateBookingRoomFormData} = BookingRoomSlice.actions;
+export const { updateBookingRoomFormData, clearBookingRoomFormData } = BookingRoomSlice.actions;
 
 export default BookingRoomSlice.reducer;

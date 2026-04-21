@@ -2,7 +2,7 @@
  * Converts a time string HH:mm to total minutes since start of day
  */
 export const timeStringToMinutes = (timeString: string): number => {
-  const [hours, minutes] = timeString.split(":").map(Number);
+  const [hours, minutes] = timeString?.split(":").map(Number);
   return hours * 60 + minutes;
 };
 

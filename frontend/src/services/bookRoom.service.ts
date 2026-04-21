@@ -1,4 +1,4 @@
-import type { BookingRoomData, GetBookedRoomData } from "../models/bookRoom.model";
+import type { BookingRoomData, GetBookedRoomDataResponse } from "../models/bookRoom.model";
 import api from "../api/api";
 
 export const BookRoom = async (bookingData: BookingRoomData) => {
@@ -6,8 +6,8 @@ export const BookRoom = async (bookingData: BookingRoomData) => {
   return res;
 };
 
-export const getBookedDataById= async (roomId: number): Promise<GetBookedRoomData> =>{
-  const res= await api.get<GetBookedRoomData>(`/api/v1/get-booked-room/${roomId}`);
+export const getBookedDataById= async (roomId: number): Promise<GetBookedRoomDataResponse> =>{
+  const res= await api.get(`/api/v1/get-room-meetings/${roomId}`);
   return res.data;
 }
 

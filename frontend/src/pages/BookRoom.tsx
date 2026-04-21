@@ -26,7 +26,8 @@ const meetings = [
 ];
 
 const BookRoom = () => {
-  const { handleChange, handleBookRoom } = useBookingRoomViewModel();
+  const { handleChange, handleBookRoom } =
+    useBookingRoomViewModel();
   const { participantType, handleInternalClick, handleExternalClick } =
     useparticipantsViewModel();
   const bookinRoomFormData = useAppSelector((state) => state.bookingRoom);
@@ -176,8 +177,8 @@ const BookRoom = () => {
                 <label className="field-label">Meeting Type *</label>
                 <TextField
                   select
-                  name="meetingType"
-                  value={bookinRoomFormData.meetingType}
+                  name="meetingTypeId"
+                  value={bookinRoomFormData.meetingTypeId}
                   onChange={handleChange}
                   // error={!!errors.meetingType}
                   fullWidth
@@ -197,8 +198,8 @@ const BookRoom = () => {
                   }}
                 >
                   {meetings.map((meeting) => (
-                    <MenuItem key={meeting.id} value={capitalize(meeting.name)}>
-                      {meeting.name}
+                    <MenuItem key={meeting.id} value={meeting.id}>
+                      {meeting.id}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -330,7 +331,12 @@ const BookRoom = () => {
                   multiline
                 />
               </div>
-              <Button variant="contained" onClick={handleBookRoom}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleBookRoom();
+                }}
+              >
                 Book Room
               </Button>
             </div>

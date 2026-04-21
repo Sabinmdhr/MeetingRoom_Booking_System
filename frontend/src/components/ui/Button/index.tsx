@@ -4,7 +4,6 @@ import "./Button.scss";
 export interface ButtonProps {
   variant?: "contained" | "outlined" | "text";
   customVariant?: "primary" | "dark" | "danger" | "ghost";
-
   size?: "small" | "medium" | "large";
   color?: "primary" | "secondary" | "success" | "error" | "warning" | "info";
   text: string;

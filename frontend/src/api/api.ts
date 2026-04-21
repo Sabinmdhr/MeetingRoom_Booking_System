@@ -55,8 +55,8 @@ instance.interceptors.response.use(
           refreshToken,
         });
 
-        const newAccessToken = res.data.accessToken;
-        const newRefreshToken = res.data.refreshToken;
+        const newAccessToken = res.data?.data?.accessToken;
+        const newRefreshToken = res.data.data?.refreshToken;
 
         // ✅ store new tokens
         localStorage.setItem("accessToken", newAccessToken);

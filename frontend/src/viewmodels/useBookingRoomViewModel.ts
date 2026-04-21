@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { BookRoom, getBookedDataById } from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
-import { useDispatch } from "react-redux";
-import { updateBookingRoomFormData } from "../redux/bookRoomSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearBookingRoomFormData,
+  updateBookingRoomFormData,
+} from "../redux/bookRoomSlice";
+import { clamp, snapToInterval } from "../utils/timeUtils";
 import { useNavigate } from "react-router-dom";
+import type {  GetBookedRoomDataResponse } from "../models/bookRoom.model";
 
 type BookingTimeAndDatePeops = {
   startTime: string;
@@ -15,7 +20,8 @@ export const useBookingRoomViewModel = () => {
   const dispatch = useDispatch();
   const {roomId}= useAppSelector((state)=>state.bookingRoom);
   
-  const navigate = useNavigate()
+  const [successState, setSuccessState] = useState<boolean>(false);
+  const navigate = useNavigate();
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -38,13 +44,31 @@ export const useBookingRoomViewModel = () => {
     navigate("/book-room");
   };
 
+  // const handleClearFormData = () => {
+  //   dispatch(clearBookingRoomFormData());
+  //   navigate("/meeting-rooms");
+  // };
+  // const submit = () =>{
+  //     console.log(startTime);
+  //   }
+  //  const handleSubmit = () => {
+  //     console.log(startTime);
+  //     setBookingRoomData((prev) => ({
+  //       ...prev,
+  //       startTime:startTime,
+  //       endTime : endTime,
+  //       date : date,
+  //     }));
+
+  //   };
   const handleBookRoom = async () => {
     try {
       // console.log("success", bookingRoomFormData);
       const response = await BookRoom(bookingRoomFormData);
+      dispatch(clearBookingRoomFormData());
+      navigate("/meeting-rooms");
       return response;
-
-    } catch (error:any) {
+    } catch (error: any) {
       console.log("FULL ERROR:", error);
       console.log("STATUS:", error.response?.status);
       console.log("BACKEND MESSAGE:", error.response?.data);
@@ -53,13 +77,19 @@ export const useBookingRoomViewModel = () => {
 
   const handleGetBookedRoom= async () =>{
     try {
-      const res= await getBookedDataById(roomId);
-      setBookedSlots([{start:res.startTime, end: res.endTime}]);
+      const res :GetBookedRoomDataResponse = await getBookedDataById(roomId);
+      console.log(res);
+  
+      const formatted =res.data.map((slot) =>({
+        start: slot.startTime,
+        end: slot.endTime
+      }))
+setBookedSlots(formatted)
       return res;
     } catch (error) {
       console.log("Error:", error);
     }
-  }
+  } 
 
   return {
     updateBookingTimeAndDate,
@@ -67,5 +97,6 @@ export const useBookingRoomViewModel = () => {
     handleGetBookedRoom,
     bookedSlots,
     handleBookRoom,
+    successState,
   };
 };

@@ -1,5 +1,4 @@
 import {
-  Button,
   Checkbox,
   Dialog,
   DialogActions,
@@ -11,12 +10,12 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import { Plus } from "lucide-react";
 import "../../assets/scss/components/AddMeetingRoom-Form.scss";
 import { useEffect } from "react";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import MyButton from "../ui/Button";
+import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 
 type props = {
   roomFormState: {
@@ -41,7 +40,10 @@ export const AddMeetingRoomForm = ({
     handleChange,
     handleCheckboxChange,
     submitAddRomForm,
-  } = useAddRoomViewModel();
+    setRoomFormState,
+    refresh,
+    fetchMeeting,
+  } = useMeetingCardViewModel();
   // const {
   //   addMeetingFormData,
   //   setAddMeetingFormData,
@@ -50,6 +52,9 @@ export const AddMeetingRoomForm = ({
   //   setRoomFormState,
   //   handleRoomFormOpen,
   // } = useMeetingCardViewModel();
+  // useEffect(() => {
+  //   fetchMeeting();
+  // }, [refresh]);
   useEffect(() => {
     if (roomFormState.mode === "edit" && roomFormState.room) {
       setAddRoomFormData({
@@ -175,14 +180,14 @@ export const AddMeetingRoomForm = ({
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button
+          <MyButton
             variant="contained"
-            onClick={() => {
-              submitAddRomForm();
+            text={roomFormState.mode =="edit" ? "Edit" : "Add"}
+            onClick={async () => {
+              const success = await submitAddRomForm();
+              if (success) handleRoomFormClose();
             }}
-          >
-            Add
-          </Button>
+          ></MyButton>
         </DialogActions>
       </Dialog>
     </div>

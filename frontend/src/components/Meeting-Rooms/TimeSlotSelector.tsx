@@ -13,6 +13,7 @@ import {Typography, Box} from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
+import { useAppSelector } from "../../redux/store";
 interface TimeSlotSelectorProps {
   onSave?: (slot: { startTime: string; endTime: string }) => void;
   initialSlot?: { startTime: string; endTime: string };
@@ -58,14 +59,20 @@ export const TimeSlotSelector = ({
   });
 
   const timelineRef = useRef<HTMLDivElement>(null);
-  const { updateBookingTimeAndDate, bookedSlots } = useBookingRoomViewModel();
+  const { updateBookingTimeAndDate, bookedSlots ,handleGetBookedRoom} = useBookingRoomViewModel();
 
   const isOverlapping =(start: string, end: string)=>{
     return bookedSlots.some(
       (slot) => start < slot.end && end > slot.start
     )
   }
-
+const {roomId}= useAppSelector((state) => state.bookingRoom)
+  useEffect(()=>{
+    handleGetBookedRoom()
+    console.log("Room",roomId );
+    
+  },[])
+  
   useEffect(() => {
     onSave?.({
       startTime: minutesToTimeString(startTime),
@@ -73,7 +80,8 @@ export const TimeSlotSelector = ({
     });
     // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
     console.log(minutesToTimeString(startTime));
-    console.log(minutesToTimeString(endTime));
+    console.log(bookedSlots, "bookedslots");
+    console.log(minutesToTimeString(endTime)); 
   }, [startTime, endTime, onSave]);
 
   const getYFromMinutes = (minutes: number) =>
@@ -160,22 +168,29 @@ export const TimeSlotSelector = ({
     (_, i) => START_HOUR + i,
   );
 
-  const { formattedDate, changeDate, jumpToToday,backendFormattedDate } = useRoomTimeslotViewModel();
+  const { formattedDate, changeDate, jumpToToday, backendFormattedDate } =
+    useRoomTimeslotViewModel();
 
   return (
-    <div className="container" style={{ height: TOTAL_HEIGHT }}>
+    <div
+      className="container"
+      style={{ height: TOTAL_HEIGHT }}
+    >
       <div className="header">
         <Box className="timeslot-nav">
           <MyButton
             onClick={() => changeDate(-1)}
             variant="outlined"
             text="Previous"
-            customVariant="ghost" 
+            customVariant="ghost"
             startIcon={<ChevronLeft size={18} />}
           />
           <Box className="date">
             <Typography className="timeslot-date">{formattedDate}</Typography>
-            <Typography className="jump-today" onClick={jumpToToday}>
+            <Typography
+              className="jump-today"
+              onClick={jumpToToday}
+            >
               Jump to Today
             </Typography>
           </Box>
@@ -183,16 +198,22 @@ export const TimeSlotSelector = ({
             onClick={() => changeDate(1)}
             variant="outlined"
             text="Next"
-            customVariant="ghost" 
+            customVariant="ghost"
             endIcon={<ChevronRight size={18} />}
           />
         </Box>
       </div>
 
-      <div className="timelineWrapper" ref={timelineRef}>
+      <div
+        className="timelineWrapper"
+        ref={timelineRef}
+      >
         <div className="timeGutter">
           {hours.map((hour) => (
-            <div key={hour} className="timeLabel">
+            <div
+              key={hour}
+              className="timeLabel"
+            >
               {hour.toString().padStart(2, "0")}:00
             </div>
           ))}
@@ -216,6 +237,7 @@ export const TimeSlotSelector = ({
               }}
             />
           ))}
+          
 {bookedSlots.map((slot, index) => (
   <div
     key={index}
@@ -228,7 +250,7 @@ export const TimeSlotSelector = ({
       backgroundColor: "rgba(255, 0, 0, 0.3)",
       border: "1px solid red",
       pointerEvents: "none", // 👈 important
-      zIndex: 1,
+      zIndex: 999,
     }}
   />
 ))}
@@ -280,15 +302,16 @@ export const TimeSlotSelector = ({
         </div>
 
         <div className="bookRoomActions">
-          <MyButton 
-          variant="contained"
-          text="Cancel"
-          customVariant="ghost" 
-          onClick={()=>{}}/>
+          <MyButton
+            variant="contained"
+            text="Cancel"
+            customVariant="ghost"
+            onClick={() => {}}
+          />
           <MyButton
             variant="contained"
             text="Proceed to Booking"
-            customVariant="dark" 
+            customVariant="dark"
             onClick={() => {
               updateBookingTimeAndDate({
                 startTime: minutesToTimeString(startTime),

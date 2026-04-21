@@ -69,10 +69,6 @@ export const DemoColumns = (): Columns[] => {
       label: "Contact",
     },
     {
-      id: "numOfMeetings",
-      label: "Meetings",
-    },
-    {
       id: "actions",
       label: "Actions",
     },
@@ -92,3 +88,7 @@ export const addUser = async (data: ParticipantsRequest) => {
   return response.data;
 };
 
+export const editUser = async (id: number) => {
+  const response = await api.put(`/api/v1/user/${id}/update`);
+  return response.data;
+};

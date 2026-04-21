@@ -1,11 +1,27 @@
-import { Button, Card, Grid, CardActions, CardContent, Menu, MenuItem, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  Grid,
+  CardActions,
+  CardContent,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import "../../assets/scss/components/Meeting_roomCard.scss";
 import "../../assets/scss/global.scss";
 import { deleteMeetingRoom } from "../../services/Meetinf_room.service";
-import { Projector, Presentation, TvMinimal, Wifi, Ellipsis, Pen, Trash2 } from "lucide-react";
+import {
+  Projector,
+  Presentation,
+  TvMinimal,
+  Wifi,
+  Ellipsis,
+  Pen,
+  Trash2,
+} from "lucide-react";
 // import { Meeting_roomCardDetails } from "./Meeting_roomCard-Details";
-import { useAddRoomViewModel } from "../../viewmodels/useAddRoomViewModel";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -13,6 +29,10 @@ import { updateBookingRoomFormData } from "../../redux/bookRoomSlice";
 // interface MeetingCardProps {
 //   meetingId: string;
 // }
+import { useState } from "react";
+import ConfirmDialog from "../ui/ConfirmDialog";
+import MyButton from "../ui/Button";
+
 type props = {
   roomFormState: {
     open: boolean;
@@ -25,11 +45,13 @@ export const Meeting_roomCard = ({
   roomFormState,
   handleRoomFormOpen,
 }: props) => {
-
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   // const [open , setOpen] = useState(false)
-  const navigate= useNavigate();
-  const dispatch = useDispatch()
-  const { meeting, error, selectedRoom, setSelectedRoom } = useMeetingCardViewModel();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { meeting, error, selectedRoom, setSelectedRoom } =
+    useMeetingCardViewModel();
 
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -42,6 +64,18 @@ export const Meeting_roomCard = ({
     "Wi-Fi": <Wifi size={12} />,
   };
 
+  const handleDeleteClick = (id: number) => {
+    setSelectedRoomId(id);
+    setOpenConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedRoomId !== null) {
+      await deleteMeetingRoom(selectedRoomId);
+      setOpenConfirm(false);
+      setSelectedRoomId(null);
+    }
+  };
   return (
     <div className="room-Card--Container">
       {meeting.map((m) => {
@@ -51,7 +85,10 @@ export const Meeting_roomCard = ({
             <CardContent className="Meeting-Card--content">
               <div>
                 <div className="cardHeader">
-                  <Typography className="Meeting-title" variant="h6">
+                  <Typography
+                    className="Meeting-title"
+                    variant="h6"
+                  >
                     {m.roomName}
                   </Typography>
 
@@ -71,9 +108,15 @@ export const Meeting_roomCard = ({
                   </Typography>
                 </div>
 
-                <Typography variant="body2" className="Features-Tabs">
+                <Typography
+                  variant="body2"
+                  className="Features-Tabs"
+                >
                   {m.resources.map((feature, index) => (
-                    <span className="Meeitng_room-Feature" key={index}>
+                    <span
+                      className="Meeitng_room-Feature"
+                      key={index}
+                    >
                       <span className="Feature-icons">
                         {featureIcons[feature]}
                       </span>
@@ -85,27 +128,57 @@ export const Meeting_roomCard = ({
             </CardContent>
 
             <CardActions className="Meeting-Card--Actions">
-              <Button
+              <MyButton
+                text="Book Now"
                 className="Meeting_room-Book Available"
+                variant="outlined"
+                customVariant="dark"
                 onClick={() => {
                   navigate("/room-timeslot", { state: { room: m } });
-                  dispatch(updateBookingRoomFormData({roomId: m.id}))
+                  dispatch(updateBookingRoomFormData({ roomId: m.id }));
                 }}
-              >
-                Book Now
-              </Button>
+              />
 
-              <Button onClick={() => handleRoomFormOpen("edit", m)}>
-                <Pen size={18} />
-              </Button>
-              <Button onClick={() => deleteMeetingRoom(m.id)}>
-                <Trash2 size={18} color="red" />
-              </Button>
+              <MyButton
+                startIcon={
+                  <Pen
+                    size={18}
+                    style={{ marginLeft: "5px" }}
+                  />
+                }
+                text=""
+                customVariant="ghost"
+                onClick={() => handleRoomFormOpen("edit", m)}
+              />
+              <MyButton
+                text=""
+                customVariant="ghost"
+                startIcon={
+                  <Trash2
+                    size={18}
+                    color="red"
+                    style={{ marginLeft: "5px" }}
+                  />
+                }
+                onClick={() => handleDeleteClick(m.id)}
+              />
             </CardActions>
           </Card>
           // </Grid>
         );
       })}
+
+      <ConfirmDialog
+        open={openConfirm}
+        title="Delete Meeting Room"
+        content="Are you sure you want to delete this room?"
+        text="Delete"
+        onConfirm={handleConfirmDelete}
+        onClose={() => {
+          setOpenConfirm(false);
+          setSelectedRoomId(null);
+        }}
+      />
     </div>
   );
 };
