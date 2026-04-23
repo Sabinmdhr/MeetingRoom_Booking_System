@@ -9,7 +9,7 @@ import {
   timeStringToMinutes,
 } from "../../utils/timeUtils";
 import { useRoomTimeslotViewModel } from "../../viewmodels/useRoomTimeslotViewModel";
-import {Typography, Box} from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
@@ -45,7 +45,6 @@ export const TimeSlotSelector = ({
     initialSlot ? timeStringToMinutes(initialSlot.endTime) : 610, // 10:10 default
   );
 
-
   const [interaction, setInteraction] = useState<{
     mode: InteractionMode;
     startY: number;
@@ -59,20 +58,18 @@ export const TimeSlotSelector = ({
   });
 
   const timelineRef = useRef<HTMLDivElement>(null);
-  const { updateBookingTimeAndDate, bookedSlots ,handleGetBookedRoom} = useBookingRoomViewModel();
+  const { updateBookingTimeAndDate, bookedSlots, handleGetBookedRoom } =
+    useBookingRoomViewModel();
 
-  const isOverlapping =(start: string, end: string)=>{
-    return bookedSlots.some(
-      (slot) => start < slot.end && end > slot.start
-    )
-  }
-const {roomId}= useAppSelector((state) => state.bookingRoom)
-  useEffect(()=>{
-    handleGetBookedRoom()
-    console.log("Room",roomId );
-    
-  },[])
-  
+  const isOverlapping = (start: string, end: string) => {
+    return bookedSlots.some((slot) => start < slot.end && end > slot.start);
+  };
+  const { roomId } = useAppSelector((state) => state.bookingRoom);
+  useEffect(() => {
+    handleGetBookedRoom();
+    console.log("Room", roomId);
+  }, []);
+
   useEffect(() => {
     onSave?.({
       startTime: minutesToTimeString(startTime),
@@ -81,7 +78,7 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
     // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
     console.log(minutesToTimeString(startTime));
     console.log(bookedSlots, "bookedslots");
-    console.log(minutesToTimeString(endTime)); 
+    console.log(minutesToTimeString(endTime));
   }, [startTime, endTime, onSave]);
 
   const getYFromMinutes = (minutes: number) =>
@@ -118,7 +115,10 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
     const newStart = clamp(snappedStart, START_MINUTES, END_MINUTES - 10);
     const newEnd = clamp(newStart + 10, START_MINUTES + 10, END_MINUTES);
 
-    if(isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newEnd))) return;
+    if (
+      isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newEnd))
+    )
+      return;
 
     setStartTime(newStart);
     setEndTime(newEnd);
@@ -128,7 +128,7 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
     if (interaction.mode === "none") return;
 
     const deltaY = e.clientY - interaction.startY;
-    const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT); 
+    const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT);
     const snappedDelta = snapToInterval(deltaMinutes, 5);
 
     if (interaction.mode === "drag") {
@@ -139,7 +139,13 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
       if (newStart < START_MINUTES) newStart = START_MINUTES;
       if (newStart + duration > END_MINUTES) newStart = END_MINUTES - duration;
 
-      if (isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newStart + duration))) return;
+      if (
+        isOverlapping(
+          minutesToTimeString(newStart),
+          minutesToTimeString(newStart + duration),
+        )
+      )
+        return;
 
       setStartTime(newStart);
       setEndTime(newStart + duration);
@@ -147,13 +153,25 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
       let newStart = interaction.initialStart + snappedDelta;
       if (newStart < START_MINUTES) newStart = START_MINUTES;
       if (newStart > endTime - 5) newStart = endTime - 5; // Min 5 min duration
-      if (isOverlapping(minutesToTimeString(newStart), minutesToTimeString(endTime))) return;
+      if (
+        isOverlapping(
+          minutesToTimeString(newStart),
+          minutesToTimeString(endTime),
+        )
+      )
+        return;
       setStartTime(newStart);
     } else if (interaction.mode === "resize-bottom") {
       let newEnd = interaction.initialEnd + snappedDelta;
       if (newEnd > END_MINUTES) newEnd = END_MINUTES;
       if (newEnd < startTime + 5) newEnd = startTime + 5; // Min 5 min duration
-      if (isOverlapping(minutesToTimeString(startTime), minutesToTimeString(newEnd))) return;
+      if (
+        isOverlapping(
+          minutesToTimeString(startTime),
+          minutesToTimeString(newEnd),
+        )
+      )
+        return;
       setEndTime(newEnd);
     }
   };
@@ -172,10 +190,7 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
     useRoomTimeslotViewModel();
 
   return (
-    <div
-      className="container"
-      style={{ height: TOTAL_HEIGHT }}
-    >
+    <div className="container" style={{ height: TOTAL_HEIGHT }}>
       <div className="header">
         <Box className="timeslot-nav">
           <MyButton
@@ -187,10 +202,7 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
           />
           <Box className="date">
             <Typography className="timeslot-date">{formattedDate}</Typography>
-            <Typography
-              className="jump-today"
-              onClick={jumpToToday}
-            >
+            <Typography className="jump-today" onClick={jumpToToday}>
               Jump to Today
             </Typography>
           </Box>
@@ -204,16 +216,10 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
         </Box>
       </div>
 
-      <div
-        className="timelineWrapper"
-        ref={timelineRef}
-      >
+      <div className="timelineWrapper" ref={timelineRef}>
         <div className="timeGutter">
           {hours.map((hour) => (
-            <div
-              key={hour}
-              className="timeLabel"
-            >
+            <div key={hour} className="timeLabel">
               {hour.toString().padStart(2, "0")}:00
             </div>
           ))}
@@ -224,6 +230,7 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
           style={{ height: TOTAL_HEIGHT }}
           onPointerDown={handleGridClick}
         >
+
           {/* Horizontal grid lines */}
           {hours.map((hour) => (
             <div
@@ -237,23 +244,26 @@ const {roomId}= useAppSelector((state) => state.bookingRoom)
               }}
             />
           ))}
-          
-{bookedSlots.map((slot, index) => (
-  <div
-    key={index}
-    style={{
-      position: "absolute",
-      top: getYFromMinutes(timeStringToMinutes(slot.start)),
-      height: (timeStringToMinutes(slot.end) - timeStringToMinutes(slot.start)) * MINUTE_HEIGHT,
-      left: 0,
-      right: 0,
-      backgroundColor: "rgba(255, 0, 0, 0.3)",
-      border: "1px solid red",
-      pointerEvents: "none", // 👈 important
-      zIndex: 999,
-    }}
-  />
-))}
+
+          {bookedSlots.map((slot, index) => (
+            <div
+              key={index}
+              style={{
+                position: "absolute",
+                top: getYFromMinutes(timeStringToMinutes(slot.start)),
+                height:
+                  (timeStringToMinutes(slot.end) -
+                    timeStringToMinutes(slot.start)) *
+                  MINUTE_HEIGHT,
+                left: 0,
+                right: 0,
+                backgroundColor: "rgba(255, 0, 0, 0.3)",
+                border: "1px solid red",
+                pointerEvents: "none", 
+                zIndex: 999,
+              }}
+            />
+          ))}
           {/* The Slot */}
           <div
             className="slot"
