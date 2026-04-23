@@ -3,8 +3,8 @@ import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListVi
 import { CommonDropdown } from "../ui/Dropdown/CommonDropdown";
 
 type props = {
-  value: number;
-  onChange: (id: number) => void;
+  value: number | "";
+  onChange: (id: number | "") => void;
 };
 export const DepartmentList = ({ value, onChange }: props) => {
   const { departmentItems } = useDepartmentListViewModel();

@@ -1,16 +1,19 @@
 import { Card, CardContent, Typography } from "@mui/material";
-import { Megaphone, Plus } from "lucide-react";
+import { Megaphone, Plus, Trash } from "lucide-react";
 import "../assets/scss/pages/Announcements.scss";
 import { useState } from "react";
 import AnnouncementModal from "../components/Announcements/AnnouncementModal";
 import AnnouncementCard from "../components/Announcements/AnnouncementCard";
 import useAnnouncementCardViewModel from "../viewmodels/useAnnouncementCardViewModel";
 
-import { deleteAnnouncement } from "../services/announcements.service";
+import {
+  deleteAnnouncement,
+  deleteBulk,
+} from "../services/announcements.service";
 import { toast } from "react-toastify";
 import MyButton from "../components/ui/Button";
-import { Checkbox } from "@mui/material";
 import type { Announcements } from "../models/announcements.model";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 
 const Announcements = () => {
   const [open, setOpen] = useState(false);
@@ -18,6 +21,10 @@ const Announcements = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [click, setClick] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<"deleteBulk" | null>(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const {
     pinnedData,
     setPinnedData,
@@ -32,6 +39,18 @@ const Announcements = () => {
       await deleteAnnouncement(id);
 
       toast.error("Announcement deleted successfully");
+      fetchAnnouncements(true);
+      setClick(false);
+    } catch (error) {
+      console.error("Delete failed", error);
+    }
+  };
+
+  const handleBulkDelete = async (ids: number[]) => {
+    try {
+      await deleteBulk(ids);
+      setSelectedIds([]);
+      toast.error("Announcements deleted successfully");
       fetchAnnouncements(true);
     } catch (error) {
       console.error("Delete failed", error);
@@ -60,6 +79,16 @@ const Announcements = () => {
       );
     }
   };
+
+  const handleConfirmAction = () => {
+    if (confirmAction === "deleteBulk") {
+      handleBulkDelete(selectedIds);
+      setClick(false);
+    }
+
+    setOpenConfirm(false);
+    setConfirmAction(null);
+  };
   return (
     <div className="announcement__main">
       <Card className="announcement">
@@ -79,13 +108,18 @@ const Announcements = () => {
           </div>
 
           <div className="announcement__header-actions">
-            <MyButton
-              text={click ? "Cancel" : "Select"}
-              customVariant="ghost"
-              onClick={() => {
-                setClick(!click);
-              }}
-            />
+            {pinnedData.length === 0 && unpinnedData.length === 0 ? (
+              ""
+            ) : (
+              <MyButton
+                text={click ? "Cancel" : "Select"}
+                customVariant="ghost"
+                onClick={() => {
+                  setClick(!click);
+                  if (click) setSelectedIds([]);
+                }}
+              />
+            )}
 
             <MyButton
               variant="contained"
@@ -99,20 +133,53 @@ const Announcements = () => {
         </CardContent>
 
         {/* Content */}
-        <div className="announcement__content">
-          {pinnedData.length > 0 && (
+        {pinnedData.length === 0 && unpinnedData.length === 0 ? (
+          <div className="announcement__empty">
+            <Typography variant="h4">No announcements available</Typography>
+          </div>
+        ) : (
+          <div className="announcement__content">
+            {pinnedData.length > 0 && (
+              <div className="announcement__section">
+                <CardContent className="announcement__list">
+                  {pinnedData.map((item) => (
+                    <div
+                      key={item.id}
+                      className="checkbox__card"
+                    >
+                      <AnnouncementCard
+                        item={item}
+                        key={item.id}
+                        selectedIds={selectedIds}
+                        setSelectedIds={setSelectedIds}
+                        onDelete={handleDelete}
+                        handleBulkDelete={handleBulkDelete}
+                        onUpdate={handleUpdate}
+                        onTogglePin={handleTogglePin}
+                        pinnedCount={pinnedData.length}
+                        click={click}
+                        setClick={setClick}
+                      />
+                    </div>
+                  ))}
+                </CardContent>
+              </div>
+            )}
+
             <div className="announcement__section">
-              {/* <Divider className="announcement__divider" /> */}
               <CardContent className="announcement__list">
-                {pinnedData.map((item) => (
+                {unpinnedData.map((item) => (
                   <div
                     key={item.id}
                     className="checkbox__card"
                   >
-                    {/* {click && <Checkbox />} */}
                     <AnnouncementCard
+                      key={item.id}
                       item={item}
+                      selectedIds={selectedIds}
+                      setSelectedIds={setSelectedIds}
                       onDelete={handleDelete}
+                      handleBulkDelete={handleBulkDelete}
                       onUpdate={handleUpdate}
                       onTogglePin={handleTogglePin}
                       pinnedCount={pinnedData.length}
@@ -123,53 +190,53 @@ const Announcements = () => {
                 ))}
               </CardContent>
             </div>
-          )}
-
-          <div className="announcement__section">
-            <CardContent className="announcement__list">
-              {unpinnedData.map((item) => (
-                <div
-                  key={item.id}
-                  className="checkbox__card"
-                >
-                  <AnnouncementCard
-                    key={item.id}
-                    item={item}
-                    onDelete={handleDelete}
-                    onUpdate={handleUpdate}
-                    onTogglePin={handleTogglePin}
-                    pinnedCount={pinnedData.length}
-                    click={click}
-                    setClick={setClick}
-                  />
-                </div>
-              ))}
-            </CardContent>
-          </div>
-          <div className="announcement__bottom">
-            {click && (
+            <div className="announcement__bottom">
+              {click && (
+                <MyButton
+                  disabled={selectedIds.length === 0}
+                  onClick={() => {
+                    if (selectedIds.length === 0) {
+                      toast.warning("Please select at least one announcement");
+                      return;
+                    }
+                    setConfirmAction("deleteBulk");
+                    setOpenConfirm(true);
+                  }}
+                  text="Delete"
+                  variant="outlined"
+                  customVariant="danger"
+                  color="error"
+                />
+              )}
               <MyButton
-                onClick={() => {}}
-                text="Delete"
                 variant="outlined"
-                customVariant="danger"
+                onClick={() => fetchAnnouncements(false)}
+                text="Show More"
+                customVariant={hasMore ? "dark" : "ghost"}
+                disabled={!hasMore}
               />
-            )}
-            <MyButton
-              variant="outlined"
-              onClick={() => fetchAnnouncements(false)}
-              text="Show More"
-              customVariant={hasMore ? "dark" : "ghost"}
-              disabled={!hasMore}
-            />
+            </div>
           </div>
-        </div>
+        )}
       </Card>
 
       <AnnouncementModal
         open={open}
         handleClose={handleClose}
         refreshAnnouncements={fetchAnnouncements}
+      />
+
+      <ConfirmDialog
+        open={openConfirm}
+        title="Confirm Delete"
+        text={`Delete (${selectedIds.length})`}
+        startIcon={<Trash size={17} />}
+        content={`Are you sure you want to delete ${selectedIds.length} announcement${selectedIds.length > 1 ? "s" : ""}?`}
+        onConfirm={handleConfirmAction}
+        onClose={() => {
+          setOpenConfirm(false);
+          setConfirmAction(null);
+        }}
       />
     </div>
   );

@@ -1,4 +1,5 @@
 import api from "../api/api";
+import type { ReportPayload } from "../models/meetingReport.model";
 
 export const getAllReports = async () => {
   try {
@@ -10,28 +11,18 @@ export const getAllReports = async () => {
   }
 };
 
-export const exportReports = async () => {
-  try {
-    const res = await api.post("/api/v1/reports/export", {
-      responseType: "blob",
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Error exporting report", error);
-    throw error;
-  }
+export const exportReports = async (): Promise<Blob> => {
+  const res = await api.post(
+    "/api/v1/reports/export",
+    {},
+    { responseType: "blob" },
+  );
+  return res.data;
 };
 
-export const filterReport = async (data: any) => {
-  try {
-    const res = await api.post("/api/v1/reports", data);
-    // console.log(res);
-    console.log(res.data.data.content);
-    return res.data.data.content;
-  } catch (error) {
-    console.error("Error filtering report", error);
-    throw error;
-  }
+export const filterReport = async (data: ReportPayload) => {
+  const res = await api.post("/api/v1/reports", data);
+  return res.data.data.content;
 };
 
 export const fetchUser = async () => {
@@ -51,20 +42,30 @@ export const fetchRoom = async () => {
     const res = await api.get("/api/v1/room/list");
     console.log(res.data);
 
-    return res.data;
+    return res.data.data;
   } catch (error) {
     console.error("Error fetching rooms", error);
     throw error;
   }
 };
-export const fetchDepartment = async () => {
-  try {
-    const res = await api.get("/api/v1/department/list");
-    console.log(res.data);
+// export const fetchDepartment = async () => {
+//   try {
+//     const res = await api.get("/api/v1/department/list");
+//     console.log(res.data);
 
+//     return res.data;
+//   } catch (error) {
+//     console.error("Error fetching department", error);
+//     throw error;
+//   }
+// };
+
+export const getAllMeetingType = async () => {
+  try {
+    const res = await api.get(`/api/v1/get-all-meeting-type`);
     return res.data;
   } catch (error) {
-    console.error("Error fetching department", error);
+    console.error("Error fetching meeting types", error);
     throw error;
   }
 };

@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
-import type { Meeting, Column } from "../models/meetingReport.model";
+import type {
+  Meeting,
+  Column,
+  DropdownItem,
+  ReportPayload,
+} from "../models/meetingReport.model";
 import {
   exportReports,
   filterReport,
   getAllReports,
   fetchUser,
   fetchRoom,
-  fetchDepartment,
+  getAllMeetingType,
 } from "../services/report.service";
 
-export const columns: Column[] = [
+export const COLUMNS: Column[] = [
   { id: "roomName", label: "Room" },
   { id: "meetingTitle", label: "Title" },
   { id: "startTime", label: "Start Time" },
@@ -21,27 +26,27 @@ export const columns: Column[] = [
 export function useMeetingReportViewModel() {
   const [rows, setRows] = useState<Meeting[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
-  const [users, setUsers] = useState<string[]>([]);
+  // const [users, setUsers] = useState<string[]>([]);
   const [rooms, setRooms] = useState<string[]>([]);
-  const [departments, setDepartments] = useState<string[]>([]);
+  const [meetingTypes, setMeetingTypes] = useState<DropdownItem[]>([]);
 
   const fetchReports = async () => {
     try {
       const res = await getAllReports();
-      setRows(res.data);
+      setRows(res.data ?? []);
       setIsFiltered(false);
-    } catch (error) {
-      console.error("Error fetching reports", error);
+    } catch (err) {
+      console.error("Error fetching reports", err);
     }
   };
 
-  const filterReports = async (filters: any) => {
+  const filterReports = async (payload: ReportPayload) => {
     try {
-      const res = await filterReport(filters);
-      setRows(res ?? []);
+      const data = await filterReport(payload);
+      setRows(data ?? []);
       setIsFiltered(true);
-    } catch (error) {
-      console.error("Filter failed", error);
+    } catch (err) {
+      console.error("Filter failed", err);
     }
   };
 
@@ -49,47 +54,52 @@ export function useMeetingReportViewModel() {
     try {
       const blob = await exportReports();
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "meeting-report.csv";
+      const link = Object.assign(document.createElement("a"), {
+        href: url,
+        download: "meeting-report.csv",
+      });
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      link.remove();
       URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Export failed", error);
+    } catch (err) {
+      console.error("Export failed", err);
     }
   };
 
-  const loadFilterOptions = async () => {
-    try {
-      const [userRes, roomRes, deptRes] = await Promise.all([
-        fetchUser(),
-        fetchRoom(),
-        fetchDepartment(),
-      ]);
-
-      setUsers(userRes.data.content?.map((u: any) => u.firstname) ?? []);
-      setRooms(roomRes.data?.map((r: any) => r.roomName) ?? []);
-      setDepartments(deptRes.data?.map((d: any) => d.departmentName) ?? []);
-    } catch (error) {
-      console.error("Failed to load filter options", error);
-    }
-  };
   useEffect(() => {
+    const load = async () => {
+      try {
+        const [userRes, roomRes, typeRes] = await Promise.all([
+          fetchUser(),
+          fetchRoom(),
+          getAllMeetingType(),
+        ]);
+
+        // setUsers(userRes.data.content?.map((u: any) => u.lastname) ?? []);
+        // console.log("roomRes", roomRes);
+        setRooms(roomRes.map((r: any) => r.roomName));
+        setMeetingTypes(
+          typeRes.data?.map((m: any) => ({ id: m.id, label: m.name })) ?? [],
+        );
+      } catch (err) {
+        console.error("Failed to load filter options", err);
+      }
+    };
+
     fetchReports();
-    loadFilterOptions();
+    load();
   }, []);
 
   return {
-    columns,
+    columns: COLUMNS,
     rows,
+    isFiltered,
+    meetingTypes,
+    // users,
+    rooms,
+    fetchReports,
     filterReports,
     exportReport,
-    isFiltered,
-    fetchReports,
-    users,
-    rooms,
-    departments,
   };
 }
