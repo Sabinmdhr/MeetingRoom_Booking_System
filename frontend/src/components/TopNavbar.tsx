@@ -123,23 +123,7 @@ export default function TopNavbar() {
           </Link>
         </div>
 
-        <div className="nav-items">
-          <TextField
-            placeholder="Search for people, participants..."
-            variant="outlined"
-            size="small"
-            className="topbar-search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Search size={16} />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
+        <div className="spacer" />
 
         <div className="topbar-actions">
           <IconButton onClick={handleOpen}>

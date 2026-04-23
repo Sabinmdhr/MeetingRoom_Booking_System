@@ -85,7 +85,10 @@ export const Meeting_roomCard = ({
             <CardContent className="Meeting-Card--content">
               <div>
                 <div className="cardHeader">
-                  <Typography className="Meeting-title" variant="h6">
+                  <Typography
+                    className="Meeting-title"
+                    variant="h6"
+                  >
                     {m.roomName}
                   </Typography>
 
@@ -105,9 +108,15 @@ export const Meeting_roomCard = ({
                   </Typography>
                 </div>
 
-                <Typography variant="body2" className="Features-Tabs">
+                <Typography
+                  variant="body2"
+                  className="Features-Tabs"
+                >
                   {m.resources.map((feature, index) => (
-                    <span className="Meeitng_room-Feature" key={index}>
+                    <span
+                      className="Meeitng_room-Feature"
+                      key={index}
+                    >
                       <span className="Feature-icons">
                         {featureIcons[feature]}
                       </span>
@@ -131,7 +140,12 @@ export const Meeting_roomCard = ({
               />
 
               <MyButton
-                startIcon={<Pen size={18} style={{ marginLeft: "5px" }} />}
+                startIcon={
+                  <Pen
+                    size={18}
+                    style={{ marginLeft: "5px" }}
+                  />
+                }
                 text=""
                 customVariant="ghost"
                 onClick={() => handleRoomFormOpen("edit", m)}
@@ -140,7 +154,11 @@ export const Meeting_roomCard = ({
                 text=""
                 customVariant="ghost"
                 startIcon={
-                  <Trash2 size={18} color="red" style={{ marginLeft: "5px" }} />
+                  <Trash2
+                    size={18}
+                    color="red"
+                    style={{ marginLeft: "5px" }}
+                  />
                 }
                 onClick={() => handleDeleteClick(m.id)}
               />

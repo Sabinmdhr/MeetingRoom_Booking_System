@@ -5,7 +5,6 @@ import {
   Button,
   Menu,
   MenuItem,
-  Checkbox,
 } from "@mui/material";
 import "../../assets/scss/pages/Announcements.scss";
 import {
@@ -32,109 +31,121 @@ const AnnouncementCard = ({
   refreshAnnouncements,
   onTogglePin,
   click,
+  selectedIds,
+  setSelectedIds,
   setClick,
 }: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  // const [openModal, setOpenModal] = useState(false);
-
+  const isSelected = selectedIds?.includes(item.id) ?? false;
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
-
   const [openConfirm, setOpenConfirm] = useState(false);
+
+  const [confirmAction, setConfirmAction] = useState<
+    "delete" | "pin" | "unpin" | null
+  >(null);
+
   const handleOpenDetail = () => {
     setAnchorEl(null);
     setOpenDetailModal(true);
   };
-
   const handleOpenEdit = () => {
     setOpenDetailModal(false);
     setEditingItem(item);
     setOpenEditModal(true);
     handleClose();
   };
-
   const handleCloseEdit = () => {
     setOpenEditModal(false);
     setEditingItem(null);
   };
-
   const handleDeleteClick = () => {
+    setConfirmAction("delete");
     setOpenConfirm(true);
     handleClose();
   };
 
-  const handleConfirmDelete = () => {
-    onDelete(item.id);
+  const handleConfirmAction = () => {
+    if (confirmAction === "delete") {
+      onDelete(item.id);
+    }
+    if (confirmAction === "pin" || confirmAction === "unpin") {
+      const updated = { ...item, pinned: !item.pinned };
+      onTogglePin(updated);
+      handlePinChange(item.id);
+    }
     setOpenConfirm(false);
+    setConfirmAction(null);
   };
 
-  const { handlePinChange } = useAnnouncementViewModel(
+  const { handlePinChange, handleMarkRead } = useAnnouncementViewModel(
     () => {},
     refreshAnnouncements,
     item,
     onUpdate,
   );
-
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
 
-  // const handleOpenModal = () => {
-  //   setEditingItem(item);
-  //   setOpenModal(true);
-  //   handleClose();
-  // };
-
-  // const handleCloseModal = () => {
-  //   setOpenModal(false);
-  //   setEditingItem(null);
-  // };
-
   return (
     <>
       <Card
         className={`announcement__card ${item.pinned ? "pinned" : ""}`}
         variant="outlined"
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log("Hello");
+          handleMarkRead(item.id);
+          setSelectedIds((prev: number[]) => [...prev, item.id]);
+        }}
       >
         {item.pinned && (
-          // <Pin
-          //   onClick={() => {
-          //     handlePinChange(item.id);
-          //   }}
-          //   size={33}
-          //   fill="#8646c3"
-          //   color="#8646c3"
-          //   className="announcement__pin-icon"
-          // />
           <Pin
-            onClick={() => {
-              const updated = { ...item, pinned: !item.pinned };
-
-              onTogglePin(updated); //  instant UI
-              handlePinChange(item.id); //  backend sync
+            onClick={(e) => {
+              e.stopPropagation();
+              setConfirmAction("unpin");
+              setOpenConfirm(true);
             }}
             size={33}
-            fill={item.pinned ? "#8646c3" : "transparent"}
+            fill="#8646c3"
             color="#8646c3"
             className="announcement__pin-icon"
           />
         )}
-        <CardContent className="announcement__card-content">
-          <div className="announcement__card-top">
-            <div className="announcement__card-top-left">
-              <Typography
-                className="announcement__author-date"
-                variant="subtitle2"
-              >
-                {item.authorName} • {item.startDate}
-              </Typography>
-            </div>
 
-            <div className="announcement__card-top-right">
+        <CardContent className="announcement__card-content">
+          {/* LEFT: all text */}
+          <div className="announcement__card-left">
+            <Typography
+              className="announcement__author-date"
+              variant="subtitle2"
+            >
+              {item.authorName} • {item.startDate}
+            </Typography>
+            <Typography
+              className="announcement__card-title"
+              variant="body1"
+            >
+              {item.title}
+            </Typography>
+            <Typography
+              className="announcement__description"
+              variant="subtitle2"
+            >
+              {item.message}
+            </Typography>
+          </div>
+
+          {/* RIGHT: menu + circle */}
+          <div className="announcement__card-right">
+            {click ? (
+              ""
+            ) : (
               <Button
                 id={`announcement-button-${item.id}`}
                 aria-controls={
@@ -145,87 +156,87 @@ const AnnouncementCard = ({
                 onClick={handleMenuClick}
                 className="announcement__menu-btn"
               >
-                <div className="announcemnet__circleCheck">
-                  <div>
-                    <EllipsisVertical
-                      className="vertical-ellipsis"
-                      color="black"
-                      size={18}
-                    />
-                  </div>
-                  <div>{click && <Circle />}</div>
-                </div>
+                <EllipsisVertical
+                  color="black"
+                  size={18}
+                />
               </Button>
-              <Menu
-                id={`announcement-menu-${item.id}`}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: "center",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+            )}
+
+            {click ? (
+              <div
+                className="announcement__circle-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  if (isSelected) {
+                    setSelectedIds((prev: number[]) =>
+                      prev.filter((id) => id !== item.id),
+                    );
+                  } else {
+                    setSelectedIds((prev: number[]) => [...prev, item.id]);
+                  }
                 }}
               >
-                <MenuItem onClick={handleOpenDetail}>
-                  <Eye size={16} />
-                  <Typography variant="body1">View Details</Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    handleOpenEdit();
-                  }}
-                >
-                  <SquarePen size={16} />
-                  <Typography variant="body1">Edit</Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    const updated = { ...item, pinned: !item.pinned };
-
-                    onTogglePin(updated); // instant move
-                    handlePinChange(item.id); //  API call
-
-                    handleClose();
-                  }}
-                >
-                  {item.pinned ? <PinOff size={16} /> : <Pin size={16} />}
-                  <Typography variant="body1">
-                    {item.pinned ? "Unpin" : "Pin"}
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleDeleteClick}>
-                  <Trash2
-                    size={16}
-                    color="red"
+                {isSelected ? (
+                  <CircleCheck
+                    size={20}
+                    color="green"
+                    fill="#ede8f8"
                   />
-                  <Typography
-                    variant="body1"
-                    style={{ color: "red" }}
-                  >
-                    Delete
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </div>
+                ) : (
+                  <Circle
+                    size={20}
+                    color="#aaa"
+                  />
+                )}
+              </div>
+            ) : (
+              <div className="announcement__circle-btn announcement__circle-btn--placeholder" />
+            )}
+
+            <Menu
+              id={`announcement-menu-${item.id}`}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+              <MenuItem onClick={handleOpenDetail}>
+                <Eye size={16} />
+                <Typography variant="body1">View Details</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleOpenEdit}>
+                <SquarePen size={16} />
+                <Typography variant="body1">Edit</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setConfirmAction(item.pinned ? "unpin" : "pin");
+                  setOpenConfirm(true);
+                  handleClose();
+                }}
+              >
+                {item.pinned ? <PinOff size={16} /> : <Pin size={16} />}
+                <Typography variant="body1">
+                  {item.pinned ? "Unpin" : "Pin"}
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleDeleteClick}>
+                <Trash2
+                  size={16}
+                  color="red"
+                />
+                <Typography
+                  variant="body1"
+                  color="error"
+                >
+                  Delete
+                </Typography>
+              </MenuItem>
+            </Menu>
           </div>
-
-          <Typography
-            className="announcement__card-title"
-            variant="body1"
-          >
-            {item.title}
-          </Typography>
-
-          <Typography
-            variant="subtitle2"
-            className="announcement__description"
-          >
-            {item.message}
-          </Typography>
         </CardContent>
       </Card>
 
@@ -235,11 +246,8 @@ const AnnouncementCard = ({
         item={item}
         onEdit={handleOpenEdit}
         onDelete={onDelete}
-        onPin={(id: number) => {
-          handlePinChange(id);
-        }}
+        onPin={(id: number) => handlePinChange(id)}
       />
-
       <AnnouncementModal
         open={openEditModal}
         handleClose={handleCloseEdit}
@@ -249,21 +257,41 @@ const AnnouncementCard = ({
       />
       <ConfirmDialog
         open={openConfirm}
-        title="Confirm Delete"
-        text="Delete"
-        startIcon={
-          <Trash
-            size={17}
-            style={{
-              // display: "flex",
-              // alignItems: "center",
-              marginBottom: "4px",
-            }}
-          />
+        title={
+          confirmAction === "delete"
+            ? "Confirm Delete"
+            : confirmAction === "pin"
+              ? "Confirm Pin"
+              : "Confirm Unpin"
         }
-        content={`Are you sure you want to delete "${item.title}"?`}
-        onConfirm={handleConfirmDelete}
-        onClose={() => setOpenConfirm(false)}
+        text={
+          confirmAction === "delete"
+            ? "Delete"
+            : confirmAction === "pin"
+              ? "Pin"
+              : "Unpin"
+        }
+        startIcon={
+          confirmAction === "delete" ? (
+            <Trash size={17} />
+          ) : confirmAction === "pin" ? (
+            <Pin size={17} />
+          ) : (
+            <PinOff size={17} />
+          )
+        }
+        content={
+          confirmAction === "delete"
+            ? `Are you sure you want to delete "${item.title}"?`
+            : confirmAction === "pin"
+              ? `Do you want to pin "${item.title}"?`
+              : `Do you want to unpin "${item.title}"?`
+        }
+        onConfirm={handleConfirmAction}
+        onClose={() => {
+          setOpenConfirm(false);
+          setConfirmAction(null);
+        }}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -28,9 +28,9 @@ export default function Report() {
     exportReport,
     isFiltered,
     fetchReports,
-    users,
+    // users,
     rooms,
-    departments,
+    meetingTypes,
   } = useMeetingReportViewModel();
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function Report() {
     minWidth: 130,
   }));
 
-  const gridRows = rows.map((row, index) => ({ id: index, ...row }));
+  const gridRows = rows.map((row, i) => ({ id: i, ...row }));
 
   return (
     <div>
@@ -62,6 +62,7 @@ export default function Report() {
             View and export reservation data
           </Typography>
         </div>
+
         <div className="meeting-table__buttons">
           {isFiltered && (
             <MyButton
@@ -73,16 +74,13 @@ export default function Report() {
               size="small"
             />
           )}
-
           <MyButton
             variant="outlined"
             onClick={() => setFilterOpen(true)}
             startIcon={<Funnel size={16} />}
             text="Filters"
             customVariant="ghost"
-            // className="filter"
           />
-
           <MyButton
             variant="contained"
             onClick={exportReport}
@@ -97,9 +95,8 @@ export default function Report() {
         open={filterOpen}
         onClose={() => setFilterOpen(false)}
         onApply={filterReports}
-        users={users}
+        meetingTypes={meetingTypes}
         rooms={rooms}
-        departments={departments}
       />
 
       <div className="meeting-table">
@@ -108,9 +105,7 @@ export default function Report() {
             rows={gridRows}
             columns={gridColumns}
             pageSizeOptions={[5, 10, 25]}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 10 } },
-            }}
+            initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
             slots={{ toolbar: CustomToolbar }}
             disableRowSelectionOnClick
             disableColumnResize
