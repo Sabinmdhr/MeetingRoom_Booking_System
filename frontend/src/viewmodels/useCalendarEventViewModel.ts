@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import type { CalendarEvent } from "../models/calendar.model";
+import { getCalendarByDay } from "../services/calendar.service";
 
 export type CalendarView = "day" | "week" | "month";
 
@@ -149,6 +150,12 @@ export const useCalendarEventViewModel = () => {
   const goToToday = (date?: Dayjs) => {
     setCurrentMonth(date ?? dayjs());
   };
+
+
+const handleGetCalendarByDay = async(date: string) =>{
+    const res = await getCalendarByDay(date)
+    
+}
 
   return {
     currentMonth,

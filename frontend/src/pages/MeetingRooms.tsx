@@ -1,41 +1,56 @@
 import { Meeting_roomCard } from "../components/Meeting-Rooms/Meeting_roomCard";
 import "../assets/scss/pages/MeetingRooms.scss";
-import { Button, Card, CardContent, CardHeader, CircularProgress, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useMeetingCardViewModel } from "../viewmodels/useMeeting_roomCardViewModel";
-import {  useState } from "react";
+import { useState } from "react";
 import { SquarePen } from "lucide-react";
 import { AddMeetingRoomForm } from "../components/Meeting-Rooms/AddMeetingRoom-Form";
 import { useAppSelector } from "../redux/store";
+import { useAuth } from "../hooks/useAuth";
+import { permissions } from "../utils/permissions";
 // import { EventCalendar } from "@mui/x-scheduler/event-calendar";
 
 const MeetingRooms = () => {
-  const { loading, handleRoomFormOpen, roomFormState, handleRoomFormClose } = useMeetingCardViewModel();
-// const open = roomFormState.open
-    // const {
-    //   openAddRoomForm,
-    //   addRoomFormData,
-    //   handleChange,
-    //   handleCheckboxChange,
-    //   setOpenAddRoomForm,
-    //   submitAddRomForm,
-    // } = useAddRoomViewModel();
+  const { role } = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
+  const { loading, handleRoomFormOpen, roomFormState, handleRoomFormClose } =
+    useMeetingCardViewModel();
+  // const open = roomFormState.open
+  // const {
+  //   openAddRoomForm,
+  //   addRoomFormData,
+  //   handleChange,
+  //   handleCheckboxChange,
+  //   setOpenAddRoomForm,
+  //   submitAddRomForm,
+  // } = useAddRoomViewModel();
   // const [editMode, setEditMode] = useState(false)
   if (loading) return <CircularProgress />;
-//   const {handleClose} = useAddRoomViewModel();
-// const {isEditOpen} = useAppSelector((state) => state.meetingRoom)
+  //   const {handleClose} = useAddRoomViewModel();
+  // const {isEditOpen} = useAppSelector((state) => state.meetingRoom)
   return (
     <div>
       <div className="titleDesc">
         <Typography variant="h1">Meeting Rooms</Typography>
         <Typography variant="subtitle1">Book available rooms</Typography>
       </div>
-      <div>
-        <AddMeetingRoomForm
-          roomFormState={roomFormState}
-          handleRoomFormOpen={handleRoomFormOpen}
-          handleRoomFormClose={handleRoomFormClose}
-        />
-      </div>
+      {perms?.canBookRoom && (
+        <div>
+          <AddMeetingRoomForm
+            roomFormState={roomFormState}
+            handleRoomFormOpen={handleRoomFormOpen}
+            handleRoomFormClose={handleRoomFormClose}
+          />
+        </div>
+      )}
 
       <CardContent className="MeetingRooms">
         {/* <Grid container> */}
@@ -49,6 +64,4 @@ const MeetingRooms = () => {
   );
 };
 
-
-
-export default MeetingRooms
+export default MeetingRooms;

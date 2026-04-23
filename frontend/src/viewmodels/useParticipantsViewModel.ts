@@ -13,6 +13,8 @@ import {
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
+
+
   const fetchUsers = async () => {
     const data = await getAllUser();
     setUsers(data);

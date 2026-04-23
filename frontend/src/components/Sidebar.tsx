@@ -24,27 +24,52 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Divider, Typography } from "@mui/material";
 import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
 import Logout from "./Auth/Logout";
+import { useAuth } from "../hooks/useAuth";
 
 const menuItems = [
   {
     text: "Dashboard",
     icon: <LayoutDashboard size={20} />,
     path: "/dashboard",
+    roles: ["ADMIN", "STAFF", "MANAGER"],
   },
-  { text: "Calendar", icon: <Calendar size={20} />, path: "/calendar" },
+  {
+    text: "Calendar",
+    icon: <Calendar size={20} />,
+    path: "/calendar",
+    roles: ["ADMIN", "STAFF", "MANAGER"],
+  },
+
   {
     text: "Meeting Rooms",
     icon: <Building2 size={20} />,
     path: "/meeting-rooms",
+    roles: ["ADMIN", "MANAGER"],
   },
   {
     text: "Announcements",
     icon: <Bell size={20} />,
     path: "/announcements",
+    roles: ["ADMIN", "STAFF", "MANAGER"],
   },
-  { text: "Report", icon: <ClipboardMinus size={20} />, path: "/report" },
-  { text: "Participants", icon: <Users size={20} />, path: "/participants" },
-  { text: "Settings", icon: <Settings size={20} />, path: "/settings" },
+  {
+    text: "Report",
+    icon: <ClipboardMinus size={20} />,
+    path: "/report",
+    roles: ["ADMIN"],
+  },
+  {
+    text: "Participants",
+    icon: <Users size={20} />,
+    path: "/participants",
+    roles: ["ADMIN", "MANAGER"],
+  },
+  {
+    text: "Settings",
+    icon: <Settings size={20} />,
+    path: "/settings",
+    roles: ["ADMIN", "STAFF", "MANAGER"],
+  },
 ];
 
 const logoutItem = {
@@ -54,6 +79,7 @@ const logoutItem = {
 
 export default function Sidebar() {
   const location = useLocation();
+  const { role } = useAuth();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const {
@@ -62,6 +88,10 @@ export default function Sidebar() {
     handleLogoutClose,
     handleLogoutConfirm,
   } = useLogoutViewModel();
+
+  const filteredMenuItems = menuItems.filter((item) =>
+    item.roles.includes(role as string),
+  );
   // const { logout } = useLoginViewModel();
 
   // const[logoutOpen, setLogoutOpen]= useState(false);
@@ -85,11 +115,8 @@ export default function Sidebar() {
     >
       <div className="sidebar-content">
         <List>
-          {menuItems.map((item) => (
-            <ListItem
-              key={item.text}
-              disablePadding
-            >
+          {filteredMenuItems.map((item) => (
+            <ListItem key={item.text} disablePadding>
               <ListItemButton
                 disableRipple
                 className={`sidebar-item ${
@@ -109,10 +136,7 @@ export default function Sidebar() {
         </List>
         <Divider />
 
-        <div
-          className="sidebar-header"
-          onClick={() => setOpen(!open)}
-        >
+        <div className="sidebar-header" onClick={() => setOpen(!open)}>
           <div className="toggle-button">
             {open ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
           </div>

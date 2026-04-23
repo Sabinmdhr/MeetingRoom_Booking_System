@@ -13,3 +13,20 @@ export type CalendarEvent = {
   description: string;
   department: string;
 };
+export interface MeetingType {
+  id: string;
+  name: string;
+  colorCode: string;
+  status: string;
+}
+
+export interface CalendarByDay {
+  date: string;
+  startTime: string;
+  endTime: string;
+  meetingId: number;
+  meetingTitle: string;
+  meetingType: MeetingType;
+  roomId: number;
+  roomName: string;
+}
