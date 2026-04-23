@@ -32,6 +32,8 @@ import { updateBookingRoomFormData } from "../../redux/bookRoomSlice";
 import { useState } from "react";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import MyButton from "../ui/Button";
+import { useAuth } from "../../hooks/useAuth";
+import { permissions } from "../../utils/permissions";
 
 type props = {
   roomFormState: {
@@ -52,7 +54,8 @@ export const Meeting_roomCard = ({
   const dispatch = useDispatch();
   const { meeting, error, selectedRoom, setSelectedRoom } =
     useMeetingCardViewModel();
-
+  const { role } = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!meeting) return null;
@@ -138,30 +141,28 @@ export const Meeting_roomCard = ({
                   dispatch(updateBookingRoomFormData({ roomId: m.id }));
                 }}
               />
-
-              <MyButton
-                startIcon={
-                  <Pen
-                    size={18}
-                    style={{ marginLeft: "5px" }}
+              {perms?.canManageRooms && (
+                <>
+                  <MyButton
+                    startIcon={<Pen size={18} style={{ marginLeft: "5px" }} />}
+                    text=""
+                    customVariant="ghost"
+                    onClick={() => handleRoomFormOpen("edit", m)}
                   />
-                }
-                text=""
-                customVariant="ghost"
-                onClick={() => handleRoomFormOpen("edit", m)}
-              />
-              <MyButton
-                text=""
-                customVariant="ghost"
-                startIcon={
-                  <Trash2
-                    size={18}
-                    color="red"
-                    style={{ marginLeft: "5px" }}
+                  <MyButton
+                    text=""
+                    customVariant="ghost"
+                    startIcon={
+                      <Trash2
+                        size={18}
+                        color="red"
+                        style={{ marginLeft: "5px" }}
+                      />
+                    }
+                    onClick={() => handleDeleteClick(m.id)}
                   />
-                }
-                onClick={() => handleDeleteClick(m.id)}
-              />
+                </>
+              )}
             </CardActions>
           </Card>
           // </Grid>

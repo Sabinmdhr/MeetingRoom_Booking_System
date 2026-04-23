@@ -17,8 +17,11 @@ import { GroupCard } from "../components/Participants/GroupCard";
 import { AddGroupForm } from "../components/Participants/AddGroup-Form";
 import { useGroupCardViewModel } from "../viewmodels/useGroupCardViewModel";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
+import { useAuth } from "../hooks/useAuth";
+import { permissions } from "../utils/permissions";
 const Participants = () => {
-  const [editMode, setEditMode] = useState(false);
+const {role} = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
   const {
     users,
     setUsers,
@@ -63,8 +66,10 @@ const Participants = () => {
       </div>
 
       {/* ------------------------Edit Mode Button------------ */}
-      <div>
-        {activeTab == "Tab1" ? (
+      {perms?.canAddUsers &&
+
+        <div>
+            {activeTab == "Tab1" ?(
           <AddParticipantsForm
             participantsFormState={participantsFormState}
             handleParticipantFormOpen={handleParticipantFormOpen}
@@ -78,8 +83,9 @@ const Participants = () => {
           />
         )}
       </div>
+      }
 
-      {activeTab == "Tab1" ? (
+     {activeTab == "Tab1" ? (
         <div className="participants-container">
           <div className="participants-table">
             <ParticipantsTable

@@ -83,8 +83,8 @@ const useAnnouncementViewModel = (
         await addAnnouncement(payload);
         toast.success("Announcement added successfully");
       }
-      // @ts-ignore
-      refreshAnnouncements?.(true);
+
+      refreshAnnouncements?.();
       closeAnnouncementForm();
     } catch (error) {
       console.error("Error saving announcement:", error);

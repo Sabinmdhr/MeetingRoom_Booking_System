@@ -9,6 +9,8 @@ import {
 import { clamp, snapToInterval } from "../utils/timeUtils";
 import { useNavigate } from "react-router-dom";
 import type {  GetBookedRoomDataResponse } from "../models/bookRoom.model";
+import { getCalendarByDay } from "../services/calendar.service";
+import type { CalendarByDay } from "../models/calendar.model";
 
 type BookingTimeAndDatePeops = {
   startTime: string;
@@ -16,10 +18,10 @@ type BookingTimeAndDatePeops = {
   date: string;
 };
 export const useBookingRoomViewModel = () => {
-  const [bookedSlots, setBookedSlots]= useState<{start: string, end:string}[]>([]);
+  const [bookedSlots, setBookedSlots]= useState<{start: string, end:string, color: string}[]>([]);
   const dispatch = useDispatch();
   const {roomId}= useAppSelector((state)=>state.bookingRoom);
-  
+
   const [successState, setSuccessState] = useState<boolean>(false);
   const navigate = useNavigate();
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
@@ -75,26 +77,39 @@ export const useBookingRoomViewModel = () => {
     }
   };
 
-  const handleGetBookedRoom= async () =>{
-    try {
-      const res :GetBookedRoomDataResponse = await getBookedDataById(roomId);
-      console.log(res);
-  
-      const formatted =res.data.map((slot) =>({
-        start: slot.startTime,
-        end: slot.endTime
-      }))
-setBookedSlots(formatted)
-      return res;
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  } 
+//   const handleGetBookedRoom= async () =>{
+//     try {
+//       const res :GetBookedRoomDataResponse = await getBookedDataById(roomId);
+//       console.log(res);
 
+//       const formatted =res.data.map((slot) =>({
+//         start: slot.startTime,
+//         end: slot.endTime
+//       }))
+// setBookedSlots(formatted)
+//       return res;
+//     } catch (error) {
+//       console.log("Error:", error);
+//     }
+//   }
+const handleGetBookedRoomByDay = async(date: string, RoomId: number) =>{
+  try {
+    const res = await getCalendarByDay(date)
+    const formattedByDate = res.filter((slot) => slot.roomId === RoomId);
+    const formatted = formattedByDate.map((slot) =>({
+      start: slot.startTime,
+      end: slot.endTime,
+      color: slot.meetingType.colorCode
+    }))
+    setBookedSlots(formatted)
+  } catch (error) {
+
+  }
+}
   return {
     updateBookingTimeAndDate,
     handleChange,
-    handleGetBookedRoom,
+    handleGetBookedRoomByDay,
     bookedSlots,
     handleBookRoom,
     successState,

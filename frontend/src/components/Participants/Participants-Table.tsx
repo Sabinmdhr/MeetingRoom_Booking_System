@@ -24,6 +24,8 @@ import {
 } from "lucide-react";
 import type { ParticipantResponse, ParticipantsRequest } from "../../models/participants.model";
 import { useState } from "react";
+import { permissions } from "../../utils/permissions";
+import { useAuth } from "../../hooks/useAuth";
 // import { openEditForm } from "../../redux/ParticipantsSlice";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
@@ -46,6 +48,8 @@ export const ParticipantsTable = ({
 }: props) => {
   // const { openAddParticipantForm } = useAddParticipantsViewModel();
   const {  columns } = useparticipantsViewModel();
+const {role}  = useAuth();
+const perms = permissions[role as keyof typeof permissions];
 
   const [menuState, setMenuState] = useState<{
     anchorEl: HTMLElement | null;
@@ -133,7 +137,7 @@ export const ParticipantsTable = ({
 
 
                   case "actions":
-                    return (
+                 return  perms?.canManageUsers ?(
                       <TableCell key={col.id}>
                         <IconButton
                           onClick={(e) => {
@@ -181,7 +185,8 @@ export const ParticipantsTable = ({
                           </MenuItem>
                         </Menu>
                       </TableCell>
-                    );
+                    ): null;
+
 
                   default:
                     return <TableCell key={col.id}>-</TableCell>;

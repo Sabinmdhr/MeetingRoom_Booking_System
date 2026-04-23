@@ -251,7 +251,7 @@ export const Calendar = () => {
 
           <div className="calendar__topbar__main__right">
             <MyButton
-              onClick={() => navigate("/book-room")}
+              onClick={() => navigate("/meeting-rooms")}
               variant="contained"
               customVariant="dark"
               startIcon={<Plus size={17} />}

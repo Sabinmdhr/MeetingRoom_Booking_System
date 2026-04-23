@@ -13,3 +13,51 @@ export type CalendarEvent = {
   description: string;
   department: string;
 };
+
+export interface CalenderMonth {
+  date: string;
+  endTime: string;
+  meetingId: number;
+  meetingTitle: string;
+  meetingType: {
+    id: number;
+    name: string;
+    colorCode: string;
+    status: string;
+  };
+  roomId: number;
+  roomName: string;
+  startTime: string;
+}
+
+export interface CalenderDay {
+  date: string;
+  endTime: string;
+  meetingId: number;
+  meetingTitle: string;
+  meetingType: {
+    id: number;
+    name: string;
+    colorCode: string;
+    status: string;
+  };
+  roomId: number;
+  roomName: string;
+  startTime: string;
+}export interface MeetingType {
+  id: string;
+  name: string;
+  colorCode: string;
+  status: string;
+}
+
+export interface CalendarByDay {
+  date: string;
+  startTime: string;
+  endTime: string;
+  meetingId: number;
+  meetingTitle: string;
+  meetingType: MeetingType;
+  roomId: number;
+  roomName: string;
+}

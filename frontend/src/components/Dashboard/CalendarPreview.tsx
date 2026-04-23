@@ -1,124 +1,176 @@
 import { useState } from "react";
-import { Box, Typography, IconButton, Paper } from "@mui/material";
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import dayjs, { Dayjs } from "dayjs";
+import {
+  Box,
+  Typography,
+  IconButton,
+  Paper,
+  Chip,
+  colors,
+} from "@mui/material";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Dot,
+} from "lucide-react";
+import { useCalendarEventViewModel } from "../../viewmodels/useCalendarEventViewModel";
 import "../../assets/scss/components/Dashboard/CalendarPreview.scss";
+import MyButton from "../ui/Button";
+import { formatDisplayTime, timeStringToMinutes } from "../../utils/timeUtils";
+import { useNavigate } from "react-router-dom";
 
 const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 const CalendarPreview: React.FC = () => {
-  const today = new Date();
+  const navigate = useNavigate();
+  const {
+    currentDate,
+    setcurrentDate,
+    bookedDates,
+    meetings,
+    selectedDates,
+    setSelectedDates,
+  } = useCalendarEventViewModel();
+  const today = dayjs();
 
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(today);
+  // const [selectedDate, setSelectedDate] = useState<Dayjs | null>(today);
 
+  // Month navigation
   const changeMonth = (direction: number) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
-    setCurrentDate(newDate);
+    setcurrentDate((prev) => prev.add(direction, "month"));
   };
 
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
+  // Generate month grid
+  const getDaysInMonth = (date: Dayjs) => {
+    const startOfMonth = date.startOf("month");
+    const daysInMonth = date.daysInMonth();
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const totalDays = new Date(year, month + 1, 0).getDate();
+    const startDay = startOfMonth.day();
 
-    const days: (number | null)[] = [];
+    const days: (Dayjs | null)[] = [];
 
-    for (let i = 0; i < firstDay; i++) {
+    // empty slots before month starts
+    for (let i = 0; i < startDay; i++) {
       days.push(null);
     }
 
-    for (let i = 1; i <= totalDays; i++) {
-      days.push(i);
+    // actual days
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(date.date(i));
     }
 
     return days;
   };
 
-  const isToday = (day: number | null) => {
-    return (
-      day !== null &&
-      day === today.getDate() &&
-      currentDate.getMonth() === today.getMonth() &&
-      currentDate.getFullYear() === today.getFullYear()
-    );
-  };
-
-  const isSelected = (day: number | null) => {
-    if (!selectedDate || day === null) return false;
-
-    return (
-      day === selectedDate.getDate() &&
-      currentDate.getMonth() === selectedDate.getMonth() &&
-      currentDate.getFullYear() === selectedDate.getFullYear()
-    );
-  };
-
   const days = getDaysInMonth(currentDate);
+
+  const isToday = (d: Dayjs | null) => (d ? d.isSame(today, "day") : false);
+
+  const isSelected = (d: Dayjs | null) =>
+    d && selectedDates ? d.isSame(selectedDates, "day") : false;
+
+  const isBooked = (d: Dayjs | null) => {
+    if (!d) return false;
+    return bookedDates.has(d.format("YYYY-MM-DD"));
+  };
 
   return (
     <Paper className="calendar-container">
       <Box className="calendar-header">
-        <Typography className="title"><Calendar size={18} />Calendar Preview</Typography>
+        <Typography className="title">
+          <CalendarIcon size={18} /> Calendar Preview
+        </Typography>
       </Box>
 
       <Box className="calendar-box">
-        {/* Month Navigation */}
-      <Box className="calendar-nav">
-        <IconButton className="nav-btn left" onClick={() => changeMonth(-1)}>
-          <ChevronLeft size={18} />
-        </IconButton>
+        <Box className="calendar-nav">
+          <IconButton className="nav-btn left" onClick={() => changeMonth(-1)}>
+            <ChevronLeft size={18} />
+          </IconButton>
 
-        <Typography className="month-label">
-          {currentDate.toLocaleString("default", {
-            month: "long",
-            year: "numeric",
-          })}
-        </Typography>
-
-        <IconButton className="nav-btn right" onClick={() => changeMonth(1)}>
-          <ChevronRight size={18} />
-        </IconButton>
-      </Box>
-
-      {/* Calendar Grid */}
-      <Box className="calendar-grid">
-        {daysOfWeek.map((day) => (
-          <Typography key={day} className="day-label">
-            {day}
+          <Typography className="month-label">
+            {currentDate.format("MMMM YYYY")}
           </Typography>
-        ))}
 
-        {days.map((day, index) => (
-          <Box
-            key={index}
-            className={`day-cell 
-              ${isSelected(day) ? "selected" : ""} 
-              ${isToday(day) ? "today" : ""}`}
-            onClick={() => {
-              if (day) {
-                setSelectedDate(
-                  new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    day
-                  )
-                );
-              }
-            }}>
-            {day}
+          <IconButton className="nav-btn right" onClick={() => changeMonth(1)}>
+            <ChevronRight size={18} />
+          </IconButton>
+        </Box>
+
+        <Box className="calendar-grid">
+          {daysOfWeek.map((day) => (
+            <Typography key={day} className="day-label">
+              {day}
+            </Typography>
+          ))}
+
+          {days.map((day, index) => (
+            <Box
+              key={index}
+              className={`day-cell 
+                ${isSelected(day) ? "selected" : ""} 
+                ${isToday(day) ? "today" : ""}`}
+              onClick={() => day && setSelectedDates(day)}
+            >
+              {day ? day.date() : ""}
+
+              {/* BOOKING DOT */}
+              {isBooked(day) && <Box className="booking-dot" />}
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      {meetings.length === 0 ? (
+        <Box className="today-meetings__empty">
+          <CalendarIcon size={30} className="empty-icon" />
+          <Typography className="empty-text">No meetings scheduled</Typography>
+        </Box>
+      ) : (
+        <Box className="today-meetings">
+          <Typography className="today-meetings__header">
+            {selectedDates && !selectedDates.isSame(today, "day")
+              ? `Meetings on ${selectedDates.format("MMM D")}`
+              : "Today’s Meetings"}
+            <span className="today-meetings__badge">{meetings.length}</span>
+          </Typography>
+          {meetings.map((m) => (
+            <Box className="today-meetings__card" key={m.meetingId}>
+              <Box className="today-meetings__subcard">
+                <Typography className="today-meetings__title">
+                  {m.meetingTitle}
+                </Typography>
+                <div className="today-meetings__subtitle">
+                  <Typography>
+                  {formatDisplayTime(timeStringToMinutes(m.startTime))} 
+                  </Typography>
+                  <Dot/>
+                  <Typography>
+                  {m.roomName}
+                  </Typography>
+                </div>
+              </Box>
+              <Box>
+                <Chip
+                  label={m.meetingType.name}
+                  className="today-meetings__chip"
+                  style={{ color: `rgba${m.meetingType.colorCode}` }}
+                />
+              </Box>
+            </Box>
+          ))}
           </Box>
-        ))}
-      </Box>
-      </Box>
-
-      <Box className="calendar-footer">
-        <Typography>Today’s Meetings <span className="badge">3</span></Typography>
-      </Box>
+      )}
+          <MyButton
+            variant="outlined"
+            fullWidth
+            text="Open Full Calender"
+            customVariant="ghost"
+            onClick={() => navigate("/Calendar")}
+          />
     </Paper>
-  )
-}
+  );
+};
 
-export default CalendarPreview
+export default CalendarPreview;
