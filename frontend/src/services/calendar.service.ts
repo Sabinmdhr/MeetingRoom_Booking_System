@@ -1,5 +1,7 @@
 import api from "../api/api";
 import type { CalendarByDay } from "../models/calendar.model";
+import type { CalenderDay, CalenderMonth } from "../models/calendar.model";
+
 export const getCalendarByWeek = async () => {
   try {
     const res = await api.post(`/api/v1/calender/week`);
@@ -35,6 +37,15 @@ export const getCalendarByDay = async (date:string):Promise<CalendarByDay[]> => 
     // console.log(res);
 
     return res.data.data;
+     } catch (error) {
+    console.error("Error fetching calendar by day", error)
+    throw error;
+    }
+}
+export const getCalenderByDay= async(date: string)=>{
+  try {
+    const res= await api.post<{data: CalenderDay[]}>(`/api/v1/calender/day`, {"date":date})
+    return res.data;
   } catch (error) {
     console.error("Error fetching calendar by day", error)
     throw error;

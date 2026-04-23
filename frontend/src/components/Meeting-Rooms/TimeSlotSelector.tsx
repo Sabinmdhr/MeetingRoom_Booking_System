@@ -10,7 +10,6 @@ import {
 } from "../../utils/timeUtils";
 import { useRoomTimeslotViewModel } from "../../viewmodels/useRoomTimeslotViewModel";
 import { Typography, Box } from "@mui/material";
-import { Typography, Box } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
@@ -159,7 +158,6 @@ setManualScroll(true);
 
     const deltaY = e.clientY - interaction.startY;
     const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT);
-    const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT);
     const snappedDelta = snapToInterval(deltaMinutes, 5);
 
     if (interaction.mode === "drag") {
@@ -231,7 +229,6 @@ setManualScroll(true);
           <Box className="date">
             <Typography className="timeslot-date">{formattedDate}</Typography>
             <Typography className="jump-today" onClick={jumpToToday}>
-            <Typography className="jump-today" onClick={jumpToToday}>
               Jump to Today
             </Typography>
           </Box>
@@ -246,10 +243,8 @@ setManualScroll(true);
       </div>
 
       <div className="timelineWrapper" ref={timelineRef}>
-      <div className="timelineWrapper" ref={timelineRef}>
         <div className="timeGutter">
           {hours.map((hour) => (
-            <div key={hour} className="timeLabel">
             <div key={hour} className="timeLabel">
               {hour.toString().padStart(2, "0")}:00
             </div>
