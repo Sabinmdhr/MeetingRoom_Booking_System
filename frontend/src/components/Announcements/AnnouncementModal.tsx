@@ -120,9 +120,7 @@ const AnnouncementModal = ({
             </div>
           ))}
 
-          {/* PRIORITY & AUDIENCE ROW */}
           <div className="announcementModal__row">
-            {/* PRIORITY */}
             <div className="announcementModal__inputGroup">
               <label className="announcementModal__label">
                 <Calendar size={15} /> Start Date
@@ -138,7 +136,6 @@ const AnnouncementModal = ({
               ></TextField>
             </div>
 
-            {/* AUDIENCE/roles */}
             <div className="announcementModal__inputGroup">
               <label className="announcementModal__label">
                 <Calendar size={15} /> End Date
@@ -204,7 +201,7 @@ const AnnouncementModal = ({
             onClick={handleSubmit}
             customVariant="dark"
             // className="announcement__button__publish"
-          ></MyButton>
+          />
         </DialogActions>
       </div>
     </Dialog>

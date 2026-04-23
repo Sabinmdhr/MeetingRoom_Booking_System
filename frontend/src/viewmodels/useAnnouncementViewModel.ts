@@ -99,7 +99,6 @@ const useAnnouncementViewModel = (
   const handlePinChange = async (id: number) => {
     try {
       await updatePinStatus(id);
-      refreshAnnouncements?.();
       toast.success("Pin status updated");
     } catch (error) {
       console.error("Error updating pin status:", error);
@@ -113,7 +112,7 @@ const useAnnouncementViewModel = (
       console.log(" item has been read.");
 
       refreshAnnouncements?.();
-      toast.success("Item has been marked read");
+      // toast.success("Item has been marked read");
     } catch (error) {
       console.error("Item has been marked read", error);
       // toast.error("Failed to update pin status");

@@ -402,3 +402,18 @@
     flex: 1;
   }
 }
+
+// .card__unread {
+//   // border-left: 3px solid #8646c3 !important;
+//   background-color: #faf7ff !important;
+// }
+
+// .card__read {
+//   // border-left: 3px solid transparent !important;
+//   background-color: white !important;
+// }
+
+.announcement__card.card__read {
+  background-color: white !important;
+  border: 1px solid #d2c5db !important;
+}

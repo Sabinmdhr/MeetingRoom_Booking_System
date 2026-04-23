@@ -9,6 +9,7 @@ import useAnnouncementCardViewModel from "../viewmodels/useAnnouncementCardViewM
 import {
   deleteAnnouncement,
   deleteBulk,
+  markAsRead,
 } from "../services/announcements.service";
 import { toast } from "react-toastify";
 import MyButton from "../components/ui/Button";
@@ -23,14 +24,15 @@ const Announcements = () => {
   const [click, setClick] = useState(false);
   const [confirmAction, setConfirmAction] = useState<"deleteBulk" | null>(null);
   const [openConfirm, setOpenConfirm] = useState(false);
-
+  const [announcements, setAnnouncements] = useState<Announcements[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const {
     pinnedData,
     setPinnedData,
     setUnpinnedData,
     unpinnedData,
-    fetchAnnouncements,
+    fetchPinnedAnnouncements,
+    fetchUnpinnedAnnouncements,
     hasMore,
   } = useAnnouncementCardViewModel();
 
@@ -38,8 +40,9 @@ const Announcements = () => {
     try {
       await deleteAnnouncement(id);
 
-      toast.error("Announcement deleted successfully");
-      fetchAnnouncements(true);
+      toast.success("Announcement deleted successfully");
+      fetchPinnedAnnouncements();
+      fetchUnpinnedAnnouncements();
       setClick(false);
     } catch (error) {
       console.error("Delete failed", error);
@@ -50,8 +53,9 @@ const Announcements = () => {
     try {
       await deleteBulk(ids);
       setSelectedIds([]);
-      toast.error("Announcements deleted successfully");
-      fetchAnnouncements(true);
+      toast.success("Announcements deleted successfully");
+      fetchPinnedAnnouncements();
+      fetchUnpinnedAnnouncements();
     } catch (error) {
       console.error("Delete failed", error);
     }
@@ -88,6 +92,14 @@ const Announcements = () => {
 
     setOpenConfirm(false);
     setConfirmAction(null);
+  };
+
+  const handleMarkRead = async (id: number) => {
+    setAnnouncements((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, isRead: true } : a)),
+    );
+
+    await markAsRead(id);
   };
   return (
     <div className="announcement__main">
@@ -153,12 +165,12 @@ const Announcements = () => {
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
                         onDelete={handleDelete}
-                        handleBulkDelete={handleBulkDelete}
                         onUpdate={handleUpdate}
                         onTogglePin={handleTogglePin}
                         pinnedCount={pinnedData.length}
                         click={click}
                         setClick={setClick}
+                        onMarkRead={handleMarkRead}
                       />
                     </div>
                   ))}
@@ -179,12 +191,12 @@ const Announcements = () => {
                       selectedIds={selectedIds}
                       setSelectedIds={setSelectedIds}
                       onDelete={handleDelete}
-                      handleBulkDelete={handleBulkDelete}
                       onUpdate={handleUpdate}
                       onTogglePin={handleTogglePin}
                       pinnedCount={pinnedData.length}
                       click={click}
                       setClick={setClick}
+                      onMarkRead={handleMarkRead}
                     />
                   </div>
                 ))}
@@ -210,7 +222,7 @@ const Announcements = () => {
               )}
               <MyButton
                 variant="outlined"
-                onClick={() => fetchAnnouncements(false)}
+                onClick={() => fetchPinnedAnnouncements()}
                 text="Show More"
                 customVariant={hasMore ? "dark" : "ghost"}
                 disabled={!hasMore}
@@ -223,7 +235,10 @@ const Announcements = () => {
       <AnnouncementModal
         open={open}
         handleClose={handleClose}
-        refreshAnnouncements={fetchAnnouncements}
+        refreshAnnouncements={() => {
+          fetchPinnedAnnouncements();
+          fetchUnpinnedAnnouncements();
+        }}
       />
 
       <ConfirmDialog

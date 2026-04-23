@@ -28,12 +28,13 @@ const AnnouncementCard = ({
   item,
   onDelete,
   onUpdate,
-  refreshAnnouncements,
   onTogglePin,
+  onMarkRead,
   click,
   selectedIds,
   setSelectedIds,
   setClick,
+  pinnedCount,
 }: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -42,30 +43,42 @@ const AnnouncementCard = ({
   const [openEditModal, setOpenEditModal] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [openConfirm, setOpenConfirm] = useState(false);
-
   const [confirmAction, setConfirmAction] = useState<
     "delete" | "pin" | "unpin" | null
   >(null);
 
-  const handleOpenDetail = () => {
+  const handleOpenDetail = async () => {
     setAnchorEl(null);
     setOpenDetailModal(true);
+    if (!item.isRead) {
+      await onMarkRead?.(item.id);
+    }
   };
+
   const handleOpenEdit = () => {
     setOpenDetailModal(false);
     setEditingItem(item);
     setOpenEditModal(true);
     handleClose();
   };
+
   const handleCloseEdit = () => {
     setOpenEditModal(false);
     setEditingItem(null);
   };
+
   const handleDeleteClick = () => {
     setConfirmAction("delete");
     setOpenConfirm(true);
     handleClose();
   };
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => setAnchorEl(null);
 
   const handleConfirmAction = () => {
     if (confirmAction === "delete") {
@@ -74,34 +87,29 @@ const AnnouncementCard = ({
     if (confirmAction === "pin" || confirmAction === "unpin") {
       const updated = { ...item, pinned: !item.pinned };
       onTogglePin(updated);
-      handlePinChange(item.id);
     }
     setOpenConfirm(false);
     setConfirmAction(null);
   };
 
-  const { handlePinChange, handleMarkRead } = useAnnouncementViewModel(
-    () => {},
-    refreshAnnouncements,
-    item,
-    onUpdate,
-  );
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => setAnchorEl(null);
-
   return (
     <>
       <Card
-        className={`announcement__card ${item.pinned ? "pinned" : ""}`}
+        className={`announcement__card ${
+          item.isRead ? "card__read" : item.pinned ? "pinned" : "card__unread"
+        }`}
         variant="outlined"
         onClick={(e) => {
           e.stopPropagation();
-          console.log("Hello");
-          handleMarkRead(item.id);
-          setSelectedIds((prev: number[]) => [...prev, item.id]);
+          if (!click) {
+            handleOpenDetail();
+          } else {
+            setSelectedIds((prev: number[]) =>
+              prev.includes(item.id)
+                ? prev.filter((id) => id !== item.id)
+                : [...prev, item.id],
+            );
+          }
         }}
       >
         {item.pinned && (
@@ -119,7 +127,6 @@ const AnnouncementCard = ({
         )}
 
         <CardContent className="announcement__card-content">
-          {/* LEFT: all text */}
           <div className="announcement__card-left">
             <Typography
               className="announcement__author-date"
@@ -127,25 +134,25 @@ const AnnouncementCard = ({
             >
               {item.authorName} • {item.startDate}
             </Typography>
-            <Typography
-              className="announcement__card-title"
-              variant="body1"
-            >
-              {item.title}
-            </Typography>
-            <Typography
-              className="announcement__description"
-              variant="subtitle2"
-            >
-              {item.message}
-            </Typography>
+            <div className="announcement__card-left__bottom">
+              <Typography
+                className="announcement__card-title"
+                variant="body1"
+                fontWeight={item.isRead ? 400 : 700}
+              >
+                {item.title}
+              </Typography>
+              <Typography
+                className="announcement__description"
+                variant="subtitle2"
+              >
+                {item.message}
+              </Typography>
+            </div>
           </div>
 
-          {/* RIGHT: menu + circle */}
           <div className="announcement__card-right">
-            {click ? (
-              ""
-            ) : (
+            {!click && (
               <Button
                 id={`announcement-button-${item.id}`}
                 aria-controls={
@@ -168,14 +175,11 @@ const AnnouncementCard = ({
                 className="announcement__circle-btn"
                 onClick={(e) => {
                   e.stopPropagation();
-
-                  if (isSelected) {
-                    setSelectedIds((prev: number[]) =>
-                      prev.filter((id) => id !== item.id),
-                    );
-                  } else {
-                    setSelectedIds((prev: number[]) => [...prev, item.id]);
-                  }
+                  setSelectedIds((prev: number[]) =>
+                    isSelected
+                      ? prev.filter((id) => id !== item.id)
+                      : [...prev, item.id],
+                  );
                 }}
               >
                 {isSelected ? (
@@ -246,14 +250,16 @@ const AnnouncementCard = ({
         item={item}
         onEdit={handleOpenEdit}
         onDelete={onDelete}
-        onPin={(id: number) => handlePinChange(id)}
+        onPin={(id: number) => {
+          const updated = { ...item, pinned: !item.pinned };
+          onTogglePin(updated);
+        }}
       />
       <AnnouncementModal
         open={openEditModal}
         handleClose={handleCloseEdit}
         initialData={editingItem}
         onUpdate={onUpdate}
-        refreshAnnouncements={refreshAnnouncements}
       />
       <ConfirmDialog
         open={openConfirm}
