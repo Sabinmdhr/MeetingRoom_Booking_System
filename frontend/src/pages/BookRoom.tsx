@@ -188,7 +188,7 @@ const BookRoom = () => {
                     renderValue: (selected) => {
                       if (!selected) {
                         return (
-                          <span style={{ color: "#9aa0a6", fontSize: "14px" }}>
+                          <span style={{ color: "#245789", fontSize: "14px" }}>
                             Select meeting type
                           </span>
                         );

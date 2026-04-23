@@ -22,14 +22,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
+  PlusIcon,
 } from "lucide-react";
 import EditCalendarModal from "../components/Calendar/EditCalendarModal";
 import MyButton from "../components/ui/Button";
 
 const ROOMS = [
-  { id: "room-3a", name: "Executive Room 3A" },
-  { id: "room-2b", name: "Conference Room 2B" },
-  { id: "room-1c", name: "Meeting Room 1C" },
+  { id: "room-3a", name: "Mustang" },
+  { id: "room-2b", name: "Manang" },
+  { id: "room-1c", name: "Langtang" },
 ];
 
 const GRID_VISIBLE_DAYS = 30;
@@ -62,7 +63,9 @@ export const Calendar = () => {
   const [eventFilter, setEventFilter] = useState("all");
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
   const [dayOffset, setDayOffset] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredCell, setHoveredCell] = useState<string | null>(null);
+
+  const [modalAnchor, setModalAnchor] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     const header = headerScrollRef.current;
@@ -217,13 +220,9 @@ export const Calendar = () => {
                   className="report-filter__select"
                 >
                   <MenuItem value="All Rooms">All Rooms</MenuItem>
-                  <MenuItem value="Executive Room 3A">
-                    Executive Room 3A
-                  </MenuItem>
-                  <MenuItem value="Conference Room 2B">
-                    Conference Room 2B
-                  </MenuItem>
-                  <MenuItem value="Meeting Room 1C">Meeting Room 1C</MenuItem>
+                  <MenuItem value="Mustang">Mustang</MenuItem>
+                  <MenuItem value="Manang">Manang</MenuItem>
+                  <MenuItem value="Langtang">Langtang</MenuItem>
                 </TextField>
               </div>
 
@@ -291,14 +290,16 @@ export const Calendar = () => {
                     <div className="day__cell">
                       {cellEvents.map((event) => (
                         <div
-                          key={event.id}
                           className={`day__event ${event.category}`}
-                          onClick={() => {
+                          onClick={(e) => {
+                            setModalAnchor(e.currentTarget);
                             openEvent(event);
                             setMode("view");
                           }}
                         >
-                          <span className="event-time">{event.startTime}</span>
+                          <span className="event-time">
+                            {event.startTime} - {event.endTime}
+                          </span>
                           <br />
                           <span className="event-title">{event.title}</span>
                         </div>
@@ -381,16 +382,18 @@ export const Calendar = () => {
                         <div
                           key={`${rm.id}-${dateKey}`}
                           className={`room-grid__cell${dateKey === today ? " room-grid__cell--today" : ""} `}
-                          onMouseEnter={() => setIsHovered(true)}
-                          onMouseLeave={() => setIsHovered(false)}
+                          onMouseEnter={() =>
+                            setHoveredCell(`${rm.id}-${dateKey}`)
+                          }
+                          onMouseLeave={() => setHoveredCell(null)}
                           onClick={() => handleRoomCellClick(date, rm.name)}
                         >
                           {cellEvents.map((event) => (
                             <div
-                              key={event.id}
                               className={`room-grid__event ${event.category}`}
                               onClick={(e) => {
                                 e.stopPropagation();
+                                setModalAnchor(e.currentTarget);
                                 openEvent(event);
                                 setMode("view");
                               }}
@@ -403,6 +406,22 @@ export const Calendar = () => {
                               </span>
                             </div>
                           ))}
+                          {/* create meeting +  */}
+                          {hoveredCell === `${rm.id}-${dateKey}` && (
+                            <div
+                              className="room-grid__event room-grid__event--create"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRoomCellClick(date, rm.name);
+                              }}
+                            >
+                              <div className="create-icon">
+                                <PlusIcon />
+
+                                {/* <span>Create Meeting</span> */}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -417,9 +436,11 @@ export const Calendar = () => {
       <CalendarModal
         open={mode === "view"}
         event={selectedEvent}
+        anchorEl={modalAnchor}
         onClose={() => {
           setMode(null);
           closeModal();
+          setModalAnchor(null);
         }}
         onEdit={() => setMode("edit")}
       />

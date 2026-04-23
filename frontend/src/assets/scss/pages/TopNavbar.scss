@@ -4,10 +4,9 @@
 }
 
 .topbar-toolbar {
-  padding: 12px 0 12px 32px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
-  // justify-content: space-between;
 }
 
 .nav-items {
@@ -133,4 +132,8 @@
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+.spacer {
+  flex: 1;
 }

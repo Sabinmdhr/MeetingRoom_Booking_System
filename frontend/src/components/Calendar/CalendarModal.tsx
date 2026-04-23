@@ -1,158 +1,303 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Divider,
-} from "@mui/material";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+// import { Popover, Divider, IconButton, Typography } from "@mui/material";
+// import { MapPin, Users, Pen, Clock, Menu, CircleUser, X } from "lucide-react";
+// import type { CalendarEvent } from "../../models/calendar.model";
+// import "../../assets/scss/components/Calendar/CalendarModal.scss";
+// import { useNavigate } from "react-router-dom";
+
+// interface CalendarModalProps {
+//   open: boolean;
+//   event: CalendarEvent | null;
+//   anchorEl: HTMLElement | null;
+//   onClose: () => void;
+//   onEdit: () => void;
+// }
+
+// export const CalendarModal = ({
+//   open,
+//   event,
+//   anchorEl,
+//   onClose,
+//   // onEdit,
+// }: CalendarModalProps) => {
+//   const navigate = useNavigate();
+//   const accentColor = CATEGORY_COLORS[event?.category ?? ""] ?? "#1B73E8";
+//   const navigate = useNavigate();
+//   return (
+//     <Popover
+//       open={open}
+//       anchorEl={anchorEl}
+//       onClose={onClose}
+//       anchorOrigin={{ vertical: "top", horizontal: "right" }}
+//       transformOrigin={{ vertical: "top", horizontal: "left" }}
+//       slotProps={{
+//         paper: {
+//           sx: {
+//             borderRadius: 2,
+//             overflow: "hidden",
+//             width: 320,
+//             boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+//           },
+//         },
+//       }}
+//     >
+//       <div
+//         className="calendar-modal__strip"
+//         style={{ background: accentColor }}
+//       />
+//       {/* Header */}
+//       <div className="calendar-modal__header">
+//         <div className="calendar-modal__header__title">
+//           <h2>{event?.title}</h2>
+//           <span className="calendar-modal__header__badge">
+//             {event?.category}
+//           </span>
+//         </div>
+//         <div className="calendar-modal__header__actions">
+//           <IconButton
+//             size="small"
+//             onClick={() => navigate("/book-room")}
+//             title="Edit"
+//           >
+//             <Pen size={17} />
+//           </IconButton>
+//           <IconButton
+//             size="small"
+//             onClick={onClose}
+//             title="Close"
+//           >
+//             <X size={20} />
+//           </IconButton>
+//         </div>
+//       </div>
+
+//       <Divider />
+
+//       <div className="calendar-modal__body">
+//         <Row icon={<Clock size={18} />}>
+//           <strong className="calendar-modal__row__date">{event?.date}</strong>
+//           <span className="calendar-modal__row__time">
+//             {event?.startTime} – {event?.endTime}
+//           </span>
+//         </Row>
+
+//         <Row icon={<Users size={18} />}>
+//           <Typography
+//             className="calendar-modal__row__label"
+//             variant="subtitle1"
+//           >
+//             Participants
+//           </Typography>
+//           <span className="calendar-modal__row__value">Sushant</span>
+//         </Row>
+
+//         <Row icon={<Menu size={18} />}>
+//           <Typography
+//             className="calendar-modal__row__label"
+//             variant="subtitle1"
+//           >
+//             Description
+//           </Typography>
+//           <span className="calendar-modal__row__value">
+//             {event?.description}
+//           </span>
+//         </Row>
+
+//         <Row icon={<MapPin size={18} />}>
+//           <Typography
+//             className="calendar-modal__row__label"
+//             variant="subtitle1"
+//           >
+//             Meeting Room
+//           </Typography>
+//           <span className="calendar-modal__row__value">{event?.location}</span>
+//         </Row>
+
+//         <Row icon={<CircleUser size={18} />}>
+//           <Typography
+//             className="calendar-modal__row__label"
+//             variant="subtitle1"
+//           >
+//             Created By
+//           </Typography>
+//           <span className="calendar-modal__row__value">{event?.organizer}</span>
+//         </Row>
+//       </div>
+//     </Popover>
+//   );
+// };
+
+// function Row({
+//   icon,
+//   children,
+// }: {
+//   icon: React.ReactNode;
+//   children: React.ReactNode;
+// }) {
+//   return (
+//     <div className="calendar-modal__row">
+//       <span className="calendar-modal__row__icon">{icon}</span>
+//       <div className="calendar-modal__row__content">{children}</div>
+//     </div>
+//   );
+// }
+
+// export default CalendarModal;
+
+import { Popover, Divider, IconButton, Typography } from "@mui/material";
+import { MapPin, Users, Pen, Clock, Menu, CircleUser, X } from "lucide-react";
 import type { CalendarEvent } from "../../models/calendar.model";
 import "../../assets/scss/components/Calendar/CalendarModal.scss";
-import "../../assets/scss/global.scss";
-// import ParticipantsCard from "../BookingRooms/ParticipantsCard";
-import { toast } from "react-toastify";
-import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
-import MyButton from "../ui/Button";
-import { SquarePen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface CalendarModalProps {
   open: boolean;
   event: CalendarEvent | null;
+  anchorEl: HTMLElement | null;
   onClose: () => void;
   onEdit: () => void;
 }
 
-// FIX: Removed the nested component definition. There was an inner CalendarModal
-// defined inside the outer one that was never returned, causing the component
-// to render nothing. Flattened into a single component with a proper return.
+const CATEGORY_COLORS: Record<string, string> = {
+  internal: "#2563EB",
+  client: "#ff6900",
+  executive: "#AD46FF",
+};
+
 export const CalendarModal = ({
   open,
   event,
+  anchorEl,
   onClose,
   onEdit,
 }: CalendarModalProps) => {
-  const { users } = useparticipantsViewModel();
-
-  const handleDelete = () => {
-    toast.error("Meeting Deleted Successfully!", {
-      closeButton: true,
-    });
-  };
+  const accentColor = CATEGORY_COLORS[event?.category ?? ""] ?? "#1B73E8";
+  const navigate = useNavigate();
 
   return (
-    <Dialog
-      className="calendar-modal-main"
+    <Popover
       open={open}
+      anchorEl={anchorEl}
       onClose={onClose}
-      fullWidth
-      maxWidth="sm"
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: "top", horizontal: "left" }}
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: 3,
+            overflow: "hidden",
+            width: 320,
+            boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+          },
+        },
+      }}
     >
-      <DialogTitle className="calendar-modal-title">
-        <h2 className="modal-title">{event?.title}</h2>
-        <span
-          className={`modal-category ${
-            event?.category === "client"
-              ? "client"
-              : event?.category === "internal"
-                ? "internal"
-                : "executive"
-          }`}
-        >
-          {event?.category}
-        </span>
-      </DialogTitle>
+      {/* Colored top strip */}
+      <div
+        className="calendar-modal__strip"
+        style={{ background: accentColor }}
+      />
+
+      {/* Header */}
+      <div className="calendar-modal__header">
+        <div className="calendar-modal__header__title">
+          <h2>{event?.title}</h2>
+          <span
+            className="calendar-modal__header__badge"
+            style={{
+              background: `${accentColor}18`,
+              color: accentColor,
+            }}
+          >
+            {event?.category}
+          </span>
+        </div>
+        <div className="calendar-modal__header__actions">
+          <IconButton
+            size="small"
+            onClick={() => navigate("/book-room")}
+            title="Edit"
+          >
+            <Pen size={17} />
+          </IconButton>
+          <IconButton
+            size="small"
+            onClick={onClose}
+            title="Close"
+          >
+            <X size={20} />
+          </IconButton>
+        </div>
+      </div>
 
       <Divider />
 
-      <DialogContent className="calendar-modal-content">
-        <div className="modal-section">
-          <p className="section-title">Date & Time</p>
-          <div className="datetime-grid">
-            <div>
-              <p className="section-title">Date</p>
-              <p className="section-text">{event?.date}</p>
-            </div>
-            <div>
-              <p className="section-title">Time</p>
-              <p className="section-text">
-                {event?.startTime} - {event?.endTime}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="calendar-modal__body">
+        <Row icon={<Clock size={18} />}>
+          <strong className="calendar-modal__row__date">{event?.date}</strong>
+          <span className="calendar-modal__row__time">
+            {event?.startTime} – {event?.endTime}
+          </span>
+        </Row>
 
-        <Divider />
+        <Row icon={<Users size={18} />}>
+          <Typography
+            className="calendar-modal__row__label"
+            variant="subtitle1"
+          >
+            Participants
+          </Typography>
+          <span className="calendar-modal__row__value">Sushant</span>
+        </Row>
 
-        <div className="modal-section">
-          <p className="section-title">Location</p>
-          <p className="section-text">{event?.location}</p>
-        </div>
+        <Row icon={<Menu size={18} />}>
+          <Typography
+            className="calendar-modal__row__label"
+            variant="subtitle1"
+          >
+            Description
+          </Typography>
+          <span className="calendar-modal__row__value">
+            {event?.description}
+          </span>
+        </Row>
 
-        <Divider />
+        <Row icon={<MapPin size={18} />}>
+          <Typography
+            className="calendar-modal__row__label"
+            variant="subtitle1"
+          >
+            Meeting Room
+          </Typography>
+          <span className="calendar-modal__row__value">{event?.location}</span>
+        </Row>
 
-        <div className="modal-section">
-          <p className="section-title">Organizer</p>
-          <p className="section-text">{event?.organizer}</p>
-        </div>
-
-        <Divider />
-
-        {/* <ParticipantsCard
-          type=""
-          displayOn="calendar"
-          users={users}
-        /> */}
-
-        <Divider />
-
-        <div className="modal-section">
-          <div className="datetime-grid">
-            <div>
-              <p className="section-title">Meeting Type</p>
-              <p className="section-text">{event?.category}</p>
-            </div>
-            <div>
-              <p className="section-title">Department</p>
-              <p className="section-text">{event?.department}</p>
-            </div>
-          </div>
-        </div>
-
-        <Divider />
-
-        <div className="modal-section">
-          <p className="section-title">Description</p>
-          <p className="section-text">{event?.description}</p>
-        </div>
-      </DialogContent>
-
-      <DialogActions className="calendar-modal-actions">
-        <MyButton
-          className="close-button"
-          onClick={onClose}
-          variant="contained"
-          text="Close"
-        />
-        <MyButton
-          // className="delete-button"
-          customVariant="danger"
-          variant="outlined"
-          color="error"
-          startIcon={<DeleteOutlineIcon />}
-          onClick={handleDelete}
-          text="Delete Meeting"
-        />
-        <MyButton
-          // className="edit-button"
-          customVariant="dark"
-          variant="contained"
-          onClick={onEdit}
-          startIcon={<SquarePen size={16} />}
-          text="Edit Meeting"
-        />
-      </DialogActions>
-    </Dialog>
+        <Row icon={<CircleUser size={18} />}>
+          <Typography
+            className="calendar-modal__row__label"
+            variant="subtitle1"
+          >
+            Created By
+          </Typography>
+          <span className="calendar-modal__row__value">{event?.organizer}</span>
+        </Row>
+      </div>
+    </Popover>
   );
 };
+
+function Row({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="calendar-modal__row">
+      <span className="calendar-modal__row__icon">{icon}</span>
+      <div className="calendar-modal__row__content">{children}</div>
+    </div>
+  );
+}
 
 export default CalendarModal;

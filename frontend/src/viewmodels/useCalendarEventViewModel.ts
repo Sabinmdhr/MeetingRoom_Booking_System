@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import type { CalendarEvent } from "../models/calendar.model";
-import { getCalendarByDay } from "../services/calendar.service";
+import type { CalendarEvent, CalenderDay } from "../models/calendar.model";
+import { getCalendarByMonth, getCalenderByDay } from "../services/calendar.service";
 
 export type CalendarView = "day" | "week" | "month";
 
@@ -12,6 +12,49 @@ export const useCalendarEventViewModel = () => {
     null,
   );
   const [openModal, setOpenModal] = useState(false);
+
+  const [currentDate, setcurrentDate] = useState(dayjs());
+  const [bookedDates, setBookedDates]= useState<Set<string>>(new Set());
+  const fetchCalender= async()=>{
+    try {
+      console.log("MONTH:", currentDate.format("YYYY-MM-DD"));
+      const res= await getCalendarByMonth( currentDate.format("YYYY-MM-DD"))
+      console.log("MONTH API DATA:", res.data);
+      const dates = new Set(
+        res.data.map((item: any) => item.date)
+      );
+
+      console.log("BOOKED DATES:", [...dates]);
+      setBookedDates(dates);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCalender();
+  }, [currentDate.month(), currentDate.year()]);
+
+  const [meetings, setMeetings]= useState<CalenderDay[]>([]);
+  const [selectedDates, setSelectedDates]= useState(dayjs());
+  const [loading, setLoading]= useState(false);
+
+  const fetchMeetings= async(date: string)=>{
+    try {
+      setLoading(true);
+      const res= await getCalenderByDay(date);
+      setMeetings(res.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+    finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    fetchMeetings(selectedDates.format("YYYY-MM-DD"));
+  },[selectedDates])
 
   const openEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
@@ -29,10 +72,10 @@ export const useCalendarEventViewModel = () => {
         id: 1,
         title: "Board Meeting",
         category: "executive",
-        date: "2026-04-21",
+        date: "2026-04-23",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
-        location: "Executive Room 3A",
+        location: "Manang",
         organizer: "Elon Musk",
         participants: [],
         description: "Quarterly board meeting",
@@ -42,10 +85,10 @@ export const useCalendarEventViewModel = () => {
         id: 2,
         title: "Frontend Dev Meeting",
         category: "internal",
-        date: "2026-04-21",
+        date: "2026-04-23",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
-        location: "Conference Room 2B",
+        location: "Mustang",
         organizer: "Lionel Messi",
         participants: [],
         description: "Frontend sync meeting",
@@ -55,10 +98,10 @@ export const useCalendarEventViewModel = () => {
         id: 3,
         title: "Client Meeting",
         category: "client",
-        date: "2026-04-21",
+        date: "2026-04-23",
         startTime: "10:00 AM",
         endTime: "12:00 PM",
-        location: "Meeting Room 1C",
+        location: "Langtang",
         organizer: "Lionel Messi",
         participants: [],
         description: "Client sync",
@@ -68,10 +111,23 @@ export const useCalendarEventViewModel = () => {
         id: 4,
         title: "Client Onboarding",
         category: "client",
-        date: "2026-04-21",
+        date: "2026-04-23",
         startTime: "2:00 PM",
         endTime: "3:00 PM",
-        location: "Executive Room 3A",
+        location: "Manang",
+        organizer: "Lionel Messi",
+        participants: [],
+        description: "Client sync",
+        department: "Engineering",
+      },
+      {
+        id: 4,
+        title: "Client Onboarding",
+        category: "client",
+        date: "2026-04-23",
+        startTime: "2:00 PM",
+        endTime: "3:00 PM",
+        location: "Mustang",
         organizer: "Lionel Messi",
         participants: [],
         description: "Client sync",
@@ -151,12 +207,6 @@ export const useCalendarEventViewModel = () => {
     setCurrentMonth(date ?? dayjs());
   };
 
-
-const handleGetCalendarByDay = async(date: string) =>{
-    const res = await getCalendarByDay(date)
-    
-}
-
   return {
     currentMonth,
     view,
@@ -175,5 +225,12 @@ const handleGetCalendarByDay = async(date: string) =>{
     goToToday,
     eventsByDate,
     eventsByDateHour,
+    currentDate,
+    setcurrentDate,
+    bookedDates,
+    meetings,
+    loading,
+    selectedDates,
+    setSelectedDates,
   };
 };

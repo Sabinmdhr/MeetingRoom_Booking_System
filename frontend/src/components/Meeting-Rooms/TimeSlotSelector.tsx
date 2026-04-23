@@ -10,6 +10,7 @@ import {
 } from "../../utils/timeUtils";
 import { useRoomTimeslotViewModel } from "../../viewmodels/useRoomTimeslotViewModel";
 import { Typography, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
@@ -98,6 +99,9 @@ export const TimeSlotSelector = ({
       endTime: minutesToTimeString(endTime),
     });
     // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
+    console.log(minutesToTimeString(startTime));
+    console.log(bookedSlots, "bookedslots");
+    console.log(minutesToTimeString(endTime));
   }, [startTime, endTime, onSave]);
 
   const getYFromMinutes = (minutes: number) =>
@@ -141,6 +145,10 @@ setManualScroll(true);
       isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newEnd))
     )
       return;
+    if (
+      isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newEnd))
+    )
+      return;
 
     setStartTime(newStart);
     setEndTime(newEnd);
@@ -150,6 +158,7 @@ setManualScroll(true);
     if (interaction.mode === "none") return;
 
     const deltaY = e.clientY - interaction.startY;
+    const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT);
     const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT);
     const snappedDelta = snapToInterval(deltaMinutes, 5);
 
@@ -222,6 +231,7 @@ setManualScroll(true);
           <Box className="date">
             <Typography className="timeslot-date">{formattedDate}</Typography>
             <Typography className="jump-today" onClick={jumpToToday}>
+            <Typography className="jump-today" onClick={jumpToToday}>
               Jump to Today
             </Typography>
           </Box>
@@ -236,8 +246,10 @@ setManualScroll(true);
       </div>
 
       <div className="timelineWrapper" ref={timelineRef}>
+      <div className="timelineWrapper" ref={timelineRef}>
         <div className="timeGutter">
           {hours.map((hour) => (
+            <div key={hour} className="timeLabel">
             <div key={hour} className="timeLabel">
               {hour.toString().padStart(2, "0")}:00
             </div>
@@ -249,6 +261,7 @@ setManualScroll(true);
           style={{ height: TOTAL_HEIGHT }}
           onPointerDown={handleGridClick}
         >
+
           {/* Horizontal grid lines */}
           {hours.map((hour) => (
             <div

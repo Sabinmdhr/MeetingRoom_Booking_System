@@ -7,14 +7,12 @@
 //     justify-content: space-between;
 //     align-items: center;
 //     gap: 16px;
-//     padding-top: 16px !important;
-//     padding-bottom: 12px !important;
+//     padding-bottom: 7px !important;
 //   }
 
 //   &__title-wrapper {
 //     display: flex;
 //     flex-direction: column;
-//     gap: 2px;
 //   }
 
 //   &__title {
@@ -23,49 +21,19 @@
 //     gap: 8px;
 //   }
 
-//   &__subtitle {
-//     margin-left: 28px;
-//   }
+//   // &__subtitle {
+//   //   margin-left: 28px;
+//   // }
 
-//   // Filter + New Announcement button group (top-right)
-//   &__header-actions {
-//     display: flex;
-//     align-items: center;
-//     gap: 8px;
-//     flex-shrink: 0;
-//   }
-
-//   &__button {
-//     font-size: 13px !important;
-//     text-transform: none !important;
-//     color: white !important;
-//     border-radius: 8px !important;
-//     background: black !important;
-//     padding: 6px 12px !important;
-//     white-space: nowrap;
-//   }
-
-//   &__bottom {
-//     margin-top: 10px !important;
-//     margin-bottom: 10px !important;
-//     margin-left: 45%;
-//     padding: 4px 8px;
-//     &-button {
-//       // background: black !important;
-
-//       border: 1px solid black !important;
-//       color: black !important;
-//     }
-//   }
 //   &__content {
 //     display: flex;
 //     flex-direction: column;
 //   }
 
-//   // &__divider {
-//   //   margin: 0 15px !important;
-//   // }
-
+//   &__header-actions {
+//     display: flex;
+//     gap: 8px;
+//   }
 //   &__list {
 //     display: flex;
 //     flex-direction: column;
@@ -74,106 +42,164 @@
 //     padding-bottom: 0 !important;
 //   }
 
-//   &__empty {
-//     text-align: center;
-//     padding: 10px;
-//     color: gray;
-//     font-size: 14px;
+//   &__bottom {
+//     margin: 10px auto;
+//     display: flex;
+//     gap: 8px;
+//     justify-content: center;
 //   }
 
-//   // card ko layout
 //   &__card {
 //     border-radius: 12px !important;
-//     border: 1px solid #dab2ff !important;
-//     // background-color: #faf5ff !important;
-//     background-color: #f4f3f5 !important;
-
-//     transition: box-shadow 0.2s ease !important;
+//     border: 1px solid #d2c5db !important;
+//     background-color: #f8f7f9 !important;
 //     cursor: pointer;
-
 //     position: relative;
 //     overflow: visible !important;
+
+//     transition: box-shadow 0.2s ease;
 
 //     &:hover {
 //       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 //     }
-
-//     &:hover .announcement__checkbox .MuiCheckbox-root {
-//       opacity: 1;
-//     }
 //   }
 
-//   .pinned {
-//     border: 1px solid #8400ff !important;
+//   &__card.pinned {
+//     // border-left: 3px solid #8646c3 !important;
+//     // border: 1px solid #8400ff !important;
+//     // background-color: #eee6f6 !important;
+//     background-color: #eeeaf9 !important;
+//   }
+
+//   .announcement__card.read {
+//     background-color: #f8f7f9 !important;
+//     border: 1px solid #d2c5db !important;
 //   }
 
 //   &__card-content {
 //     display: flex;
 //     flex-direction: column;
-//     // gap: 6px;
-//     padding: 12px 14px !important;
+//     padding: 8px 14px !important;
+//     // padding-top: 0px !important;
 //   }
 
-//   // Top row: checkbox + pin + author/date on left, chips + menu on right
 //   &__card-top {
 //     display: flex;
 //     justify-content: space-between;
-//     align-items: center;
+//     align-items: center !important;
 //   }
 
 //   &__author-date {
+//     // padding-top: 0px !important;
+//     // margin-top: 0px !important;
 //     color: #6b7280;
-//     font-size: 13px !important;
-//     white-space: nowrap;
-//     overflow: hidden;
-//     text-overflow: ellipsis;
+//     font-size: 13px;
 //   }
-
 //   &__menu-btn {
-//     min-width: unset !important;
-//     padding: 2px 4px !important;
-//     color: #6b7280 !important;
+//     min-width: unset;
+//     padding: 0 !important;
+//     background-color: transparent !important;
 
 //     &:hover {
-//       background-color: rgba(0, 0, 0, 0.05) !important;
+//       background-color: transparent !important;
+//       box-shadow: none !important;
 //     }
 //   }
 
 //   &__card-title {
 //     font-weight: 500 !important;
-//     line-height: 1.4 !important;
 //   }
 
 //   &__description {
-//     color: #4b5563;
-//     line-height: 1.5;
+//     color: #535e6c;
+//     font-weight: 400 !important;
 //     display: -webkit-box;
 //     overflow: hidden;
 //   }
-
+//   &__pin-icon {
+//     position: absolute;
+//     top: -12px;
+//     left: -15px;
+//     overflow: hidden;
+//     padding: 4px;
+//     rotate: 320deg;
+//     // transform-origin: center;
+//   }
 // }
-// // .MuiMenuItem-root {
-// //   display: flex;
-// //   gap: 10px !important;
-// //   align-items: center;
-// //   font-size: 0.85rem !important;
-// //   min-height: 36px !important;
-// // }
+// .checkbox__card {
+//   display: flex;
+//   align-items: flex-start;
+//   gap: 8px;
+// }
 
-// .announcement__pin-icon {
-//   position: absolute;
-//   top: -12px;
-//   left: -15px;
+// .checkbox__card {
+//   display: flex;
+//   align-items: flex-start;
+//   gap: 10px;
+//   width: 100%;
+// }
 
+// .checkbox__card .MuiCheckbox-root {
+//   margin-top: 6px;
 //   padding: 4px;
-//   rotate: 320deg;
-//   // transform-origin: center;
 // }
 
+// .checkbox__card .announcement__card {
+//   flex: 1;
+// }
+
+// .announcement__card-top {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+// }
+
+// /* LEFT SIDE */
+// .announcement__card-top-left {
+//   display: flex;
+//   align-items: center;
+// }
+
+// /* RIGHT SIDE */
+// .announcement__card-top-right {
+//   display: flex !important;
+//   flex-direction: column;
+//   justify-content: center !important;
+//   align-items: center !important;
+// }
+
+// /* FIX BUTTON PADDING (MAIN ISSUE) */
+// .announcement__menu-btn {
+//   min-width: unset !important;
+//   padding: 0px !important;
+//   margin: 0 !important;
+
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   background-color: transparent !important;
+
+//   &:hover {
+//     background-color: transparent !important;
+//     box-shadow: none !important;
+//   }
+// }
+// .announcemnet__circleCheck {
+//   display: flex !important;
+// }
+
+// Page wrapper
+.announcement__main {
+  padding: 16px;
+}
+
+//  Outer card
 .announcement {
   border-radius: 12px !important;
   padding: 0 20px;
 
+  // Header
   &__header {
     display: flex;
     justify-content: space-between;
@@ -185,6 +211,7 @@
   &__title-wrapper {
     display: flex;
     flex-direction: column;
+    gap: 2px;
   }
 
   &__title {
@@ -193,25 +220,30 @@
     gap: 8px;
   }
 
-  // &__subtitle {
-  //   margin-left: 28px;
-  // }
+  &__header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
 
+  // Content area
   &__content {
+    display: flex;
+    flex-direction: column;
+    // gap: 5px;
+  }
+
+  &__section {
     display: flex;
     flex-direction: column;
   }
 
-  &__header-actions {
-    display: flex;
-    gap: 8px;
-  }
   &__list {
     display: flex;
     flex-direction: column;
     gap: 7px;
     padding-top: 7px !important;
-    padding-bottom: 0 !important;
+    padding-bottom: 0px !important;
   }
 
   &__bottom {
@@ -221,6 +253,7 @@
     justify-content: center;
   }
 
+  //  Individual card
   &__card {
     border-radius: 12px !important;
     border: 1px solid #d2c5db !important;
@@ -228,134 +261,144 @@
     cursor: pointer;
     position: relative;
     overflow: visible !important;
-
     transition: box-shadow 0.2s ease;
 
     &:hover {
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
-  }
 
-  &__card.pinned {
-    // border-left: 3px solid #8646c3 !important;
-    // border: 1px solid #8400ff !important;
-    // background-color: #eee6f6 !important;
-    background-color: #eeeaf9 !important;
-  }
+    &.pinned {
+      background-color: #eeeaf9 !important;
+    }
 
-  .announcement__card.read {
-    background-color: #f8f7f9 !important;
-    border: 1px solid #d2c5db !important;
-  }
-
-  &__card-content {
-    display: flex;
-    flex-direction: column;
-    padding: 8px 14px !important;
-    // padding-top: 0px !important;
-  }
-
-  &__card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center !important;
-  }
-
-  &__author-date {
-    // padding-top: 0px !important;
-    // margin-top: 0px !important;
-    color: #6b7280;
-    font-size: 13px;
-  }
-  &__menu-btn {
-    min-width: unset;
-    padding: 0 !important;
-    background-color: transparent !important;
-
-    &:hover {
-      background-color: transparent !important;
-      box-shadow: none !important;
+    &.read {
+      background-color: #f8f7f9 !important;
+      border: 1px solid #d2c5db !important;
     }
   }
 
-  &__card-title {
-    font-weight: 500 !important;
-  }
-
-  &__description {
-    color: #535e6c;
-    font-weight: 400 !important;
-    display: -webkit-box;
-    overflow: hidden;
-  }
   &__pin-icon {
     position: absolute;
     top: -12px;
     left: -15px;
-    overflow: hidden;
     padding: 4px;
     rotate: 320deg;
-    // transform-origin: center;
+  }
+
+  // card content
+  &__card-content {
+    display: flex;
+    // flex-direction: row;
+    align-items: center;
+    // gap: 16px !important;
+    padding: 10px 12px !important;
+  }
+
+  //  Left column
+  &__card-left {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-left: 7px;
+  }
+
+  &__author-date {
+    color: #6b7280;
+    font-size: 12px !important;
+    line-height: 1.4;
+  }
+
+  &__card-title {
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    line-height: 1.4;
+    color: #111;
+  }
+
+  &__description {
+    color: #535e6c;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    line-height: 1.5;
+    overflow: hidden;
+  }
+
+  //  Right column: ellipsis menu btn + circle
+  &__card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start !important;
+    gap: 8px;
+    flex-shrink: 0;
+    width: 28px;
+  }
+
+  &__menu-btn {
+    min-width: unset !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #111 !important;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.06) !important;
+    }
+  }
+
+  &__circle-btn {
+    width: 28px;
+    height: 28px;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgba(134, 70, 195, 0.08);
+    }
+
+    // invisible spacer when click-mode is off — keeps column height stable
+    &--placeholder {
+      pointer-events: none;
+      visibility: hidden;
+    }
+  }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
   }
 }
-.checkbox__card {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
 
+// ── Checkbox wrapper row ───────────────────────────────────
 .checkbox__card {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   width: 100%;
-}
 
-.checkbox__card .MuiCheckbox-root {
-  margin-top: 6px;
-  padding: 4px;
-}
+  .MuiCheckbox-root {
+    margin-top: 6px;
+    padding: 4px;
+  }
 
-.checkbox__card .announcement__card {
-  flex: 1;
-}
-
-.announcement__card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* LEFT SIDE */
-.announcement__card-top-left {
-  display: flex;
-  align-items: center;
-}
-
-/* RIGHT SIDE */
-.announcement__card-top-right {
-  display: flex;
-  align-items: center;
-}
-
-/* FIX BUTTON PADDING (MAIN ISSUE) */
-.announcement__menu-btn {
-  min-width: unset !important;
-  padding: 0px !important; //  match visual weight of text
-  margin: 0 !important;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background-color: transparent !important;
-
-  &:hover {
-    background-color: transparent !important;
-    box-shadow: none !important;
+  .announcement__card {
+    flex: 1;
   }
 }
-.announcemnet__circleCheck {
-  display: flex !important;
-}
-

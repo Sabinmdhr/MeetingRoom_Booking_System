@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   addAnnouncement,
+  markAsRead,
   updateAnnouncement,
   updatePinStatus,
 } from "../services/announcements.service";
@@ -106,6 +107,19 @@ const useAnnouncementViewModel = (
     }
   };
 
+  const handleMarkRead = async (id: number) => {
+    try {
+      await markAsRead(id);
+      console.log(" item has been read.");
+
+      refreshAnnouncements?.();
+      toast.success("Item has been marked read");
+    } catch (error) {
+      console.error("Item has been marked read", error);
+      // toast.error("Failed to update pin status");
+    }
+  };
+
   return {
     handleSubmit,
     closeAnnouncementForm,
@@ -114,6 +128,7 @@ const useAnnouncementViewModel = (
     setAnnouncementFormData,
     isEditing: Boolean(initialData?.id),
     handlePinChange,
+    handleMarkRead,
   };
 };
 

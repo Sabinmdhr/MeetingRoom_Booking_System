@@ -4,14 +4,14 @@ import type {
 } from "../models/announcements.model";
 import api from "../api/api";
 
-// const URL = "";
-export const addAnnouncement = async (data: Announcements) => {
+export const updateAnnouncement = async (id: number, data: Announcements) => {
   try {
-    console.log("Sending payload:", data);
-    const res = await api.post("/api/v1/announcement/add", data);
+    const res = await api.put(`/api/v1/announcement/${id}/update`, data);
+    console.log(res);
+
     return res.data;
   } catch (error) {
-    console.error("Error adding announcement", error);
+    console.error("Error updating announcement", error);
     throw error;
   }
 };
@@ -28,33 +28,23 @@ export const getAnnouncements = async (data: AnnouncementListRequest) => {
   }
 };
 
-// export const getPinnedAnnouncements = async (page = 0, size = 5) => {
-//   try {
-//     const res = await api.get(
-//       `/api/v1/announcement/pinned-list?page=${page}&size=${size}`,
-//     );
-//     return res.data;
-//   } catch (error) {
-//     console.error("Error fetching pinned announcements", error);
-//     throw error;
-//   }
-// };
-
-export const deleteAnnouncement = async (id: number) => {
+export const addAnnouncement = async (data: Announcements) => {
   try {
-    const res = await api.delete(`/api/v1/announcement/${id}/delete`);
-    console.log(res);
-    console.log("Successfully deleted the announcement.");
+    console.log("Sending payload:", data);
+    const res = await api.post("/api/v1/announcement/add", data);
+    return res.data;
   } catch (error) {
-    console.error("Error deleting announcement", error);
+    console.error("Error adding announcement", error);
     throw error;
   }
 };
 
-export const updateAnnouncement = async (id: number, data: Announcements) => {
+export const markAsRead = async (id: number) => {
+  console.log(id);
+
   try {
-    const res = await api.put(`/api/v1/announcement/${id}/update`, data);
-    console.log(res);
+    const res = await api.patch(`/api/v1/announcement/${id}/mark-as-read`);
+    console.log(res.data);
 
     return res.data;
   } catch (error) {
@@ -73,6 +63,29 @@ export const updatePinStatus = async (id: number) => {
     return res.data;
   } catch (error) {
     console.error("Error updating announcement", error);
+    throw error;
+  }
+};
+
+export const deleteBulk = async (ids: number[]) => {
+  try {
+    const res = await api.delete("/api/v1/announcements/batch", {
+      data: { ids },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error deleting announcements", error);
+    throw error;
+  }
+};
+
+export const deleteAnnouncement = async (id: number) => {
+  try {
+    const res = await api.delete(`/api/v1/announcement/${id}/delete`);
+    console.log(res);
+    console.log("Successfully deleted the announcement.");
+  } catch (error) {
+    console.error("Error deleting announcement", error);
     throw error;
   }
 };
