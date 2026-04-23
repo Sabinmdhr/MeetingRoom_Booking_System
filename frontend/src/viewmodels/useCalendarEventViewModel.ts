@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import type { CalendarEvent } from "../models/calendar.model";
+import type { CalendarEvent, CalenderDay } from "../models/calendar.model";
+import { getCalendarByMonth, getCalenderByDay } from "../services/calendar.service";
 
 export type CalendarView = "day" | "week" | "month";
 
@@ -11,6 +12,49 @@ export const useCalendarEventViewModel = () => {
     null,
   );
   const [openModal, setOpenModal] = useState(false);
+  
+  const [currentDate, setcurrentDate] = useState(dayjs());
+  const [bookedDates, setBookedDates]= useState<Set<string>>(new Set());
+  const fetchCalender= async()=>{
+    try {
+      console.log("MONTH:", currentDate.format("YYYY-MM-DD"));
+      const res= await getCalendarByMonth( currentDate.format("YYYY-MM-DD"))
+      console.log("MONTH API DATA:", res.data);
+      const dates = new Set(
+        res.data.map((item: any) => item.date)
+      );
+
+      console.log("BOOKED DATES:", [...dates]);
+      setBookedDates(dates);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCalender();
+  }, [currentDate.month(), currentDate.year()]);
+
+  const [meetings, setMeetings]= useState<CalenderDay[]>([]);
+  const [selectedDates, setSelectedDates]= useState(dayjs());
+  const [loading, setLoading]= useState(false);
+
+  const fetchMeetings= async(date: string)=>{
+    try {
+      setLoading(true);
+      const res= await getCalenderByDay(date);
+      setMeetings(res.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+    finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    fetchMeetings(selectedDates.format("YYYY-MM-DD"));
+  },[selectedDates])
 
   const openEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
@@ -168,5 +212,12 @@ export const useCalendarEventViewModel = () => {
     goToToday,
     eventsByDate,
     eventsByDateHour,
+    currentDate,
+    setcurrentDate,
+    bookedDates,
+    meetings,
+    loading,
+    selectedDates,
+    setSelectedDates,
   };
 };
