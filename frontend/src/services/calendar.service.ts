@@ -16,7 +16,10 @@ export const getCalendarByWeek = async () => {
 
 export const getCalendarByMonth = async (date: string) => {
   try {
-    const res = await api.post<{data: CalenderMonth[]}>(`/api/v1/calender/month`, {"date": date});
+    const res = await api.post<{ data: CalenderMonth[] }>(
+      `/api/v1/calender/month`,
+      { date },
+    );
     // console.log(res);
 
     return res.data;
@@ -26,30 +29,33 @@ export const getCalendarByMonth = async (date: string) => {
   }
 };
 
-export const getCalendarByDay = async (date:string):Promise<CalendarByDay[]> => {
+export const getCalendarByDay = async (
+  date: string,
+): Promise<CalendarByDay[]> => {
   try {
     console.log("sending Date", date);
 
     const res = await api.post<{ data: CalendarByDay[] }>(
       `/api/v1/calender/day`,
-      {"date":date},
+      { date: date },
     );
     // console.log(res);
 
-    return res.data.data;
-     } catch (error) {
-    console.error("Error fetching calendar by day", error)
-    throw error;
-    }
-}
-export const getCalenderByDay= async(date: string)=>{
-  try {
-    const res= await api.post<{data: CalenderDay[]}>(`/api/v1/calender/day`, {"date":date})
-    return res.data;
+    return res.data.data ?? [];
   } catch (error) {
-    console.error("Error fetching calendar by day", error)
+    console.error("Error fetching calendar by day", error);
     throw error;
   }
-}
-
-
+};
+export const getCalenderByDay = async (date: string) => {
+  try {
+    const res = await api.post<{ data: CalenderDay[] }>(
+      `/api/v1/calender/day`,
+      { date: date },
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching calendar by day", error);
+    throw error;
+  }
+};

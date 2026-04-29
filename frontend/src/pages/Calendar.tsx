@@ -1,4 +1,3 @@
-// new
 import "../assets/scss/pages/Calendar.scss";
 import {
   Tab,
@@ -26,12 +25,7 @@ import {
 } from "lucide-react";
 import EditCalendarModal from "../components/Calendar/EditCalendarModal";
 import MyButton from "../components/ui/Button";
-
-const ROOMS = [
-  { id: "room-3a", name: "Mustang" },
-  { id: "room-2b", name: "Manang" },
-  { id: "room-1c", name: "Langtang" },
-];
+import type { CalendarEvent } from "../models/calendar.model";
 
 const GRID_VISIBLE_DAYS = 30;
 
@@ -40,6 +34,10 @@ export const Calendar = () => {
   const headerScrollRef = useRef<HTMLDivElement>(null);
   const bodyScrollRef = useRef<HTMLDivElement>(null);
   const isSyncingRef = useRef(false);
+
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const {
     currentMonth,
     view,
@@ -49,10 +47,15 @@ export const Calendar = () => {
     hours,
     openEvent,
     goToNext,
-    selectedEvent,
-    closeModal,
     goToPrev,
     goToToday,
+    selectedEvent,
+    closeModal,
+    // openModal,
+    setSelectedDates,
+    eventData,
+    eventDataLoading,
+    rooms,
   } = useCalendarEventViewModel();
 
   const [room, setRoom] = useState("All Rooms");
@@ -60,11 +63,14 @@ export const Calendar = () => {
   const [datePickerAnchor, setDatePickerAnchor] = useState<HTMLElement | null>(
     null,
   );
-  const [eventFilter, setEventFilter] = useState("all");
+  // const [eventFilter, setEventFilter] = useState("all");
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
   const [dayOffset, setDayOffset] = useState(0);
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
-
+  const [overflowAnchor, setOverflowAnchor] = useState<HTMLElement | null>(
+    null,
+  );
+  const [overflowEvents, setOverflowEvents] = useState<CalendarEvent[]>([]);
   const [modalAnchor, setModalAnchor] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -122,11 +128,30 @@ export const Calendar = () => {
   const gridDates = Array.from({ length: GRID_VISIBLE_DAYS }, (_, i) =>
     currentMonth.add(dayOffset + i, "day"),
   );
+  useEffect(() => {
+    const syncHeights = () => {
+      rowRefs.current.forEach((row, i) => {
+        const label = labelRefs.current[i];
+        if (row && label) {
+          label.style.height = `${row.getBoundingClientRect().height}px`;
+        }
+      });
+    };
 
+    const observer = new ResizeObserver(syncHeights);
+    rowRefs.current.forEach((row) => {
+      if (row) observer.observe(row);
+    });
+
+    syncHeights(); // run once immediately
+
+    return () => observer.disconnect();
+  }, [rooms, eventsByDate, gridDates]);
   // Handle room cell click - filter by room and go to day view
   const handleRoomCellClick = (date: dayjs.Dayjs, roomName: string) => {
     setSelectedRoom(roomName);
     goToToday(date);
+    setSelectedDates(date);
     setView("day");
     setDayOffset(0);
   };
@@ -220,9 +245,14 @@ export const Calendar = () => {
                   className="report-filter__select"
                 >
                   <MenuItem value="All Rooms">All Rooms</MenuItem>
-                  <MenuItem value="Mustang">Mustang</MenuItem>
-                  <MenuItem value="Manang">Manang</MenuItem>
-                  <MenuItem value="Langtang">Langtang</MenuItem>
+                  {rooms.map((rm) => (
+                    <MenuItem
+                      key={rm.id}
+                      value={rm.roomName}
+                    >
+                      {rm.roomName}
+                    </MenuItem>
+                  ))}
                 </TextField>
               </div>
 
@@ -301,7 +331,9 @@ export const Calendar = () => {
                             {event.startTime} - {event.endTime}
                           </span>
                           <br />
-                          <span className="event-title">{event.title}</span>
+                          <span className="event-title">
+                            {event.meetingTitle}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -348,12 +380,13 @@ export const Calendar = () => {
             {/* Body: sticky room labels + horizontally scrollable event tiles */}
             <div className="room-grid__body">
               <div className="room-grid__room-labels">
-                {ROOMS.map((rm) => (
+                {rooms.map((rm, i) => (
                   <div
                     key={rm.id}
                     className="room-grid__room-label"
+                    ref={(el) => (labelRefs.current[i] = el)} //  ref each label
                   >
-                    <span>{rm.name}</span>
+                    <span>{rm.roomName}</span>
                   </div>
                 ))}
               </div>
@@ -362,7 +395,7 @@ export const Calendar = () => {
                 className="room-grid__scroll"
                 ref={bodyScrollRef}
               >
-                {ROOMS.map((rm) => (
+                {rooms.map((rm) => (
                   <div
                     key={rm.id}
                     className="room-grid__row"
@@ -372,24 +405,32 @@ export const Calendar = () => {
                       const allDayEvents = eventsByDate[dateKey] || [];
                       const cellEvents =
                         room === "All Rooms"
-                          ? allDayEvents.filter((e) => e.location === rm.name)
+                          ? allDayEvents.filter(
+                              (e) => e.location === rm.roomName,
+                            )
                           : allDayEvents.filter(
                               (e) =>
-                                e.location === rm.name && e.location === room,
+                                e.location === rm.roomName &&
+                                e.location === room,
                             );
+
+                      const VISIBLE_LIMIT = 4;
+                      const visibleEvents = cellEvents.slice(0, VISIBLE_LIMIT);
+                      const hiddenCount = cellEvents.length - VISIBLE_LIMIT;
 
                       return (
                         <div
                           key={`${rm.id}-${dateKey}`}
-                          className={`room-grid__cell${dateKey === today ? " room-grid__cell--today" : ""} `}
+                          className={`room-grid__cell${dateKey === today ? " room-grid__cell--today" : ""}`}
                           onMouseEnter={() =>
                             setHoveredCell(`${rm.id}-${dateKey}`)
                           }
                           onMouseLeave={() => setHoveredCell(null)}
-                          onClick={() => handleRoomCellClick(date, rm.name)}
+                          onClick={() => handleRoomCellClick(date, rm.roomName)}
                         >
-                          {cellEvents.map((event) => (
+                          {visibleEvents.map((event) => (
                             <div
+                              key={event.id}
                               className={`room-grid__event ${event.category}`}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -402,26 +443,39 @@ export const Calendar = () => {
                                 {event.startTime} – {event.endTime}
                               </span>
                               <span className="room-grid__event-title">
-                                {event.title}
+                                {event.meetingTitle}
                               </span>
                             </div>
                           ))}
-                          {/* create meeting +  */}
-                          {hoveredCell === `${rm.id}-${dateKey}` && (
+
+                          {/*  Show more button */}
+                          {hiddenCount > 0 && (
                             <div
-                              className="room-grid__event room-grid__event--create"
+                              className="room-grid__show-more"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleRoomCellClick(date, rm.name);
+                                setOverflowEvents(cellEvents);
+                                setOverflowAnchor(e.currentTarget);
                               }}
                             >
-                              <div className="create-icon">
-                                <PlusIcon />
-
-                                {/* <span>Create Meeting</span> */}
-                              </div>
+                              +{hiddenCount} more
                             </div>
                           )}
+
+                          {hoveredCell === `${rm.id}-${dateKey}` &&
+                            cellEvents.length === 0 && (
+                              <div
+                                className="room-grid__event room-grid__event--create"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRoomCellClick(date, rm.roomName);
+                                }}
+                              >
+                                <div className="create-icon">
+                                  <PlusIcon />
+                                </div>
+                              </div>
+                            )}
                         </div>
                       );
                     })}
@@ -432,11 +486,53 @@ export const Calendar = () => {
           </div>
         )}
       </CardContent>
-
+      {/*   Overflow events popover */}
+      <Popover
+        open={Boolean(overflowAnchor)}
+        anchorEl={overflowAnchor}
+        onClose={() => setOverflowAnchor(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: 2,
+              width: 240,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+              p: 1,
+            },
+          },
+        }}
+      >
+        <div className="room-grid__overflow-list">
+          {overflowEvents.map((event) => (
+            <div
+              key={event.id}
+              className={`room-grid__event ${event.category}`}
+              style={{ marginBottom: 6 }}
+              onClick={(e) => {
+                setOverflowAnchor(null);
+                setModalAnchor(e.currentTarget);
+                openEvent(event);
+                setMode("view");
+              }}
+            >
+              <span className="room-grid__event-time">
+                {event.startTime} – {event.endTime}
+              </span>
+              <span className="room-grid__event-title">
+                {event.meetingTitle}
+              </span>
+            </div>
+          ))}
+        </div>
+      </Popover>
       <CalendarModal
         open={mode === "view"}
         event={selectedEvent}
         anchorEl={modalAnchor}
+        eventData={eventData}
+        eventDataLoading={eventDataLoading}
         onClose={() => {
           setMode(null);
           closeModal();

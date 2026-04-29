@@ -3,7 +3,6 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
-// import { useState } from "react";
 import "../../assets/scss/components/Dashboard/DashboardCard.scss";
 
 function DashboardCard({ cards }: any) {
