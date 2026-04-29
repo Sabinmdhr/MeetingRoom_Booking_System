@@ -1,7 +1,10 @@
 import { useState, useMemo, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import type { CalendarEvent, CalenderDay } from "../models/calendar.model";
-import { getCalendarByMonth, getCalenderByDay } from "../services/calendar.service";
+import {
+  getCalendarByMonth,
+  getCalenderByDay,
+} from "../services/calendar.service";
 
 export type CalendarView = "day" | "week" | "month";
 
@@ -12,49 +15,99 @@ export const useCalendarEventViewModel = () => {
     null,
   );
   const [openModal, setOpenModal] = useState(false);
-  
+
   const [currentDate, setcurrentDate] = useState(dayjs());
-  const [bookedDates, setBookedDates]= useState<Set<string>>(new Set());
-  const fetchCalender= async()=>{
+  const [bookedDates, setBookedDates] = useState<Set<string>>(new Set());
+  const [monthMeetings, setMonthMeetings] = useState<CalenderDay[]>([]);
+
+  const fetchCalender = async () => {
     try {
       console.log("MONTH:", currentDate.format("YYYY-MM-DD"));
-      const res= await getCalendarByMonth( currentDate.format("YYYY-MM-DD"))
+      const res = await getCalendarByMonth(currentDate.format("YYYY-MM-DD"));
       console.log("MONTH API DATA:", res.data);
-      const dates = new Set(
-        res.data.map((item: any) => item.date)
-      );
-
+      setMonthMeetings(res.data || []);
+      const dates = new Set(res.data.map((item: any) => item.date));
       console.log("BOOKED DATES:", [...dates]);
       setBookedDates(dates);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCalender();
   }, [currentDate.month(), currentDate.year()]);
 
-  const [meetings, setMeetings]= useState<CalenderDay[]>([]);
-  const [selectedDates, setSelectedDates]= useState(dayjs());
-  const [loading, setLoading]= useState(false);
+  const [selectedDates, setSelectedDates] = useState(dayjs());
+  const [dateRange, setDateRange] = useState<{
+    start: Dayjs | null;
+    end: Dayjs | null;
+  }>({ start: null, end: null });
+  const [loading, setLoading] = useState(false);
 
-  const fetchMeetings= async(date: string)=>{
-    try {
-      setLoading(true);
-      const res= await getCalenderByDay(date);
-      setMeetings(res.data || []);
-    } catch (error) {
-      console.error(error);
-    }
-    finally{
-      setLoading(false);
-    }
-  }
+  // const fetchMeetings= async(date: string)=>{
+  //   try {
+  //     setLoading(true);
+  //     const res= await getCalenderByDay(date);
+  //     setMeetings(res.data || []);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   finally{
+  //     setLoading(false);
+  //   }
+  // }
 
-  useEffect(()=>{
-    fetchMeetings(selectedDates.format("YYYY-MM-DD"));
-  },[selectedDates])
+  // useEffect(()=>{
+  //   fetchMeetings(selectedDates.format("YYYY-MM-DD"));
+  // },[selectedDates])
+
+  const handleDateClick = (day: Dayjs) => {
+    if (!dateRange.start || (dateRange.start && dateRange.end)) {
+      setDateRange({ start: day, end: null });
+    } else {
+      if (day.isBefore(dateRange.start)) {
+        setDateRange({ start: day, end: dateRange.start });
+      } else {
+        setDateRange({ start: dateRange.start, end: day });
+      }
+    }
+  };
+
+  const isInRange = (d: Dayjs | null) => {
+    if (!d || !dateRange.start) return false;
+    if (!dateRange.end) {
+      return d.isSame(dateRange.start, "day");
+    }
+    return (
+      d.isSame(dateRange.start, "day") ||
+      d.isSame(dateRange.end, "day") ||
+      (d.isAfter(dateRange.start) && d.isBefore(dateRange.end))
+    );
+  };
+
+  const meetings = useMemo(() => {
+    if (!dateRange.start) return [];
+
+    return monthMeetings.filter((m) => {
+      const meetingDate = dayjs(m.date);
+
+      if (!dateRange.end) {
+        return meetingDate.isSame(dateRange.start, "day");
+      }
+
+      return (
+        meetingDate.isSame(dateRange.start, "day") ||
+        meetingDate.isSame(dateRange.end, "day") ||
+        (meetingDate.isAfter(dateRange.start) &&
+          meetingDate.isBefore(dateRange.end))
+      );
+    });
+  }, [monthMeetings, dateRange]);
+
+  const clearSelection = () => {
+    setDateRange({ start: null, end: null });
+  };
 
   const openEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
@@ -188,23 +241,29 @@ export const useCalendarEventViewModel = () => {
 
   // NAVIGATION
   const goToNext = () => {
+    setDateRange({ start: null, end: null });
     setCurrentMonth((prev) => {
       if (view === "day") return prev.add(1, "day");
       if (view === "week") return prev.add(1, "week");
       return prev.add(1, "month");
     });
+
+    
   };
 
   const goToPrev = () => {
     setCurrentMonth((prev) => {
       if (view === "day") return prev.subtract(1, "day");
       if (view === "week") return prev.subtract(1, "week");
+      setDateRange({ start: null, end: null });
       return prev.subtract(1, "month");
     });
+
   };
 
   const goToToday = (date?: Dayjs) => {
     setCurrentMonth(date ?? dayjs());
+
   };
 
   return {
@@ -232,5 +291,10 @@ export const useCalendarEventViewModel = () => {
     loading,
     selectedDates,
     setSelectedDates,
+    handleDateClick,
+    isInRange,
+    dateRange,
+    setDateRange,
+    clearSelection,
   };
 };

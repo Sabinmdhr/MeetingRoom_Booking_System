@@ -1,9 +1,10 @@
 import "../assets/scss/pages/Dashboard.scss";
 import DashboardCard from "../components/Dashboard/DashboardCard";
 import { Building2, Calendar, ChartColumn, Timer } from "lucide-react";
-import Announcements from "./Announcements";
 import CalendarPreview from "../components/Dashboard/CalendarPreview";
 import DashboardAnnouncements from "../components/Dashboard/DashboardAnnouncements";
+import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
+import "../assets/scss/pages/Dashboard.scss"
 
 export default function Dashboard() {
   const accessToken = localStorage.getItem("accessToken");
@@ -65,9 +66,15 @@ export default function Dashboard() {
       <main className="dashboard-content">
         <DashboardCard cards={cards} />
         
-        <div className="dashboard__announcements">
+        <div className="dashboard-subcontainer">
+          <div className="dashboard__announcements">
           <DashboardAnnouncements />
         </div>
+        <div className="dashboard_dashboardupmeetings">
+          <DashboardUpMeetings />
+        </div>
+        </div>
+
         <div className="dashboard_calenderpreview">
           <CalendarPreview />
         </div>

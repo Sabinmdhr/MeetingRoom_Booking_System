@@ -1,12 +1,9 @@
 .dashboard-announcements {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  width: 50%;
   margin-top: 20px;
 
   &__section {
     // flex: 1;
-    width: 50%;
     border-radius: 8px !important;
     padding: 10px !important;
   }
@@ -16,6 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 4px;
   }
 
   &__title {

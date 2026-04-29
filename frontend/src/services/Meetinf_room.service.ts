@@ -39,6 +39,7 @@ export const deleteMeetingRoom = async (roomId: number) => {
     throw error;
   }
 };
+
 export const EditMeetingRoom = async (id: number, data: AddRoomModal) => {
   try {
     await api.put(`/api/v1/room/${id}/update`, data);
@@ -47,3 +48,13 @@ export const EditMeetingRoom = async (id: number, data: AddRoomModal) => {
     console.log(error);
   }
 };
+
+export const getUpcomingMeeting = async()=>{
+  try {
+    const res= await api.get("/api/v1/upcoming-meeting");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching upcoming meetings",error);
+    throw error;
+  }
+}

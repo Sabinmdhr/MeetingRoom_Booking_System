@@ -16,8 +16,6 @@ export const getCalendarByWeek = async () => {
 export const getCalendarByMonth = async (date: string) => {
   try {
     const res = await api.post<{data: CalenderMonth[]}>(`/api/v1/calender/month`, {"date": date});
-    // console.log(res);
-
     return res.data;
   } catch (error) {
     console.error("Error fetching calendar by month", error);

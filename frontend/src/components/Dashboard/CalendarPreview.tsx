@@ -1,18 +1,12 @@
-import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Paper,
-  Chip,
-  colors,
-} from "@mui/material";
+import { Box, Typography, IconButton, Paper, Chip } from "@mui/material";
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
   Dot,
+  MapPin,
+  X,
 } from "lucide-react";
 import { useCalendarEventViewModel } from "../../viewmodels/useCalendarEventViewModel";
 import "../../assets/scss/components/Dashboard/CalendarPreview.scss";
@@ -31,13 +25,17 @@ const CalendarPreview: React.FC = () => {
     meetings,
     selectedDates,
     setSelectedDates,
+    handleDateClick,
+    isInRange,
+    dateRange,
+    setDateRange,
+    clearSelection,
   } = useCalendarEventViewModel();
   const today = dayjs();
 
-  // const [selectedDate, setSelectedDate] = useState<Dayjs | null>(today);
-
   // Month navigation
   const changeMonth = (direction: number) => {
+    setDateRange({ start: null, end: null });
     setcurrentDate((prev) => prev.add(direction, "month"));
   };
 
@@ -81,6 +79,18 @@ const CalendarPreview: React.FC = () => {
         <Typography className="title">
           <CalendarIcon size={18} /> Calendar Preview
         </Typography>
+
+        {meetings.length !== 0 && (
+          <MyButton
+            className="clearselection-btn"
+            startIcon={<X size={16} />}
+            text="Clear Selection"
+            customVariant="ghost"
+            onClick={() => {
+              clearSelection();
+            }}
+          />
+        )}
       </Box>
 
       <Box className="calendar-box">
@@ -109,9 +119,9 @@ const CalendarPreview: React.FC = () => {
             <Box
               key={index}
               className={`day-cell 
-                ${isSelected(day) ? "selected" : ""} 
+                ${isInRange(day) ? "selected" : ""} 
                 ${isToday(day) ? "today" : ""}`}
-              onClick={() => day && setSelectedDates(day)}
+              onClick={() => day && handleDateClick(day)}
             >
               {day ? day.date() : ""}
 
@@ -130,9 +140,11 @@ const CalendarPreview: React.FC = () => {
       ) : (
         <Box className="today-meetings">
           <Typography className="today-meetings__header">
-            {selectedDates && !selectedDates.isSame(today, "day")
-              ? `Meetings on ${selectedDates.format("MMM D")}`
-              : "Today’s Meetings"}
+            {dateRange.start && dateRange.end
+              ? `Meetings from ${dateRange.start.format("MMM D")} - ${dateRange.end.format("MMM D")}`
+              : dateRange.start
+                ? `Meetings on ${dateRange.start.format("MMM D")}`
+                : "Select dates"}
             <span className="today-meetings__badge">{meetings.length}</span>
           </Typography>
           {meetings.map((m) => (
@@ -141,34 +153,43 @@ const CalendarPreview: React.FC = () => {
                 <Typography className="today-meetings__title">
                   {m.meetingTitle}
                 </Typography>
-                <div className="today-meetings__subtitle">
-                  <Typography>
-                  {formatDisplayTime(timeStringToMinutes(m.startTime))} 
-                  </Typography>
-                  <Dot/>
-                  <Typography>
-                  {m.roomName}
-                  </Typography>
-                </div>
-              </Box>
-              <Box>
                 <Chip
                   label={m.meetingType.name}
                   className="today-meetings__chip"
                   style={{ color: `rgba${m.meetingType.colorCode}` }}
                 />
-              </Box>
+                </Box>
+                <div className="today-meetings__subtitle">
+                  <Typography>
+                    {m.date}
+                  </Typography>
+                  <Dot />
+                  <Typography>
+                    {formatDisplayTime(timeStringToMinutes(m.startTime))} - {formatDisplayTime(timeStringToMinutes(m.endTime))}
+                  </Typography>
+                </div>
+                <hr />
+                <div className="today-meetings__location">
+                  <MapPin size={16} />
+                  <Typography>
+                    {m.roomName}
+                  </Typography>
+                  {/* <Typography>
+                  </Typography> */}
+                </div>
             </Box>
           ))}
-          </Box>
+        </Box>
       )}
-          <MyButton
-            variant="outlined"
-            fullWidth
-            text="Open Full Calender"
-            customVariant="ghost"
-            onClick={() => navigate("/Calendar")}
-          />
+      <MyButton
+        className="calenderpreview-btn"
+        startIcon={<CalendarIcon size={18} />}
+        variant="outlined"
+        fullWidth
+        text="Open Full Calender View"
+        customVariant="primary"
+        onClick={() => navigate("/Calendar")}
+      />
     </Paper>
   );
 };

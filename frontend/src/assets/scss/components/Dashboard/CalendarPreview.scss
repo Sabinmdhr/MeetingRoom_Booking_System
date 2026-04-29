@@ -2,7 +2,7 @@
   padding: 16px;
   border-radius: 8px !important;
   margin-top: 20px;
-  width: 50%;
+  width: 100%;
 }
 
 .calendar-header {
@@ -13,6 +13,7 @@
 
   .title {
     gap: 8px;
+    font-weight: 500 !important;
   }
 }
 
@@ -149,35 +150,56 @@
     padding: 12px;
     margin-bottom: 12px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
 
     &:hover {
-    border: 1px solid rgb(201, 171, 201) ;
-    background: rgb(245, 237, 245) !important;
+    border: 2px solid rgb(201, 171, 201) ;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1) !important;
     }
   }
 
-  &__left {
+  &__subcard{
     display: flex;
-    flex-direction: column;
-  }
+    justify-content: space-between   ;
 
-  &__title {
+    &__title {
     font-weight: 400 !important;
     font-size: 15px !important;
-  }
-
-  &__subtitle {
-    font-size: 13px !important;
-    color: #777;
-    display: flex;
-    align-items: flex-end;
   }
 
   &__chip {
     height: 22px !important;
     border: 1px solid !important;
     border-radius: 8px !important;
+  }
+  }
+
+  &__subtitle {
+    font-size: 13px !important;
+    color: #777;
+    display: flex;
+  }
+
+  &__location{
+    font-size: 13px !important;
+    color: #777;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.calenderpreview-btn:hover {
+  background: #7b2ff7 !important;
+  }
+
+.clearselection-btn{
+  color: red !important;
+  border: 1px solid red !important;
+  font-size: 12px !important;
+  height: 32px !important;
+
+  &:hover {
+    color: black !important;
   }
 }
