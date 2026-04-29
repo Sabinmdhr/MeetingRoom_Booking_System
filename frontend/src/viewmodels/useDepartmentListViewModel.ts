@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { getDepartmentList } from "../services/departmentList.service";
-import type { departmentList } from "../models/departmentList.model";
+import { getDepartmentList, handleAddDepartment } from "../services/departmentList.service";
+import type {
+  addDepartment,
+  departmentList,
+} from "../models/departmentList.model";
 import type { DropdownItems } from "../components/ui/Dropdown/CommonDropdown";
 
 export const useDepartmentListViewModel = () => {
@@ -13,30 +16,79 @@ export const useDepartmentListViewModel = () => {
     useState<departmentList>();
   const [departmentItems, setDepartmentItems] = useState<DropdownItems[]>([]);
   const [departmentList, setDepartmentList] = useState<departmentList[]>([]);
-  useEffect(() => {
-    const fetchDepartments = async () => {
-      try {
-        const data = await getDepartmentList();
-        setDepartmentList(data);
+  const [departmentFormData, setDepartmentFormData] = useState<addDepartment>({
+    departmentName: "",
+    description: "",
+  });
+  const [departmentFormState, setDepartmentFormState] = useState({
+    open: false,
+    mode: "edit" as "edit" | "add",
+    department: null as departmentList | null,
+  });
 
-        const Items: DropdownItems[] = data.map((dept) => ({
-          label: dept.departmentName,
-          id: dept.id,
-        }));
-        setDepartmentItems(Items);
-      } catch (error) {
-        console.error("Error fetching department list:", error);
-      }
-    };
+  const handleDepartmentFormOpen = (
+    mode: "edit" | "add",
+    department?: departmentList,
+  ) => {
+    setDepartmentFormState({
+      open: true,
+      mode: mode,
+      department: department || null,
+    });
+  };
+  const handleDepartmentFormClose = async () => {
+    setDepartmentFormState((prev) => ({
+      ...prev,
+      open: false,
+    }));
+    await fetchDepartments();
+  };
+  const fetchDepartments = async () => {
+    try {
+      const data = await getDepartmentList();
+      setDepartmentList(data);
+
+      const Items: DropdownItems[] = data.map((dept) => ({
+        label: dept.departmentName,
+        id: dept.id,
+      }));
+      setDepartmentItems(Items);
+    } catch (error) {
+      console.error("Error fetching department list:", error);
+    }
+  };
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = e.target;
+  setDepartmentFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
+const submitDepartment = async (data: addDepartment) => {
+
+  try {
+    await handleAddDepartment(data);
+  } catch (error) {
+    console.error("Error adding department:", error);
+  }
+  }
+  // Here you would typically send departmentFormData to your backend API
+  useEffect(() => {
     fetchDepartments();
   }, []);
 
-  // const handleDepartmentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-  //   const id  = Number(e.target.value);
-
-  //     setSelectedDepartment(departmentList.find((dept) => dept.id === id));
-
-  // }
-
-  return { departmentList, selectedDepartment, departmentItems };
+  return {
+    departmentList,
+    selectedDepartment,
+    departmentItems,
+    departmentFormState,
+    handleDepartmentFormOpen,
+    handleDepartmentFormClose,
+    departmentFormData,
+    setDepartmentFormData,
+    handleChange,
+    submitDepartment,
+  };
 };

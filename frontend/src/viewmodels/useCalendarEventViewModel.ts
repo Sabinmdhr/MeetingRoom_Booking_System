@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import type { CalendarEvent, CalenderDay } from "../models/calendar.model";
 import { getCalendarByMonth, getCalenderByDay } from "../services/calendar.service";
+import { useAuth } from "../hooks/useAuth";
 
 export type CalendarView = "day" | "week" | "month";
 
@@ -12,7 +13,7 @@ export const useCalendarEventViewModel = () => {
     null,
   );
   const [openModal, setOpenModal] = useState(false);
-
+const {role } = useAuth();
   const [currentDate, setcurrentDate] = useState(dayjs());
   const [bookedDates, setBookedDates]= useState<Set<string>>(new Set());
   const fetchCalender= async()=>{

@@ -1,54 +1,54 @@
-.TableContainer{
+.TableContainer {
   border-radius: 10px;
 }
 
-.TableHead{
-background-color: #F9FAFB;}
+.TableHead {
+  background-color: #f9fafb;
+}
 
-.titleDesc{
+.titleDesc {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 6px;
 
-  .title{
+  .title {
     font-size: 28px;
     font-weight: 800;
   }
 
-  .desc{
-    color: var(--colorsNeutral600)
+  .desc {
+    color: var(--colorsNeutral600);
   }
 }
 
-.tabs{
+.tabs {
   display: flex;
   align-items: center;
   justify-content: start;
-  border-bottom: 1.5px solid #E5E7EB;
+  border-bottom: 1.5px solid #e5e7eb;
   margin: 16px 0;
   gap: 10px;
   cursor: pointer;
 
-  .active{
-    color: #155DFC  ;
-    border-bottom:2px solid #155DFC !important;
-
+  .active {
+    color: #155dfc;
+    border-bottom: 2px solid #155dfc !important;
   }
-  .participants-tab, .group-tab{
+  .participants-tab,
+  .group-tab {
     display: flex;
     align-items: center;
     gap: 8px;
     // justify-content: center;
     padding: 8px 8px;
     // border-bottom: 1px solid red;
-
   }
 }
 
-.edit-btn{
-  color: #0A0E19 !important;
-  border: 0.5px solid #E5E5E5 !important;
+.edit-btn {
+  color: #0a0e19 !important;
+  border: 0.5px solid #e5e5e5 !important;
   margin: 10px 0 !important;
   border-radius: 8px !important;
 
@@ -56,11 +56,10 @@ background-color: #F9FAFB;}
   font-weight: 500;
   display: flex;
   gap: 8px;
-  &.edit-mode{
+  &.edit-mode {
     background-color: black;
     color: white !important;
   }
-
 }
 
 .external-members {
@@ -78,18 +77,18 @@ background-color: #F9FAFB;}
     svg {
       color: #f26a00;
     }
-    .header{
+    .header {
       color: brown;
       font-size: 14px;
       font-weight: 600;
     }
   }
 
-  .field{
+  .field {
     display: flex;
     flex-direction: column;
 
-    .field-label{
+    .field-label {
       font-size: 12px;
     }
   }
@@ -109,9 +108,9 @@ background-color: #F9FAFB;}
     border-radius: 8px;
     padding: 10px 12px;
 
-    .note{
-    font-size: 13px;
-    color: #7a3b00;
+    .note {
+      font-size: 13px;
+      color: #7a3b00;
     }
 
     b {
@@ -154,6 +153,6 @@ background-color: #F9FAFB;}
     }
   }
 }
-.participants-table{
+.participants-table {
   margin-top: 20px;
 }

@@ -8,17 +8,23 @@
 //   next_available_time: string | null;
 //   next_booking_time: string | null;
 // }
-
+type resources = {
+  id: number;
+  name: string;
+  status: string;
+}
 export interface meeting_rooms{
   id: number;
   roomName: string;
   capacity: number;
-  resources: string[];
+  bookedStatus: string;
+  status: string;
+    resources: resources[];
 }
 
 export interface AddRoomModal{
   // id: string;
   roomName: string;
   capacity: number;
-  resources :string[];
+  resourcesIds :number[];
 }

@@ -80,15 +80,15 @@ export const TimeSlotSelector = ({
     return now.getHours() * 60 + now.getMinutes();
   };
   useEffect(() => {
-    if(!timelineRef.current) return;
+    if (!timelineRef.current) return;
     const minutesNow = getCurrentMinutes();
 
-  const min = START_MINUTES;
-  const max = END_HOUR * 60;
+    const min = START_MINUTES;
+    const max = END_HOUR * 60;
 
-  const clamped = Math.max(min, Math.min(minutesNow, max));
+    const clamped = Math.max(min, Math.min(minutesNow, max));
 
-  const y = getYFromMinutes(clamped);
+    const y = getYFromMinutes(clamped);
 
     timelineRef.current?.scrollTo({ top: y - 50, behavior: "smooth" });
   }, []);
@@ -108,7 +108,7 @@ export const TimeSlotSelector = ({
   const getMinutesFromY = (y: number) =>
     Math.round(y / MINUTE_HEIGHT) + START_MINUTES;
 
-const [mannualScroll, setManualScroll] = useState(false);
+  const [mannualScroll, setManualScroll] = useState(false);
   const handlePointerDown = (e: React.PointerEvent, mode: InteractionMode) => {
     e.stopPropagation();
     setManualScroll(true);
@@ -131,7 +131,7 @@ const [mannualScroll, setManualScroll] = useState(false);
     const timelineRect = timelineRef.current?.getBoundingClientRect();
     if (!timelineRect) return;
 
-setManualScroll(true);
+    setManualScroll(true);
     const clickY =
       e.clientY - timelineRect.top + (timelineRef.current?.scrollTop || 0);
     const clickedMinutes = getMinutesFromY(clickY);
@@ -189,7 +189,7 @@ setManualScroll(true);
         )
       )
         return;
-      setStartTime(newStart );
+      setStartTime(newStart);
     } else if (interaction.mode === "resize-bottom") {
       let newEnd = interaction.initialEnd + snappedDelta;
       if (newEnd > END_MINUTES) newEnd = END_MINUTES;
@@ -256,7 +256,6 @@ setManualScroll(true);
           style={{ height: TOTAL_HEIGHT }}
           onPointerDown={handleGridClick}
         >
-
           {/* Horizontal grid lines */}
           {hours.map((hour) => (
             <div
@@ -286,7 +285,7 @@ setManualScroll(true);
                 backgroundColor: "rgba(255, 0, 0, 0.3)",
                 // backgroundColor: `rgba${slot.color}`,
                 border: "1px solid red",
-                pointerEvents: "none", // 👈 important
+                pointerEvents: "none", 
                 zIndex: 999,
                 display: "flex",
                 alignItems: "center",

@@ -26,12 +26,16 @@ export const getCalendarByMonth = async (date: string) => {
   }
 };
 
-export const getCalendarByDay = async (date:string):Promise<CalendarByDay[]> => {
+export const getCalendarByDay = async (date:string, role: string):Promise<CalendarByDay[]> => {
   try {
     console.log("sending Date", date);
+    const endpoint =
+      role === "MANAGER"
+        ? `/api/v1/get-self-booked-room`
+        : `/api/v1/calender/day`;
 
     const res = await api.post<{ data: CalendarByDay[] }>(
-      `/api/v1/calender/day`,
+      endpoint,
       {"date":date},
     );
     // console.log(res);
@@ -44,7 +48,10 @@ export const getCalendarByDay = async (date:string):Promise<CalendarByDay[]> => 
 }
 export const getCalenderByDay= async(date: string)=>{
   try {
-    const res= await api.post<{data: CalenderDay[]}>(`/api/v1/calender/day`, {"date":date})
+    const res = await api.post<{ data: CalenderDay[] }>(
+      `/api/v1/calender/day`,
+      { date: date },
+    );
     return res.data;
   } catch (error) {
     console.error("Error fetching calendar by day", error)

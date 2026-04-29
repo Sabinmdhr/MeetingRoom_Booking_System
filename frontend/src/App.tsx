@@ -91,7 +91,7 @@ function App() {
           <Route
             path="report"
             element={
-            <ProtectedRoutes roles={["ADMIN", "MANAGER"]}>
+            <ProtectedRoutes roles={["ADMIN"]}>
 
             <Report />
             </ProtectedRoutes>}

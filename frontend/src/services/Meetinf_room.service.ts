@@ -25,7 +25,14 @@ export const getMeetingRooms = async () => {
     throw error;
   }
 };
-
+export const getMEttingRoomResources = async () => {
+  try {
+    const res = await api.get("/api/v1/room/active-resource");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const deleteMeetingRoom = async (roomId: number) => {
   try {
     const response = await api.patch(`/api/v1/room/${roomId}/change-status`, {
