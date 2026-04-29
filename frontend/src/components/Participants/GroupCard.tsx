@@ -7,6 +7,8 @@ import MyButton from "../ui/Button";
 import { useState } from "react";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import { mappingGroupResponseToRequest, type groupCardRequest, type groupCardResponse } from "../../models/groupCard.model";
+import { permissions } from "../../utils/permissions";
+import { useAuth } from "../../hooks/useAuth";
 
 type props = {
   groupFormState: {
@@ -27,7 +29,8 @@ export const GroupCard = ({
 }: props) => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
-
+const {role} = useAuth();
+const perms = permissions[role as keyof typeof permissions];
   const { group } = useGroupCardViewModel();
 
   const handleDeleteClick = (id: number) => {
@@ -56,30 +59,35 @@ export const GroupCard = ({
                 </div>
               }
               action={
-                <div className="title-icons">
-                  <MyButton
-                    text=""
-                    startIcon={<Pen size={17} style={{ marginLeft: "10px" }} />}
-                    variant="outlined"
-                    customVariant="ghost"
-                    onClick={() => {
-                      if (group) handleGroupFormOpen("edit", group);
-                    }}
-                  />
-                  <MyButton
-                    text=""
-                    startIcon={
-                      <Trash2
-                        size={17}
-                        color="red"
-                        style={{ marginLeft: "10px" }}
-                      />
-                    }
-                    variant="outlined"
-                    customVariant="ghost"
-                    onClick={() => handleDeleteClick(group.id)}
-                  />
-                </div>
+                perms?.canManageUsers ? (
+                  <div className="title-icons">
+                    <MyButton
+                      text=""
+                      startIcon={
+                        <Pen size={17} style={{ marginLeft: "10px" }} />
+                      }
+                      variant="outlined"
+                      customVariant="ghost"
+                      onClick={() => {
+                        if (group) handleGroupFormOpen("edit", group);
+                      }}
+                    />
+
+                    <MyButton
+                      text=""
+                      startIcon={
+                        <Trash2
+                          size={17}
+                          color="red"
+                          style={{ marginLeft: "10px" }}
+                        />
+                      }
+                      variant="outlined"
+                      customVariant="ghost"
+                      onClick={() => handleDeleteClick(group.id)}
+                    />
+                  </div>
+                ) : null
               }
               subheader={<span className="subtitle">{group.description}</span>}
             ></CardHeader>

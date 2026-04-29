@@ -44,6 +44,7 @@ export const AddMeetingRoomForm = ({
     setRoomFormState,
     refresh,
     fetchMeeting,
+    roomResources,
   } = useMeetingCardViewModel();
   // const {
   //   addMeetingFormData,
@@ -62,14 +63,14 @@ export const AddMeetingRoomForm = ({
         // id: roomFormState.room.id,
         roomName: roomFormState.room.roomName,
         capacity: roomFormState.room.capacity,
-        resources: roomFormState.room.resources,
+        resourcesIds: roomFormState.room.resources.map((r) => r.id),
       });
     } else {
       setAddRoomFormData({
         // id: "",
         roomName: "",
         capacity: 0,
-        resources: [],
+        resourcesIds: [],
       });
     }
   }, [roomFormState.room]);
@@ -124,7 +125,21 @@ export const AddMeetingRoomForm = ({
             {/* Checkboxes in 2 columns */}
             <FormGroup>
               <Grid container>
-                <Grid size={6}>
+                {roomResources.map((resource) => (
+                  <Grid size={6} key={resource.id}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          value={resource.id}
+                          onChange={handleCheckboxChange}
+                          checked={addRoomFormData.resourcesIds.includes(resource.id)}
+                        />
+                      }
+                      label={resource.name}
+                    />
+                  </Grid>
+                ))}
+                {/* <Grid size={6}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -175,7 +190,7 @@ export const AddMeetingRoomForm = ({
                     }
                     label="TV"
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
             </FormGroup>
           </FormControl>

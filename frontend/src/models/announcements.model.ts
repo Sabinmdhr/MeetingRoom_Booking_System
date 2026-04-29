@@ -13,4 +13,5 @@ export interface AnnouncementListRequest {
   pageSize?: number;
   sortBy?: string;
   sortDir?: string;
+  pinStatus?: boolean;
 }

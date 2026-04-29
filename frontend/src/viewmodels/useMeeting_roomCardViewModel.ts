@@ -4,6 +4,7 @@ import {
   addRoom,
   getMeetingRooms,
   deleteMeetingRoom,
+  getMEttingRoomResources,
 } from "../services/Meetinf_room.service";
 import { toast } from "react-toastify";
 import { getUpcomingMeeting } from "../services/Meetinf_room.service";
@@ -28,7 +29,9 @@ export const useMeetingCardViewModel = () => {
   const [addMeetingFormData, setAddMeetingFormData] = useState({
     initialAddMeetingFormData,
   });
-
+  const [roomResources, setRoomResources] = useState<
+    { id: number; name: string }[]
+  >([]);
   const [roomFormState, setRoomFormState] = useState({
     open: false,
     mode: "add" as "add" | "edit",
@@ -39,9 +42,8 @@ export const useMeetingCardViewModel = () => {
     //  id: "",
     roomName: "",
     capacity: 0,
-    resources: [],
+    resourcesIds: [],
   });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -54,13 +56,15 @@ export const useMeetingCardViewModel = () => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     setAddRoomFormData((prev) => {
-      let newResources = [...prev.resources];
+      let newResources = [...prev.resourcesIds];
       if (checked) {
-        newResources.push(value);
+        newResources.push(Number(value));
       } else {
-        newResources = newResources.filter((f) => f !== value);
+        newResources = newResources.filter((f) => f !== Number(value));
       }
-      return { ...prev, resources: newResources };
+      console.log(addRoomFormData);
+
+      return { ...prev, resourcesIds: newResources };
     });
   };
   const fetchMeeting = async () => {
@@ -70,12 +74,15 @@ export const useMeetingCardViewModel = () => {
       const data = await getMeetingRooms();
       // console.log(data);
       setMeeting(data.data.content);
+      const resources = await getMEttingRoomResources();
+      setRoomResources(resources.data);
     } catch (err: any) {
       setError(err.message || "Failed to load meeting room");
     } finally {
       setLoading(false);
     }
   };
+
   const submitAddRomForm = async () => {
     try {
       const data = {
@@ -153,5 +160,6 @@ export const useMeetingCardViewModel = () => {
     setAddRoomFormData,
     fetchUpcomingMeetings,
     upcomingMeeting,
+    roomResources,
   };
 };

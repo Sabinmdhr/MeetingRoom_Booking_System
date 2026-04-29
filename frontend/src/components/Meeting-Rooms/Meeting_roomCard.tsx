@@ -1,11 +1,7 @@
 import {
-  Button,
   Card,
-  Grid,
   CardActions,
   CardContent,
-  Menu,
-  MenuItem,
   Typography,
 } from "@mui/material";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
@@ -17,7 +13,6 @@ import {
   Presentation,
   TvMinimal,
   Wifi,
-  Ellipsis,
   Pen,
   Trash2,
 } from "lucide-react";
@@ -32,6 +27,8 @@ import { updateBookingRoomFormData } from "../../redux/bookRoomSlice";
 import { useState } from "react";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import MyButton from "../ui/Button";
+import { useAuth } from "../../hooks/useAuth";
+import { permissions } from "../../utils/permissions";
 
 type props = {
   roomFormState: {
@@ -42,7 +39,6 @@ type props = {
   handleRoomFormOpen: (mode: "add" | "edit", room?: meeting_rooms) => void;
 };
 export const Meeting_roomCard = ({
-  roomFormState,
   handleRoomFormOpen,
 }: props) => {
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -50,9 +46,10 @@ export const Meeting_roomCard = ({
   // const [open , setOpen] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { meeting, error, selectedRoom, setSelectedRoom } =
+  const { meeting, error } =
     useMeetingCardViewModel();
-
+  const { role } = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!meeting) return null;
@@ -85,15 +82,14 @@ export const Meeting_roomCard = ({
             <CardContent className="Meeting-Card--content">
               <div>
                 <div className="cardHeader">
-                  <Typography
-                    className="Meeting-title"
-                    variant="h6"
-                  >
+                  <Typography className="Meeting-title" variant="h6">
                     {m.roomName}
                   </Typography>
 
-                  <Typography className="Meeting_room-Available Available">
-                    Available
+                  <Typography
+                    className={`Meeting_room-Available ${m.bookedStatus === "Available" ? "Available" : "Unavailable"}`}
+                  >
+                    {m.bookedStatus}
                   </Typography>
                 </div>
 
@@ -108,19 +104,13 @@ export const Meeting_roomCard = ({
                   </Typography>
                 </div>
 
-                <Typography
-                  variant="body2"
-                  className="Features-Tabs"
-                >
+                <Typography variant="body2" className="Features-Tabs">
                   {m.resources.map((feature, index) => (
-                    <span
-                      className="Meeitng_room-Feature"
-                      key={index}
-                    >
+                    <span className="Meeitng_room-Feature" key={index}>
                       <span className="Feature-icons">
-                        {featureIcons[feature]}
+                        {featureIcons[feature.name]}
                       </span>
-                      <span className="Feature-title">{feature}</span>
+                      <span className="Feature-title">{feature.name}</span>
                     </span>
                   ))}
                 </Typography>
@@ -138,30 +128,28 @@ export const Meeting_roomCard = ({
                   dispatch(updateBookingRoomFormData({ roomId: m.id }));
                 }}
               />
-
-              <MyButton
-                startIcon={
-                  <Pen
-                    size={18}
-                    style={{ marginLeft: "5px" }}
+              {perms?.canManageRooms && (
+                <>
+                  <MyButton
+                    startIcon={<Pen size={18} style={{ marginLeft: "5px" }} />}
+                    text=""
+                    customVariant="ghost"
+                    onClick={() => handleRoomFormOpen("edit", m)}
                   />
-                }
-                text=""
-                customVariant="ghost"
-                onClick={() => handleRoomFormOpen("edit", m)}
-              />
-              <MyButton
-                text=""
-                customVariant="ghost"
-                startIcon={
-                  <Trash2
-                    size={18}
-                    color="red"
-                    style={{ marginLeft: "5px" }}
+                  <MyButton
+                    text=""
+                    customVariant="ghost"
+                    startIcon={
+                      <Trash2
+                        size={18}
+                        color="red"
+                        style={{ marginLeft: "5px" }}
+                      />
+                    }
+                    onClick={() => handleDeleteClick(m.id)}
                   />
-                }
-                onClick={() => handleDeleteClick(m.id)}
-              />
+                </>
+              )}
             </CardActions>
           </Card>
           // </Grid>

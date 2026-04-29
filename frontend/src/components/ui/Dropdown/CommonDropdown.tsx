@@ -10,7 +10,7 @@ type props = {
   placeholder?: string;
   value: number | string;
   items: DropdownItems[];
-  onChange: (id: number | "") => void;
+  onChange: (id: number | 1) => void;
 };
 
 export const CommonDropdown = ({
@@ -48,7 +48,7 @@ export const CommonDropdown = ({
           },
         }}
         onChange={(e) =>
-          onChange(e.target.value === "" ? "" : Number(e.target.value))
+          onChange(e.target.value === "" ? 1 : Number(e.target.value))
         }
       >
         <MenuItem value="">{placeholder || `All ${label}`}</MenuItem>

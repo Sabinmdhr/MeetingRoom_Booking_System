@@ -83,21 +83,6 @@ export const AddParticipantsForm = ({
     }
   }, [participantsFormState]);
 
-  // useEffect(() => {
-  //   if (selectedParticipant) {
-  //     setParticipantFormData({
-  //       name: selectedParticipant.fullName,
-  //       role: selectedParticipant.role,
-  //       position: selectedParticipant.position,
-  //       phoneNum: selectedParticipant.phoneNumber,
-  //       email: selectedParticipant.email,
-  //       department: selectedParticipant.department,
-  //     });
-  //     console.log(selectedParticipant);
-  //   } else {
-  //     setParticipantFormData(initialFormData);
-  //   }
-  // }, [selectedParticipant]);
 
   return (
     <>
@@ -148,30 +133,7 @@ export const AddParticipantsForm = ({
             helperText={errors.lastname}
             required
           ></TextField>
-          {/* <label htmlFor="Department">Department</label>
-          <TextField
-            fullWidth
-            name="department"
-            placeholder="Department"
-            id="Department"
-            required
-            className="customTextField"
-            select
-            SelectProps={{
-              MenuProps: {
-                disablePortal: true,
-                PaperProps: {
-                  className: "customTextField",
-                },
-              },
-            }}
-            value={participantFormData.department}
-            onChange={handleChange}
-          >
-            {departments.map((d) => (
-              <MenuItem value={d}>{d}</MenuItem>
-            ))}
-          </TextField> */}
+
           <DepartmentList
             onChange={handleDepartmentChange}
             value={participantFormData.departmentId}
@@ -180,31 +142,7 @@ export const AddParticipantsForm = ({
             onChange={handleRoleChange}
             value={participantFormData.roleId}
           />
-          {/*
-          <label htmlFor="Role">Role</label>
-          <TextField
-            fullWidth
-            name="role"
-            placeholder="Role"
-            id="Role"
-            required
-            className="customTextField"
-            select
-            SelectProps={{
-              MenuProps: {
-                disablePortal: true,
-                PaperProps: {
-                  className: "customTextField",
-                },
-              },
-            }}
-            value={participantFormData.role}
-            onChange={handleChange}
-          >
-            {roles.map((r) => (
-              <MenuItem value={r}>{r}</MenuItem>
-            ))}
-          </TextField> */}
+      
 
           <label htmlFor="Position">Position</label>
           <TextField

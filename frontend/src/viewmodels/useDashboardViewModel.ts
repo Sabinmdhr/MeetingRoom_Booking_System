@@ -1,24 +1,36 @@
-// import { useEffect, useState } from "react";
-// import { getPinnedAnnouncements } from "../services/announcements.service";
-// // import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { getDashboardDetails } from "../services/dashboard.service";
 
-// const useDashboardViewModel = () => {
-//   const [pinnnedData, setPinnnedData] = useState<any[]>([]);
+type DashboardData = {
+  totalRooms: number;
+  totalUsers: number;
+  avgDurationOfMeetings: number;
+};
 
-//   const fetchPinnned = async (page = 0) => {
-//     try {
-//       const result = await getPinnedAnnouncements(page, 5);
-//       setPinnnedData(result.data);
-//     } catch (error) {
-//       console.error("Failed to fetch pinned announcements", error);
-//     }
-//   };
+const useDashboardViewModel = () => {
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-//   useEffect(() => {
-//     fetchPinnned();
-//   }, []);
+  const fetchDashboardDetails = async () => {
+    try {
+      setLoading(true);
+      const result = await getDashboardDetails();
+      setDashboardData(result.data);
+    } catch (err) {
+      setError("Failed to fetch dashboard data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   return { fetchPinnned, setPinnnedData, pinnnedData };
-// };
+  useEffect(() => {
+    fetchDashboardDetails();
+  }, []);
 
-// export default useDashboardViewModel;
+  return { dashboardData, loading, error };
+};
+
+export default useDashboardViewModel;

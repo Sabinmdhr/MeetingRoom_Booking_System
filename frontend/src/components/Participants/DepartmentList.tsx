@@ -4,7 +4,7 @@ import { CommonDropdown } from "../ui/Dropdown/CommonDropdown";
 
 type props = {
   value: number | "";
-  onChange: (id: number | "") => void;
+  onChange: (id: number | 1) => void;
 };
 export const DepartmentList = ({ value, onChange }: props) => {
   const { departmentItems } = useDepartmentListViewModel();

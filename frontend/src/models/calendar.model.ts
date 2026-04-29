@@ -1,8 +1,8 @@
-export type EventCategory = "internal" | "client" | "executive";
+export type EventCategory = "internal" | "client" | "executive" | "external";
 
 export type CalendarEvent = {
   id: number;
-  title: string;
+  meetingTitle: string;
   category: EventCategory;
   date: string;
   startTime: string;
@@ -20,7 +20,7 @@ export interface CalenderMonth {
   meetingId: number;
   meetingTitle: string;
   meetingType: {
-    id: number;
+    id: number | string;
     name: string;
     colorCode: string;
     status: string;
@@ -36,7 +36,7 @@ export interface CalenderDay {
   meetingId: number;
   meetingTitle: string;
   meetingType: {
-    id: number;
+    id: number | string;
     name: string;
     colorCode: string;
     status: string;
@@ -44,4 +44,21 @@ export interface CalenderDay {
   roomId: number;
   roomName: string;
   startTime: string;
+}
+export interface MeetingType {
+  id: number | string;
+  name: string;
+  colorCode: string;
+  status: string;
+}
+
+export interface CalendarByDay {
+  date: string;
+  startTime: string;
+  endTime: string;
+  meetingId: number;
+  meetingTitle: string;
+  meetingType: MeetingType;
+  roomId: number;
+  roomName: string;
 }

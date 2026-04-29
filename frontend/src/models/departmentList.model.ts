@@ -3,3 +3,8 @@ export interface departmentList {
   id: number;
   description: string;
 }
+
+export interface addDepartment {
+  departmentName: string;
+  description: string;
+}

@@ -13,6 +13,8 @@ import {
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
+
+
   const fetchUsers = async () => {
     const data = await getAllUser();
     setUsers(data);
@@ -58,25 +60,7 @@ export const useparticipantsViewModel = () => {
 
   // const [participants, setParticipants] = useState<Participants[]>(DemoParticipants());
   const [columns, setColumns] = useState<Columns[]>(DemoColumns());
-  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const data = DemoParticipants();
-  //   dispatch(setParticipants(data));
-  //   dispatch(clearSelectedParticipants());
-  // }, [dispatch]);
-
-  // const handleEdit = (participants: any) => {
-  //   dispatch(openEditForm(participants));
-  // };
-
-  const handleToggle = (pId: number) => {
-    dispatch(toggleParticipantsSelection(pId));
-  };
-
-  // const handleClose = () => {
-  //   dispatch(closeEditForm());
-  // };
 
   const { participants, isEditOpen } = useSelector(
     (state: any) => state.participants,
@@ -129,7 +113,6 @@ export const useparticipantsViewModel = () => {
     // handleEdit,
     columns,
     setColumns,
-    handleToggle,
     setTabValue,
 
     users,

@@ -19,11 +19,12 @@ import Calendar from "./pages/Calendar";
 import BookRoom from "./pages/BookRoom";
 import UserProfile from "./pages/UserProfile";
 import RoomTimeslot from "./pages/RoomTimeslot/RoomTimeslot";
+import { ProtectedRoutes } from "./layouts/ProtectedRoutes";
 // import TestTimeline from "./pages/TestTimeline";
 
 
 function App() {
-  
+
   return (
     <BrowserRouter>
       <Routes>
@@ -60,15 +61,28 @@ function App() {
           />
           <Route
             path="book-room"
-            element={<BookRoom />}
+            element={
+            <ProtectedRoutes roles={["ADMIN", "MANAGER"]}>
+
+            <BookRoom />
+            </ProtectedRoutes>
+            }
           />
           <Route
             path="meeting-rooms"
-            element={<MeetingRooms />}
+            element={
+            <ProtectedRoutes roles={["ADMIN", "MANAGER"]}>
+
+            <MeetingRooms />
+            </ProtectedRoutes>}
           />
           <Route
             path="room-timeslot"
-            element={<RoomTimeslot />}
+            element={
+            <ProtectedRoutes roles={["ADMIN", "MANAGER"]}>
+
+            <RoomTimeslot />
+            </ProtectedRoutes>}
           />
           <Route
             path="announcements"
@@ -76,11 +90,20 @@ function App() {
           />
           <Route
             path="report"
-            element={<Report />}
+            element={
+            <ProtectedRoutes roles={["ADMIN"]}>
+
+            <Report />
+            </ProtectedRoutes>}
           />
           <Route
             path="participants"
-            element={<Participants />}
+            element={
+
+            <ProtectedRoutes roles={["ADMIN", "MANAGER"]}>
+            <Participants />
+            </ProtectedRoutes>
+            }
           />
           <Route
             path="settings"

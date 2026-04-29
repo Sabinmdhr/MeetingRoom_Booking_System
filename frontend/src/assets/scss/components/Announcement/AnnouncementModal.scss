@@ -5,6 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: -10px !important;
 
     &__main {
       display: flex;
@@ -21,6 +22,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    background-color: #fff;
 
     .MuiTextField-root {
       margin-top: 2px;
@@ -89,10 +91,10 @@
   }
 
   .MuiMenuItem-root.Mui-selected {
-    background-color: #f3f4f6 !important;
+    // background-color: #f3f4f6 !important;
 
     &:hover {
-      background-color: #e5e7eb !important;
+      // background-color: #e5e7eb !important;
     }
   }
   &__dropdownItem {
@@ -131,43 +133,38 @@
   &__author {
     margin-top: 10px;
   }
-}
+  // &__datepicker {
+  //   margin-top: 2px !important;
 
-/* Dropdown input */
-.MuiSelect-select {
-  display: flex !important;
-  align-items: center;
-  gap: 8px;
-}
+  //   .MuiOutlinedInput-root {
+  //     background-color: red !important;
+  //     border-radius: 30px !important;
 
-/* Dropdown menu items */
-.MuiMenuItem-root {
-  display: flex !important;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-}
+  //     input {
+  //       padding: 13.5px 19px !important;
+  //       cursor: pointer !important;
+  //     }
 
-/* Icons inside dropdown */
-.MuiMenuItem-root svg {
-  flex-shrink: 0;
-}
+  //     fieldset {
+  //       border: none !important;
+  //     }
+  //   }
+  // }
+  // .MuiFormControl-root {
+  //   .MuiOutlinedInput-root {
+  //     background: #f3f3f5;
+  //     border-radius: 10px;
 
-/* Selected item style */
-.MuiMenuItem-root.Mui-selected {
-  background-color: #f3f4f6 !important;
-  border-radius: 10px;
+  //     fieldset {
+  //       border: none;
+  //     }
 
-  &:hover {
-    background-color: #e5e7eb !important;
-  }
-}
-
-/* Dropdown menu container */
-.MuiPaper-root.MuiMenu-paper {
-  border-radius: 10px !important;
-  margin-top: 4px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+  //     &.Mui-focused fieldset {
+  //       border: 2px solid #a1a1a1 !important;
+  //       box-shadow: 0 0 0 2px #cfcfcf;
+  //     }
+  //   }
+  // }
 }
 
 /* Select field arrow alignment */
@@ -175,6 +172,12 @@
   color: #6b7280;
 }
 
+// Target DatePicker inputs globally but scoped to the dialog
 .announcement__modal__main {
   border-radius: 8px !important;
+
+  .MuiOutlinedInput-root {
+    background: #f3f3f5 !important;
+    border-radius: 10px !important;
+  }
 }

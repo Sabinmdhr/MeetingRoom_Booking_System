@@ -1,6 +1,6 @@
 .calendar-modal {
   &__strip {
-    height: 2px;
+    // height: 2px;
   }
 
   &__header {
@@ -83,4 +83,29 @@
       color: #888;
     }
   }
+}
+
+.participant-group {
+  margin-bottom: 6px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+}
+
+.participant-name {
+  font-size: 13px;
+  margin: 2px 0;
+  color: #444;
+}
+
+.participant-more {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
 }

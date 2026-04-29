@@ -16,7 +16,7 @@ const DashboardAnnouncements = () => {
     setPinnedData,
     setUnpinnedData,
     // unpinnedData,
-    fetchAnnouncements,
+    fetchPinnedAnnouncements,
     // hasMore,
   } = useAnnouncementCardViewModel();
 
@@ -25,7 +25,7 @@ const DashboardAnnouncements = () => {
       await deleteAnnouncement(id);
 
       toast.error("Announcement deleted successfully");
-      fetchAnnouncements(true);
+      fetchPinnedAnnouncements();
     } catch (error) {
       console.error("Delete failed", error);
     }

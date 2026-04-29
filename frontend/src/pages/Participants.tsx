@@ -17,8 +17,13 @@ import { GroupCard } from "../components/Participants/GroupCard";
 import { AddGroupForm } from "../components/Participants/AddGroup-Form";
 import { useGroupCardViewModel } from "../viewmodels/useGroupCardViewModel";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
+import { useAuth } from "../hooks/useAuth";
+import { permissions } from "../utils/permissions";
+import { AddDepartmentForm } from "../components/Participants/AddDepartment-Form";
+import { DepartmentTable } from "../components/Participants/Department-Table";
 const Participants = () => {
-  const [editMode, setEditMode] = useState(false);
+  const { role } = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
   const {
     users,
     setUsers,
@@ -33,7 +38,7 @@ const Participants = () => {
 
   // const { open } = useAddParticipantsViewModel();
   const { numOfGroup } = useGroupCardViewModel();
-  const [activeTab, setActiveTab] = useState<"Tab1" | "Tab2">("Tab1");
+  const [activeTab, setActiveTab] = useState<"Tab1" | "Tab2" | "Tab3">("Tab1");
   return (
     <div>
       <div className="titleDesc">
@@ -60,24 +65,34 @@ const Participants = () => {
             Custom Groups <Chip label={numOfGroup}></Chip>
           </span>
         </div>
+        <div
+          className={`participants-tab ${activeTab == "Tab3" ? `active` : ``}`}
+          onClick={() => setActiveTab("Tab3")}
+        >
+          <span>Departments</span>
+        </div>
       </div>
 
       {/* ------------------------Edit Mode Button------------ */}
-      <div>
-        {activeTab == "Tab1" ? (
-          <AddParticipantsForm
-            participantsFormState={participantsFormState}
-            handleParticipantFormOpen={handleParticipantFormOpen}
-            handleParticipantsFormClose={handleParticipantsFormClose}
-          />
-        ) : (
-          <AddGroupForm
-            handleGroupFormOpen={handleGroupFormOpen}
-            handleGroupFormClose={handleGroupFormClose}
-            groupFormState={groupFormState}
-          />
-        )}
-      </div>
+      {perms?.canAddUsers && (
+        <div>
+          {activeTab == "Tab1" ? (
+            <AddParticipantsForm
+              participantsFormState={participantsFormState}
+              handleParticipantFormOpen={handleParticipantFormOpen}
+              handleParticipantsFormClose={handleParticipantsFormClose}
+            />
+          ) : activeTab == "Tab2" ? (
+            <AddGroupForm
+              handleGroupFormOpen={handleGroupFormOpen}
+              handleGroupFormClose={handleGroupFormClose}
+              groupFormState={groupFormState}
+            />
+          ) : (
+            <AddDepartmentForm />
+          )}
+        </div>
+      )}
 
       {activeTab == "Tab1" ? (
         <div className="participants-container">
@@ -90,13 +105,17 @@ const Participants = () => {
             />
           </div>
         </div>
-      ) : (
+      ) : activeTab == "Tab2" ? (
         <div>
           <GroupCard
             handleGroupFormOpen={handleGroupFormOpen}
             handleGroupFormClose={handleGroupFormClose}
             groupFormState={groupFormState}
           />
+        </div>
+      ) : (
+        <div>
+          <DepartmentTable />
         </div>
       )}
     </div>

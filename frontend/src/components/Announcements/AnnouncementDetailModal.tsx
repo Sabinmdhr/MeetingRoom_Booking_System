@@ -7,7 +7,7 @@ import {
   Divider,
   Chip,
 } from "@mui/material";
-import { X, Megaphone, Pin, SquarePen, Trash2, Calendar } from "lucide-react";
+import { X, Pin, SquarePen, Trash2, Calendar } from "lucide-react";
 import MyButton from "../ui/Button";
 import "../../assets/scss/components/Announcement/AnnouncementDetailModal.scss";
 import ConfirmDialog from "../ui/ConfirmDialog";

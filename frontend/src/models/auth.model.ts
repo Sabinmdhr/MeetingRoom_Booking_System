@@ -5,12 +5,11 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  data: {
+  
     accessToken: string;
     refreshToken: string;
-  };
-  success: boolean;
-  message: string;
+    role: string;
+
 }
 
 // Optional: Form input type can be same as LoginRequest

@@ -6,7 +6,7 @@ import resendOtpReducer from "./resendOtpSlice";
 import participantsReducer from "./ParticipantsSlice";
 import meetingRoomReducer from "./MeetingRoomSlice"
 import bookingReducer from "./bookRoomSlice"
-
+import authReducer from "./authSlice";
 export const store = configureStore({
   reducer: {
     forgot: forgotReducer,
@@ -16,6 +16,7 @@ export const store = configureStore({
     participants: participantsReducer,
     meetingRoom: meetingRoomReducer,
     bookingRoom: bookingReducer,
+    auth: authReducer,
   },
 });
 

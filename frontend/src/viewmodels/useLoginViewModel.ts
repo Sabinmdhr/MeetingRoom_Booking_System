@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { LoginFormInputs } from "../models/auth.model";
 import { loginService, logoutService } from "../services/auth.service";
+import { useDispatch } from "react-redux";
+import { set } from "zod";
+import { setAuth } from "../redux/authSlice";
 
 export const useLoginViewModel = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const login = async (data: LoginFormInputs) => {
     try {
       setLoading(true);
@@ -19,11 +22,19 @@ export const useLoginViewModel = () => {
         localStorage.removeItem("refreshToken");
       }
       const result = await loginService(data);
+      // console.log("Login Success:", result);
+      dispatch(
+        setAuth({
+          accessToken: result.accessToken,
+          refreshToken: result.refreshToken,
+          role: result.role,
+        }),
+      );
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("refreshToken", result.refreshToken);
+      localStorage.setItem("userRole", result.role);
+      // console.log("user Role", localStorage.getItem("userRole"));
 
-      localStorage.setItem("accessToken", result.data.accessToken);
-      localStorage.setItem("refreshToken", result.data.refreshToken);
-
-      console.log("Login Success:", result);
       navigate("/dashboard");
       return result;
     } catch (err: any) {
