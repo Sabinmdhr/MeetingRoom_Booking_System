@@ -237,6 +237,10 @@
   background: #ad46ff;
   color: #fff;
 }
+.day__event.external {
+  background: #370362;
+  color: #fff;
+}
 
 /* ─── ROOM × DATE GRID ───────────────────────────── */
 //
@@ -493,6 +497,16 @@ $gap: 8px;
       border-left: 3px solid #ff6900;
     }
     &.executive {
+      background: #f3e8ff;
+      color: #7e22ce;
+      border-left: 3px solid #ad46ff;
+    }
+    &.executive {
+      background: #f3e8ff;
+      color: #7e22ce;
+      border-left: 3px solid #ad46ff;
+    }
+    &.external {
       background: #f3e8ff;
       color: #7e22ce;
       border-left: 3px solid #ad46ff;

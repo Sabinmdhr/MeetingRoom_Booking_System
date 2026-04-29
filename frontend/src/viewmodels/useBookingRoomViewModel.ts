@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BookRoom, getBookedDataById } from "../services/bookRoom.service";
+import { BookRoom, getBookedDataByRoomId } from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,6 +19,7 @@ type BookingTimeAndDatePeops = {
   date: string;
 };
 export const useBookingRoomViewModel = () => {
+
   const [bookedSlots, setBookedSlots] = useState<
     { start: string; end: string; color: string }[]
   >([]);

@@ -1,194 +1,3 @@
-// .announcement {
-//   border-radius: 12px !important;
-//   padding: 0 20px;
-
-//   &__header {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     gap: 16px;
-//     padding-bottom: 7px !important;
-//   }
-
-//   &__title-wrapper {
-//     display: flex;
-//     flex-direction: column;
-//   }
-
-//   &__title {
-//     display: flex;
-//     align-items: center;
-//     gap: 8px;
-//   }
-
-//   // &__subtitle {
-//   //   margin-left: 28px;
-//   // }
-
-//   &__content {
-//     display: flex;
-//     flex-direction: column;
-//   }
-
-//   &__header-actions {
-//     display: flex;
-//     gap: 8px;
-//   }
-//   &__list {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 7px;
-//     padding-top: 7px !important;
-//     padding-bottom: 0 !important;
-//   }
-
-//   &__bottom {
-//     margin: 10px auto;
-//     display: flex;
-//     gap: 8px;
-//     justify-content: center;
-//   }
-
-//   &__card {
-//     border-radius: 12px !important;
-//     border: 1px solid #d2c5db !important;
-//     background-color: #f8f7f9 !important;
-//     cursor: pointer;
-//     position: relative;
-//     overflow: visible !important;
-
-//     transition: box-shadow 0.2s ease;
-
-//     &:hover {
-//       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-//     }
-//   }
-
-//   &__card.pinned {
-//     // border-left: 3px solid #8646c3 !important;
-//     // border: 1px solid #8400ff !important;
-//     // background-color: #eee6f6 !important;
-//     background-color: #eeeaf9 !important;
-//   }
-
-//   .announcement__card.read {
-//     background-color: #f8f7f9 !important;
-//     border: 1px solid #d2c5db !important;
-//   }
-
-//   &__card-content {
-//     display: flex;
-//     flex-direction: column;
-//     padding: 8px 14px !important;
-//     // padding-top: 0px !important;
-//   }
-
-//   &__card-top {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center !important;
-//   }
-
-//   &__author-date {
-//     // padding-top: 0px !important;
-//     // margin-top: 0px !important;
-//     color: #6b7280;
-//     font-size: 13px;
-//   }
-//   &__menu-btn {
-//     min-width: unset;
-//     padding: 0 !important;
-//     background-color: transparent !important;
-
-//     &:hover {
-//       background-color: transparent !important;
-//       box-shadow: none !important;
-//     }
-//   }
-
-//   &__card-title {
-//     font-weight: 500 !important;
-//   }
-
-//   &__description {
-//     color: #535e6c;
-//     font-weight: 400 !important;
-//     display: -webkit-box;
-//     overflow: hidden;
-//   }
-//   &__pin-icon {
-//     position: absolute;
-//     top: -12px;
-//     left: -15px;
-//     overflow: hidden;
-//     padding: 4px;
-//     rotate: 320deg;
-//     // transform-origin: center;
-//   }
-// }
-// .checkbox__card {
-//   display: flex;
-//   align-items: flex-start;
-//   gap: 8px;
-// }
-
-// .checkbox__card {
-//   display: flex;
-//   align-items: flex-start;
-//   gap: 10px;
-//   width: 100%;
-// }
-
-// .checkbox__card .MuiCheckbox-root {
-//   margin-top: 6px;
-//   padding: 4px;
-// }
-
-// .checkbox__card .announcement__card {
-//   flex: 1;
-// }
-
-// .announcement__card-top {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-// }
-
-// /* LEFT SIDE */
-// .announcement__card-top-left {
-//   display: flex;
-//   align-items: center;
-// }
-
-// /* RIGHT SIDE */
-// .announcement__card-top-right {
-//   display: flex !important;
-//   flex-direction: column;
-//   justify-content: center !important;
-//   align-items: center !important;
-// }
-
-// /* FIX BUTTON PADDING (MAIN ISSUE) */
-// .announcement__menu-btn {
-//   min-width: unset !important;
-//   padding: 0px !important;
-//   margin: 0 !important;
-
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-
-//   background-color: transparent !important;
-
-//   &:hover {
-//     background-color: transparent !important;
-//     box-shadow: none !important;
-//   }
-// }
-// .announcemnet__circleCheck {
-//   display: flex !important;
-// }
-
 // Page wrapper
 .announcement__main {
   padding: 16px;
@@ -266,15 +75,6 @@
     &:hover {
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
-
-    &.pinned {
-      background-color: #eeeaf9 !important;
-    }
-
-    &.read {
-      background-color: #f8f7f9 !important;
-      border: 1px solid #d2c5db !important;
-    }
   }
 
   &__pin-icon {
@@ -311,8 +111,9 @@
   }
 
   &__card-title {
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     font-size: 14px !important;
+    margin-bottom: -2px !important;
     line-height: 1.4;
     color: #111;
   }
@@ -401,4 +202,85 @@
   .announcement__card {
     flex: 1;
   }
+}
+// ── Read / Unread colors
+
+.announcement__card.card__unread {
+  // background-color: #ede8f8 !important;
+  // background-color: #f2eff6 !important;
+  // border: 1px solid #c9b3e8 !important;
+}
+
+// READ — soft neutral
+.announcement__card.card__read {
+  background-color: #fafafa !important;
+  // border: 1px solid #e0d9e8 !important;
+  // color: #6b7280 !important;
+}
+
+// base pinned (fallback)
+.announcement__card.pinned {
+  // border-left: 4px solid #c9b3e8 !important;
+  background-color: #f2eff6 !important;
+  // background-color: #ede8f8 !important;
+}
+
+// pinned + unread → strong purple
+.announcement__card.pinned.card__unread {
+  // border-left: 4px solid #8646c3 !important;
+}
+
+// pinned + read → softer purple
+.announcement__card.pinned.card__read {
+  // border-left: 4px solid #c9b3e8 !important;
+  // background: red !important;
+}
+.card__read {
+  color: #808692 !important;
+}
+// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+
+// Stretch card-right to full card height so we can center inside it
+.announcement__card-content {
+  display: flex;
+  align-items: stretch !important;
+  padding: 10px 12px !important;
+}
+
+// Fixed-width right column — never changes between normal/select mode
+// justify-content:center puts whichever icon is visible in the middle
+.announcement__card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center !important;
+  flex-shrink: 0;
+  width: 28px;
+  gap: 0 !important;
+}
+
+// Both buttons are visibility:hidden / visibility:visible, never display:none,
+// so layout is always identical. Absolute stacking means they occupy the
+// same space and the column stays exactly 28px wide at all times.
+.announcement__menu-btn,
+.announcement__circle-btn {
+  position: absolute !important;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.announcement__card-right {
+  position: relative;
+}
+
+// // Selected card outline
+// .announcement__card.card__selected {
+//   outline: 2px solid #8646c3;
+//   outline-offset: -2px;
+// }
+
+// Collapse the old wrapper div so it has zero layout effect
+.checkbox__card {
+  display: contents;
 }

@@ -27,6 +27,30 @@ export const getAnnouncements = async (data: AnnouncementListRequest) => {
     throw error;
   }
 };
+export const getPinnedAnnouncement = async (data: AnnouncementListRequest) => {
+  try {
+    const res = await api.post("/api/v1/announcement/get", data);
+    // console.log(res);
+
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching announcement", error);
+    throw error;
+  }
+};
+export const getUnpinnedAnnouncement = async (
+  data: AnnouncementListRequest,
+) => {
+  try {
+    const res = await api.post("/api/v1/announcement/get", data);
+    // console.log(res);
+
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching announcement", error);
+    throw error;
+  }
+};
 
 export const addAnnouncement = async (data: Announcements) => {
   try {
