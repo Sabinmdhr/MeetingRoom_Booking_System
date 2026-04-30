@@ -80,13 +80,14 @@ export default function Dashboard() {
         
         <div className="dashboard-subcontainer">
           <div className="dashboard__announcements">
+          </div>
           <DashboardAnnouncements />
+          <div className="dashboard_dashboardupmeetings">
+          <DashboardUpMeetings   />
+          </div>
         </div>
 
-        <div className="dashboard_dashboardupmeetings">
-          <DashboardUpMeetings />
-        </div>
-        </div>
+        
 
         <div className="dashboard_calenderpreview">
           <CalendarPreview />

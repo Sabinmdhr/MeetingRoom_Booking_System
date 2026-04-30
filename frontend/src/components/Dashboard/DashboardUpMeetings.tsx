@@ -3,6 +3,7 @@ import "../../assets/scss/components/Dashboard/DashboardUpMeetings.scss";
 import MyButton from "../ui/Button";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import { formatDisplayTime, timeStringToMinutes } from "../../utils/timeUtils";
+import { Users } from "lucide-react";
 
 const DashboardUpMeetings = () => {
   const { upcomingMeeting } = useMeetingCardViewModel();
@@ -37,6 +38,9 @@ const DashboardUpMeetings = () => {
               <Typography className="dashboard-upmeetings__subtitle">
                 By: {m.roomBooker.firstName} {m.roomBooker.lastName}
               </Typography>
+              <Typography className="dashboard-upmeetings__participants"><Users size={14} />
+                {(m.internalParticipant?.length || 0) + (m.externalParticipant?.length || 0)} Participants
+              </Typography>
             </div>
             <div>
               <Typography className="dashboard-upmeetings__title">
@@ -45,9 +49,7 @@ const DashboardUpMeetings = () => {
               <Typography className="dashboard-upmeetings__subtitle">
                 {m.room?.roomName}
               </Typography>
-              <Typography className="dashboard-upmeetings__subtitle">
-                {(m.internalParticipant?.length || 0) + (m.externalParticipant?.length || 0)}
-              </Typography>
+              
             </div>
           </CardContent>
         </Card>

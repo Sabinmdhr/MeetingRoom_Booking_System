@@ -139,18 +139,21 @@ const CalendarPreview: React.FC = () => {
         </Box>
       ) : (
         <Box className="today-meetings">
-          <Typography className="today-meetings__header">
+          <div>
+            <Typography className="today-meetings__header" sx={{ fontWeight: 600, fontSize: 18 }}>
             {dateRange.start && dateRange.end
               ? `Meetings from ${dateRange.start.format("MMM D")} - ${dateRange.end.format("MMM D")}`
               : dateRange.start
-                ? `Meetings on ${dateRange.start.format("MMM D")}`
+                ? `Meetings on ${dateRange.start.format("MMM D")}`  
                 : "Select dates"}
             <span className="today-meetings__badge">{meetings.length}</span>
           </Typography>
+          </div>
+          <div className="today-meetings__list">
           {meetings.map((m) => (
             <Box className="today-meetings__card" key={m.meetingId}>
               <Box className="today-meetings__subcard">
-                <Typography className="today-meetings__title">
+                <Typography className="today-meetings__title" >
                   {m.meetingTitle}
                 </Typography>
                 <Chip
@@ -160,8 +163,8 @@ const CalendarPreview: React.FC = () => {
                 />
                 </Box>
                 <div className="today-meetings__subtitle">
-                  <Typography>
-                    {m.date}
+                  <Typography sx={{fontWeight: 500}}>
+                    {m.date ? dayjs(m.date).format("MMM D") : ""}
                   </Typography>
                   <Dot />
                   <Typography>
@@ -170,15 +173,14 @@ const CalendarPreview: React.FC = () => {
                 </div>
                 <hr />
                 <div className="today-meetings__location">
-                  <MapPin size={16} />
-                  <Typography>
+                  <Typography className="today-meetings__roomname">
+                    <MapPin size={14}/>
                     {m.roomName}
                   </Typography>
-                  {/* <Typography>
-                  </Typography> */}
                 </div>
             </Box>
           ))}
+          </div>
         </Box>
       )}
       <MyButton
