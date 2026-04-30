@@ -4,7 +4,7 @@ import useAnnouncementCardViewModel from "../../viewmodels/useAnnouncementCardVi
 import { deleteAnnouncement } from "../../services/announcements.service";
 import type { Announcements } from "../../models/announcements.model";
 import { toast } from "react-toastify";
-import { Pin } from "lucide-react";
+// import { Pin } from "lucide-react";
 
 import "../../assets/scss/components/Dashboard/DashboardAnnouncements.scss";
 import MyButton from "../ui/Button";
@@ -58,11 +58,11 @@ const DashboardAnnouncements = () => {
       <Card className="dashboard-announcements__section">
         <div className="dashboard-announcements__top">
           <div className="dashboard-announcements__title">
-            <Pin
+            {/* <Pin
               color="#8646C3"
               fill="#8646C3"
               size={23}
-            />
+            /> */}
             <Typography variant="h3">Pinned Announcements</Typography>
           </div>
 

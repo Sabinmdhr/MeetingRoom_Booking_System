@@ -1,12 +1,23 @@
 // Page wrapper
 .announcement__main {
-  padding: 16px;
+  // padding-bottom: 10px !important;
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
 }
 
 //  Outer card
 .announcement {
   border-radius: 12px !important;
   padding: 0 20px;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  position: relative !important;
+  scrollbar-width: none !important;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+  
 
   // Header
   &__header {
@@ -15,6 +26,11 @@
     align-items: center;
     gap: 16px;
     padding-bottom: 7px !important;
+
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background-color: #fff !important;
   }
 
   &__title-wrapper {
@@ -66,12 +82,11 @@
   &__card {
     border-radius: 12px !important;
     border: 1px solid #d2c5db !important;
-    background-color: #f8f7f9 !important;
+    // background-color: #f8f7f9 !important;
     cursor: pointer;
     position: relative;
     overflow: visible !important;
     transition: box-shadow 0.2s ease;
-
     &:hover {
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
@@ -91,7 +106,9 @@
     // flex-direction: row;
     align-items: center;
     // gap: 16px !important;
-    padding: 10px 12px !important;
+    padding: 5px 12px !important;
+    // padding: 8px !important;
+    // padding-bottom: 2px !important;
   }
 
   //  Left column
@@ -106,6 +123,9 @@
 
   &__author-date {
     color: #6b7280;
+    display: flex;
+    // align-items: flex-end !important;
+    // justify-content: space-between;
     font-size: 12px !important;
     line-height: 1.4;
   }
@@ -132,7 +152,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start !important;
-    gap: 8px;
+    gap: 8px !important;
     flex-shrink: 0;
     width: 28px;
   }
@@ -169,25 +189,12 @@
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: rgba(134, 70, 195, 0.08);
+      background-color: rgba(0, 0, 0, 0.08);
     }
-
-    // invisible spacer when click-mode is off — keeps column height stable
-    &--placeholder {
-      pointer-events: none;
-      visibility: hidden;
-    }
-  }
-
-  &__empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
   }
 }
 
-// ── Checkbox wrapper row ───────────────────────────────────
+// ── Checkbox wrapper row
 .checkbox__card {
   display: flex;
   align-items: flex-start;
@@ -213,9 +220,9 @@
 
 // READ — soft neutral
 .announcement__card.card__read {
-  background-color: #fafafa !important;
-  // border: 1px solid #e0d9e8 !important;
+  // background-color: #fafafa !important;
   // color: #6b7280 !important;
+  // opacity:0.9;
 }
 
 // base pinned (fallback)
@@ -232,24 +239,19 @@
 
 // pinned + read → softer purple
 .announcement__card.pinned.card__read {
-  // border-left: 4px solid #c9b3e8 !important;
   // background: red !important;
 }
 .card__read {
   color: #808692 !important;
 }
-// ─────────────────────────────────────────────────────────────
-// ─────────────────────────────────────────────────────────────
 
 // Stretch card-right to full card height so we can center inside it
-.announcement__card-content {
-  display: flex;
-  align-items: stretch !important;
-  padding: 10px 12px !important;
-}
+// .announcement__card-content {
+//   display: flex;
+//   align-items: stretch !important;
+//   padding: 10px 12px !important;
+// }
 
-// Fixed-width right column — never changes between normal/select mode
-// justify-content:center puts whichever icon is visible in the middle
 .announcement__card-right {
   display: flex;
   flex-direction: column;
@@ -283,4 +285,10 @@
 // Collapse the old wrapper div so it has zero layout effect
 .checkbox__card {
   display: contents;
+}
+
+.announcement-menu__button {
+  // display: flex !important;
+  // justify-content: center;
+  gap: 5px !important;
 }

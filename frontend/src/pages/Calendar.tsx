@@ -56,6 +56,7 @@ export const Calendar = () => {
     eventData,
     eventDataLoading,
     rooms,
+    setCurrentMonth,
   } = useCalendarEventViewModel();
 
   const [room, setRoom] = useState("All Rooms");
@@ -111,6 +112,7 @@ export const Calendar = () => {
   const handleDateChange = (newDate: dayjs.Dayjs | null) => {
     if (newDate) {
       goToToday(newDate);
+      setCurrentMonth(newDate);
       setDayOffset(0);
     }
     setDatePickerAnchor(null);
@@ -182,23 +184,23 @@ export const Calendar = () => {
           <div className="calendar__topbar__main__left">
             <div className="calendar__topbar__main__left__buttons">
               <MyButton
-                onClick={
-                  isGridView
-                    ? () => setDayOffset((o) => o - GRID_VISIBLE_DAYS)
-                    : goToPrev
-                }
+                onClick={() => {
+                  isGridView &&
+                    // ? setDayOffset((o) => o - GRID_VISIBLE_DAYS)
+                    goToPrev();
+                }}
                 text=""
                 color="secondary"
                 startIcon={<ChevronLeft size={18} />}
               />
 
-              <button
+              <div
                 onClick={handleDateButtonClick}
                 className="date-button"
               >
                 <CalendarIcon size={18} />
                 <span>{currentMonth.format("MMMM D, YYYY")}</span>
-              </button>
+              </div>
 
               <Popover
                 open={Boolean(datePickerAnchor)}
@@ -216,11 +218,9 @@ export const Calendar = () => {
               </Popover>
 
               <MyButton
-                onClick={
-                  isGridView
-                    ? () => setDayOffset((o) => o + GRID_VISIBLE_DAYS)
-                    : goToNext
-                }
+                onClick={() => {
+                  isGridView && goToNext();
+                }}
                 text=""
                 color="secondary"
                 startIcon={<ChevronRight size={18} />}
@@ -228,34 +228,6 @@ export const Calendar = () => {
             </div>
 
             <div className="calendar__topbar__main__left__items">
-              <div className="report-filter__dropdown-item">
-                <TextField
-                  select
-                  fullWidth
-                  value={isDayView && selectedRoom ? selectedRoom : room}
-                  onChange={(e) => {
-                    if (isDayView) {
-                      setSelectedRoom(
-                        e.target.value === "All Rooms" ? null : e.target.value,
-                      );
-                    } else {
-                      setRoom(e.target.value);
-                    }
-                  }}
-                  className="report-filter__select"
-                >
-                  <MenuItem value="All Rooms">All Rooms</MenuItem>
-                  {rooms.map((rm) => (
-                    <MenuItem
-                      key={rm.id}
-                      value={rm.roomName}
-                    >
-                      {rm.roomName}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
-
               <Tabs
                 value={view}
                 onChange={(_, value) => {
@@ -276,6 +248,37 @@ export const Calendar = () => {
                   value="month"
                 />
               </Tabs>
+              {isDayView && (
+                <div className="report-filter__dropdown-item">
+                  <TextField
+                    select
+                    fullWidth
+                    value={isDayView && selectedRoom ? selectedRoom : room}
+                    onChange={(e) => {
+                      if (isDayView) {
+                        setSelectedRoom(
+                          e.target.value === "All Rooms"
+                            ? null
+                            : e.target.value,
+                        );
+                      } else {
+                        setRoom(e.target.value);
+                      }
+                    }}
+                    className="report-filter__select"
+                  >
+                    <MenuItem value="All Rooms">All Rooms</MenuItem>
+                    {rooms.map((rm) => (
+                      <MenuItem
+                        key={rm.id}
+                        value={rm.roomName}
+                      >
+                        {rm.roomName}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
+              )}
             </div>
           </div>
 

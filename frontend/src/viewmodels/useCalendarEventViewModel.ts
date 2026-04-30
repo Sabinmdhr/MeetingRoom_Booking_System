@@ -261,7 +261,8 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import type {
-
+  CalendarEvent,
+  CalenderDay,
   CalenderMonth,
 } from "../models/calendar.model";
 import {
@@ -273,8 +274,6 @@ import type { BookedRoomDataResponse } from "../models/bookRoom.model";
 
 import { getMeetingRooms } from "../services/Meetinf_room.service";
 import type { meeting_rooms } from "../models/meeting_room.model";
-import type { CalendarEvent, CalenderDay } from "../models/calendar.model";
-import { useAuth } from "../hooks/useAuth";
 
 export type CalendarView = "day" | "week" | "month";
 
@@ -316,7 +315,6 @@ export const useCalendarEventViewModel = () => {
     null,
   );
   const [openModal, setOpenModal] = useState(false);
-const {role } = useAuth();
   const [currentDate, setcurrentDate] = useState(dayjs());
   const [bookedDates, setBookedDates] = useState<Set<string>>(new Set());
   const [eventData, setEventData] = useState<BookedRoomDataResponse | null>(
@@ -324,7 +322,6 @@ const {role } = useAuth();
   );
   const [eventDataLoading, setEventDataLoading] = useState(false);
 
-  //   Real events from API (replaces static array)
   const [monthEvents, setMonthEvents] = useState<CalendarEvent[]>([]);
   const [dayEvents, setDayEvents] = useState<CalendarEvent[]>([]);
 
@@ -348,21 +345,25 @@ const {role } = useAuth();
   }, []);
 
   //   Fetch month data — populates the grid view
-  const fetchCalender = useCallback(async () => {
-    try {
-      const res = await getCalendarByMonth(currentDate.format("YYYY-MM-DD"));
-      const items: CalenderMonth[] = res.data ?? [];
+  const fetchCalender = useCallback(
+    async (date: any) => {
+      try {
+        // const res = await getCalendarByMonth(currentDate.format("YYYY-MM-DD"));
+        const res = await getCalendarByMonth(date.format("YYYY-MM-DD"));
+        const items: CalenderMonth[] = res.data ?? [];
 
-      // booked dates for dot indicators
-      const dates = new Set(items.map((item) => item.date));
-      setBookedDates(dates);
+        // booked dates for dot indicators
+        const dates = new Set(items.map((item) => item.date));
+        setBookedDates(dates);
 
-      //   Map to CalendarEvent for the grid
-      setMonthEvents(items.map(mapMonthItem));
-    } catch (error) {
-      console.error("Error fetching month calendar", error);
-    }
-  }, [currentDate]);
+        //   Map to CalendarEvent for the grid
+        setMonthEvents(items.map(mapMonthItem));
+      } catch (error) {
+        console.error("Error fetching month calendar", error);
+      }
+    },
+    [currentDate],
+  );
 
   //   Fetch day data — populates the day view
   const fetchMeetings = useCallback(async (date: string) => {
@@ -396,17 +397,12 @@ const {role } = useAuth();
   }, []);
 
   useEffect(() => {
-    fetchCalender();
-  }, [currentDate.month(), currentDate.year()]);
-
-  useEffect(() => {
     fetchMeetings(selectedDates.format("YYYY-MM-DD"));
   }, [selectedDates]);
 
   const openEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
     setOpenModal(true);
-    //   Fetch real details when an event is clicked
     fetchEvent(event.id);
   };
 
@@ -416,7 +412,6 @@ const {role } = useAuth();
     setEventData(null);
   };
 
-  //   Use real API events, not static
   const events = view === "day" ? dayEvents : monthEvents;
 
   // MONTH VIEW CALCULATION
@@ -467,25 +462,20 @@ const {role } = useAuth();
   }, [dayEvents]);
 
   const goToNext = () => {
-    setCurrentMonth((prev) => {
-      if (view === "day") return prev.add(1, "day");
-      if (view === "week") return prev.add(1, "week");
-      return prev.add(1, "month");
-    });
+    setCurrentMonth((prev) => prev.add(1, "month"));
   };
 
   const goToPrev = () => {
-    setCurrentMonth((prev) => {
-      if (view === "day") return prev.subtract(1, "day");
-      if (view === "week") return prev.subtract(1, "week");
-      return prev.subtract(1, "month");
-    });
-  };
+    setCurrentMonth((prev) => prev.add(-1, "month"));
+    console.log(currentMonth);
 
+  };
   const goToToday = (date?: Dayjs) => {
     setCurrentMonth(date ?? dayjs());
   };
-
+  useEffect(() => {
+    fetchCalender(currentMonth);
+  }, [currentMonth]);
   return {
     currentMonth,
     view,
@@ -516,5 +506,6 @@ const {role } = useAuth();
     eventDataLoading,
     setEventData,
     rooms,
+    setCurrentMonth,
   };
 };

@@ -168,8 +168,7 @@ import type { CalendarEvent } from "../../models/calendar.model";
 import type { BookedRoomDataResponse } from "../../models/bookRoom.model";
 import "../../assets/scss/components/Calendar/CalendarModal.scss";
 import { useNavigate } from "react-router-dom";
-import { ArrowDropDownIcon } from "@mui/x-date-pickers";
-
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 interface CalendarModalProps {
   open: boolean;
   event: CalendarEvent | null;
@@ -206,7 +205,6 @@ export const CalendarModal = ({
 
   const externalNames =
     eventData?.data?.externalParticipant?.map((p) => p.name) ?? [];
-  const allParticipants = [...internalNames, ...externalNames];
 
   const booker = eventData?.data?.roomBooker;
   // console.log(booker);
@@ -335,8 +333,8 @@ export const CalendarModal = ({
                   </AccordionSummary>
                   <AccordionDetails>
                     <span className="calendar-modal__row__value">
-                      {allParticipants.length > 0
-                        ? allParticipants.join(", ")
+                      {internalNames.length > 0
+                        ? internalNames.join(", ")
                         : "—"}
                     </span>
                   </AccordionDetails>
@@ -356,9 +354,11 @@ export const CalendarModal = ({
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <p>Sushant Basnet</p>
-                    <p>Ishan Awal</p>
-                    <p>Sabin Manandhar</p>
+                    <span className="calendar-modal__row__value">
+                      {externalNames.length > 0
+                        ? externalNames.join(", ")
+                        : "—"}
+                    </span>
                   </AccordionDetails>
                 </Accordion>
               </AccordionDetails>

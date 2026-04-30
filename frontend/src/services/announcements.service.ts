@@ -8,7 +8,6 @@ export const updateAnnouncement = async (id: number, data: Announcements) => {
   try {
     const res = await api.put(`/api/v1/announcement/${id}/update`, data);
     console.log(res);
-
     return res.data;
   } catch (error) {
     console.error("Error updating announcement", error);
@@ -20,7 +19,6 @@ export const getAnnouncements = async (data: AnnouncementListRequest) => {
   try {
     const res = await api.post("/api/v1/announcement/list", data);
     // console.log(res);
-
     return res.data;
   } catch (error) {
     console.error("Error fetching announcement", error);
@@ -31,7 +29,6 @@ export const getPinnedAnnouncement = async (data: AnnouncementListRequest) => {
   try {
     const res = await api.post("/api/v1/announcement/get", data);
     // console.log(res);
-
     return res.data;
   } catch (error) {
     console.error("Error fetching announcement", error);
@@ -43,8 +40,6 @@ export const getUnpinnedAnnouncement = async (
 ) => {
   try {
     const res = await api.post("/api/v1/announcement/get", data);
-    // console.log(res);
-
     return res.data;
   } catch (error) {
     console.error("Error fetching announcement", error);
@@ -69,7 +64,6 @@ export const markAsRead = async (id: number) => {
   try {
     const res = await api.patch(`/api/v1/announcement/${id}/mark-as-read`);
     console.log(res.data);
-
     return res.data;
   } catch (error) {
     console.error("Error updating announcement", error);
@@ -79,11 +73,9 @@ export const markAsRead = async (id: number) => {
 
 export const updatePinStatus = async (id: number) => {
   console.log(id);
-
   try {
     const res = await api.patch(`/api/v1/announcement/${id}/change-pin-status`);
     console.log(res.data);
-
     return res.data;
   } catch (error) {
     console.error("Error updating announcement", error);

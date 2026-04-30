@@ -97,13 +97,14 @@ import {
 } from "../services/announcements.service";
 import type { Announcements } from "../models/announcements.model";
 
-const PINNED_LIMIT = 5;
+// const PINNED_LIMIT = 5;
 const UNPINNED_PAGE_SIZE = 10;
 
 const useAnnouncementCardViewModel = () => {
   const [pinnedData, setPinnedData] = useState<Announcements[]>([]);
   const [unpinnedData, setUnpinnedData] = useState<Announcements[]>([]);
   const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Tracks the NEXT page to load (0-indexed).
   // After a reset fetch (page 0), this becomes 1.
@@ -116,12 +117,13 @@ const useAnnouncementCardViewModel = () => {
     try {
       const result = await getPinnedAnnouncement({
         pageNo: 0,
-        pageSize: PINNED_LIMIT,
+        pageSize: 5,
         sortBy: "modifiedAt",
         sortDir: "desc",
         pinStatus: true,
       });
       setPinnedData(result.data.content ?? []);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching pinned announcements", error);
     }
@@ -139,8 +141,8 @@ const useAnnouncementCardViewModel = () => {
 
       try {
         const result = await getUnpinnedAnnouncement({
-          pageNo: page,
-          pageSize: UNPINNED_PAGE_SIZE,
+          pageNo: 0,
+          pageSize: 15,
           sortBy: "modifiedAt",
           sortDir: "desc",
           pinStatus: false,
@@ -163,6 +165,7 @@ const useAnnouncementCardViewModel = () => {
 
         // result.data.last === true means no more pages exist
         setHasMore(!result.data.last);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching unpinned announcements", error);
       } finally {
@@ -198,9 +201,11 @@ const useAnnouncementCardViewModel = () => {
     unpinnedData,
     setUnpinnedData,
     hasMore,
+
     fetchPinnedAnnouncements,
     fetchUnpinnedAnnouncements: refreshUnpinned, // used by page for refresh
     loadMoreUnpinned, // used by Show More button
+    loading,
   };
 };
 

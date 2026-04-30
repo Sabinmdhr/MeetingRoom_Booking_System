@@ -280,8 +280,9 @@ import { toast } from "react-toastify";
 import MyButton from "../components/ui/Button";
 import type { Announcements } from "../models/announcements.model";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
+import { Spinner } from "../components/ui/Spinner";
 
-const AnnouncementsPage = () => {
+const Announcements = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -300,6 +301,7 @@ const AnnouncementsPage = () => {
     fetchPinnedAnnouncements,
     fetchUnpinnedAnnouncements, // always a "reset" refresh
     loadMoreUnpinned, // Show More — appends next page
+    loading,
   } = useAnnouncementCardViewModel();
 
   // ── Mark read (optimistic in both lists)
@@ -325,7 +327,7 @@ const AnnouncementsPage = () => {
       setPinnedData((prev) => prev.filter((x) => x.id !== id));
       setUnpinnedData((prev) => prev.filter((x) => x.id !== id));
       fetchPinnedAnnouncements();
-      fetchUnpinnedAnnouncements(); // reset to page 0
+      fetchUnpinnedAnnouncements();
       setClick(false);
     } catch (error) {
       console.error("Delete failed", error);
@@ -340,7 +342,7 @@ const AnnouncementsPage = () => {
       setSelectedIds([]);
       toast.success("Announcements deleted successfully");
       fetchPinnedAnnouncements();
-      fetchUnpinnedAnnouncements(); // reset to page 0
+      fetchUnpinnedAnnouncements();
       setClick(false);
     } catch (error) {
       console.error("Bulk delete failed", error);
@@ -348,7 +350,6 @@ const AnnouncementsPage = () => {
     }
   };
 
-  // ── Update: merge preserving display-only fields ──────────
   const handleUpdate = (updatedItem: any) => {
     const merge = (list: Announcements[]) =>
       list.map((item) =>
@@ -356,6 +357,8 @@ const AnnouncementsPage = () => {
       );
     setPinnedData(merge);
     setUnpinnedData(merge);
+    fetchPinnedAnnouncements();
+    fetchUnpinnedAnnouncements();
   };
 
   // ── Pin toggle (optimistic) ───────────────────────────────
@@ -472,11 +475,23 @@ const AnnouncementsPage = () => {
             />
           </div>
         </CardContent>
-
+        {/* {loading && <Spinner />} */}
         {/* ── Body ── */}
         {!hasAny ? (
           <div className="announcement__empty">
-            <Typography variant="h4">No announcements available</Typography>
+            {hasAny ? <Spinner /> : ""}
+            {!loading && (
+              <Typography
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: 24,
+                }}
+                variant="h4"
+              >
+                No announcements available
+              </Typography>
+            )}
           </div>
         ) : (
           <div className="announcement__content">
@@ -553,4 +568,4 @@ const AnnouncementsPage = () => {
   );
 };
 
-export default AnnouncementsPage;
+export default Announcements;

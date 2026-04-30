@@ -13,12 +13,13 @@ import {
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
-
+  const [loading, setLoading] = useState(true);
 
   const fetchUsers = async () => {
     const data = await getAllUser();
     setUsers(data);
     console.log(data);
+    setLoading(false);
   };
   useEffect(() => {
     fetchUsers();
@@ -41,12 +42,12 @@ export const useparticipantsViewModel = () => {
     });
   };
 
-  const handleParticipantsFormClose = async() => {
+  const handleParticipantsFormClose = async () => {
     setParticipantsFormState((prev) => ({
       ...prev,
       open: false,
     }));
-    await fetchUsers()
+    await fetchUsers();
   };
 
   const [participantType, setParticipantType] = useState<
@@ -60,7 +61,6 @@ export const useparticipantsViewModel = () => {
 
   // const [participants, setParticipants] = useState<Participants[]>(DemoParticipants());
   const [columns, setColumns] = useState<Columns[]>(DemoColumns());
-
 
   const { participants, isEditOpen } = useSelector(
     (state: any) => state.participants,
@@ -133,5 +133,7 @@ export const useparticipantsViewModel = () => {
     setParticipantsFormState,
     handleParticipantFormOpen,
     handleParticipantsFormClose,
+
+    loading,
   };
 };
