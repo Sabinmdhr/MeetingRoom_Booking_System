@@ -8,10 +8,17 @@ import {
 import { addUser, editUser } from "../services/participants.service";
 
 // import type { departmentList } from "../models/departmentList.model";
-import { ParticipantSchema, UserSchema } from "../models/scehma/user.schema";
+import {
+  EditParticipantSchema,
+  ParticipantSchema,
+  UserSchema,
+} from "../models/scehma/user.schema";
 
 import type { departmentList } from "../models/departmentList.model";
-import type { ParticipantResponse, ParticipantsRequest } from "../models/participants.model";
+import type {
+  ParticipantResponse,
+  ParticipantsRequest,
+} from "../models/participants.model";
 export const useAddParticipantsViewModel = () => {
   // const { selectedParticipant } = useAppSelector((state) => state.participants);
   const dispatch = useDispatch();
@@ -37,7 +44,7 @@ export const useAddParticipantsViewModel = () => {
   //   dispatch(openEditForm(participant));
   //   console.log(selectedParticipant);
   // };
-    useState<ParticipantsRequest>(initialFormData);
+  useState<ParticipantsRequest>(initialFormData);
 
   const [departmentId, setDepartmentId] = useState<number>(1);
   const [roleId, setRoleId] = useState<number>(1);
@@ -79,8 +86,10 @@ export const useAddParticipantsViewModel = () => {
     });
   };
 
-  const validate = () => {
-    const result = ParticipantSchema.safeParse(participantFormData);
+  const validate = (mode: "add" | "edit") => {
+    const schema = mode === "edit" ? EditParticipantSchema : ParticipantSchema;
+
+    const result = schema.safeParse(participantFormData);
 
     if (!result.success) {
       const formatted: Record<string, string> = {};
@@ -98,12 +107,11 @@ export const useAddParticipantsViewModel = () => {
     return true;
   };
 
-
   const handleDepartmentChange = (id: number) => {
     setDepartmentId(id);
     setParticipantFormData((prev) => ({
       ...prev,
-      departmentId: id? id: 1,
+      departmentId: id ? id : 1,
     }));
   };
 
@@ -115,22 +123,29 @@ export const useAddParticipantsViewModel = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (mode: "add" | "edit", id?: number) => {
     setIsSubmitted(true);
-    const isValid = validate();
 
-    if (!isValid) return false;
+    const isValid = validate(mode);
+    console.log("IS VALID:", isValid); // 👈 ADD THIS
+
+    if (!isValid) {
+      console.log("ERRORS:", errors); // 👈 ADD THIS
+      return false;
+    }
 
     try {
-      const response = await addUser(participantFormData);
-      console.log("User added successfully:", response);
-      return true;
-      // const response = await addUser(participantFormData);
+      if (mode === "edit" && id) {
+        console.log("EDITING USER"); // 👈 ADD
+        await editUser(id, participantFormData);
+      } else {
+        console.log("ADDING USER"); // 👈 ADD
+        await addUser(participantFormData);
+      }
 
-      // return response;
-      console.log("User added successfully:", participantFormData);
+      return true;
     } catch (error) {
-      console.error("Error adding user:", error);
+      console.error("Error:", error);
       return false;
     }
   };
@@ -160,4 +175,4 @@ export const useAddParticipantsViewModel = () => {
     setRoleId,
     roleId,
   };
-  };
+};

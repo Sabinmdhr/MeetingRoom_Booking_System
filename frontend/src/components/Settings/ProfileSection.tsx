@@ -5,26 +5,27 @@ import MyButton from "../ui/Button";
 import type { UserProfileInfo } from "../../models/profileSection.model";
 import { DepartmentList } from "../Participants/DepartmentList";
 import { RoleDropdown } from "../Participants/RoleDropdown";
+import { useAuth } from "../../hooks/useAuth";
+import { useUserProfileViewModel } from "../../viewmodels/useUserProfileViewModel";
 
 interface ProfileProps {
-  profile: UserProfileInfo;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSave: () => Promise<boolean>;
+  // profile: UserProfileInfo;
+  // onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // onSave: () => Promise<boolean>;
   onCancel: () => void;
-  errors: Record<string, string>;
+  // errors: Record<string, string>;
 
-  handleDepartmentChange: (id: number) => void;
-  handleRoleChange: (id: number) => void;
+  // handleDepartmentChange: (id: number) => void;
+  // handleRoleChange: (id: number) => void;
 }
 
 const ProfileSection = ({
-  profile,
-  onChange,
-  onSave,
-  errors,
+  // onChange,
+  // onSave,
+  // errors,
   onCancel,
-  handleDepartmentChange,
-  handleRoleChange,
+  // handleDepartmentChange,
+  // handleRoleChange,
 }: ProfileProps) => {
   const ErrorText = ({ error }: { error?: string }) =>
     error ? (
@@ -41,6 +42,15 @@ const ProfileSection = ({
     "Product Manager",
     "UX Researcher",
   ];
+  const { role } = useAuth();
+  const {
+    profile,
+    handleDepartmentChange,
+    handleRoleChange,
+    errors,
+    handleChange,
+    saveProfile,
+  } = useUserProfileViewModel();
   return (
     <div className="profile-section">
       <Typography
@@ -57,8 +67,8 @@ const ProfileSection = ({
             <label className="profile-section__label">First Name</label>
             <TextField
               name="firstname"
-              value={profile.firstname}
-              onChange={onChange}
+              value={profile?.firstname}
+              onChange={handleChange}
               error={!!errors.firstname}
             />
             <ErrorText error={errors.firstname} />
@@ -68,8 +78,8 @@ const ProfileSection = ({
             <label className="profile-section__label">Last Name</label>
             <TextField
               name="lastname"
-              value={profile.lastname}
-              onChange={onChange}
+              value={profile?.lastname}
+              onChange={handleChange}
               error={!!errors.lastname}
             />
             <ErrorText error={errors.lastname} />
@@ -82,8 +92,8 @@ const ProfileSection = ({
             <label className="profile-section__label">Email</label>
             <TextField
               name="email"
-              value={profile.email}
-              onChange={onChange}
+              value={profile?.email}
+              onChange={handleChange}
               error={!!errors.email}
             />
             <ErrorText error={errors.email} />
@@ -93,55 +103,57 @@ const ProfileSection = ({
             <label className="profile-section__label">Phone Number</label>
             <TextField
               name="phoneNo"
-              value={profile.phoneNo}
-              onChange={onChange}
+              value={profile?.phoneNo}
+              onChange={handleChange}
               error={!!errors.phoneNo}
             />
             <ErrorText error={errors.phoneNo} />
           </div>
         </div>
 
-        {/* Row 3 */}
-        <div className="profile-section__row">
-          <div className="profile-section__field">
-            <DepartmentList
-              value={profile.departmentId ?? 1}
-              onChange={handleDepartmentChange}
-            />
-          </div>
+        {
+          <div className="profile-section__row">
+            <div className="profile-section__field">
+              <DepartmentList
+                value={profile?.departmentId ?? 1}
+                onChange={handleDepartmentChange}
+              />
+            </div>
 
-          <div className="profile-section__field">
-            <RoleDropdown
-              value={profile.roleId ?? 1}
-              onChange={handleRoleChange}
-            />
+            <div className="profile-section__field">
+              <RoleDropdown
+                value={profile?.roleId ?? 1}
+                onChange={handleRoleChange}
+              />
+            </div>
           </div>
-        </div>
+        }
 
-        {/* Row 4 */}
-        <div className="profile-section__row">
-          <div className="profile-section__field">
-            <label className="profile-section__label">Position</label>
-            <TextField
-              select
-              name="position"
-              value={profile.position}
-              onChange={onChange}
-            >
-              {positions.map((p) => (
-                <MenuItem
-                  key={p}
-                  value={p}
-                >
-                  {p}
-                </MenuItem>
-              ))}
-            </TextField>
+        {
+          <div className="profile-section__row">
+            <div className="profile-section__field">
+              <label className="profile-section__label">Position</label>
+              <TextField
+                select
+                name="position"
+                value={profile?.position}
+                onChange={handleChange}
+              >
+                {positions.map((p) => (
+                  <MenuItem
+                    key={p}
+                    value={p}
+                  >
+                    {p}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+
+            {/* empty space to keep alignment */}
+            <div className="profile-section__field profile-section__field--empty" />
           </div>
-
-          {/* empty space to keep alignment */}
-          <div className="profile-section__field profile-section__field--empty" />
-        </div>
+        }
 
         <div className="profile-section__actions">
           <MyButton
@@ -149,8 +161,8 @@ const ProfileSection = ({
             variant="contained"
             customVariant="dark"
             onClick={async () => {
-              console.log("CLICKED SAVE"); // 👈 ADD THIS
-              const success = await onSave();
+              console.log("CLICKED SAVE"); //  ADD THIS
+              const success = await saveProfile();
               console.log("RESULT:", success);
 
               if (success) toast.success("Changes saved successfully");

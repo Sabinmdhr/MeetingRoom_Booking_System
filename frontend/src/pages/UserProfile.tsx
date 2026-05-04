@@ -10,11 +10,11 @@ const UserProfile = () => {
   const {
     profile,
     loading,
-    handleChange,
-    saveProfile,
-    errors,
-    handleDepartmentChange,
-    handleRoleChange,
+    // handleChange,
+    // saveProfile,
+    // errors,
+    // handleDepartmentChange,
+    // handleRoleChange,
   } = useUserProfileViewModel();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -86,13 +86,13 @@ const UserProfile = () => {
         </Card>
       ) : (
         <ProfileSection
-          profile={profile}
-          onChange={handleChange}
-          onSave={saveProfile}
+          // profile={profile}
+          // onChange={handleChange}
+          // onSave={saveProfile}
           onCancel={() => setIsEditing(false)}
-          errors={errors}
-          handleDepartmentChange={handleDepartmentChange}
-          handleRoleChange={handleRoleChange}
+          // errors={errors}
+          // handleDepartmentChange={handleDepartmentChange}
+          // handleRoleChange={handleRoleChange}
         />
       )}
     </div>

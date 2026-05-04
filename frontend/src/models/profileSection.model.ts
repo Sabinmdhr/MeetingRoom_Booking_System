@@ -12,8 +12,7 @@ export interface UserProfileInfo {
 
   role: string;
   roleId?: number;
-  
+
   position: string;
   status: Status;
-
 }

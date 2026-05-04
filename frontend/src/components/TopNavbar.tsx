@@ -119,7 +119,7 @@ export default function TopNavbar() {
 
         <div className="spacer" />
 
-        <div className="topbar-actions">
+        {/* <div className="topbar-actions">
           <IconButton onClick={handleOpen}>
             <Badge
               badgeContent={unreadCount}
@@ -128,7 +128,7 @@ export default function TopNavbar() {
               <Bell size={25} />
             </Badge>
           </IconButton>
-        </div>
+        </div> */}
 
         <Menu
           anchorEl={anchorEl}

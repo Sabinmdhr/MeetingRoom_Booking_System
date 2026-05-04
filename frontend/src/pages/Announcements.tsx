@@ -640,7 +640,7 @@ const AnnouncementsPage = () => {
     }
   };
 
-  //  Pin API call ─
+  //  Pin API call
   const handlePinChange = async (id: number) => {
     try {
       await updatePinStatus(id);
@@ -674,6 +674,8 @@ const AnnouncementsPage = () => {
   };
 
   const hasAny = pinnedData.length > 0 || unpinnedData.length > 0;
+
+  console.log(pinnedData.length + unpinnedData.length);
 
   return (
     <div className="announcement__main">
@@ -772,7 +774,7 @@ const AnnouncementsPage = () => {
             )}
 
             {/* Show More */}
-            {hasMore && (
+            {unpinnedData.length > 5 && (
               <div className="announcement__bottom">
                 <MyButton
                   variant="outlined"

@@ -65,6 +65,7 @@ export const CalendarModal = ({
 
   const category = event?.category?.toLowerCase() ?? "";
   const colors = CATEGORY_COLORS[category] ?? DEFAULT_COLORS;
+  const [isEditing, setIsEditing] = useState(false);
 
   const internalNames =
     eventData?.internalParticipant?.map(

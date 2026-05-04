@@ -20,7 +20,7 @@
 //   const nextPageRef = useRef(1); // starts at 1 because initial load fetches page 0
 //   const loadingRef = useRef(false);
 
-//   // ── Pinned: always fresh, hard-capped at PINNED_LIMIT ────
+//   //  Pinned: always fresh, hard-capped at PINNED_LIMIT
 //   const fetchPinnedAnnouncements = useCallback(async () => {
 //     try {
 //       const result = await getPinnedAnnouncement({
@@ -37,7 +37,7 @@
 //     }
 //   }, []);
 
-//   // ── Unpinned: paginated ───────────────────────────────────
+//   //  Unpinned: paginated
 //   // mode "reset" → replace list, reset page counter to 1
 //   // mode "more"  → append next page, increment counter
 //   const fetchUnpinnedAnnouncements = useCallback(
@@ -89,7 +89,7 @@
 //     fetchUnpinnedAnnouncements("reset");
 //   }, [fetchPinnedAnnouncements, fetchUnpinnedAnnouncements]);
 
-//   // ── Public API
+//   //  Public API
 
 //   // Call after add / delete / bulk-delete to start back from page 0
 //   const refreshUnpinned = useCallback(
@@ -383,7 +383,7 @@ const useAnnouncementCardViewModel = () => {
   // Guard against concurrent fetches
   const loadingRef = useRef(false);
 
-  // ── Pinned: always page 0, max 5, latest first ────────────
+  //  Pinned: always page 0, max 5, latest first
   const fetchPinnedAnnouncements = useCallback(async () => {
     try {
       const result = await getPinnedAnnouncement({
@@ -399,7 +399,7 @@ const useAnnouncementCardViewModel = () => {
     }
   }, []);
 
-  // ── Unpinned: paginated ───────────────────────────────────
+  //  Unpinned: paginated
   // mode "reset" → replaces the list, resets page counter (used on mount + after add/delete)
   // mode "more"  → appends next page (used by Show More button)
   const fetchUnpinnedAnnouncements = useCallback(
@@ -447,7 +447,7 @@ const useAnnouncementCardViewModel = () => {
     [],
   );
 
-  // ── Initial load ──────────────────────────────────────────
+  //  Initial load
   useEffect(() => {
     const init = async () => {
       setLoading(true);
@@ -459,7 +459,7 @@ const useAnnouncementCardViewModel = () => {
     init();
   }, [fetchPinnedAnnouncements, fetchUnpinnedAnnouncements]);
 
-  // ── Full refresh (after add / delete / bulk delete) ───────
+  //  Full refresh (after add / delete / bulk delete)
   const refreshAll = useCallback(async () => {
     await Promise.all([
       fetchPinnedAnnouncements(),

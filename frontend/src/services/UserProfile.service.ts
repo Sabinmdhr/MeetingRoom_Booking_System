@@ -9,7 +9,6 @@ export const fetchCurrentUser = async () => {
     throw error;
   }
 };
-
 export const updateProfile = async (id: number, data: any) => {
   try {
     const res = await api.put(`/api/v1/user/${id}/update`, data);
