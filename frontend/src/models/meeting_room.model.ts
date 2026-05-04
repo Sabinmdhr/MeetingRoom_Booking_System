@@ -28,3 +28,4 @@ export interface AddRoomModal{
   capacity: number;
   resourcesIds :number[];
 }
+

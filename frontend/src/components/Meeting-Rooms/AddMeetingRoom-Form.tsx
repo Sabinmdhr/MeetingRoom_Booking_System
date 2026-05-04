@@ -12,11 +12,11 @@ import {
 } from "@mui/material";
 import { Plus } from "lucide-react";
 import "../../assets/scss/components/AddMeetingRoom-Form.scss";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import MyButton from "../ui/Button";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
-import { EditMeetingRoom } from "../../services/Meetinf_room.service";
+import { addMeetingResources, EditMeetingRoom } from "../../services/Meetinf_room.service";
 
 type props = {
   roomFormState: {
@@ -45,6 +45,8 @@ export const AddMeetingRoomForm = ({
     refresh,
     fetchMeeting,
     roomResources,
+    setAddResourceMode,
+    addResourceMode,
   } = useMeetingCardViewModel();
   // const {
   //   addMeetingFormData,
@@ -57,6 +59,8 @@ export const AddMeetingRoomForm = ({
   // useEffect(() => {
   //   fetchMeeting();
   // }, [refresh]);
+
+  const [meetingTypeName, setMeetingTypeName] = useState("");
   useEffect(() => {
     if (roomFormState.mode === "edit" && roomFormState.room) {
       setAddRoomFormData({
@@ -132,66 +136,42 @@ export const AddMeetingRoomForm = ({
                         <Checkbox
                           value={resource.id}
                           onChange={handleCheckboxChange}
-                          checked={addRoomFormData.resourcesIds.includes(resource.id)}
+                          checked={addRoomFormData.resourcesIds.includes(
+                            resource.id,
+                          )}
                         />
                       }
                       label={resource.name}
                     />
                   </Grid>
                 ))}
-                {/* <Grid size={6}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        value="WIFI"
-                        onChange={handleCheckboxChange}
-                        checked={addRoomFormData.resources.includes("WIFI")}
-                      />
-                    }
-                    label="WIFI"
-                  />
-                </Grid>
-                <Grid size={6}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        value="PROJECTOR"
-                        onChange={handleCheckboxChange}
-                        checked={addRoomFormData.resources.includes(
-                          "PROJECTOR",
-                        )}
-                      />
-                    }
-                    label="Projector"
-                  />
-                </Grid>
-                <Grid size={6}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        value="WHITEBOARD"
-                        onChange={handleCheckboxChange}
-                        checked={addRoomFormData.resources.includes(
-                          "WHITEBOARD",
-                        )}
-                      />
-                    }
-                    label="Whiteboard"
-                  />
-                </Grid>
-                <Grid size={6}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        value="TV"
-                        onChange={handleCheckboxChange}
-                        checked={addRoomFormData.resources.includes("TV")}
-                      />
-                    }
-                    label="TV"
-                  />
-                </Grid> */}
               </Grid>
+              <hr />
+             {!addResourceMode && (
+               <MyButton
+                 text="Add Resources"
+                 customVariant="ghost"
+                 onClick={() => setAddResourceMode(true)}
+               />
+             )}
+{addResourceMode && (<>
+<label htmlFor="resourceName">Write Name for Resource</label>
+<TextField
+  id="resourceName"
+  placeholder="Resource Name"
+  className="customTextField"
+  value={meetingTypeName}
+  onChange={(e) => setMeetingTypeName(e.target.value)}
+/>
+<MyButton
+  text="Submit"
+  customVariant="ghost"
+  onClick={() => {
+    addMeetingResources(meetingTypeName);
+    setMeetingTypeName("");
+  }}
+/>
+</>)}
             </FormGroup>
           </FormControl>
         </DialogContent>

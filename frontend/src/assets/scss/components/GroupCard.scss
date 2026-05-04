@@ -60,9 +60,16 @@
   .members {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
     .member-chip {
       font-size: 12px;

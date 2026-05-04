@@ -8,7 +8,6 @@ import { DemoColumns, getAllUser } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setParticipants,
-  toggleParticipantsSelection,
 } from "../redux/ParticipantsSlice";
 
 export const useparticipantsViewModel = () => {

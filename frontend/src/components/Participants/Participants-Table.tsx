@@ -15,14 +15,11 @@ import {
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import "../../assets/scss/components/Participants-Table.scss";
 import "../../assets/scss/global.scss";
-import {
-  EllipsisVertical,
-  Mail,
-  Pen,
-  Phone,
-  Trash2,
-} from "lucide-react";
-import type { ParticipantResponse, ParticipantsRequest } from "../../models/participants.model";
+import { EllipsisVertical, Mail, Pen, Phone, Trash2 } from "lucide-react";
+import type {
+  ParticipantResponse,
+  ParticipantsRequest,
+} from "../../models/participants.model";
 import { useState } from "react";
 import { permissions } from "../../utils/permissions";
 import { useAuth } from "../../hooks/useAuth";
@@ -47,9 +44,9 @@ export const ParticipantsTable = ({
   handleParticipantFormOpen,
 }: props) => {
   // const { openAddParticipantForm } = useAddParticipantsViewModel();
-  const {  columns } = useparticipantsViewModel();
-const {role}  = useAuth();
-const perms = permissions[role as keyof typeof permissions];
+  const { columns } = useparticipantsViewModel();
+  const { role } = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
 
   const [menuState, setMenuState] = useState<{
     anchorEl: HTMLElement | null;
@@ -81,6 +78,7 @@ const perms = permissions[role as keyof typeof permissions];
       <Table>
         <TableHead className="TableHead">
           <TableRow>
+            <TableCell>S.N</TableCell>
             {columns.map((col) => (
               <TableCell key={col.id}>{col.label}</TableCell>
             ))}
@@ -88,8 +86,10 @@ const perms = permissions[role as keyof typeof permissions];
         </TableHead>
 
         <TableBody>
-          {users.map((participant: ParticipantResponse) => (
+          {users.map((participant: ParticipantResponse, index: number) => (
             <TableRow key={participant.id} hover>
+              <TableCell width="5%">{index + 1}.</TableCell>
+
               {columns.map((col) => {
                 switch (col.id) {
                   case "Name":
@@ -134,10 +134,8 @@ const perms = permissions[role as keyof typeof permissions];
                       </TableCell>
                     );
 
-
-
                   case "actions":
-                 return  perms?.canManageUsers ?(
+                    return perms?.canManageUsers ? (
                       <TableCell key={col.id}>
                         <IconButton
                           onClick={(e) => {
@@ -185,8 +183,7 @@ const perms = permissions[role as keyof typeof permissions];
                           </MenuItem>
                         </Menu>
                       </TableCell>
-                    ): null;
-
+                    ) : null;
 
                   default:
                     return <TableCell key={col.id}>-</TableCell>;

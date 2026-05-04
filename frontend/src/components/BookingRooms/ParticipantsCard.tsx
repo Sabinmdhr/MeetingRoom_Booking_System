@@ -19,7 +19,7 @@ import type { groupCardRequest } from "../../models/groupCard.model";
 
 interface ParticipantsCardProps {
   type: "internal" | "external" | "";
-  participants: number[];
+  participants?: number[];
   onChange: (updated: number[]) => void;
 }
 
@@ -74,7 +74,7 @@ const ParticipantsCard = ({
       ? selectedParticipants.filter((id) => !ids.includes(id))
       : [...new Set([...selectedParticipants, ...ids])];
 
-      onChange(updated)
+    onChange(updated);
   };
   // const handleSelectParticipant = (id: string) => {
   //   setSelectedParticipants((prev) =>
@@ -97,12 +97,12 @@ const ParticipantsCard = ({
   return (
     <>
       <>
-        <label htmlFor="description" className="label">
+        {/* <label htmlFor="description" className="label">
           Participants
         </label>
         <Typography>
           Add internal and external participants to your meeting.
-        </Typography>
+        </Typography> */}
         {selectedParticipants.length > 0 && (
           <div className="selected-participants">
             <Typography variant="subtitle2">Selected Participants:</Typography>
@@ -115,7 +115,8 @@ const ParticipantsCard = ({
                   icon={
                     <X
                       size={18}
-                      onClick={() => {toggleParticipantSelection(id)
+                      onClick={() => {
+                        toggleParticipantSelection(id);
                       }}
                     />
                   }
@@ -187,7 +188,7 @@ const ParticipantsCard = ({
                               {p.department}
                             </Typography>
                             &bull;
-                            <Typography className="role">{p.role}</Typography>
+                            <Typography className="role">{p.position}</Typography>
                           </div>
                         </div>
                       </div>
@@ -258,58 +259,8 @@ const ParticipantsCard = ({
             </div>
           )}
 
-          {/* {type === "external" && (
-            <div className="external-members">
-              <div className="external-header">
-                <UserPlus size={18} />
-                <Typography>Add External Member</Typography>
-              </div>
 
-              <TextField
-                label="Name *"
-                fullWidth
-                size="small"
-                placeholder="Enter external member name"
-                value={externalName}
-                onChange={(e) => setExternalName(e.target.value)}
-              />
-              <TextField
-                label="Email *"
-                fullWidth
-                size="small"
-                placeholder="Enter external member email"
-                value={externalEmail}
-                onChange={(e) => setExternalEmail(e.target.value)}
-              />
 
-              <div className="external-note">
-                <Typography>
-                  <b>Note:</b> External members will be tracked separately in
-                  reports and won't affect internal dashboard statistics.
-                </Typography>
-              </div>
-
-              <div className="external-buttons">
-                <Button
-                  className="participants-btn"
-                  fullWidth
-                  onClick={handleAddExternal}
-                  startIcon={<UserPlus size={18} />}
-                >
-                  Add External Member
-                </Button>
-                <Button
-                  className="participants-btn"
-                  onClick={() => {
-                    setExternalName("");
-                    setExternalEmail("");
-                  }}
-                >
-                  Clear
-                </Button>
-              </div>
-            </div>
-          )} */}
         </div>
       </>
     </>

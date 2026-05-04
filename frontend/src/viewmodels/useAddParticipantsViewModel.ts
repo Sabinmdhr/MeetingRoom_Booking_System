@@ -37,7 +37,7 @@ export const useAddParticipantsViewModel = () => {
   //   dispatch(openEditForm(participant));
   //   console.log(selectedParticipant);
   // };
-    useState<ParticipantsRequest>(initialFormData);
+    // useState<ParticipantsRequest>(initialFormData);
 
   const [departmentId, setDepartmentId] = useState<number>(1);
   const [roleId, setRoleId] = useState<number>(1);

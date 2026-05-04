@@ -6,6 +6,6 @@ export const getDepartmentList = async (): Promise<departmentList[]> => {
   return response.data.data;
 };
 export const handleAddDepartment = async(data: addDepartment) => {
-  const res = await api.post("/api/v1/department/add", data);
+  const res = await api.post("/api/v1/department/", data);
   return res.data;
 };
