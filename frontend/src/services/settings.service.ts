@@ -8,8 +8,6 @@ const GET_URL = "https://dummyjson.com/c/ab43-0141-42f5-a9a2";
 const UPDATE_URL = "https://mocki.io/v1/7800acf0-968d-40d9-9518-c12d5fb40fab";
 
 export const getSettings = async (): Promise<Settings> => {
-  // const res= await axios.get(GET_URL);
-  // return res.data;
   try {
     const res = await axios.get(GET_URL);
     return res.data;

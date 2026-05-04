@@ -94,6 +94,9 @@ import { useSettingsViewModel } from "../../viewmodels/useSettingsViewModel";
 import { Palette, Pen, Plus, X } from "lucide-react";
 import MyButton from "../ui/Button";
 
+
+
+
 export default function MeetingTypeColors() {
   const {
     meetingTypes,
@@ -102,6 +105,8 @@ export default function MeetingTypeColors() {
     togglePicker,
     saveMeetingType,
   } = useSettingsViewModel();
+
+  
 
   return (
     <Paper className="meeting-type-colors">
@@ -157,8 +162,11 @@ export default function MeetingTypeColors() {
           {activePickerId === item.id && (
             <div className="meeting-type-colors__picker">
               <SketchPicker
+               
                 color={item.color}
                 onChange={(color) => handleColorChange(item.id!, color)}
+
+                
               />
             </div>
           )}
