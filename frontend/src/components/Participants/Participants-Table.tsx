@@ -23,6 +23,7 @@ import type {
 import { useState } from "react";
 import { permissions } from "../../utils/permissions";
 import { useAuth } from "../../hooks/useAuth";
+import { Spinner } from "../ui/Spinner";
 // import { openEditForm } from "../../redux/ParticipantsSlice";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
@@ -44,7 +45,8 @@ export const ParticipantsTable = ({
   handleParticipantFormOpen,
 }: props) => {
   // const { openAddParticipantForm } = useAddParticipantsViewModel();
-  const { columns } = useparticipantsViewModel();
+
+  const { columns, loading } = useparticipantsViewModel();
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
 
@@ -74,7 +76,10 @@ export const ParticipantsTable = ({
   };
   // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
-    <TableContainer component={Paper} className="TableContainer">
+    <TableContainer
+      component={Paper}
+      className="TableContainer"
+    >
       <Table>
         <TableHead className="TableHead">
           <TableRow>
@@ -84,11 +89,13 @@ export const ParticipantsTable = ({
             ))}
           </TableRow>
         </TableHead>
+        {loading && <Spinner />}
 
         <TableBody>
           {users.map((participant: ParticipantResponse, index: number) => (
             <TableRow key={participant.id} hover>
               <TableCell width="5%">{index + 1}.</TableCell>
+
 
               {columns.map((col) => {
                 switch (col.id) {

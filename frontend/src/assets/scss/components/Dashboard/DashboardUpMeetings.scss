@@ -1,0 +1,56 @@
+.dashboard-upmeetings {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 8px !important;
+  background: white;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+
+  &__heading {
+    margin-bottom: 12px !important;
+    font-weight: 500 !important;
+  }
+
+  &__card {
+    font-weight: 600 !important;
+    margin-bottom: 14px;
+    border: 2px solid #eee;
+    border-radius: 20px !important;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__cardheader {
+    &__meetingtitle {
+      font-size: 18px !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  &__chip {
+    border: 1px solid !important;
+  }
+
+  &__subheading {
+    display: flex;
+    gap: 160px;
+  }
+
+  &__title {
+    margin-bottom: 8px !important;
+    font-weight: 400 !important;
+  }
+  &__subtitle {
+    font-weight: 400 !important;
+    color: gray;
+  }
+  &__participants {
+    color: gray;
+    display: flex;
+    align-items: center;
+    gap: 6px !important;
+    font-size: 14px !important;
+  }
+}

@@ -130,7 +130,10 @@ export const AddMeetingRoomForm = ({
             <FormGroup>
               <Grid container>
                 {roomResources.map((resource) => (
-                  <Grid size={6} key={resource.id}>
+                  <Grid
+                    size={6}
+                    key={resource.id}
+                  >
                     <FormControlLabel
                       control={
                         <Checkbox

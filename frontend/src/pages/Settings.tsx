@@ -8,11 +8,10 @@ import SecuritySection from "../components/Settings/SecuritySection";
 import { useSettingsViewModel } from "../viewmodels/useSettingsViewModel";
 
 const Settings = () => {
-  const { settings, loading, updateProfileSection, saveSettings } =
-    useSettingsViewModel();
+  // const { settings, loading } = useSettingsViewModel();
 
-  if (loading) return <div>Loading...</div>;
-  if (!settings) return <div>No settings found</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (!settings) return <div>No settings found</div>;
 
   return (
     <div className="settings">

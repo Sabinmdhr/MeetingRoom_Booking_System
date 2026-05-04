@@ -97,6 +97,6 @@ export interface BookedRoomDataResponse {
   meetingType: MeetingTypeInfo[];
   externalParticipant?: BookedExternalParticipant[];
   internalParticipant?: BookedInternalParticipant[];
-  room: Room[];
-  roomBooker: RoomBooker[];
+  room: Room;
+  roomBooker: RoomBooker;
 }

@@ -2,7 +2,7 @@
   padding: 16px;
   border-radius: 8px !important;
   margin-top: 20px;
-  width: 50%;
+  width: 100%;
 }
 
 .calendar-header {
@@ -13,6 +13,7 @@
 
   .title {
     gap: 8px;
+    font-weight: 500 !important;
   }
 }
 
@@ -76,17 +77,6 @@
   }
 }
 
-.day-cell {
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  position: relative;
-  text-align: center;
-
-  &:hover {
-    background: #f3f3f3;
-  }
-
   .booking-dot {
     position: absolute;
     bottom: 4px;
@@ -97,7 +87,6 @@
     border-radius: 50%;
     background-color: #1976d2;
   }
-}
 
 .selected {
     background: #7b2ff7;
@@ -131,16 +120,25 @@
     font-size: 14px;
   }
 
-  &__header {
-    margin-bottom: 16px !important;
-    font-weight: 400 !important;
+  &__header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px !important;
   }
 
   &__badge{
-    background: #e0e0e0;
+    background: #7b2ff7;
+    color: white;
     padding: 2px 8px;
     border-radius: 8px;
-    margin-left: 6px;
+    height: 26px;
+    font-size: 14px;
+  }
+
+  &__list{
+    max-height: 350px; 
+    overflow-y: auto;    
+    padding-right: 4px;
   }
 
   &__card {
@@ -149,30 +147,24 @@
     padding: 12px;
     margin-bottom: 12px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
 
     &:hover {
-    border: 1px solid rgb(201, 171, 201) ;
-    background: rgb(245, 237, 245) !important;
+    border: 2px solid rgb(201, 171, 201) ;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1) !important;
     }
   }
 
-  &__left {
+  &__subcard{
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
   }
 
   &__title {
-    font-weight: 400 !important;
-    font-size: 15px !important;
-  }
-
-  &__subtitle {
-    font-size: 13px !important;
-    color: #777;
-    display: flex;
-    align-items: flex-end;
+    font-weight: 600 !important;
+    font-size: 18px !important;
+    margin-bottom: 6px !important;
   }
 
   &__chip {
@@ -180,4 +172,42 @@
     border: 1px solid !important;
     border-radius: 8px !important;
   }
+
+  &__subtitle {
+    color: #777;
+    display: flex;
+    margin-bottom: 8px;
+  }
+
+  &__location{
+    display: flex;
+    align-items: center;
+    color: #777;
+  }
+    
+    &__roomname {
+    font-size: 14px !important;
+  }
 }
+
+hr {
+  border-top: 1px #e0dfdf;
+  margin-bottom: 8px;
+}
+ 
+.calenderpreview-btn:hover {
+  background: #7b2ff7 !important;
+  }
+
+.clearselection-btn{
+  color: red !important;
+  border: 1px solid red !important;
+  font-size: 12px !important;
+  height: 32px !important;
+
+  &:hover {
+    color: black !important;
+  }
+}
+
+

@@ -21,3 +21,8 @@ export const ParticipantSchema = z.object({
   password: z.string().min(6, "Password be at least 8 characters."),
 });
 
+export const AddParticipantSchema = ParticipantSchema;
+
+export const EditParticipantSchema = ParticipantSchema.omit({
+  password: true,
+});

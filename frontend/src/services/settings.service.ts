@@ -1,5 +1,7 @@
 import axios from "axios";
+import api from "../api/api";
 import type { Settings } from "../models/settings.model";
+import type { MeetingTypeRequest } from "../models/settings.model";
 
 // const GET_URL = "https://mocki.io/v1/b5b839b5-75a6-48ce-941e-5c6dd4bd4097";
 const GET_URL = "https://dummyjson.com/c/ab43-0141-42f5-a9a2";
@@ -21,3 +23,8 @@ export const updateSettings = async (data: Settings) => {
   const res = await axios.put(UPDATE_URL, data);
   return res.data;
 };
+
+export const meetingType= async(data: MeetingTypeRequest)=>{
+  const res= await api.post("/api/v1/meeting-type", data);
+  return res.data;
+}

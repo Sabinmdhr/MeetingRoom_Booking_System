@@ -11,12 +11,10 @@ export const getAllReports = async () => {
   }
 };
 
-export const exportReports = async (): Promise<Blob> => {
-  const res = await api.post(
-    "/api/v1/reports/export",
-    {},
-    { responseType: "blob" },
-  );
+export const exportReports = async (data?: ReportPayload): Promise<Blob> => {
+  const res = await api.post("/api/v1/reports/export", data || {}, {
+    responseType: "blob",
+  });
   return res.data;
 };
 
@@ -28,7 +26,7 @@ export const filterReport = async (data: ReportPayload) => {
 export const fetchUser = async () => {
   try {
     const res = await api.get("/api/v1/user/get-all");
-    console.log(res.data);
+    // console.log(res.data);
 
     return res.data;
   } catch (error) {
@@ -40,7 +38,7 @@ export const fetchUser = async () => {
 export const fetchRoom = async () => {
   try {
     const res = await api.get("/api/v1/room/list");
-    console.log(res.data);
+    // console.log(res.data);
 
     return res.data.data;
   } catch (error) {
