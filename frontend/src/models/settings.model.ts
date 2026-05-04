@@ -32,3 +32,23 @@ export interface Settings {
   booking: BookingSettings;
   security: SecuritySettings;
 }
+
+export type MeetingTypeStatus = "ACTIVE" | "INACTIVE";
+export interface MeetingTypeUI {
+  id?: number;
+  name: string;
+  desc: string;
+  color: {
+    r: number;
+    g: number;
+    b: number;
+    a: number;
+  };
+  status: MeetingTypeStatus;
+}
+
+export interface MeetingTypeRequest{
+  name: string;
+  colorCode: string;
+  status: MeetingTypeStatus;
+}

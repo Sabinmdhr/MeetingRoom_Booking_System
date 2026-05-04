@@ -1,260 +1,312 @@
-// import { useState, useMemo, useEffect } from "react";
+// import { useState, useMemo, useEffect, useCallback } from "react";
 // import dayjs, { Dayjs } from "dayjs";
-// import type { CalendarEvent, CalenderDay } from "../models/calendar.model";
+// import type {
+//   CalendarEvent,
+//   CalenderDay,
+//   CalenderMonth,
+// } from "../models/calendar.model";
 // import {
 //   getCalendarByMonth,
 //   getCalenderByDay,
 // } from "../services/calendar.service";
 // import { getBookedDataByMeetingId } from "../services/bookRoom.service";
 // import type { BookedRoomDataResponse } from "../models/bookRoom.model";
+// import { getMeetingRooms } from "../services/Meetinf_room.service";
+// import type { meeting_rooms } from "../models/meeting_room.model";
 
-// export type CalendarView = "day" | "week" | "month";
+// export type CalendarView = "day" | "month";
+
+// //  Mappers
+// // These convert raw API shapes into the CalendarEvent shape the UI uses.
+
+// const mapMonthItem = (item: CalenderMonth): CalendarEvent => ({
+//   id: item.meetingId,
+//   meetingTitle: item.meetingTitle,
+//   category: (item.meetingType?.name?.toLowerCase() ??
+//     "internal") as CalendarEvent["category"],
+//   date: item.date,
+//   startTime: item.startTime,
+//   endTime: item.endTime,
+//   location: item.roomName,
+//   organizer: "",
+//   participants: [],
+//   description: "",
+//   department: "",
+// });
+
+// const mapDayItem = (item: CalenderDay): CalendarEvent => ({
+//   id: item.meetingId,
+//   meetingTitle: item.meetingTitle,
+//   category: (item.meetingType?.name?.toLowerCase() ??
+//     "internal") as CalendarEvent["category"],
+//   date: item.date,
+//   startTime: item.startTime,
+//   endTime: item.endTime,
+//   location: item.roomName,
+//   organizer: "",
+//   participants: [],
+//   description: "",
+//   department: "",
+// });
+
+// //  Hook ─
 
 // export const useCalendarEventViewModel = () => {
-//   const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
+//   // ─ Shared navigation state ─
+//   // currentMonth  → Calendar page: drives the header label and grid columns
+//   // currentDate   → CalendarPreview: drives its own mini-calendar display
+//   // selectedDates → which day the day-view API call fetches
 //   const [view, setView] = useState<CalendarView>("month");
+//   const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
+//   const [currentDate, setcurrentDate] = useState<Dayjs>(dayjs());
+//   const [selectedDates, setSelectedDates] = useState<Dayjs>(dayjs());
+
+//   // ─ Event / modal
 //   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
 //     null,
 //   );
-//   const [openModal, setOpenModal] = useState(false);
+//   const [eventData, setEventData] = useState<BookedRoomDataResponse | null>(
+//     null,
+//   );
+//   const [eventDataLoading, setEventDataLoading] = useState(false);
 
-//   const [currentDate, setcurrentDate] = useState(dayjs());
+//   // ─ Raw API data ─
+//   const [monthEvents, setMonthEvents] = useState<CalendarEvent[]>([]);
+//   const [dayEvents, setDayEvents] = useState<CalendarEvent[]>([]);
+//   // monthMeetings keeps the original CalenderDay[] shape that CalendarPreview needs
+//   const [monthMeetings, setMonthMeetings] = useState<CalenderDay[]>([]);
 //   const [bookedDates, setBookedDates] = useState<Set<string>>(new Set());
-
-//   const [eventData, setEventData] = useState<BookedRoomDataResponse>();
-//   const fetchCalender = async () => {
-//     try {
-//       console.log("MONTH:", currentDate.format("YYYY-MM-DD"));
-//       const res = await getCalendarByMonth(currentDate.format("YYYY-MM-DD"));
-//       console.log(res);
-
-//       console.log("MONTH API DATA:", res.data);
-//       const dates = new Set(res.data.map((item: any) => item.date));
-
-//       console.log("BOOKED DATES:", [...dates]);
-//       setBookedDates(dates);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   const fetchEvent = async (meetingId: number) => {
-//     try {
-//       const res = await getBookedDataByMeetingId(meetingId);
-//       console.log("ans:", res);
-//       setEventData(res);
-//       console.log(eventData);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchCalender();
-//     fetchEvent(5);
-//   }, [currentDate.month(), currentDate.year()]);
-
-//   const [meetings, setMeetings] = useState<CalenderDay[]>([]);
-//   const [selectedDates, setSelectedDates] = useState(dayjs());
+//   const [rooms, setRooms] = useState<meeting_rooms[]>([]);
 //   const [loading, setLoading] = useState(false);
 
-//   const fetchMeetings = async (date: string) => {
+//   // ─ Date-range selection (CalendarPreview only) ─
+//   const [dateRange, setDateRange] = useState<{
+//     start: Dayjs | null;
+//     end: Dayjs | null;
+//   }>({
+//     start: null,
+//     end: null,
+//   });
+
+//   // ─ Fetchers ─
+
+//   const fetchRooms = useCallback(async () => {
+//     try {
+//       const res = await getMeetingRooms();
+//       setRooms(res.data.content ?? res.data ?? []);
+//     } catch (e) {
+//       console.error("Error fetching rooms", e);
+//     }
+//   }, []);
+
+//   // Fetches events for a given month. Used by both Calendar page and CalendarPreview.
+//   const fetchMonthEvents = useCallback(async (date: Dayjs) => {
+//     try {
+//       const res = await getCalendarByMonth(date.format("YYYY-MM-DD"));
+//       const items: CalenderMonth[] = res.data ?? [];
+//       setBookedDates(new Set(items.map((i) => i.date)));
+//       setMonthMeetings(items as unknown as CalenderDay[]); // CalendarPreview reads this
+//       setMonthEvents(items.map(mapMonthItem)); // Calendar grid reads this
+//     } catch (e) {
+//       console.error("Error fetching month events", e);
+//     }
+//   }, []);
+
+//   // Fetches events for a single day. Used by Calendar day view.
+//   const fetchDayEvents = useCallback(async (date: Dayjs) => {
 //     try {
 //       setLoading(true);
-//       const res = await getCalenderByDay(date);
-//       setMeetings(res.data || []);
-//     } catch (error) {
-//       console.error(error);
+//       const res = await getCalenderByDay(date.format("YYYY-MM-DD"));
+//       const items: CalenderDay[] = res.data ?? [];
+//       setDayEvents(items.map(mapDayItem));
+//     } catch (e) {
+//       console.error("Error fetching day events", e);
 //     } finally {
 //       setLoading(false);
 //     }
-//   };
+//   }, []);
 
+//   // Fetches full details for one meeting (shown in the event modal).
+//   const fetchEvent = useCallback(async (meetingId: number) => {
+//     try {
+//       setEventDataLoading(true);
+//       const res = await getBookedDataByMeetingId(meetingId);
+//       setEventData(res);
+//     } catch (e) {
+//       console.error("Error fetching event detail", e);
+//     } finally {
+//       setEventDataLoading(false);
+//     }
+//   }, []);
+
+//   // ─ Effects
+
+//   // Fetch rooms once on mount
 //   useEffect(() => {
-//     fetchMeetings(selectedDates.format("YYYY-MM-DD"));
-//   }, [selectedDates]);
+//     fetchRooms();
+//   }, []);
 
-//   const openEvent = (event: CalendarEvent) => {
-//     setSelectedEvent(event);
-//     console.log("This is:" + event.id);
+//   // Calendar page: re-fetch month events when the user navigates to a new month
+//   useEffect(() => {
+//     fetchMonthEvents(currentMonth);
+//   }, [currentMonth.month(), currentMonth.year()]);
 
-//     setOpenModal(true);
-//   };
+//   // CalendarPreview: re-fetch when its mini-calendar moves to a different month
+//   useEffect(() => {
+//     // Skip if it's the same month/year as currentMonth to avoid a duplicate request
+//     if (
+//       currentDate.month() !== currentMonth.month() ||
+//       currentDate.year() !== currentMonth.year()
+//     ) {
+//       fetchMonthEvents(currentDate);
+//     }
+//   }, [currentDate.month(), currentDate.year()]);
 
-//   const closeModal = () => {
-//     setOpenModal(false);
-//     setSelectedEvent(null);
-//   };
+//   // Day view: re-fetch whenever the selected day changes
+//   useEffect(() => {
+//     fetchDayEvents(selectedDates);
+//   }, [selectedDates.format("YYYY-MM-DD")]);
 
-//   const events: CalendarEvent[] = useMemo(
-//     () => [
-//       {
-//         id: 1,
-//         meetingTitle: "Board Meeting",
-//         category: "executive",
-//         date: "2026-04-24",
-//         startTime: "10:00 AM",
-//         endTime: "12:00 PM",
-//         location: "Manang",
-//         organizer: "Elon Musk",
-//         participants: [],
-//         description: "Quarterly board meeting",
-//         department: "Account Management",
-//       },
-//       {
-//         id: 2,
-//         meetingTitle: "Frontend Dev Meeting",
-//         category: "internal",
-//         date: "2026-04-24",
-//         startTime: "10:00 AM",
-//         endTime: "12:00 PM",
-//         location: "Mustang",
-//         organizer: "Lionel Messi",
-//         participants: [],
-//         description: "Frontend sync meeting",
-//         department: "Engineering",
-//       },
-//       {
-//         id: 3,
-//         meetingTitle: "Client Meeting",
-//         category: "client",
-//         date: "2026-04-24",
-//         startTime: "10:00 AM",
-//         endTime: "12:00 PM",
-//         location: "Langtang",
-//         organizer: "Lionel Messi",
-//         participants: [],
-//         description: "Client sync",
-//         department: "Engineering",
-//       },
-//       {
-//         id: 4,
-//         meetingTitle: "Client Onboarding",
-//         category: "client",
-//         date: "2026-04-24",
-//         startTime: "2:00 PM",
-//         endTime: "3:00 PM",
-//         location: "Manang",
-//         organizer: "Lionel Messi",
-//         participants: [],
-//         description: "Client sync",
-//         department: "Engineering",
-//       },
-//       {
-//         id: 4,
-//         meetingTitle: "Client Onboarding",
-//         category: "client",
-//         date: "2026-04-24",
-//         startTime: "2:00 PM",
-//         endTime: "3:00 PM",
-//         location: "Mustang",
-//         organizer: "Lionel Messi",
-//         participants: [],
-//         description: "Client sync",
-//         department: "Engineering",
-//       },
-//     ],
-//     [],
-//   );
+//   // ─ Derived data
 
-//   // MONTH VIEW CALCULATION
-//   const startOfMonth = currentMonth.startOf("month").day();
-//   const daysInMonth = currentMonth.daysInMonth();
-//   const totalCells = Math.ceil((startOfMonth + daysInMonth) / 7) * 7;
-
-//   const calendarDays = [
-//     ...Array(startOfMonth).fill(null),
-//     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
-//     ...Array(totalCells - (startOfMonth + daysInMonth)).fill(null),
-//   ];
-
-//   const formatDate = (day: number) =>
-//     currentMonth.date(day).format("YYYY-MM-DD");
-
-//   // WEEK VIEW CALCULATION
-//   const weekStart = currentMonth.startOf("week");
-//   const weekDaysWithDates = Array.from({ length: 7 }, (_, i) =>
-//     weekStart.add(i, "day"),
-//   );
-
-//   // 7 AM – 6 PM (hours 7 through 18)
-//   const hours = Array.from({ length: 12 }, (_, i) => 7 + i);
-
-//   // INDEX EVENTS BY DATE
+//   // Calendar grid: date string → list of events on that date
 //   const eventsByDate = useMemo(() => {
 //     const map: Record<string, CalendarEvent[]> = {};
-//     events.forEach((event) => {
-//       if (!map[event.date]) map[event.date] = [];
-//       map[event.date].push(event);
+//     monthEvents.forEach((e) => {
+//       if (!map[e.date]) map[e.date] = [];
+//       map[e.date].push(e);
 //     });
 //     return map;
-//   }, [events]);
+//   }, [monthEvents]);
 
-//   // INDEX EVENTS BY DATE + HOUR
+//   // Calendar day view: date string → hour number → list of events
 //   const eventsByDateHour = useMemo(() => {
 //     const map: Record<string, Record<number, CalendarEvent[]>> = {};
-//     events.forEach((event) => {
-//       const date = event.date;
-//       const startHour = dayjs(
-//         `${event.date} ${event.startTime}`,
+//     dayEvents.forEach((e) => {
+//       const hour = dayjs(
+//         `${e.date} ${e.startTime}`,
 //         "YYYY-MM-DD h:mm A",
 //       ).hour();
-//       if (!map[date]) map[date] = {};
-//       if (!map[date][startHour]) map[date][startHour] = [];
-//       map[date][startHour].push(event);
+//       if (!map[e.date]) map[e.date] = {};
+//       if (!map[e.date][hour]) map[e.date][hour] = [];
+//       map[e.date][hour].push(e);
 //     });
 //     return map;
-//   }, [events]);
+//   }, [dayEvents]);
 
-//   // NAVIGATION
-//   const goToNext = () => {
-//     setCurrentMonth((prev) => {
-//       if (view === "day") return prev.add(1, "day");
-//       if (view === "week") return prev.add(1, "week");
-//       return prev.add(1, "month");
+//   // CalendarPreview: meetings filtered to the selected date range
+//   const meetings = useMemo(() => {
+//     if (!dateRange.start) return [];
+//     return monthMeetings.filter((m) => {
+//       const d = dayjs(m.date);
+//       if (!dateRange.end) return d.isSame(dateRange.start, "day");
+//       return (
+//         d.isSame(dateRange.start, "day") ||
+//         d.isSame(dateRange.end, "day") ||
+//         (d.isAfter(dateRange.start) && d.isBefore(dateRange.end))
+//       );
 //     });
+//   }, [monthMeetings, dateRange]);
+
+//   // Hours shown in day view: 7 AM to 6 PM
+//   const hours = Array.from({ length: 12 }, (_, i) => 7 + i);
+
+//   // ─ Date-range helpers (CalendarPreview) ─
+
+//   const handleDateClick = (day: Dayjs) => {
+//     if (!dateRange.start || (dateRange.start && dateRange.end)) {
+//       // Start a fresh selection
+//       setDateRange({ start: day, end: null });
+//     } else {
+//       // Complete the range
+//       if (day.isBefore(dateRange.start)) {
+//         setDateRange({ start: day, end: dateRange.start });
+//       } else {
+//         setDateRange({ start: dateRange.start, end: day });
+//       }
+//     }
+//   };
+
+//   const isInRange = (d: Dayjs | null) => {
+//     if (!d || !dateRange.start) return false;
+//     if (!dateRange.end) return d.isSame(dateRange.start, "day");
+//     return (
+//       d.isSame(dateRange.start, "day") ||
+//       d.isSame(dateRange.end, "day") ||
+//       (d.isAfter(dateRange.start) && d.isBefore(dateRange.end))
+//     );
+//   };
+
+//   const clearSelection = () => setDateRange({ start: null, end: null });
+
+//   // ─ Navigation (Calendar page)
+
+//   const goToNext = () => {
+//     setCurrentMonth((prev) =>
+//       view === "day" ? prev.add(1, "day") : prev.add(1, "month"),
+//     );
 //   };
 
 //   const goToPrev = () => {
-//     setCurrentMonth((prev) => {
-//       if (view === "day") return prev.subtract(1, "day");
-//       if (view === "week") return prev.subtract(1, "week");
-//       return prev.subtract(1, "month");
-//     });
+//     setCurrentMonth((prev) =>
+//       view === "day" ? prev.subtract(1, "day") : prev.subtract(1, "month"),
+//     );
 //   };
 
+//   // Jump to a specific date. Keeps both currentMonth and selectedDates in sync.
 //   const goToToday = (date?: Dayjs) => {
-//     setCurrentMonth(date ?? dayjs());
+//     const target = date ?? dayjs();
+//     setCurrentMonth(target);
+//     setSelectedDates(target);
 //   };
+
+//   // ─ Modal actions ─
+
+//   const openEvent = (event: CalendarEvent) => {
+//     setSelectedEvent(event);
+//     fetchEvent(event.id);
+//   };
+
+//   const closeModal = () => {
+//     setSelectedEvent(null);
+//     setEventData(null);
+//   };
+
+//   // ─ Return
 
 //   return {
-//     currentMonth,
+//     // Calendar page
 //     view,
 //     setView,
-//     events,
-//     calendarDays,
+//     currentMonth,
+//     setCurrentMonth,
 //     hours,
-//     formatDate,
-//     weekDaysWithDates,
-//     openEvent,
-//     openModal,
+//     eventsByDate,
+//     eventsByDateHour,
 //     selectedEvent,
+//     eventData,
+//     eventDataLoading,
+//     setEventData,
+//     rooms,
+//     loading,
+//     openEvent,
 //     closeModal,
 //     goToNext,
 //     goToPrev,
 //     goToToday,
-//     eventsByDate,
-//     eventsByDateHour,
+//     selectedDates,
+//     setSelectedDates,
+
+//     // CalendarPreview
 //     currentDate,
 //     setcurrentDate,
 //     bookedDates,
 //     meetings,
-//     loading,
-//     selectedDates,
-//     setSelectedDates,
-//     fetchEvent,
-//     eventData,
-//     setEventData,
+//     handleDateClick,
+//     isInRange,
+//     dateRange,
+//     setDateRange,
+//     clearSelection,
 //   };
 // };
 
@@ -271,14 +323,16 @@ import {
 } from "../services/calendar.service";
 import { getBookedDataByMeetingId } from "../services/bookRoom.service";
 import type { BookedRoomDataResponse } from "../models/bookRoom.model";
-
 import { getMeetingRooms } from "../services/Meetinf_room.service";
 import type { meeting_rooms } from "../models/meeting_room.model";
 
-export type CalendarView = "day" | "week" | "month";
+export type CalendarView = "day" | "month";
 
-//   Maps API response to CalendarEvent shape the UI expects
-const mapMonthItem = (item: CalenderMonth): CalendarEvent => ({
+//  Mappers
+
+const mapToCalendarEvent = (
+  item: CalenderMonth | CalenderDay,
+): CalendarEvent => ({
   id: item.meetingId,
   meetingTitle: item.meetingTitle,
   category: (item.meetingType?.name?.toLowerCase() ??
@@ -293,50 +347,94 @@ const mapMonthItem = (item: CalenderMonth): CalendarEvent => ({
   department: "",
 });
 
-const mapDayItem = (item: CalenderDay): CalendarEvent => ({
-  id: item.meetingId,
-  meetingTitle: item.meetingTitle,
-  category: (item.meetingType?.name?.toLowerCase() ??
-    "internal") as CalendarEvent["category"],
-  date: item.date,
-  startTime: item.startTime,
-  endTime: item.endTime,
-  location: item.roomName,
-  organizer: "",
-  participants: [],
-  description: "",
-  department: "",
-});
+//  Hook ─
 
 export const useCalendarEventViewModel = () => {
-  const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
+  //  View & date navigation
   const [view, setView] = useState<CalendarView>("month");
+  // currentMonth drives both the Calendar page header AND the month grid
+  const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
+  // selectedDates drives which day the day-view API fetches
+  const [selectedDates, setSelectedDates] = useState<Dayjs>(dayjs());
+
+  //  CalendarPreview (dashboard mini-calendar) ─
+  // Separate date state so the preview navigates independently from the full calendar
+  const [currentDate, setcurrentDate] = useState<Dayjs>(dayjs());
+  const [bookedDates, setBookedDates] = useState<Set<string>>(new Set());
+  const [dateRange, setDateRange] = useState<{
+    start: Dayjs | null;
+    end: Dayjs | null;
+  }>({
+    start: null,
+    end: null,
+  });
+
+  //  API data ─
+  const [monthEvents, setMonthEvents] = useState<CalendarEvent[]>([]);
+  const [dayEvents, setDayEvents] = useState<CalendarEvent[]>([]);
+  // Raw shape kept for CalendarPreview's meeting list (needs meetingType.colorCode etc.)
+  const [monthMeetings, setMonthMeetings] = useState<CalenderDay[]>([]);
+  const [rooms, setRooms] = useState<meeting_rooms[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  //  Event modal
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null,
   );
-  const [openModal, setOpenModal] = useState(false);
-  const [currentDate, setcurrentDate] = useState(dayjs());
-  const [bookedDates, setBookedDates] = useState<Set<string>>(new Set());
   const [eventData, setEventData] = useState<BookedRoomDataResponse | null>(
     null,
   );
   const [eventDataLoading, setEventDataLoading] = useState(false);
 
-  const [monthEvents, setMonthEvents] = useState<CalendarEvent[]>([]);
-  const [dayEvents, setDayEvents] = useState<CalendarEvent[]>([]);
-
-  const [meetings, setMeetings] = useState<CalenderDay[]>([]);
-  const [selectedDates, setSelectedDates] = useState(dayjs());
-  const [loading, setLoading] = useState(false);
-
-  const [rooms, setRooms] = useState<meeting_rooms[]>([]);
+  //  Fetchers ─
 
   const fetchRooms = useCallback(async () => {
     try {
       const res = await getMeetingRooms();
       setRooms(res.data.content ?? res.data ?? []);
-    } catch (error) {
-      console.error("Error fetching rooms", error);
+    } catch (e) {
+      console.error("Error fetching rooms", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchMonthEvents = useCallback(async (date: Dayjs) => {
+    try {
+      const res = await getCalendarByMonth(date.format("YYYY-MM-DD"));
+      const items: CalenderMonth[] = res.data ?? [];
+      setBookedDates(new Set(items.map((i) => i.date)));
+      setMonthMeetings(items as unknown as CalenderDay[]);
+      setMonthEvents(items.map(mapToCalendarEvent));
+    } catch (e) {
+      console.error("Error fetching month events", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchDayEvents = useCallback(async (date: Dayjs) => {
+    try {
+      const res = await getCalenderByDay(date.format("YYYY-MM-DD"));
+      const items: CalenderDay[] = res.data ?? [];
+      setDayEvents(items.map(mapToCalendarEvent));
+    } catch (e) {
+      console.error("Error fetching day events", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchEventDetail = useCallback(async (meetingId: number) => {
+    try {
+      setEventDataLoading(true);
+      const res = await getBookedDataByMeetingId(meetingId);
+
+      setEventData(res?.data);
+    } catch (e) {
+      console.error("Error fetching event detail", e);
+    } finally {
+      setEventDataLoading(false);
     }
   }, []);
 
@@ -344,168 +442,162 @@ export const useCalendarEventViewModel = () => {
     fetchRooms();
   }, []);
 
-  //   Fetch month data — populates the grid view
-  const fetchCalender = useCallback(
-    async (date: any) => {
-      try {
-        // const res = await getCalendarByMonth(currentDate.format("YYYY-MM-DD"));
-        const res = await getCalendarByMonth(date.format("YYYY-MM-DD"));
-        const items: CalenderMonth[] = res.data ?? [];
-
-        // booked dates for dot indicators
-        const dates = new Set(items.map((item) => item.date));
-        setBookedDates(dates);
-
-        //   Map to CalendarEvent for the grid
-        setMonthEvents(items.map(mapMonthItem));
-      } catch (error) {
-        console.error("Error fetching month calendar", error);
-      }
-    },
-    [currentDate],
-  );
-
-  //   Fetch day data — populates the day view
-  const fetchMeetings = useCallback(async (date: string) => {
-    try {
-      setLoading(true);
-      const res = await getCalenderByDay(date);
-      const items: CalenderDay[] = res.data ?? [];
-      setMeetings(items);
-      //   Also map to CalendarEvent for day view rendering
-      setDayEvents(items.map(mapDayItem));
-    } catch (error) {
-      console.error("Error fetching day calendar", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  //   Fetch specific meeting details for the modal
-  const fetchEvent = useCallback(async (meetingId: number) => {
-    try {
-      setEventDataLoading(true);
-      const res = await getBookedDataByMeetingId(meetingId);
-      console.log(res);
-
-      setEventData(res);
-    } catch (error) {
-      console.error("Error fetching meeting details", error);
-    } finally {
-      setEventDataLoading(false);
-    }
-  }, []);
-
+  // Re-fetch when the Calendar page navigates to a new month
   useEffect(() => {
-    fetchMeetings(selectedDates.format("YYYY-MM-DD"));
-  }, [selectedDates]);
+    fetchMonthEvents(currentMonth);
+  }, [currentMonth.month(), currentMonth.year()]);
 
-  const openEvent = (event: CalendarEvent) => {
-    setSelectedEvent(event);
-    setOpenModal(true);
-    fetchEvent(event.id);
-  };
+  // Re-fetch when the CalendarPreview mini-calendar moves to a different month
+  useEffect(() => {
+    if (
+      currentDate.month() !== currentMonth.month() ||
+      currentDate.year() !== currentMonth.year()
+    ) {
+      fetchMonthEvents(currentDate);
+    }
+  }, [currentDate.month(), currentDate.year()]);
 
-  const closeModal = () => {
-    setOpenModal(false);
-    setSelectedEvent(null);
-    setEventData(null);
-  };
+  // Re-fetch day events whenever the selected day changes
+  useEffect(() => {
+    fetchDayEvents(selectedDates);
+  }, [selectedDates.format("YYYY-MM-DD")]);
 
-  const events = view === "day" ? dayEvents : monthEvents;
+  //  Derived maps ─
 
-  // MONTH VIEW CALCULATION
-  const startOfMonth = currentMonth.startOf("month").day();
-  const daysInMonth = currentMonth.daysInMonth();
-  const totalCells = Math.ceil((startOfMonth + daysInMonth) / 7) * 7;
-
-  const calendarDays = [
-    ...Array(startOfMonth).fill(null),
-    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
-    ...Array(totalCells - (startOfMonth + daysInMonth)).fill(null),
-  ];
-
-  const formatDate = (day: number) =>
-    currentMonth.date(day).format("YYYY-MM-DD");
-
-  const weekStart = currentMonth.startOf("week");
-  const weekDaysWithDates = Array.from({ length: 7 }, (_, i) =>
-    weekStart.add(i, "day"),
-  );
-
-  const hours = Array.from({ length: 12 }, (_, i) => 7 + i);
-
-  //   Index month events by date for grid view
+  // Month grid: "YYYY-MM-DD" → CalendarEvent[]
   const eventsByDate = useMemo(() => {
     const map: Record<string, CalendarEvent[]> = {};
-    monthEvents.forEach((event) => {
-      if (!map[event.date]) map[event.date] = [];
-      map[event.date].push(event);
+    monthEvents.forEach((e) => {
+      if (!map[e.date]) map[e.date] = [];
+      map[e.date].push(e);
     });
     return map;
   }, [monthEvents]);
 
-  //   Index day events by hour for day view
+  // Day view: "YYYY-MM-DD" → hour (0-23) → CalendarEvent[]
   const eventsByDateHour = useMemo(() => {
     const map: Record<string, Record<number, CalendarEvent[]>> = {};
-    dayEvents.forEach((event) => {
-      const date = event.date;
-      const startHour = dayjs(
-        `${event.date} ${event.startTime}`,
+    dayEvents.forEach((e) => {
+      const hour = dayjs(
+        `${e.date} ${e.startTime}`,
         "YYYY-MM-DD h:mm A",
       ).hour();
-      if (!map[date]) map[date] = {};
-      if (!map[date][startHour]) map[date][startHour] = [];
-      map[date][startHour].push(event);
+      if (!map[e.date]) map[e.date] = {};
+      if (!map[e.date][hour]) map[e.date][hour] = [];
+      map[e.date][hour].push(e);
     });
     return map;
   }, [dayEvents]);
 
-  const goToNext = () => {
-    setCurrentMonth((prev) => prev.add(1, "month"));
+  // CalendarPreview: meetings within the selected date range
+  const meetings = useMemo(() => {
+    if (!dateRange.start) return [];
+    return monthMeetings.filter((m) => {
+      const d = dayjs(m.date);
+      if (!dateRange.end) return d.isSame(dateRange.start, "day");
+      return (
+        d.isSame(dateRange.start, "day") ||
+        d.isSame(dateRange.end, "day") ||
+        (d.isAfter(dateRange.start) && d.isBefore(dateRange.end))
+      );
+    });
+  }, [monthMeetings, dateRange]);
+
+  // Hours rendered in day view: 7 AM – 6 PM
+  const hours = Array.from({ length: 12 }, (_, i) => 7 + i);
+
+  //  CalendarPreview date-range helpers
+
+  const handleDateClick = (day: Dayjs) => {
+    if (!dateRange.start || (dateRange.start && dateRange.end)) {
+      setDateRange({ start: day, end: null });
+    } else {
+      if (day.isBefore(dateRange.start)) {
+        setDateRange({ start: day, end: dateRange.start });
+      } else {
+        setDateRange({ start: dateRange.start, end: day });
+      }
+    }
   };
 
-  const goToPrev = () => {
-    setCurrentMonth((prev) => prev.add(-1, "month"));
-    console.log(currentMonth);
-
+  const isInRange = (d: Dayjs | null) => {
+    if (!d || !dateRange.start) return false;
+    if (!dateRange.end) return d.isSame(dateRange.start, "day");
+    return (
+      d.isSame(dateRange.start, "day") ||
+      d.isSame(dateRange.end, "day") ||
+      (d.isAfter(dateRange.start) && d.isBefore(dateRange.end))
+    );
   };
+
+  const clearSelection = () => setDateRange({ start: null, end: null });
+
+  //  Navigation ─
+
+  // In month view: move one month. In day view: move one day.
+  const goToNext = () =>
+    setCurrentMonth((prev) =>
+      view === "day" ? prev.add(1, "day") : prev.add(1, "month"),
+    );
+
+  const goToPrev = () =>
+    setCurrentMonth((prev) =>
+      view === "day" ? prev.subtract(1, "day") : prev.subtract(1, "month"),
+    );
+
+  // Jump to a specific date (date picker, room cell click)
   const goToToday = (date?: Dayjs) => {
-    setCurrentMonth(date ?? dayjs());
+    const target = date ?? dayjs();
+    setCurrentMonth(target);
+    setSelectedDates(target);
   };
-  useEffect(() => {
-    fetchCalender(currentMonth);
-  }, [currentMonth]);
+
+  //  Modal actions
+
+  const openEvent = (event: CalendarEvent) => {
+    setSelectedEvent(event);
+    fetchEventDetail(event.id);
+  };
+
+  const closeModal = () => {
+    setSelectedEvent(null);
+    setEventData(null);
+  };
+
+  //  Return
+
   return {
-    currentMonth,
+    // Calendar page
     view,
     setView,
-    events,
-    calendarDays,
+    currentMonth,
+    setCurrentMonth,
     hours,
-    formatDate,
-    weekDaysWithDates,
-    openEvent,
-    openModal,
+    eventsByDate,
+    eventsByDateHour,
     selectedEvent,
+    eventData,
+    setEventData,
+    eventDataLoading,
+    rooms,
+    loading,
+    openEvent,
     closeModal,
     goToNext,
     goToPrev,
     goToToday,
-    eventsByDate,
-    eventsByDateHour,
+    selectedDates,
+    setSelectedDates,
+
+    // CalendarPreview (dashboard)
     currentDate,
     setcurrentDate,
     bookedDates,
     meetings,
-    loading,
-    selectedDates,
-    setSelectedDates,
-    fetchEvent,
-    eventData,
-    eventDataLoading,
-    setEventData,
-    rooms,
-    setCurrentMonth,
+    handleDateClick,
+    isInRange,
+    dateRange,
+    setDateRange,
+    clearSelection,
   };
 };

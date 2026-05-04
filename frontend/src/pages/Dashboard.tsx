@@ -5,6 +5,8 @@ import CalendarPreview from "../components/Dashboard/CalendarPreview";
 import DashboardAnnouncements from "../components/Dashboard/DashboardAnnouncements";
 import useDashboardViewModel from "../viewmodels/useDashboardViewModel";
 import { Spinner } from "../components/ui/Spinner";
+import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
+import "../assets/scss/pages/Dashboard.scss"
 
 export default function Dashboard() {
   const accessToken = localStorage.getItem("accessToken");
@@ -75,9 +77,17 @@ export default function Dashboard() {
       <main className="dashboard-content">
         <DashboardCard cards={cards} />
 
-        <div className="dashboard__announcements">
+        
+        <div className="dashboard-subcontainer">
+          <div className="dashboard__announcements">
+          </div>
           <DashboardAnnouncements />
+          <div className="dashboard_dashboardupmeetings">
+          <DashboardUpMeetings   />
+          </div>
         </div>
+
+        
 
         <div className="dashboard_calenderpreview">
           <CalendarPreview />

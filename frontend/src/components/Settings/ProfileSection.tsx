@@ -1,164 +1,171 @@
-import { Card, TextField, Typography } from "@mui/material";
-import "../../assets/scss/pages/Settings.scss";
-import type { ProfileSettings } from "../../models/settings.model";
+import { Card, MenuItem, TextField, Typography } from "@mui/material";
+import "../../assets/scss/components/ProfileSection/ProfileSection.scss";
 import { toast } from "react-toastify";
 import MyButton from "../ui/Button";
-// import { useSettingsViewModel } from "../../viewmodels/useSettingsViewModel";
+import type { UserProfileInfo } from "../../models/profileSection.model";
+import { DepartmentList } from "../Participants/DepartmentList";
+import { RoleDropdown } from "../Participants/RoleDropdown";
 
 interface ProfileProps {
-  profile: ProfileSettings;
+  profile: UserProfileInfo;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSave: () => Promise<boolean>;
   onCancel: () => void;
   errors: Record<string, string>;
+
+  handleDepartmentChange: (id: number) => void;
+  handleRoleChange: (id: number) => void;
 }
+
 const ProfileSection = ({
   profile,
   onChange,
   onSave,
   errors,
   onCancel,
+  handleDepartmentChange,
+  handleRoleChange,
 }: ProfileProps) => {
-  function handleSave() {
-    toast.success("Changes saved Successfully");
-  }
-
   const ErrorText = ({ error }: { error?: string }) =>
-    error ? <Typography className="error-text">{error}</Typography> : null;
+    error ? (
+      <Typography className="profile-section__error">{error}</Typography>
+    ) : null;
+
+  const positions = [
+    "Senior Engineer",
+    "Tech Lead",
+    "Senior",
+    "HR",
+    "DevOps Engineer",
+    "Frontend Developer",
+    "Product Manager",
+    "UX Researcher",
+  ];
   return (
-    <>
-      <Typography variant="h2">Edit User Information</Typography>
-      <Card className="settings-card">
-        <div className="name">
-          <div className="field">
-            <label
-              className="field-label"
-              htmlFor="firstName"
-            >
-              First Name
-            </label>
-            <TextField
-              id="firstName"
-              fullWidth
-              name={"firstName"}
-              value={profile.firstName}
-              required
-              onChange={onChange}
-              error={!!errors.firstName}
-            />
-            <ErrorText error={errors.firstName} />
-          </div>
-          <div className="field">
-            <label
-              className="field-label"
-              htmlFor="lastName"
-            >
-              Last Name
-            </label>
-            <TextField
-              id="lastName"
-              fullWidth
-              value={profile.lastName}
-              name="lastName"
-              error={!!errors.lastName}
-              required
-              onChange={onChange}
-            />
+    <div className="profile-section">
+      <Typography
+        variant="h2"
+        className="profile-section__title"
+      >
+        Edit User Information
+      </Typography>
 
-            <ErrorText error={errors.lastName} />
+      <Card className="profile-section__card">
+        {/* Row 1 */}
+        <div className="profile-section__row">
+          <div className="profile-section__field">
+            <label className="profile-section__label">First Name</label>
+            <TextField
+              name="firstname"
+              value={profile.firstname}
+              onChange={onChange}
+              error={!!errors.firstname}
+            />
+            <ErrorText error={errors.firstname} />
+          </div>
+
+          <div className="profile-section__field">
+            <label className="profile-section__label">Last Name</label>
+            <TextField
+              name="lastname"
+              value={profile.lastname}
+              onChange={onChange}
+              error={!!errors.lastname}
+            />
+            <ErrorText error={errors.lastname} />
           </div>
         </div>
 
-        <div className="field">
-          <label
-            className="field-label"
-            htmlFor="email"
-          >
-            Email Address
-          </label>
-          <TextField
-            id="email"
-            fullWidth
-            size="small"
-            value={profile.email}
-            error={!!errors.email}
-            name="email"
-            onChange={onChange}
-          />
+        {/* Row 2 */}
+        <div className="profile-section__row">
+          <div className="profile-section__field">
+            <label className="profile-section__label">Email</label>
+            <TextField
+              name="email"
+              value={profile.email}
+              onChange={onChange}
+              error={!!errors.email}
+            />
+            <ErrorText error={errors.email} />
+          </div>
 
-          <ErrorText error={errors.email} />
-        </div>
-        <div className="field">
-          <label
-            className="field-label"
-            htmlFor="phone-no"
-          >
-            Phone Number
-          </label>
-          <TextField
-            id="phone-no"
-            fullWidth
-            required
-            name="phone"
-            value={profile.phone}
-            error={!!errors.phone}
-            onChange={onChange}
-          />
-
-          <ErrorText error={errors.phone} />
-        </div>
-        <div className="field">
-          <label
-            className="field-label"
-            htmlFor="desc"
-          >
-            Role
-          </label>
-          <TextField
-            id="desc"
-            fullWidth
-            name={"role"}
-            value={profile.role}
-            onChange={onChange}
-          />
-        </div>
-        <div className="field">
-          <label
-            className="field-label"
-            htmlFor="dep"
-          >
-            Department
-          </label>
-          <TextField
-            id="dep"
-            fullWidth
-            name={"department"}
-            value={profile.department}
-            onChange={onChange}
-          />
+          <div className="profile-section__field">
+            <label className="profile-section__label">Phone Number</label>
+            <TextField
+              name="phoneNo"
+              value={profile.phoneNo}
+              onChange={onChange}
+              error={!!errors.phoneNo}
+            />
+            <ErrorText error={errors.phoneNo} />
+          </div>
         </div>
 
-        <div className="settings-buttons">
+        {/* Row 3 */}
+        <div className="profile-section__row">
+          <div className="profile-section__field">
+            <DepartmentList
+              value={profile.departmentId ?? 1}
+              onChange={handleDepartmentChange}
+            />
+          </div>
+
+          <div className="profile-section__field">
+            <RoleDropdown
+              value={profile.roleId ?? 1}
+              onChange={handleRoleChange}
+            />
+          </div>
+        </div>
+
+        {/* Row 4 */}
+        <div className="profile-section__row">
+          <div className="profile-section__field">
+            <label className="profile-section__label">Position</label>
+            <TextField
+              select
+              name="position"
+              value={profile.position}
+              onChange={onChange}
+            >
+              {positions.map((p) => (
+                <MenuItem
+                  key={p}
+                  value={p}
+                >
+                  {p}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+
+          {/* empty space to keep alignment */}
+          <div className="profile-section__field profile-section__field--empty" />
+        </div>
+
+        <div className="profile-section__actions">
           <MyButton
             text="Save Changes"
             variant="contained"
-            // className="profile__button"
-            onClick={async () => {
-              const success = await onSave();
-              if (success) handleSave();
-            }}
             customVariant="dark"
+            onClick={async () => {
+              console.log("CLICKED SAVE"); // 👈 ADD THIS
+              const success = await onSave();
+              console.log("RESULT:", success);
+
+              if (success) toast.success("Changes saved successfully");
+            }}
           />
+
           <MyButton
             text="Cancel"
             variant="contained"
-            // className="profile__button"
-            onClick={() => onCancel()}
             customVariant="ghost"
+            onClick={onCancel}
           />
         </div>
       </Card>
-    </>
+    </div>
   );
 };
 

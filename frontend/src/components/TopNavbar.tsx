@@ -4,12 +4,10 @@ import "../assets/scss/pages/TopNavbar.scss";
 import logo from "../assets/swift-logo.svg";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Bell, X, CircleCheckBig, Dot } from "lucide-react";
+import { Bell, X, CircleCheckBig, Dot } from "lucide-react";
 
 import { useState } from "react";
 import {
-  InputAdornment,
-  TextField,
   IconButton,
   Badge,
   Menu,
@@ -23,9 +21,9 @@ import { deepPurple } from "@mui/material/colors";
 // import Announcements from "../pages/Announcements";
 import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
 import Logout from "./Auth/Logout";
+import { useUserProfileViewModel } from "../viewmodels/useUserProfileViewModel";
 
 export default function TopNavbar() {
-  const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(
     null,
@@ -56,11 +54,7 @@ export default function TopNavbar() {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
-
+  const { profile } = useUserProfileViewModel();
   const handleProfile = () => {
     navigate("/profile");
     handleProfileMenuClose();
@@ -234,8 +228,14 @@ export default function TopNavbar() {
             sx={{ bgcolor: deepPurple[500], width: 40, height: 40 }}
             sizes=""
           >
-            SB
+            {profile?.firstname?.[0]}
+            {profile?.lastname?.[0]}
           </Avatar>
+
+          {/* <Avatar className="profile__avatar">
+            {(currentUser?.firstname || "").charAt(0)}
+            {(currentUser?.lastname || "").charAt(0)}
+          </Avatar> */}
         </IconButton>
 
         <Menu

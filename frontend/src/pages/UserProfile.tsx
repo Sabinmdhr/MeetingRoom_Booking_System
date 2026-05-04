@@ -2,109 +2,99 @@ import { Card, CardContent, Typography, Avatar } from "@mui/material";
 import "../assets/scss/pages/UserProfile.scss";
 import { useState } from "react";
 import ProfileSection from "../components/Settings/ProfileSection";
-import { useSettingsViewModel } from "../viewmodels/useSettingsViewModel";
 import MyButton from "../components/ui/Button";
+import { useUserProfileViewModel } from "../viewmodels/useUserProfileViewModel";
+import { Spinner } from "../components/ui/Spinner";
+
 const UserProfile = () => {
   const {
-    settings,
-    handleChange,
-    loadSettings,
-    saveSettings,
-    errors,
+    profile,
     loading,
-    resetErrors,
-  } = useSettingsViewModel();
+    handleChange,
+    saveProfile,
+    errors,
+    handleDepartmentChange,
+    handleRoleChange,
+  } = useUserProfileViewModel();
 
   const [isEditing, setIsEditing] = useState(false);
 
-  if (loading || !settings) return <div>Loading...</div>;
+  if (loading || !profile)
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
 
-  const handleSaveAndClose = async (): Promise<boolean> => {
-    const success = await saveSettings();
-    if (success) {
-      setIsEditing(false);
-    }
-    return success;
-  };
-
-  const handleCancel = async () => {
-    resetErrors();
-    await loadSettings();
-    setIsEditing(false);
-  };
   return (
     <div className="profile">
       <Typography variant="h1">
         {isEditing ? "" : "User Information"}
       </Typography>
-      {isEditing ? (
-        ""
-      ) : (
+
+      {!isEditing ? (
         <Card className="profile__card">
           <CardContent>
             <div className="profile__header">
               <div className="profile__avatar-wrapper">
                 <Avatar className="profile__avatar">
-                  {(settings.profile.firstName || "").charAt(0)}
-                  {(settings.profile.lastName || "").charAt(0)}
+                  {profile.firstname?.[0]}
+                  {profile.lastname?.[0]}
                 </Avatar>
 
                 <div className="profile__field">
                   <Typography variant="h4">
-                    {`${settings.profile.firstName ?? ""} ${settings.profile.lastName ?? ""}`.toUpperCase()}{" "}
+                    {`${profile.firstname} ${profile.lastname}`.toUpperCase()}
                   </Typography>
-                  <Typography variant="subtitle1">SUPER ADMIN</Typography>
+                  <Typography variant="subtitle1">{profile.role}</Typography>
                 </div>
               </div>
 
               <div className="profile__row">
                 <div className="profile__field">
                   <Typography className="profile__label">Email</Typography>
-                  <Typography variant="h4">{settings.profile.email}</Typography>
+                  <Typography variant="h4">{profile.email}</Typography>
                 </div>
 
                 <div className="profile__field">
                   <Typography className="profile__label">Phone</Typography>
-                  <Typography variant="h4">{settings.profile.phone}</Typography>
+                  <Typography variant="h4">{profile.phoneNo}</Typography>
                 </div>
               </div>
 
               <div className="profile__row">
                 <div className="profile__field">
-                  <Typography className="profile__label">Role</Typography>
-                  <Typography variant="h4">{settings.profile.role}</Typography>
+                  <Typography className="profile__label">Position</Typography>
+                  <Typography variant="h4">{profile.position}</Typography>
                 </div>
 
                 <div className="profile__field">
                   <Typography className="profile__label">Department</Typography>
-                  <Typography variant="h4">
-                    {settings.profile.department}
-                  </Typography>
+                  <Typography variant="h4">{profile.department}</Typography>
                 </div>
               </div>
 
               <MyButton
                 text="Edit Info"
-                variant="contained"
                 className="profile__user-button"
+                variant="contained"
                 customVariant="dark"
-                onClick={() => setIsEditing(!isEditing)}
+                onClick={() => setIsEditing(true)}
               />
             </div>
           </CardContent>
         </Card>
+      ) : (
+        <ProfileSection
+          profile={profile}
+          onChange={handleChange}
+          onSave={saveProfile}
+          onCancel={() => setIsEditing(false)}
+          errors={errors}
+          handleDepartmentChange={handleDepartmentChange}
+          handleRoleChange={handleRoleChange}
+        />
       )}
-      <div className="settings">
-        {isEditing && (
-          <ProfileSection
-            profile={settings.profile}
-            onChange={handleChange}
-            onSave={handleSaveAndClose}
-            onCancel={handleCancel}
-            errors={errors}
-          />
-        )}
-      </div>
     </div>
   );
 };

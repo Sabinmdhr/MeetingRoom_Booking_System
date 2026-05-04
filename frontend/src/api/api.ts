@@ -35,7 +35,7 @@ instance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // 🔥 Handle 401
+    // Handle 401
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
@@ -58,18 +58,18 @@ instance.interceptors.response.use(
         const newAccessToken = res.data?.data?.accessToken;
         const newRefreshToken = res.data.data?.refreshToken;
 
-        // ✅ store new tokens
+        //store new tokens
         localStorage.setItem("accessToken", newAccessToken);
         localStorage.setItem("refreshToken", newRefreshToken);
 
-        // ✅ update header safely
+        // update header safely
         if (!originalRequest.headers) {
           originalRequest.headers = {};
         }
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        // ✅ retry original request
+        //retry original request
         return instance(originalRequest);
       } catch (err) {
         console.log("Refresh failed");

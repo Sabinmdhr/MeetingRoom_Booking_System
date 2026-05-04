@@ -7,6 +7,9 @@ import {
   getMEttingRoomResources,
 } from "../services/Meetinf_room.service";
 import { toast } from "react-toastify";
+import { getUpcomingMeeting } from "../services/Meetinf_room.service";
+import type { UpcomingMeetingApi } from "../models/meeting_room.model";
+import dayjs from "dayjs";
 
 export const useMeetingCardViewModel = () => {
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
@@ -14,6 +17,10 @@ export const useMeetingCardViewModel = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [upcomingMeeting, setUpcomingMeeting] = useState<UpcomingMeetingApi[]>(
+    [],
+  );
+
   const initialAddMeetingFormData = {
     roomName: "",
     capacity: 0,
@@ -93,9 +100,6 @@ export const useMeetingCardViewModel = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    fetchMeeting();
-  }, []);
 
   const handleRoomFormOpen = (mode: "edit" | "add", room?: meeting_rooms) => {
     setRoomFormState({ open: true, mode: mode, room: room || null });
@@ -108,6 +112,30 @@ export const useMeetingCardViewModel = () => {
     }));
     await fetchMeeting();
   };
+
+  const fetchUpcomingMeetings = async () => {
+    try {
+      setLoading(true);
+      const res = await getUpcomingMeeting();
+      const sorted = [...res.data].sort(
+        (a, b) =>
+          dayjs(`${a.date} ${a.startTime}`).valueOf() -
+          dayjs(`${b.date} ${b.startTime}`).valueOf(),
+      );
+      const filtered = sorted.slice(0, 5);
+
+      setUpcomingMeeting(filtered);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMeeting();
+    fetchUpcomingMeetings();
+  }, []);
 
   return {
     meeting,
@@ -130,7 +158,8 @@ export const useMeetingCardViewModel = () => {
     submitAddRomForm,
     handleChange,
     setAddRoomFormData,
-
+    fetchUpcomingMeetings,
+    upcomingMeeting,
     roomResources,
   };
 };
