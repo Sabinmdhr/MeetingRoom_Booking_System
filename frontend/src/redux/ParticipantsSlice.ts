@@ -30,16 +30,16 @@ const participantsSlice = createSlice({
       state.selectedGroup = action.payload;
     },
 
-    toggleParticipantsSelection: (state, action: PayloadAction<number>) => {
-      const id = action.payload;
-      {
-        state.selectedParticipants.includes(id)
-          ? (state.selectedParticipants = state.selectedParticipants.filter(
-              (pId) => pId !== id,
-            ))
-          : state.selectedParticipants.push(id);
-      }
-    },
+    // toggleParticipantsSelection: (state, action: PayloadAction<number>) => {
+    //   const id = action.payload;
+    //   {
+    //     state.selectedParticipants.includes(id)
+    //       ? (state.selectedParticipants = state.selectedParticipants.filter(
+    //           (pId) => pId !== id,
+    //         ))
+    //       : state.selectedParticipants.push(id);
+    //   }
+    // },
 
     clearSelectedParticipants: (state) => {
       state.selectedParticipants = [];
@@ -68,7 +68,7 @@ export const {
   setSelectedGroup,
   openEditForm,
   closeEditForm,
-  toggleParticipantsSelection,
+  // toggleParticipantsSelection,
   clearSelectedParticipants,
 } = participantsSlice.actions;
 

@@ -1,20 +1,20 @@
-.Form__Container{
+.Form__Container {
   border-radius: 16px !important;
-  border: 2px solid #BEDBFF  !important ;
+  border: 2px solid #bedbff !important ;
   margin: 8px 0;
   // padding: 10px !important;
 }
 
-.title{
-    display: flex;
-    align-items: center;
-      .MuiCardHeader-title{
-        font-size: 18px !important;
-        color: var(--colorsNeutral600);
-        font-weight:200 !important;
-      }
+.title {
+  display: flex;
+  align-items: center;
+  .MuiCardHeader-title {
+    font-size: 18px !important;
+    color: var(--colorsNeutral600);
+    font-weight: 200 !important;
+  }
 }
-label{
+label {
   font-size: 17px !important;
 }
 
@@ -25,52 +25,54 @@ label{
 //   width: 100%;
 
 // }
-.customTextField{
+.customTextField {
   margin: 0px 0px !important;
 
-// ------------0------to make whole texfield of searchfield in add group form------------
-   &.search-field{
+  // ------------0------to make whole texfield of searchfield in add group form------------
+  &.search-field {
     // background-color: #F3F3F5;
-        border-radius: 12px;
-   }
-
-       .MuiInputBase-input {        /* target MUI input */
     border-radius: 12px;
-    background-color: #F3F3F5; /* works now */
+  }
+
+  .MuiInputBase-input {
+    /* target MUI input */
+    border-radius: 12px;
+    background-color: #f3f3f5; /* works now */
     padding: 8px 12px;
     font-size: 14px;
   }
 
-  .MuiOutlinedInput-root {     /* wrapper / outline */
+  .MuiOutlinedInput-root {
+    /* wrapper / outline */
     border-radius: 12px;
-    background-color: #F3F3F5;
+    background-color: #f3f3f5;
   }
 
-  .MuiOutlinedInput-notchedOutline { /* border */
+  .MuiOutlinedInput-notchedOutline {
+    /* border */
     border: none;
     border-radius: 12px;
   }
 
   &.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border: 1px solid #A1A1A1;
-    box-shadow: 0 0 0 2px #CFCFCF;
+    border: 1px solid #a1a1a1;
+    box-shadow: 0 0 0 2px #cfcfcf;
   }
-       fieldset{
-        outline: none;
-        border-radius: 12px;
+  fieldset {
+    outline: none;
+    border-radius: 12px;
     border: none !important;
-
-       }
-        input:focus + fieldset,
+  }
+  input:focus + fieldset,
   &:focus-within fieldset {
-    border: 1px solid #A1A1A1 ;
-    box-shadow: 0 0 0 2px #CFCFCF;
+    border: 1px solid #a1a1a1;
+    box-shadow: 0 0 0 2px #cfcfcf;
   }
 }
-.dropdown{
-  color:  red !important;
+.dropdown {
+  color: red !important;
 }
-.form-btns{
+.form-btns {
   display: flex;
   justify-content: end;
 }

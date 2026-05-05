@@ -14,11 +14,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
 import { useAppSelector } from "../../redux/store";
-import { get } from "react-hook-form";
 import { set } from "zod";
+import { current } from "@reduxjs/toolkit";
+
 interface TimeSlotSelectorProps {
-  onSave?: (slot: { startTime: string; endTime: string }) => void;
+  onSave?: (slot: { startTime: string; endTime: string; startDate: string }) => void;
   initialSlot?: { startTime: string; endTime: string };
+  id?: number;
 }
 
 const PIXELS_PER_HOUR = 120;
@@ -35,17 +37,10 @@ type InteractionMode =
   | "resize-top"
   | "resize-bottom"
   | "create";
-
-export const TimeSlotSelector = ({
-  onSave,
-  initialSlot,
-}: TimeSlotSelectorProps) => {
-  const [startTime, setStartTime] = useState<number>(() => {
-    const now = new Date();
-    const totalMinutes = now.getHours() * 60 + now.getMinutes();
-    return Math.ceil(totalMinutes / 10) * 10;
-  });
-  const [endTime, setEndTime] = useState<number>(startTime + 10);
+const initialStartTime = {};
+export const TimeSlotSelector = ({ onSave, id }: TimeSlotSelectorProps) => {
+  const [startTime, setStartTime] = useState<number>(0);
+  const [endTime, setEndTime] = useState<number>(0);
 
   const [interaction, setInteraction] = useState<{
     mode: InteractionMode;
@@ -60,8 +55,7 @@ export const TimeSlotSelector = ({
   });
 
   const timelineRef = useRef<HTMLDivElement>(null);
-  const { updateBookingTimeAndDate, bookedSlots, handleGetBookedRoomByDay } =
-    useBookingRoomViewModel();
+  const { bookedSlots, handleGetBookedRoomByDay } = useBookingRoomViewModel();
 
   const isOverlapping = (start: string, end: string) => {
     return bookedSlots.some((slot) => start < slot.end && end > slot.start);
@@ -87,7 +81,6 @@ export const TimeSlotSelector = ({
     const max = END_HOUR * 60;
 
     const clamped = Math.max(min, Math.min(minutesNow, max));
-
     const y = getYFromMinutes(clamped);
 
     timelineRef.current?.scrollTo({ top: y - 50, behavior: "smooth" });
@@ -96,6 +89,7 @@ export const TimeSlotSelector = ({
     onSave?.({
       startTime: minutesToTimeString(startTime),
       endTime: minutesToTimeString(endTime),
+      startDate: backendFormattedDate,
     });
     // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
     console.log(minutesToTimeString(startTime));
@@ -131,7 +125,7 @@ export const TimeSlotSelector = ({
     const timelineRect = timelineRef.current?.getBoundingClientRect();
     if (!timelineRect) return;
 
-    setManualScroll(true);
+    // setManualScroll(true);
     const clickY =
       e.clientY - timelineRect.top + (timelineRef.current?.scrollTop || 0);
     const clickedMinutes = getMinutesFromY(clickY);
@@ -139,7 +133,7 @@ export const TimeSlotSelector = ({
 
     const newStart = clamp(snappedStart, START_MINUTES, END_MINUTES - 10);
     const newEnd = clamp(newStart + 10, START_MINUTES + 10, END_MINUTES);
-
+    if (newStart < currentMinutes) return;
     if (
       isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newEnd))
     )
@@ -167,6 +161,7 @@ export const TimeSlotSelector = ({
       // Keep within bounds
       if (newStart < START_MINUTES) newStart = START_MINUTES;
       if (newStart + duration > END_MINUTES) newStart = END_MINUTES - duration;
+      if (newStart < currentMinutes) return;
 
       if (
         isOverlapping(
@@ -182,6 +177,8 @@ export const TimeSlotSelector = ({
       let newStart = interaction.initialStart + snappedDelta;
       if (newStart < START_MINUTES) newStart = START_MINUTES;
       if (newStart > endTime - 10) newStart = endTime - 10; // Min 10 min duration
+      if (newStart < currentMinutes) return;
+
       if (
         isOverlapping(
           minutesToTimeString(newStart + 5),
@@ -194,6 +191,8 @@ export const TimeSlotSelector = ({
       let newEnd = interaction.initialEnd + snappedDelta;
       if (newEnd > END_MINUTES) newEnd = END_MINUTES;
       if (newEnd < startTime + 10) newEnd = startTime + 10; // Min 10 min duration
+      // if (newStart < currentMinutes) return;
+
       if (
         isOverlapping(
           minutesToTimeString(startTime),
@@ -214,18 +213,12 @@ export const TimeSlotSelector = ({
     { length: END_HOUR - START_HOUR + 1 },
     (_, i) => START_HOUR + i,
   );
+  const currentMinutes = getCurrentMinutes();
 
   return (
     <div className="container">
       <div className="header">
         <Box className="timeslot-nav">
-          <MyButton
-            onClick={() => changeDate(-1)}
-            variant="outlined"
-            text="Previous"
-            customVariant="ghost"
-            startIcon={<ChevronLeft size={18} />}
-          />
           <Box className="date">
             <Typography className="timeslot-date">{formattedDate}</Typography>
             <Typography className="jump-today" onClick={jumpToToday}>
@@ -269,7 +262,6 @@ export const TimeSlotSelector = ({
               }}
             />
           ))}
-
           {bookedSlots.map((slot, index) => (
             <div
               key={index}
@@ -285,17 +277,29 @@ export const TimeSlotSelector = ({
                 backgroundColor: "rgba(255, 0, 0, 0.3)",
                 // backgroundColor: `rgba${slot.color}`,
                 border: "1px solid red",
-                pointerEvents: "none", 
+                pointerEvents: "none",
                 zIndex: 999,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                fontSize: 12,
               }}
             >
               {formatDisplayTime(timeStringToMinutes(slot.start))} -{" "}
               {formatDisplayTime(timeStringToMinutes(slot.end))}
             </div>
           ))}
+          {/* ---------------------prev past timeslot---------------- */}
+          <div
+            className="slot"
+            style={{
+              top: 0,
+              height: snapToInterval((currentMinutes * MINUTE_HEIGHT), 5),
+              backgroundColor: "#fff3cd",
+              pointerEvents: "auto",
+              cursor: "not-allowed",
+            }}
+          ></div>
           {/* The Slot */}
           <div
             className="slot"
@@ -342,27 +346,6 @@ export const TimeSlotSelector = ({
           <div className="durationDisplay">
             Duration: {formatDuration(startTime, endTime)}
           </div>
-        </div>
-
-        <div className="bookRoomActions">
-          <MyButton
-            variant="contained"
-            text="Cancel"
-            customVariant="ghost"
-            onClick={() => {}}
-          />
-          <MyButton
-            variant="contained"
-            text="Proceed to Booking"
-            customVariant="dark"
-            onClick={() => {
-              updateBookingTimeAndDate({
-                startTime: minutesToTimeString(startTime),
-                endTime: minutesToTimeString(endTime),
-                date: backendFormattedDate,
-              });
-            }}
-          />
         </div>
       </div>
     </div>

@@ -1,20 +1,33 @@
-// Page wrapper
+// ── Page wrapper ───────────────────────────────────────────
 .announcement__main {
-  padding: 16px;
+  // padding: 16px;
 }
 
-//  Outer card
+// ── Outer card — fixed height, internal scroll ─────────────
 .announcement {
   border-radius: 12px !important;
   padding: 0 20px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll !important;
+  position: relative !important ;
 
-  // Header
   &__header {
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    padding-bottom: 7px !important;
+
+    padding: 16px 0 8px !important;
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    background-color: #fff;
+    // border-bottom: 1px solid #f1f1f1;
   }
 
   &__title-wrapper {
@@ -35,11 +48,26 @@
     align-items: center;
   }
 
-  // Content area
+  // ── Scrollable body — grows to fill remaining card height ──
   &__content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    // gap: 5px;
+    overflow-y: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // Empty / loading state — fills remaining space and centers
+  &__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
 
   &__section {
@@ -52,21 +80,20 @@
     flex-direction: column;
     gap: 7px;
     padding-top: 7px !important;
-    padding-bottom: 0px !important;
+    padding-bottom: 0 !important;
   }
 
   &__bottom {
-    margin: 10px auto;
+    margin: 12px auto;
     display: flex;
     gap: 8px;
     justify-content: center;
   }
 
-  //  Individual card
+  // ── Individual card ────────────────────────────────────
   &__card {
     border-radius: 12px !important;
     border: 1px solid #d2c5db !important;
-    background-color: #f8f7f9 !important;
     cursor: pointer;
     position: relative;
     overflow: visible !important;
@@ -83,18 +110,15 @@
     left: -15px;
     padding: 4px;
     rotate: 320deg;
+    cursor: pointer;
   }
 
-  // card content
   &__card-content {
     display: flex;
-    // flex-direction: row;
-    align-items: center;
-    // gap: 16px !important;
-    padding: 10px 12px !important;
+    align-items: stretch !important;
+    padding: 8px 12px !important;
   }
 
-  //  Left column
   &__card-left {
     flex: 1;
     min-width: 0;
@@ -113,7 +137,6 @@
   &__card-title {
     font-weight: 600 !important;
     font-size: 14px !important;
-    margin-bottom: -2px !important;
     line-height: 1.4;
     color: #111;
   }
@@ -126,29 +149,29 @@
     overflow: hidden;
   }
 
-  //  Right column: ellipsis menu btn + circle
+  // ── Right column — menu + circle selector ─────────────
+  // Both buttons are position:absolute so they stack in the same
+  // 28×28 space. visibility:hidden/visible keeps layout stable.
   &__card-right {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start !important;
-    gap: 8px;
+    position: relative;
     flex-shrink: 0;
     width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__menu-btn {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     min-width: unset !important;
     width: 28px !important;
     height: 28px !important;
     padding: 0 !important;
-    margin: 0 !important;
     background-color: transparent !important;
     box-shadow: none !important;
     border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
     color: #111 !important;
 
     &:hover {
@@ -157,10 +180,11 @@
   }
 
   &__circle-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: 28px;
     height: 28px;
-    padding: 0 !important;
-    margin: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -169,118 +193,27 @@
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: rgba(134, 70, 195, 0.08);
-    }
-
-    // invisible spacer when click-mode is off — keeps column height stable
-    &--placeholder {
-      pointer-events: none;
-      visibility: hidden;
+      background-color: rgba(0, 0, 0, 0.08);
     }
   }
-
-  &__empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-  }
 }
 
-// ── Checkbox wrapper row ───────────────────────────────────
-.checkbox__card {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  width: 100%;
-
-  .MuiCheckbox-root {
-    margin-top: 6px;
-    padding: 4px;
-  }
-
-  .announcement__card {
-    flex: 1;
-  }
-}
-// ── Read / Unread colors
-
-.announcement__card.card__unread {
-  // background-color: #ede8f8 !important;
-  // background-color: #f2eff6 !important;
-  // border: 1px solid #c9b3e8 !important;
-}
-
-// READ — soft neutral
-.announcement__card.card__read {
-  background-color: #fafafa !important;
-  // border: 1px solid #e0d9e8 !important;
-  // color: #6b7280 !important;
-}
-
-// base pinned (fallback)
-.announcement__card.pinned {
-  // border-left: 4px solid #c9b3e8 !important;
-  background-color: #f2eff6 !important;
-  // background-color: #ede8f8 !important;
-}
-
-// pinned + unread → strong purple
-.announcement__card.pinned.card__unread {
-  // border-left: 4px solid #8646c3 !important;
-}
-
-// pinned + read → softer purple
-.announcement__card.pinned.card__read {
-  // border-left: 4px solid #c9b3e8 !important;
-  // background: red !important;
-}
+// ── Read / Unread ──────────────────────────────────────────
 .card__read {
   color: #808692 !important;
 }
-// ─────────────────────────────────────────────────────────────
-// ─────────────────────────────────────────────────────────────
 
-// Stretch card-right to full card height so we can center inside it
-.announcement__card-content {
-  display: flex;
-  align-items: stretch !important;
-  padding: 10px 12px !important;
+// ── Pinned card background ─────────────────────────────────
+.announcement__card.pinned {
+  background-color: #f2eff6 !important;
 }
 
-// Fixed-width right column — never changes between normal/select mode
-// justify-content:center puts whichever icon is visible in the middle
-.announcement__card-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center !important;
-  flex-shrink: 0;
-  width: 28px;
-  gap: 0 !important;
+// ── Menu paper gap ─────────────────────────────────────────
+.announcement-menu__button {
+  gap: 5px !important;
 }
 
-// Both buttons are visibility:hidden / visibility:visible, never display:none,
-// so layout is always identical. Absolute stacking means they occupy the
-// same space and the column stays exactly 28px wide at all times.
-.announcement__menu-btn,
-.announcement__circle-btn {
-  position: absolute !important;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.announcement__card-right {
-  position: relative;
-}
-
-// // Selected card outline
-// .announcement__card.card__selected {
-//   outline: 2px solid #8646c3;
-//   outline-offset: -2px;
-// }
-
-// Collapse the old wrapper div so it has zero layout effect
+// ── Checkbox wrapper — display:contents removes layout effect ──
 .checkbox__card {
   display: contents;
 }

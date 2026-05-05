@@ -20,12 +20,12 @@ import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewMo
 import { DepartmentList } from "../Participants/DepartmentList";
 
 const DEFAULT_FILTERS: Filters = {
-  department: "",
+  department: 1,
   startDate: "",
   endDate: "",
-  room: "",
-  user: "",
-  meetingType: "",
+  room: 0,
+  user: 1,
+  meetingType: 1,
 };
 
 interface Props {

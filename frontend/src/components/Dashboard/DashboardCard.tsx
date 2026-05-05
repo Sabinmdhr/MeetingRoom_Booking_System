@@ -4,16 +4,20 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 import "../../assets/scss/components/Dashboard/DashboardCard.scss";
+import { useUserProfileViewModel } from "../../viewmodels/useUserProfileViewModel";
 
 function DashboardCard({ cards }: any) {
+  const { profile } = useUserProfileViewModel();
   return (
     <div className="dashboard">
       <div className="dashboard__header">
         <Typography variant="h1">Dashboard Overview</Typography>
-        <Typography variant="subtitle1">
-          Welcome back (username) ! Here's what's happening with your meeting
-          rooms.
-        </Typography>
+        {profile && (
+          <Typography variant="subtitle1">
+            Welcome back {profile?.lastname}! Here's what's happening with your
+            meeting rooms.
+          </Typography>
+        )}
       </div>
 
       <Box className="dashboard__grid">

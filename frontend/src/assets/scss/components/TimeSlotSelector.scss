@@ -12,7 +12,12 @@
 .header {
   padding: 16px;
   border-bottom: 1px solid var(--colorNeutral200);
-
+  .timeslot-nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
   .day {
     color: var(--colorsNeutral600);
     font-size: 14px;
@@ -23,6 +28,7 @@
     color: var(--colorNeutral1000);
     font-size: 24px;
     font-weight: 700;
+    margin-left: 50%;
   }
 }
 
@@ -57,12 +63,15 @@
   flex: 1;
   position: relative;
   background-size: 100% 120px;
-  background-image:
-    linear-gradient(to bottom, var(--colorNeutral200) 1px, transparent 1px);
+  background-image: linear-gradient(
+    to bottom,
+    var(--colorNeutral200) 1px,
+    transparent 1px
+  );
 }
 
 .slot {
-  position: absolute; 
+  position: absolute;
   left: 4px;
   right: 4px;
   background: rgba(36, 9, 135, 0.37);
@@ -81,6 +90,7 @@
     cursor: grabbing;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
+
 
   .slotHandle {
     position: absolute;
@@ -106,7 +116,7 @@
       border-radius: 50%;
       background: var(--primary500);
       border: 2px solid white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 }
@@ -115,7 +125,7 @@
   padding: 16px;
   border-top: 1px solid var(--colorNeutral200);
 }
-.timeDuration{
+.timeDuration {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -132,22 +142,27 @@
   font-weight: 700;
   font-size: 13px;
 }
-.bookRoomActions{
-
+.bookRoomActions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
   margin-top: 10px;
 }
-.content{
+.content {
   display: flex;
-  gap:8px;
+  gap: 8px;
   justify-content: center;
   align-items: center;
   // font-size: 10px;
   top: 1px;
 }
-
+  .line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--primary);
+  }
 .separator {
   color: var(--ColorsPrimary500);
   font-weight: 700;

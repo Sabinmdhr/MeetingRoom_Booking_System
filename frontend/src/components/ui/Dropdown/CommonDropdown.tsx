@@ -26,7 +26,6 @@ export const CommonDropdown = ({
         htmlFor={label}
         className="label"
       >
-        {" "}
         {label}
       </label>
 
@@ -36,22 +35,21 @@ export const CommonDropdown = ({
         id={label}
         value={value}
         className="customTextField"
-        SelectProps={{
-          displayEmpty: true,
-          renderValue: (selected) => {
-            if (selected === "" || selected === undefined) {
-              return placeholder || `All ${label}`;
-            }
+        // SelectProps={{
+        //   displayEmpty: true,
+        //   renderValue: (selected) => {
+        //     if (selected === "" || selected === undefined) {
+        //       return placeholder || `All ${label}`;
+        //     }
 
-            const item = items.find((i) => i.id === selected);
-            return item ? item.label : "";
-          },
-        }}
+        //     const item = items.find((i) => i.id === selected);
+        //     return item ? item.label : "";
+        //   },
+        // }}
         onChange={(e) =>
           onChange(e.target.value === "" ? 1 : Number(e.target.value))
         }
       >
-        <MenuItem value="">{placeholder || `All ${label}`}</MenuItem>
 
         {items.map((item) => (
           <MenuItem

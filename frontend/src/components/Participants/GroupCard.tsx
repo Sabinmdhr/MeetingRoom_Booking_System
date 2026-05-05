@@ -99,7 +99,7 @@ const perms = permissions[role as keyof typeof permissions];
               <div className="group-members">
                 <div className="text">Group Members:</div>
                 <div className="members">
-                  {group.members.map((groupMember, index) => {
+                  {group.members.map((groupMember) => {
                     return (
                       <Chip
                         label={groupMember.memberName}

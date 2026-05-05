@@ -1,0 +1,69 @@
+// /* base card */
+// .announcement__card {
+//   border-radius: 12px !important;
+//   border: 1px solid #e5e7eb !important;
+//   transition: 0.2s ease;
+//   cursor: pointer;
+//   background: #fff;
+
+//   &:hover {
+//     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+//   }
+// }
+
+// /* pinned */
+// .announcement__card--pinned {
+//   background: #f6f3fb;
+//   border-left: 4px solid #7c3aed;
+// }
+
+// /* unread (strong) */
+// .announcement__card--unread {
+//   .announcement__title {
+//     font-weight: 700;
+//     color: #111827;
+//   }
+
+//   .announcement__message {
+//     color: #374151;
+//   }
+// }
+
+// /* read (muted) */
+// .announcement__card--read {
+//   opacity: 0.75;
+
+//   .announcement__title {
+//     font-weight: 500;
+//     color: #6b7280;
+//   }
+
+//   .announcement__message {
+//     color: #9ca3af;
+//   }
+// }
+
+// /* meta */
+// .announcement__meta {
+//   font-size: 12px;
+//   color: #9ca3af;
+// }
+
+// /* dot indicator */
+// .announcement__dot {
+//   width: 6px;
+//   height: 6px;
+//   background: #ef4444;
+//   border-radius: 50%;
+//   margin-right: 6px;
+//   display: inline-block;
+// }
+
+// /* pin */
+// .announcement__pin-icon {
+//   position: absolute;
+//   top: -10px;
+//   left: -12px;
+//   transform: rotate(-20deg);
+//   color: #7c3aed;
+// }

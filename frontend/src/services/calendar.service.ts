@@ -29,7 +29,10 @@ export const getCalendarByMonth = async (date: string) => {
   }
 };
 
-export const getCalendarByDay = async (date:string, role: string):Promise<CalendarByDay[]> => {
+export const getCalendarByDay = async (
+  date: string,
+  role: string,
+): Promise<CalendarByDay[]> => {
   try {
     console.log("sending Date", date);
     const endpoint =
@@ -37,10 +40,9 @@ export const getCalendarByDay = async (date:string, role: string):Promise<Calend
         ? `/api/v1/get-self-booked-room`
         : `/api/v1/calender/day`;
 
-    const res = await api.post<{ data: CalendarByDay[] }>(
-      endpoint,
-      {"date":date},
-    );
+    const res = await api.post<{ data: CalendarByDay[] }>(endpoint, {
+      date: date,
+    });
     // console.log(res);
 
     return res.data.data ?? [];
@@ -51,7 +53,6 @@ export const getCalendarByDay = async (date:string, role: string):Promise<Calend
 };
 export const getCalenderByDay = async (date: string) => {
   try {
-   
     const res = await api.post<{ data: CalenderDay[] }>(
       `/api/v1/calender/day`,
       { date: date },

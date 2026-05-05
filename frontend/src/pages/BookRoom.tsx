@@ -7,32 +7,44 @@ import {
   InputAdornment,
   Stack,
   capitalize,
+  Chip,
 } from "@mui/material";
 import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
 import "../assets/scss/pages/BookRoom.scss";
-import { Calendar, Clock4, UserPlus, Users } from "lucide-react";
+import { Calendar, Clock4, UserPlus, Users, X } from "lucide-react";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
 
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../redux/store";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 import { useDispatch } from "react-redux";
-import { updateBookingRoomFormData } from "../redux/bookRoomSlice";
-
-const meetings = [
-  { id: "1", name: "INTERNAL" },
-  { id: "2", name: "CLIENT" },
-  { id: "3", name: "EXECUTIVE" },
-];
+import {
+  clearBookingRoomFormData,
+  toggleExternalParticipantsSelection,
+  toggleParticipantsSelection,
+  updateBookingRoomFormData,
+} from "../redux/bookRoomSlice";
+import { ExternalCard } from "../components/BookingRooms/ExternalCard";
 
 const BookRoom = () => {
-  const { handleChange, handleBookRoom } =
-    useBookingRoomViewModel();
-  const { participantType, handleInternalClick, handleExternalClick } =
-    useparticipantsViewModel();
+  const {
+    handleChange,
+    handleBookRoom,
+    meetingTypes,
+    handleExternalCard,
+    openCard,
+    handleInternalCard,
+  } = useBookingRoomViewModel();
+  // const { participantType, handleInternalClick, handleExternalClick } =
+  //   useparticipantsViewModel();
   const bookinRoomFormData = useAppSelector((state) => state.bookingRoom);
-
+  const { users } = useparticipantsViewModel();
   const dispatch = useDispatch();
+  useEffect(() => {
+    return () => {
+      dispatch(clearBookingRoomFormData());
+    };
+  }, []);
   // const { startTime, endTime, date } = useAppSelector(
   //   (state) => state.bookingRoom,
   // );
@@ -45,7 +57,6 @@ const BookRoom = () => {
   //   setOpenTime,
   // } = useTimeSlotsViewModel(values.roomId, values.date);
 
-  const [openParticipantCard, setOpenParticipantCard] = useState(false);
   // const { handleRoomChange, rooms, roomId, selectedRoom } =
   //   useRoomDetailsCard();
 
@@ -101,7 +112,7 @@ const BookRoom = () => {
                 <label className="field-label">Date *</label>
                 <TextField
                   name="date"
-                  value={bookinRoomFormData.date}
+                  value={bookinRoomFormData.startDate}
                   onChange={handleChange}
                   // error={!!errors.date}
                   fullWidth
@@ -172,13 +183,14 @@ const BookRoom = () => {
                 // meetingId={values.roomId}
                 meetingId={values.roomId}
               /> */}
-
               <div className="field">
                 <label className="field-label">Meeting Type *</label>
                 <TextField
                   select
                   name="meetingTypeId"
-                  value={bookinRoomFormData.meetingTypeId}
+                  placeholder="Select Meeting Type"
+                  // value={bookinRoomFormData.meetingTypeId}
+                  value={meetingTypes.find((m) => m.id === bookinRoomFormData.meetingTypeId)?.name || ""}
                   onChange={handleChange}
                   // error={!!errors.meetingType}
                   fullWidth
@@ -197,85 +209,14 @@ const BookRoom = () => {
                     },
                   }}
                 >
-                  {meetings.map((meeting) => (
-                    <MenuItem key={meeting.id} value={meeting.id}>
-                      {meeting.id}
+
+                  {meetingTypes.map((meetingType) => (
+                    <MenuItem key={meetingType.id} value={meetingType.id}>
+                      {meetingType.name}
                     </MenuItem>
                   ))}
                 </TextField>
               </div>
-              {/* {errors.meetingType && (
-                <span className="field-error">{errors.meetingType}</span>
-              )} */}
-
-              <div className="field">
-                <label className="field-label">Participants</label>
-                <Typography className="subtitle">
-                  Add internal team members or external guests to the meeting
-                </Typography>
-                {/* {selectedParticipants.length != 0 && (
-                  <div>
-                    <Typography>
-                      Internal Members {selectedParticipants.length}
-                    </Typography>
-
-                    {selectedNames.map((p) => (
-                      <Chip label={p} icon={<X />}></Chip>
-                    ))}
-                  </div>
-                )} */}
-
-                <Stack className="stack-container">
-                  <Button
-                    className="participants-btn"
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    startIcon={<Users size={18} />}
-                    onClick={() => {
-                      setOpenParticipantCard(!openParticipantCard);
-                    }}
-                  >
-                    {participantType === "internal"
-                      ? "Hide Internal"
-                      : "Add Internal"}
-                  </Button>
-                  <Button
-                    className="participants-btn"
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    startIcon={<UserPlus size={18} />}
-                    onClick={handleExternalClick}
-                  >
-                    {participantType === "external"
-                      ? "Hide External"
-                      : "Add External"}
-                  </Button>
-                </Stack>
-                {openParticipantCard && (
-                  <ParticipantsCard
-                    type="internal"
-                    participants={bookinRoomFormData.internalParticipantIds}
-                    onChange={(updated) => {
-                      dispatch(
-                        updateBookingRoomFormData({
-                          internalParticipantIds: updated,
-                        }),
-                      );
-                    }}
-                  />
-                )}
-
-                {/* {participantType && (
-                  <ParticipantsCard
-                    displayOn="book-room"
-                    type={participantType}
-
-                  />
-                )} */}
-              </div>
-
               <div className="field">
                 <label className="field-label">Recurring Meeting</label>
                 <TextField
@@ -300,6 +241,15 @@ const BookRoom = () => {
                     </MenuItem>
                   ))}
                 </TextField>
+                {bookinRoomFormData.recurrenceType === "CUSTOM" && (
+                  <div className="customDays">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                      (option) => (
+                        <Chip label={option} key={option} />
+                      ),
+                    )}
+                  </div>
+                )}
                 {bookinRoomFormData.recurrenceType !== "NONE" && (
                   <div className="field">
                     <label className="field-label" htmlFor="recurrenceEndDate">
@@ -339,6 +289,139 @@ const BookRoom = () => {
               >
                 Book Room
               </Button>
+            </div>
+            <div>
+              {/* {errors.meetingType && (
+                <span className="field-error">{errors.meetingType}</span>
+              )} */}
+
+              <div className="field">
+                <label className="field-label">Participants</label>
+                <Typography className="subtitle">
+                  Add internal team members or external guests to the meeting
+                </Typography>
+                {/* {selectedParticipants.length != 0 && (
+                  <div>
+                    <Typography>
+                      Internal Members {selectedParticipants.length}
+                    </Typography>
+
+                    {selectedNames.map((p) => (
+                      <Chip label={p} icon={<X />}></Chip>
+                    ))}
+                  </div>
+                )} */}
+                {bookinRoomFormData.internalParticipantIds.length > 0 &&
+                  openCard != "internal" && (
+                    <div className="selected-participants">
+                      <Typography variant="subtitle2">
+                        Internal Participants:
+                      </Typography>
+                      {bookinRoomFormData.internalParticipantIds.map((id) => {
+                        const participant = users.find((p) => p.id === id);
+                        return participant ? (
+                          <Chip
+                            label={`${participant.firstname} ${participant.lastname}`}
+                            key={id}
+                            icon={
+                              <X
+                                size={18}
+                                onClick={() => {
+                                  dispatch(toggleParticipantsSelection(id));
+                                }}
+                              />
+                            }
+                            className="selected-participant"
+                          />
+                        ) : null;
+                      })}
+                    </div>
+                  )}
+                {bookinRoomFormData.externalParticipants.length > 0 && (
+                  <div className="selected-participants">
+                    <Typography variant="subtitle2">
+                      External Participants:
+                    </Typography>
+                    {bookinRoomFormData.externalParticipants.map(
+                      (participant) => (
+                        <Chip
+                          label={`${participant.name} `}
+                          key={participant.email}
+                          icon={
+                            <X
+                              size={18}
+                              onClick={() => {
+                                dispatch(
+                                  toggleExternalParticipantsSelection(
+                                    participant,
+                                  ),
+                                );
+                              }}
+                            />
+                          }
+                          className="selected-participant"
+                        />
+                      ),
+                    )}
+                  </div>
+                )}
+
+                <Stack className="stack-container">
+                  <Button
+                    className="participants-btn"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    startIcon={<Users size={18} />}
+                    onClick={() => {
+                      handleInternalCard();
+                    }}
+                  >
+                    {openCard === "internal" ? "Hide Internal" : "Add Internal"}
+                    {bookinRoomFormData.internalParticipantIds.length > 0 && (
+                      <Chip
+                        size="small"
+                        style={{ marginLeft: "4px" }}
+                        label={bookinRoomFormData.internalParticipantIds.length}
+                      />
+                    )}
+                  </Button>
+                  <Button
+                    className="participants-btn"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    startIcon={<UserPlus size={18} />}
+                    onClick={handleExternalCard}
+                  >
+                    {openCard === "external" ? "Hide External" : "Add External"}
+                    {bookinRoomFormData.externalParticipants.length > 0 && (
+                      <Chip
+                        size="small"
+                        style={{ marginLeft: "4px" }}
+                        label={bookinRoomFormData.externalParticipants.length}
+                      />
+                    )}
+                  </Button>
+                </Stack>
+                {openCard === "internal" && (
+                  <ParticipantsCard
+                    type="internal"
+                    participants={bookinRoomFormData.internalParticipantIds}
+                    onChange={(updated) => {
+                      dispatch(
+                        updateBookingRoomFormData({
+                          internalParticipantIds: updated,
+                        }),
+                      );
+                    }}
+                  />
+                )}
+
+                {openCard === "external" && (
+                  <ExternalCard onClose={handleExternalCard} />
+                )}
+              </div>
             </div>
           </div>
         </Card>

@@ -2,8 +2,14 @@ import { Plus } from "lucide-react";
 import MyButton from "../ui/Button";
 import Dialog from "@mui/material/Dialog";
 import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
-import { DialogActions, DialogContent, TextField } from "@mui/material";
+import {
+  DialogActions,
+  DialogContent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect } from "react";
+import "../../assets/scss/components/Department/AddDepartment-Form.scss";
 
 export const AddDepartmentForm = () => {
   const {
@@ -30,46 +36,75 @@ export const AddDepartmentForm = () => {
     }
   }, []);
   return (
-    <div>
-      <MyButton
-        // className="add-btn"
-        customVariant="dark"
-        startIcon={<Plus size={17} />}
-        variant="contained"
-        onClick={() => {
-          handleDepartmentFormOpen("add");
-        }}
-        text="Add Department"
-      />
+    <>
+      <div>
+        <MyButton
+          // className="add-btn"
+          customVariant="dark"
+          startIcon={<Plus size={17} />}
+          variant="contained"
+          onClick={() => {
+            handleDepartmentFormOpen("add");
+          }}
+          text="Add Department"
+        />
+      </div>
+
       <Dialog
         open={departmentFormState.open}
         onClose={handleDepartmentFormClose}
+        PaperProps={{ className: "department-modal" }}
       >
-        <DialogContent>
-          <label htmlFor="departmentName">Department Name</label>
-          <TextField
-            className="customTextField"
-            id="departmentName"
-            name="departmentName"
-            placeholder="Enter department name"
-            value={departmentFormData.departmentName}
-            onChange={handleChange}
-          />
-          <label htmlFor="description">Description</label>
-          <TextField
-            className="customTextField"
-            id="description"
-            name="description"
-            placeholder="Enter department description"
-            value={departmentFormData.description}
-            onChange={handleChange}
-          />
+        <div className="department-modal__header">
+          <Typography
+            className="department-modal__header__title"
+            variant="h3"
+          >
+            Add Department
+          </Typography>
+        </div>
+        <DialogContent className="department-modal__details">
+          <div className="department-modal__details__row">
+            <Typography className="department-modal__details__row__title">
+              Department Name
+            </Typography>
+            <TextField
+              className="customTextField"
+              id="departmentName"
+              name="departmentName"
+              placeholder="Enter department name"
+              value={departmentFormData.departmentName}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="department-modal__details__row">
+            <Typography className="department-modal__details__row__title">
+              Description
+            </Typography>
+            <TextField
+              className="customTextField"
+              id="description"
+              name="description"
+              placeholder="Enter department description"
+              value={departmentFormData.description}
+              onChange={handleChange}
+            />
+          </div>
         </DialogContent>
         <DialogActions>
           <MyButton
-            text="Add"
+            text="Cancel"
             className=""
             customVariant="ghost"
+            onClick={() => {
+              // submitDepartment(departmentFormData);
+              handleDepartmentFormClose();
+            }}
+          ></MyButton>
+          <MyButton
+            text="Add"
+            className=""
+            customVariant="dark"
             onClick={() => {
               submitDepartment(departmentFormData);
               handleDepartmentFormClose();
@@ -77,6 +112,6 @@ export const AddDepartmentForm = () => {
           ></MyButton>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };

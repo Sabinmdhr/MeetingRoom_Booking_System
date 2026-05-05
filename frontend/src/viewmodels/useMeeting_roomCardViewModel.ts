@@ -4,7 +4,7 @@ import {
   addRoom,
   getMeetingRooms,
   deleteMeetingRoom,
-  getMEttingRoomResources,
+  getMeetingRoomResources,
 } from "../services/Meetinf_room.service";
 import { toast } from "react-toastify";
 import { getUpcomingMeeting } from "../services/Meetinf_room.service";
@@ -15,6 +15,7 @@ export const useMeetingCardViewModel = () => {
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [addResourceMode, setAddResourceMode] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [upcomingMeeting, setUpcomingMeeting] = useState<UpcomingMeetingApi[]>(
@@ -74,7 +75,7 @@ export const useMeetingCardViewModel = () => {
       const data = await getMeetingRooms();
       // console.log(data);
       setMeeting(data.data.content);
-      const resources = await getMEttingRoomResources();
+      const resources = await getMeetingRoomResources();
       setRoomResources(resources.data);
     } catch (err: any) {
       setError(err.message || "Failed to load meeting room");
@@ -161,5 +162,7 @@ export const useMeetingCardViewModel = () => {
     fetchUpcomingMeetings,
     upcomingMeeting,
     roomResources,
+    addResourceMode,
+    setAddResourceMode,
   };
 };

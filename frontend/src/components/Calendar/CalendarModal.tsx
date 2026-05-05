@@ -1,150 +1,6 @@
-// import { Popover, Divider, IconButton, Typography } from "@mui/material";
-// import { MapPin, Users, Pen, Clock, Menu, CircleUser, X } from "lucide-react";
-// import type { CalendarEvent } from "../../models/calendar.model";
-// import "../../assets/scss/components/Calendar/CalendarModal.scss";
-// import { useNavigate } from "react-router-dom";
-
-// interface CalendarModalProps {
-//   open: boolean;
-//   event: CalendarEvent | null;
-//   anchorEl: HTMLElement | null;
-//   onClose: () => void;
-//   onEdit: () => void;
-// }
-
-// export const CalendarModal = ({
-//   open,
-//   event,
-//   anchorEl,
-//   onClose,
-//   // onEdit,
-// }: CalendarModalProps) => {
-//   const navigate = useNavigate();
-//   const accentColor = CATEGORY_COLORS[event?.category ?? ""] ?? "#1B73E8";
-//   const navigate = useNavigate();
-//   return (
-//     <Popover
-//       open={open}
-//       anchorEl={anchorEl}
-//       onClose={onClose}
-//       anchorOrigin={{ vertical: "top", horizontal: "right" }}
-//       transformOrigin={{ vertical: "top", horizontal: "left" }}
-//       slotProps={{
-//         paper: {
-//           sx: {
-//             borderRadius: 2,
-//             overflow: "hidden",
-//             width: 320,
-//             boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-//           },
-//         },
-//       }}
-//     >
-//       <div
-//         className="calendar-modal__strip"
-//         style={{ background: accentColor }}
-//       />
-//       {/* Header */}
-//       <div className="calendar-modal__header">
-//         <div className="calendar-modal__header__title">
-//           <h2>{event?.title}</h2>
-//           <span className="calendar-modal__header__badge">
-//             {event?.category}
-//           </span>
-//         </div>
-//         <div className="calendar-modal__header__actions">
-//           <IconButton
-//             size="small"
-//             onClick={() => navigate("/book-room")}
-//             title="Edit"
-//           >
-//             <Pen size={17} />
-//           </IconButton>
-//           <IconButton
-//             size="small"
-//             onClick={onClose}
-//             title="Close"
-//           >
-//             <X size={20} />
-//           </IconButton>
-//         </div>
-//       </div>
-
-//       <Divider />
-
-//       <div className="calendar-modal__body">
-//         <Row icon={<Clock size={18} />}>
-//           <strong className="calendar-modal__row__date">{event?.date}</strong>
-//           <span className="calendar-modal__row__time">
-//             {event?.startTime} – {event?.endTime}
-//           </span>
-//         </Row>
-
-//         <Row icon={<Users size={18} />}>
-//           <Typography
-//             className="calendar-modal__row__label"
-//             variant="subtitle1"
-//           >
-//             Participants
-//           </Typography>
-//           <span className="calendar-modal__row__value">Sushant</span>
-//         </Row>
-
-//         <Row icon={<Menu size={18} />}>
-//           <Typography
-//             className="calendar-modal__row__label"
-//             variant="subtitle1"
-//           >
-//             Description
-//           </Typography>
-//           <span className="calendar-modal__row__value">
-//             {event?.description}
-//           </span>
-//         </Row>
-
-//         <Row icon={<MapPin size={18} />}>
-//           <Typography
-//             className="calendar-modal__row__label"
-//             variant="subtitle1"
-//           >
-//             Meeting Room
-//           </Typography>
-//           <span className="calendar-modal__row__value">{event?.location}</span>
-//         </Row>
-
-//         <Row icon={<CircleUser size={18} />}>
-//           <Typography
-//             className="calendar-modal__row__label"
-//             variant="subtitle1"
-//           >
-//             Created By
-//           </Typography>
-//           <span className="calendar-modal__row__value">{event?.organizer}</span>
-//         </Row>
-//       </div>
-//     </Popover>
-//   );
-// };
-
-// function Row({
-//   icon,
-//   children,
-// }: {
-//   icon: React.ReactNode;
-//   children: React.ReactNode;
-// }) {
-//   return (
-//     <div className="calendar-modal__row">
-//       <span className="calendar-modal__row__icon">{icon}</span>
-//       <div className="calendar-modal__row__content">{children}</div>
-//     </div>
-//   );
-// }
-
-// export default CalendarModal;
-
 import {
-  Popover,
+  Dialog,
+  DialogContent,
   Divider,
   IconButton,
   Typography,
@@ -152,290 +8,354 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Chip,
+  DialogActions,
+  Tab,
+  Avatar,
 } from "@mui/material";
 import {
   MapPin,
   Users,
-  Pen,
   Clock,
-  Menu,
+  AlignLeft,
   CircleUser,
   X,
-  Building2,
-  Building2Icon,
+  SquarePen,
 } from "lucide-react";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import type { CalendarEvent } from "../../models/calendar.model";
-import type { BookedRoomDataResponse } from "../../models/bookRoom.model";
+import type { BookedRoomDataResponse, BookingRoomData } from "../../models/bookRoom.model";
 import "../../assets/scss/components/Calendar/CalendarModal.scss";
 import { useNavigate } from "react-router-dom";
-import { ArrowDropDownIcon } from "@mui/x-date-pickers";
+import MyButton from "../ui/Button";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { useState } from "react";
+import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
 
 interface CalendarModalProps {
   open: boolean;
   event: CalendarEvent | null;
-  anchorEl: HTMLElement | null;
+  anchorEl?: HTMLElement | null;
   onClose: () => void;
   onEdit: () => void;
   eventData?: BookedRoomDataResponse | null;
   eventDataLoading?: boolean;
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  internal: "#2563EB",
-  client: "#ff6900",
-  executive: "#AD46FF",
-  external: " #7e22ce",
+const CATEGORY_COLORS: Record<
+  string,
+  { bg: string; text: string; iconBg: string }
+> = {
+  internal: { bg: "#dbeafe", text: "#1d4ed8", iconBg: "#eff6ff" },
+  client: { bg: "#ffedd5", text: "#c2410c", iconBg: "#fff7ed" },
+  executive: { bg: "#f3e8ff", text: "#7e22ce", iconBg: "#faf5ff" },
+  external: { bg: "#dcfce7", text: "#15803d", iconBg: "#f0fdf4" },
 };
+
+const DEFAULT_COLORS = { bg: "#f1f5f9", text: "#475569", iconBg: "#f8fafc" };
 
 export const CalendarModal = ({
   open,
   event,
-  anchorEl,
   onClose,
-  onEdit,
   eventData,
   eventDataLoading,
 }: CalendarModalProps) => {
-  const accentColor = CATEGORY_COLORS[event?.category ?? ""] ?? "#1B73E8";
   const navigate = useNavigate();
+  const [tabValue, setTabValue] = useState("internal");
+  // console.log(eventData);
+
+  const category = event?.category?.toLowerCase() ?? "";
+  const colors = CATEGORY_COLORS[category] ?? DEFAULT_COLORS;
 
   const internalNames =
-    eventData?.data?.internalParticipant?.map(
-      (p) => `${p.firstName} ${p.lastName}`,
+    eventData?.internalParticipant?.map(
+      (p) => `${p.firstName} ${p.lastName} `,
     ) ?? [];
 
+  // const internalParticipantEmail =
   const externalNames =
-    eventData?.data?.externalParticipant?.map((p) => p.name) ?? [];
-  const allParticipants = [...internalNames, ...externalNames];
+    eventData?.externalParticipant?.map((p) => `${p.name} ${p.email}`) ?? [];
 
-  const booker = eventData?.data?.roomBooker;
-  // console.log(booker);
-
+  const booker = eventData?.roomBooker;
   const bookerName = booker
     ? `${booker.firstName} ${booker.lastName}`
-    : (event?.organizer ?? "—");
-
-  const roomName = eventData?.data?.room?.roomName ?? "—";
-
-  // console.log(eventData?.description);
-
+    : event?.organizer || "—";
+  const roomName = eventData?.room?.roomName || event?.location || "—";
+  const description = eventData?.description || "";
+  const title = event?.meetingTitle || "—";
+  const startTime = event?.startTime || "—";
+  const endTime = event?.endTime || "—";
+  const formattedDate = event?.date
+    ? dayjs(event.date).format("ddd, MMMM D, YYYY")
+    : "—";
+const dispatch = useDispatch();
   return (
-    <Popover
+    <Dialog
       open={open}
-      anchorEl={anchorEl}
       onClose={onClose}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      transformOrigin={{ vertical: "top", horizontal: "left" }}
-      slotProps={{
-        paper: {
-          sx: {
-            borderRadius: 3,
-            overflow: "hidden",
-            width: 450,
-            // height: 800,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-          },
-        },
-      }}
+      maxWidth="sm"
+      fullWidth
+      TransitionProps={{ timeout: 200 }}
+      PaperProps={{ className: "calendar-modal" }}
     >
-      <div
-        className="calendar-modal__strip"
-        style={{ background: accentColor }}
-      />
-
+      {/*  Header  */}
       <div className="calendar-modal__header">
-        <div className="calendar-modal__header__title">
-          <h2>{eventData?.meetingTitle ?? event?.meetingTitle}</h2>
-          <span
-            className="calendar-modal__header__badge"
-            style={{ background: `${accentColor}18`, color: accentColor }}
-          >
-            {event?.category}
-          </span>
-        </div>
-        <div className="calendar-modal__header__actions">
-          <IconButton
+        <div className="calendar-modal__header__left">
+          <Typography className="calendar-modal__header__title">
+            {title}
+          </Typography>
+          <Chip
+            label={event?.category || "—"}
             size="small"
-            onClick={() => navigate("/book-room")}
-            title="Edit"
-          >
-            <Pen size={17} />
-          </IconButton>
-          <IconButton
-            size="small"
-            onClick={onClose}
-            title="Close"
-          >
-            <X size={20} />
-          </IconButton>
+            className="calendar-modal__header__chip"
+            style={{ backgroundColor: colors.bg, color: colors.text }}
+          />
         </div>
+        <IconButton
+          size="small"
+          onClick={onClose}
+          className="calendar-modal__header__close"
+        >
+          <X size={18} />
+        </IconButton>
       </div>
 
       <Divider />
 
-      {/*  Show spinner while loading real data */}
-      {eventDataLoading ? (
-        <div style={{ display: "flex", justifyContent: "center", padding: 24 }}>
-          <CircularProgress size={24} />
-        </div>
-      ) : (
-        <div className="calendar-modal__body">
-          <Row
-            icon={
-              <Clock
-                color="blue"
-                size={18}
-              />
-            }
-          >
-            <strong className="calendar-modal__row__date">
-              {eventData?.date ?? event?.date}
-            </strong>
-            <span className="calendar-modal__row__time">
-              {eventData?.startTime ?? event?.startTime} –{" "}
-              {eventData?.endTime ?? event?.endTime}
-            </span>
-          </Row>
-
-          <Row
-            icon={
-              <Users
-                color="green"
-                size={18}
-              />
-            }
-          >
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ArrowDropDownIcon />}
-                aria-controls="panel2-content"
-                id="panel2-header"
+      {/*  Body  */}
+      <DialogContent className="calendar-modal__content">
+        {eventDataLoading ? (
+          <div className="calendar-modal__loading">
+            <CircularProgress size={28} />
+          </div>
+        ) : (
+          <div className="calendar-modal__body">
+            {/* Date & Time */}
+            <div className="calendar-modal__row">
+              <div
+                className="calendar-modal__icon-wrap"
+                style={{ backgroundColor: "#eff6ff" }}
               >
-                <Typography
-                  className="calendar-modal__row__label"
-                  variant="subtitle1"
-                >
-                  Participants
+                <Clock
+                  size={16}
+                  color="#2b7fff"
+                />
+              </div>
+              <div className="calendar-modal__row__content">
+                <Typography className="calendar-modal__row__label">
+                  Date & Time
                 </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ArrowDropDownIcon />}
-                    aria-controls="panel2-content"
-                    id="panel2-header"
+                <Typography className="calendar-modal__row__primary">
+                  {formattedDate}
+                </Typography>
+                <Typography className="calendar-modal__row__secondary">
+                  {startTime} – {endTime}
+                </Typography>
+              </div>
+            </div>
+
+            {/* Room */}
+            <div className="calendar-modal__row">
+              <div
+                className="calendar-modal__icon-wrap"
+                style={{ backgroundColor: "#faf5ff" }}
+              >
+                <MapPin
+                  size={16}
+                  color="#9333ea"
+                />
+              </div>
+              <div className="calendar-modal__row__content">
+                <Typography className="calendar-modal__row__label">
+                  Meeting Room
+                </Typography>
+                <Typography className="calendar-modal__row__primary">
+                  {roomName}
+                </Typography>
+              </div>
+            </div>
+
+            {/* Booked By */}
+            <div className="calendar-modal__row">
+              <div
+                className="calendar-modal__icon-wrap"
+                style={{ backgroundColor: "#eff6ff" }}
+              >
+                <CircleUser
+                  size={16}
+                  color="#2b7fff"
+                />
+              </div>
+              <div className="calendar-modal__row__content">
+                <Typography className="calendar-modal__row__label">
+                  Booked By
+                </Typography>
+                <Typography className="calendar-modal__row__primary">
+                  {bookerName}
+                </Typography>
+              </div>
+            </div>
+
+            {/* Participants */}
+            <div className="calendar-modal__row">
+              <Accordion
+                className="calendar-modal__accordion"
+                disableGutters
+                elevation={0}
+              >
+                <AccordionSummary
+                  expandIcon={<ArrowDropDownIcon />}
+                  className="calendar-modal__accordion__summary"
+                >
+                  <div
+                    className="calendar-modal__icon-wrap"
+                    style={{ backgroundColor: "#f0fdf4" }}
                   >
-                    <Typography
-                      className="calendar-modal__row__label"
-                      variant="subtitle1"
-                    >
-                      <Building2 color="blue" />
-                      Internal Participants
+                    <Users
+                      size={16}
+                      color="#16a34a"
+                    />
+                  </div>
+                  <div className="calendar-modal__row__content">
+                    <Typography className="calendar-modal__row__label">
+                      Participants
                     </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <span className="calendar-modal__row__value">
-                      {allParticipants.length > 0
-                        ? allParticipants.join(", ")
-                        : "—"}
-                    </span>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ArrowDropDownIcon />}
-                    aria-controls="panel2-content"
-                    id="panel2-header"
+                    <Typography className="calendar-modal__row__secondary">
+                      {internalNames.length + externalNames.length} Participants
+                      ({internalNames.length} Internal, {externalNames.length}{" "}
+                      External)
+                    </Typography>
+                  </div>
+                </AccordionSummary>
+
+                <AccordionDetails className="calendar-modal__accordion__details">
+                  <TabContext value={tabValue}>
+                    <TabList
+                      onChange={(_, v) => setTabValue(v)}
+                      className="calendar-modal__tabs"
+                    >
+                      <Tab
+                        label={`Internal (${internalNames.length})`}
+                        value="internal"
+                        className="calendar-modal__tab"
+                      />
+                      <Tab
+                        label={`External (${externalNames.length})`}
+                        value="external"
+                        className="calendar-modal__tab"
+                      />
+                    </TabList>
+
+                    <TabPanel
+                      value="internal"
+                      className="calendar-modal__tab-panel"
+                    >
+                      {eventData?.internalParticipant?.length ? (
+                        <div className="calendar-modal__chips">
+                          {eventData?.internalParticipant?.map((p) => (
+                            <div className="calendar-modal__participant-chip">
+                              <Avatar>
+                                {p.firstName[0]}
+                                {p.lastName[0]}
+                              </Avatar>
+                              <div>
+                                <Typography className="calendar-modal__empty">{`${p.firstName} ${p.lastName}`}</Typography>
+                                <Typography className="calendar-modal__empty">{`${p.email}`}</Typography>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <Typography className="calendar-modal__empty">
+                          No internal participants
+                        </Typography>
+                      )}
+                    </TabPanel>
+
+                    <TabPanel
+                      value="external"
+                      className="calendar-modal__tab-panel"
+                    >
+                      {eventData?.externalParticipant?.length ? (
+                        <div className="calendar-modal__chips">
+                          {eventData?.externalParticipant?.map((p) => (
+                            <div className="calendar-modal__participant-chip">
+                              <Avatar>
+                                {p.name
+                                  .split(" ")
+                                  .map((word) => word[0])
+                                  .join("")}
+                              </Avatar>
+                              <div>
+                                <Typography className="calendar-modal__empty">{`${p.name}`}</Typography>
+                                <Typography className="calendar-modal__empty">{`${p.email}`}</Typography>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <Typography className="calendar-modal__empty">
+                          No External participants
+                        </Typography>
+                      )}
+                    </TabPanel>
+                  </TabContext>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+
+            {/* Description */}
+            <div className="calendar-modal__row calendar-modal__row--full">
+              <div className="calendar-modal__description-box">
+                <div className="calendar-modal__description-header">
+                  <div
+                    className="calendar-modal__icon-wrap"
+                    style={{ backgroundColor: "#f8fafc" }}
                   >
-                    <Typography
-                      className="calendar-modal__row__label"
-                      variant="subtitle1"
-                    >
-                      <Building2Icon color="red" />
-                      External Participants
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <p>Sushant Basnet</p>
-                    <p>Ishan Awal</p>
-                    <p>Sabin Manandhar</p>
-                  </AccordionDetails>
-                </Accordion>
-              </AccordionDetails>
-            </Accordion>
-          </Row>
+                    <AlignLeft
+                      size={16}
+                      color="#64748b"
+                    />
+                  </div>
+                  <Typography className="calendar-modal__row__label">
+                    Description
+                  </Typography>
+                </div>
+                <Typography className="calendar-modal__description-text">
+                  {description || "No description provided."}
+                </Typography>
+              </div>
+            </div>
+          </div>
+        )}
+      </DialogContent>
 
-          <Row
-            icon={
-              <Menu
-                color="red"
-                size={18}
-              />
-            }
-          >
-            <Typography
-              className="calendar-modal__row__label"
-              variant="subtitle1"
-            >
-              Description
-            </Typography>
-            <span className="calendar-modal__row__value">
-              {eventData?.data?.description ?? event?.data?.description ?? "—"}
-            </span>
-          </Row>
-
-          <Row
-            icon={
-              <MapPin
-                color="purple"
-                size={18}
-              />
-            }
-          >
-            <Typography
-              className="calendar-modal__row__label"
-              variant="subtitle1"
-            >
-              Meeting Room
-            </Typography>
-            <span className="calendar-modal__row__value">{roomName}</span>
-          </Row>
-
-          <Row
-            icon={
-              <CircleUser
-                color="blue"
-                size={18}
-              />
-            }
-          >
-            <Typography
-              className="calendar-modal__row__label"
-              variant="subtitle1"
-            >
-              Booked By
-            </Typography>
-            <span className="calendar-modal__row__value">{bookerName}</span>
-          </Row>
-        </div>
-      )}
-    </Popover>
+      {/*  Actions  */}
+      <Divider />
+      <DialogActions className="calendar-modal__actions">
+        <MyButton
+          variant="outlined"
+          customVariant="ghost"
+          onClick={onClose}
+          text="Close"
+        />
+        <MyButton
+          variant="contained"
+          customVariant="dark"
+          startIcon={<SquarePen size={16} />}
+          onClick={() => {
+            dispatch(
+              setBookingRoomFormData(eventData),
+            );
+            navigate("/book-room")}}
+          text="Edit Meeting"
+        />
+      </DialogActions>
+    </Dialog>
   );
 };
-
-function Row({
-  icon,
-  children,
-}: {
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="calendar-modal__row">
-      <span className="calendar-modal__row__icon">{icon}</span>
-      <div className="calendar-modal__row__content">{children}</div>
-    </div>
-  );
-}
 
 export default CalendarModal;

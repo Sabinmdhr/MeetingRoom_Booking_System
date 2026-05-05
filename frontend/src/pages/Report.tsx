@@ -10,6 +10,7 @@ import { Download, Funnel, X } from "lucide-react";
 import ReportFilters from "../components/Reports/ReportFilters";
 import { useEffect, useState } from "react";
 import MyButton from "../components/ui/Button";
+import { Spinner } from "../components/ui/Spinner";
 
 function CustomToolbar() {
   return (
@@ -31,6 +32,7 @@ export default function Report() {
     // users,
     rooms,
     meetingTypes,
+    loading,
   } = useMeetingReportViewModel();
 
   useEffect(() => {
@@ -49,7 +51,9 @@ export default function Report() {
   }));
 
   const gridRows = rows.map((row, i) => ({ id: i, ...row }));
-
+  // if (loading) {
+  //   return <Spinner />;
+  // }
   return (
     <div>
       <div className="meeting-table__main">
@@ -111,6 +115,14 @@ export default function Report() {
             disableColumnResize
             autoHeight
             disableColumnFilter
+            {...rows}
+            loading={loading}
+            slotProps={{
+              loadingOverlay: {
+                // variant: "linear-progress",
+                noRowsVariant: "skeleton",
+              },
+            }}
           />
         </div>
       </div>

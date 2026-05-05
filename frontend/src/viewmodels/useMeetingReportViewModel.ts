@@ -29,12 +29,23 @@ export function useMeetingReportViewModel() {
   // const [users, setUsers] = useState<string[]>([]);
   const [rooms, setRooms] = useState<string[]>([]);
   const [meetingTypes, setMeetingTypes] = useState<DropdownItem[]>([]);
+  const [lastFilter, setLastFilter] = useState<ReportPayload | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const defaultPayload: ReportPayload = {
+    pageNo: 0,
+    pageSize: 10000,
+    sortBy: "date",
+    sortDir: "desc",
+  };
 
   const fetchReports = async () => {
     try {
       const res = await getAllReports();
       setRows(res.data ?? []);
       setIsFiltered(false);
+      setLastFilter(null);
+      setLoading(false);
     } catch (err) {
       console.error("Error fetching reports", err);
     }
@@ -45,6 +56,8 @@ export function useMeetingReportViewModel() {
       const data = await filterReport(payload);
       setRows(data ?? []);
       setIsFiltered(true);
+      setLastFilter(payload);
+      setLoading(false);
     } catch (err) {
       console.error("Filter failed", err);
     }
@@ -52,12 +65,12 @@ export function useMeetingReportViewModel() {
 
   const exportReport = async () => {
     try {
-      const blob = await exportReports();
+      const blob = await exportReports(lastFilter ?? defaultPayload);
       const url = URL.createObjectURL(blob);
-      const link = Object.assign(document.createElement("a"), {
-        href: url,
-        download: "meeting-report.csv",
-      });
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "meeting-report.csv";
+
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -73,6 +86,7 @@ export function useMeetingReportViewModel() {
         const [userRes, roomRes, typeRes] = await Promise.all([
           fetchUser(),
           fetchRoom(),
+
           getAllMeetingType(),
         ]);
 
@@ -82,6 +96,7 @@ export function useMeetingReportViewModel() {
         setMeetingTypes(
           typeRes.data?.map((m: any) => ({ id: m.id, label: m.name })) ?? [],
         );
+        setLoading(false);
       } catch (err) {
         console.error("Failed to load filter options", err);
       }
@@ -101,5 +116,6 @@ export function useMeetingReportViewModel() {
     fetchReports,
     filterReports,
     exportReport,
+    loading,
   };
 }

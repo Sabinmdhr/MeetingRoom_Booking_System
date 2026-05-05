@@ -6,6 +6,15 @@ export const getDepartmentList = async (): Promise<departmentList[]> => {
   return response.data.data;
 };
 export const handleAddDepartment = async(data: addDepartment) => {
-  const res = await api.post("/api/v1/department/add", data);
+  const res = await api.post("/api/v1/department/", data);
   return res.data;
 };
+export const handleEditDepartment = async(id: number, data: addDepartment) => {
+  try {
+    const res = await api.put(`/api/v1/department/${id}`, data);
+    return res.data;
+  } catch (error) {
+    console.error("Error editing department:", error);
+    throw error;
+  }
+}

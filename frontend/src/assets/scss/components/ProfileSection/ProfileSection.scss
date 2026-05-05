@@ -1,0 +1,90 @@
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__title {
+    font-weight: 500 !important;
+  }
+
+  &__card {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 28px;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  }
+
+  //   reusable row
+  &__row {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__field {
+    flex: 1; //  equal width columns
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__field--empty {
+    visibility: hidden; // keeps spacing aligned
+  }
+
+  &__label {
+    font-size: 14px !important;
+    font-weight: 500;
+    color: #0a0a0a;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  &__error {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  // MUI overrides
+  .MuiTextField-root {
+    width: 100%; //  important: fill column, not full page
+    background: #f3f3f5;
+    border-radius: 8px;
+
+    .MuiOutlinedInput-root {
+      height: 36px;
+      border-radius: 8px;
+
+      fieldset {
+        border-color: #f3f3f5 !important;
+      }
+
+      &:hover fieldset {
+        border-color: #d5d9de !important;
+      }
+
+      &.Mui-focused fieldset {
+        border: 2px solid #d5d9de !important;
+      }
+
+      input {
+        padding: 8px 10px !important;
+        color: #2f2f2f !important;
+      }
+    }
+  }
+
+  //  Responsive (very important)
+  @media (max-width: 768px) {
+    &__row {
+      flex-direction: column;
+    }
+  }
+}
