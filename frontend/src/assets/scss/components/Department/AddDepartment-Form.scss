@@ -1,0 +1,54 @@
+.department-modal {
+  border-radius: 16px !important;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.14) !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  width: 420px;
+  max-width: 95%;
+
+  // HEADER
+  &__header {
+    padding: 14px 20px 6px;
+
+    &__title {
+      font-weight: 600 !important;
+      font-size: 18px !important;
+    }
+  }
+
+  // BODY
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 20px 16px !important;
+
+    &__row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      &__title {
+        font-size: 13px;
+        font-weight: 500 !important;
+      }
+    }
+
+    .customTextField {
+      width: 100%;
+
+      .MuiInputBase-root {
+        height: 40px;
+      }
+    }
+
+    .MuiDialogActions-root {
+      padding: 12px 20px;
+      display: flex;
+      justify-content: flex-end;
+      border-top: 1px solid #e2e8f0;
+    }
+  }
+}

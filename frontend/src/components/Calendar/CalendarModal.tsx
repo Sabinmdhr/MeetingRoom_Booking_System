@@ -11,6 +11,7 @@ import {
   Chip,
   DialogActions,
   Tab,
+  Avatar,
 } from "@mui/material";
 import {
   MapPin,
@@ -62,17 +63,19 @@ export const CalendarModal = ({
 }: CalendarModalProps) => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState("internal");
+  // console.log(eventData);
 
   const category = event?.category?.toLowerCase() ?? "";
   const colors = CATEGORY_COLORS[category] ?? DEFAULT_COLORS;
-  const [isEditing, setIsEditing] = useState(false);
 
   const internalNames =
     eventData?.internalParticipant?.map(
-      (p) => `${p.firstName} ${p.lastName}`,
+      (p) => `${p.firstName} ${p.lastName} `,
     ) ?? [];
+
+  // const internalParticipantEmail =
   const externalNames =
-    eventData?.externalParticipant?.map((p) => p.name) ?? [];
+    eventData?.externalParticipant?.map((p) => `${p.name} ${p.email}`) ?? [];
 
   const booker = eventData?.roomBooker;
   const bookerName = booker
@@ -220,6 +223,8 @@ export const CalendarModal = ({
                     </Typography>
                     <Typography className="calendar-modal__row__secondary">
                       {internalNames.length + externalNames.length} Participants
+                      ({internalNames.length} Internal, {externalNames.length}{" "}
+                      External)
                     </Typography>
                   </div>
                 </AccordionSummary>
@@ -246,15 +251,19 @@ export const CalendarModal = ({
                       value="internal"
                       className="calendar-modal__tab-panel"
                     >
-                      {internalNames.length ? (
+                      {eventData?.internalParticipant?.length ? (
                         <div className="calendar-modal__chips">
-                          {internalNames.map((name, i) => (
-                            <Chip
-                              key={i}
-                              label={name}
-                              size="small"
-                              className="calendar-modal__participant-chip"
-                            />
+                          {eventData?.internalParticipant?.map((p) => (
+                            <div className="calendar-modal__participant-chip">
+                              <Avatar>
+                                {p.firstName[0]}
+                                {p.lastName[0]}
+                              </Avatar>
+                              <div>
+                                <Typography className="calendar-modal__empty">{`${p.firstName} ${p.lastName}`}</Typography>
+                                <Typography className="calendar-modal__empty">{`${p.email}`}</Typography>
+                              </div>
+                            </div>
                           ))}
                         </div>
                       ) : (
@@ -268,20 +277,26 @@ export const CalendarModal = ({
                       value="external"
                       className="calendar-modal__tab-panel"
                     >
-                      {externalNames.length ? (
+                      {eventData?.externalParticipant?.length ? (
                         <div className="calendar-modal__chips">
-                          {externalNames.map((name, i) => (
-                            <Chip
-                              key={i}
-                              label={name}
-                              size="small"
-                              className="calendar-modal__participant-chip calendar-modal__participant-chip--external"
-                            />
+                          {eventData?.externalParticipant?.map((p) => (
+                            <div className="calendar-modal__participant-chip">
+                              <Avatar>
+                                {p.name
+                                  .split(" ")
+                                  .map((word) => word[0])
+                                  .join("")}
+                              </Avatar>
+                              <div>
+                                <Typography className="calendar-modal__empty">{`${p.name}`}</Typography>
+                                <Typography className="calendar-modal__empty">{`${p.email}`}</Typography>
+                              </div>
+                            </div>
                           ))}
                         </div>
                       ) : (
                         <Typography className="calendar-modal__empty">
-                          No external participants
+                          No External participants
                         </Typography>
                       )}
                     </TabPanel>

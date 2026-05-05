@@ -72,7 +72,6 @@ const DashboardAnnouncements = () => {
     } catch (error) {
       console.error("Failed to update pin status", error);
       toast.error("Failed to update pin status");
-      fetchPinnedAnnouncements();
       fetchUnpinnedAnnouncements();
     }
   };

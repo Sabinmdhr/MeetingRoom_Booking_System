@@ -146,9 +146,9 @@
   }
 
   &__tab {
-    font-size: 12px !important;
+    font-size: 13px !important;
     text-transform: none !important;
-    min-height: 38px !important;
+    // min-height: 38px !important;
     color: #94a3b8 !important;
     padding: 6px 12px !important;
 
@@ -159,13 +159,14 @@
 
   &__tab-panel {
     padding: 12px !important;
-    min-height: 48px;
+    // min-height: 48px !important;
+    // overflow-y: scroll !important;
+    // height: 30vh !important;
   }
 
   //  Participant chips
 
   &__chips {
-    width: fit-content;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -173,12 +174,18 @@
   }
 
   &__participant-chip {
-    font-size: 12px !important;
-    font-weight: 500 !important;
-    background: #f1f5f9 !important;
-    color: #334155 !important;
-    border-radius: 6px !important;
-    height: 26px !important;
+    display: flex !important;
+    // font-weight: 500 !important;
+    gap: 8px;
+    background: #f1f5f9;
+    color: #334155;
+    border-radius: 14px !important;
+    padding: 8px !important;
+    align-items: center !important;
+
+    &Typography {
+      font-size: 10px !important;
+    }
 
     &--external {
       background: #f0fdf4 !important;
@@ -187,8 +194,8 @@
   }
 
   &__empty {
-    font-size: 13px !important;
-    color: #000 !important;
+    font-size: 14px !important;
+    color: #334155 !important;
   }
 
   //  Description box
