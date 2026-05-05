@@ -30,6 +30,7 @@ const Participants = () => {
     handleParticipantsFormClose,
     handleParticipantFormOpen,
     participantsFormState,
+    loading,
   } = useparticipantsViewModel();
 
   const { groupFormState, handleGroupFormOpen, handleGroupFormClose } =

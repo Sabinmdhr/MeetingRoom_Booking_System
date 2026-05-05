@@ -26,7 +26,6 @@ export const CommonDropdown = ({
         htmlFor={label}
         className="label"
       >
-        {" "}
         {label}
       </label>
 

@@ -15,17 +15,15 @@ import {
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import "../../assets/scss/components/Participants-Table.scss";
 import "../../assets/scss/global.scss";
-import {
-  EllipsisVertical,
-  Mail,
-  Pen,
-  Phone,
-  Trash2,
-} from "lucide-react";
-import type { ParticipantResponse, ParticipantsRequest } from "../../models/participants.model";
+import { EllipsisVertical, Mail, Pen, Phone, Trash2 } from "lucide-react";
+import type {
+  ParticipantResponse,
+  ParticipantsRequest,
+} from "../../models/participants.model";
 import { useState } from "react";
 import { permissions } from "../../utils/permissions";
 import { useAuth } from "../../hooks/useAuth";
+import { Spinner } from "../ui/Spinner";
 // import { openEditForm } from "../../redux/ParticipantsSlice";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
@@ -47,9 +45,9 @@ export const ParticipantsTable = ({
   handleParticipantFormOpen,
 }: props) => {
   // const { openAddParticipantForm } = useAddParticipantsViewModel();
-  const {  columns } = useparticipantsViewModel();
-const {role}  = useAuth();
-const perms = permissions[role as keyof typeof permissions];
+  const { columns, loading } = useparticipantsViewModel();
+  const { role } = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
 
   const [menuState, setMenuState] = useState<{
     anchorEl: HTMLElement | null;
@@ -77,7 +75,10 @@ const perms = permissions[role as keyof typeof permissions];
   };
   // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
-    <TableContainer component={Paper} className="TableContainer">
+    <TableContainer
+      component={Paper}
+      className="TableContainer"
+    >
       <Table>
         <TableHead className="TableHead">
           <TableRow>
@@ -86,10 +87,14 @@ const perms = permissions[role as keyof typeof permissions];
             ))}
           </TableRow>
         </TableHead>
+        {loading && <Spinner />}
 
         <TableBody>
           {users.map((participant: ParticipantResponse) => (
-            <TableRow key={participant.id} hover>
+            <TableRow
+              key={participant.id}
+              hover
+            >
               {columns.map((col) => {
                 switch (col.id) {
                   case "Name":
@@ -134,10 +139,8 @@ const perms = permissions[role as keyof typeof permissions];
                       </TableCell>
                     );
 
-
-
                   case "actions":
-                 return  perms?.canManageUsers ?(
+                    return perms?.canManageUsers ? (
                       <TableCell key={col.id}>
                         <IconButton
                           onClick={(e) => {
@@ -185,8 +188,7 @@ const perms = permissions[role as keyof typeof permissions];
                           </MenuItem>
                         </Menu>
                       </TableCell>
-                    ): null;
-
+                    ) : null;
 
                   default:
                     return <TableCell key={col.id}>-</TableCell>;

@@ -331,6 +331,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import "../../assets/scss/pages/Announcements.scss";
+// import "../../assets/scss/components/Announcement/AnnouncementCard.scss";
 import {
   Circle,
   CircleCheck,
@@ -388,7 +389,7 @@ const AnnouncementCard = ({
     if (!item.read) onMarkRead?.(item.id);
   };
 
-  // ── Menu ──────────────────────────────────────────────────
+  //  Menu
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     suppress();
@@ -401,7 +402,7 @@ const AnnouncementCard = ({
     setAnchorEl(null);
   };
 
-  // ── Detail modal ──────────────────────────────────────────
+  //  Detail modal
   const handleOpenDetail = () => {
     suppress();
     setAnchorEl(null);
@@ -409,7 +410,7 @@ const AnnouncementCard = ({
     setOpenDetailModal(true);
   };
 
-  // ── Edit modal ────────────────────────────────────────────
+  //  Edit modal
   const handleOpenEdit = () => {
     suppress();
     setOpenDetailModal(false);
@@ -430,7 +431,7 @@ const AnnouncementCard = ({
     onUpdate?.({ ...item, ...updatedItem });
   };
 
-  // ── Delete ────────────────────────────────────────────────
+  //  Delete
   const handleDeleteClick = () => {
     suppress();
     setConfirmAction("delete");
@@ -438,7 +439,7 @@ const AnnouncementCard = ({
     setAnchorEl(null);
   };
 
-  // ── Pin / Unpin ───────────────────────────────────────────
+  //  Pin / Unpin 
   const handlePinClick = () => {
     suppress();
     setConfirmAction(item.pinned ? "unpin" : "pin");
@@ -446,7 +447,7 @@ const AnnouncementCard = ({
     setAnchorEl(null);
   };
 
-  // ── Confirm dialog ────────────────────────────────────────
+  //  Confirm dialog
   const handleConfirmAction = () => {
     if (confirmAction === "delete") {
       onDelete(item.id);
@@ -466,7 +467,7 @@ const AnnouncementCard = ({
     setConfirmAction(null);
   };
 
-  // ── Card click ────────────────────────────────────────────
+  //  Card click
   const handleCardClick = () => {
     if (suppressCardClick.current) return;
 
@@ -484,12 +485,12 @@ const AnnouncementCard = ({
     }
   };
 
-  // ── CSS classes 
+  //  CSS classes
   const cardClass = [
     "announcement__card",
     item.pinned ? "pinned" : "",
     item.read ? "card__read" : "card__unread",
-    isSelected ? "card__selected" : "",
+    // isSelected ? "card__selected" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -524,7 +525,20 @@ const AnnouncementCard = ({
               variant="subtitle2"
             >
               {item.authorName} • {item.startDate}
+              {/* <Badge
+                // badgeContent={unreadCount}
+                color="error"
+              >
+                <Dot
+                  size={30}
+                  color="red"
+                  style={{
+                    visibility: item.read ? "hidden" : "visible",
+                  }}
+                />
+              </Badge> */}
             </Typography>
+
             <div className="announcement__card-left__bottom">
               <Typography
                 className={`announcement__card-title  ${item.read ? "card__read" : "card__unread"}`}
@@ -578,7 +592,7 @@ const AnnouncementCard = ({
                 <CircleCheck
                   size={20}
                   color="green"
-                  fill="#ede8f8"
+                  fill="#8cf1bd"
                 />
               ) : (
                 <Circle
@@ -595,8 +609,10 @@ const AnnouncementCard = ({
               onClose={handleMenuClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
+              slotProps={{ paper: { className: "announcement-menu__button" } }}
             >
               <MenuItem
+                className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenDetail();
@@ -606,6 +622,7 @@ const AnnouncementCard = ({
                 <Typography variant="body1">View Details</Typography>
               </MenuItem>
               <MenuItem
+                className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenEdit();
@@ -615,6 +632,7 @@ const AnnouncementCard = ({
                 <Typography variant="body1">Edit</Typography>
               </MenuItem>
               <MenuItem
+                className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
                   handlePinClick();
@@ -626,6 +644,7 @@ const AnnouncementCard = ({
                 </Typography>
               </MenuItem>
               <MenuItem
+                className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDeleteClick();

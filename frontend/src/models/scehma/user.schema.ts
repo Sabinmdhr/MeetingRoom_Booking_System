@@ -21,3 +21,7 @@ export const ParticipantSchema = z.object({
   password: z.string().min(6, "Password be at least 8 characters."),
 });
 
+// export const MeetingTypeSchema= z.object({
+//   name: z.string().min(2, "Meeting Type name is required"),
+// })
+

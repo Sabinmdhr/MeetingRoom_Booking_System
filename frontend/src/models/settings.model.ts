@@ -1,3 +1,5 @@
+import type { ColorResult } from "react-color";
+
 export interface ProfileSettings {
   firstName: string;
   lastName: string;
@@ -34,16 +36,13 @@ export interface Settings {
 }
 
 export type MeetingTypeStatus = "ACTIVE" | "INACTIVE";
+export interface meetingTypeChange{
+  status: MeetingTypeStatus
+} 
 export interface MeetingTypeUI {
-  id?: number;
+  id: number;
   name: string;
-  desc: string;
-  color: {
-    r: number;
-    g: number;
-    b: number;
-    a: number;
-  };
+  colorCode: string;
   status: MeetingTypeStatus;
 }
 
@@ -52,3 +51,4 @@ export interface MeetingTypeRequest{
   colorCode: string;
   status: MeetingTypeStatus;
 }
+
