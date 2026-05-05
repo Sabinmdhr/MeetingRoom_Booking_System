@@ -1,227 +1,69 @@
+// /* base card */
+// .announcement__card {
+//   border-radius: 12px !important;
+//   border: 1px solid #e5e7eb !important;
+//   transition: 0.2s ease;
+//   cursor: pointer;
+//   background: #fff;
 
-  //  Individual card
-  .announcement {
-  &__card {
-    border-radius: 12px !important;
-    border: 1px solid #d2c5db !important;
-    // background-color: #f8f7f9 !important;
-    cursor: pointer;
-    position: relative;
-    overflow: visible !important;
-    transition: box-shadow 0.2s ease;
-    &:hover {
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    }
-  }
-
-  &__pin-icon {
-    position: absolute;
-    top: -12px;
-    left: -15px;
-    padding: 4px;
-    rotate: 320deg;
-  }
-
-  // card content
-  &__card-content {
-    display: flex;
-    // flex-direction: row;
-    align-items: center;
-    // gap: 16px !important;
-    padding: 10px 12px !important;
-  }
-
-  //  Left column
-  &__card-left {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    padding-left: 7px;
-  }
-
-  &__author-date {
-    color: #6b7280;
-    display: flex;
-    // align-items: flex-end !important;
-    // justify-content: space-between;
-    font-size: 12px !important;
-    line-height: 1.4;
-  }
-
-  &__card-title {
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    margin-bottom: -2px !important;
-    line-height: 1.4;
-    color: #111;
-  }
-
-  &__description {
-    color: #535e6c;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 1.5;
-    overflow: hidden;
-  }
-
-  //  Right column: ellipsis menu btn + circle
-  &__card-right {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start !important;
-    gap: 8px !important;
-    flex-shrink: 0;
-    width: 28px;
-  }
-
-  &__menu-btn {
-    min-width: unset !important;
-    width: 28px !important;
-    height: 28px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: #111 !important;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.06) !important;
-    }
-  }
-
-  &__circle-btn {
-    width: 28px;
-    height: 28px;
-    padding: 0 !important;
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      background-color: rgba(134, 70, 195, 0.08);
-    }
-
-    // invisible spacer when click-mode is off — keeps column height stable
-    &--placeholder {
-      pointer-events: none;
-      visibility: hidden;
-    }
-  }
-
-  &__empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-  }
-  }
-
-// // ── Checkbox wrapper row
-// .checkbox__card {
-//   display: flex;
-//   align-items: flex-start;
-//   gap: 10px;
-//   width: 100%;
-
-//   .MuiCheckbox-root {
-//     margin-top: 6px;
-//     padding: 4px;
-//   }
-
-//   .announcement__card {
-//     flex: 1;
+//   &:hover {
+//     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 //   }
 // }
-// // ── Read / Unread colors
 
-// .announcement__card.card__unread {
-//   // background-color: #ede8f8 !important;
-//   // background-color: #f2eff6 !important;
-//   // border: 1px solid #c9b3e8 !important;
+// /* pinned */
+// .announcement__card--pinned {
+//   background: #f6f3fb;
+//   border-left: 4px solid #7c3aed;
 // }
 
-// // READ — soft neutral
-// .announcement__card.card__read {
-//   // background-color: #fafafa !important;
-//   // color: #6b7280 !important;
-//   // opacity:0.9;
+// /* unread (strong) */
+// .announcement__card--unread {
+//   .announcement__title {
+//     font-weight: 700;
+//     color: #111827;
+//   }
+
+//   .announcement__message {
+//     color: #374151;
+//   }
 // }
 
-// // base pinned (fallback)
-// .announcement__card.pinned {
-//   // border-left: 4px solid #c9b3e8 !important;
-//   background-color: #f2eff6 !important;
-//   // background-color: #ede8f8 !important;
+// /* read (muted) */
+// .announcement__card--read {
+//   opacity: 0.75;
+
+//   .announcement__title {
+//     font-weight: 500;
+//     color: #6b7280;
+//   }
+
+//   .announcement__message {
+//     color: #9ca3af;
+//   }
 // }
 
-// // pinned + unread → strong purple
-// .announcement__card.pinned.card__unread {
-//   // border-left: 4px solid #8646c3 !important;
+// /* meta */
+// .announcement__meta {
+//   font-size: 12px;
+//   color: #9ca3af;
 // }
 
-// // pinned + read → softer purple
-// .announcement__card.pinned.card__read {
-//   // background: red !important;
-// }
-// .card__read {
-//   color: #808692 !important;
-// }
-
-// // Stretch card-right to full card height so we can center inside it
-// // .announcement__card-content {
-// //   display: flex;
-// //   align-items: stretch !important;
-// //   padding: 10px 12px !important;
-// // }
-
-// .announcement__card-right {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center !important;
-//   flex-shrink: 0;
-//   width: 28px;
-//   gap: 0 !important;
+// /* dot indicator */
+// .announcement__dot {
+//   width: 6px;
+//   height: 6px;
+//   background: #ef4444;
+//   border-radius: 50%;
+//   margin-right: 6px;
+//   display: inline-block;
 // }
 
-// // Both buttons are visibility:hidden / visibility:visible, never display:none,
-// // so layout is always identical. Absolute stacking means they occupy the
-// // same space and the column stays exactly 28px wide at all times.
-// .announcement__menu-btn,
-// .announcement__circle-btn {
-//   position: absolute !important;
-//   top: 50%;
-//   transform: translateY(-50%);
-// }
-
-// .announcement__card-right {
-//   position: relative;
-// }
-
-// // // Selected card outline
-// // .announcement__card.card__selected {
-// //   outline: 2px solid #8646c3;
-// //   outline-offset: -2px;
-// // }
-
-// // Collapse the old wrapper div so it has zero layout effect
-// .checkbox__card {
-//   display: contents;
-// }
-
-// .announcement-menu__button {
-//   // display: flex !important;
-//   // justify-content: center;
-//   gap: 5px !important;
+// /* pin */
+// .announcement__pin-icon {
+//   position: absolute;
+//   top: -10px;
+//   left: -12px;
+//   transform: rotate(-20deg);
+//   color: #7c3aed;
 // }

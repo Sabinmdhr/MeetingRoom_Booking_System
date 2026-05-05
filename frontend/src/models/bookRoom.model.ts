@@ -25,7 +25,7 @@ export interface Room {
   id: number;
   roomName: string;
   capacity: number;
-  bookedStatus: string | null;
+  bookedStatus?: string | null;
   status: "ACTIVE" | string;
   resources: string[]; // could be enum if fixed
 }
@@ -69,22 +69,38 @@ export type MeetingTypeInfo = {
 
 export type Status = "ACTIVE" | "INACTIVE";
 export type MeetingStatus = "COMPLETED" | "ONGOING" | "UPCOMING";
+export type dates = {
+  meetingId: number;
+};
 
 export interface BookedRoomDataResponse {
+  id?: number;
   meetingTitle: string;
-  date: string;
+
+  startDate: string;
+  endDate?: string;
+
   startTime: string;
   endTime: string;
+
   description: string;
+
   status?: Status;
   meetingStatus?: MeetingStatus;
+
+  recurrenceId: string;
   recurrenceType: RecurrenceType;
   meetingType: MeetingTypeInfo[];
+
   externalParticipant?: BookedExternalParticipant[];
   internalParticipant?: BookedInternalParticipant[];
   room: Room;
+
+  dates?: dates[];
   roomBooker: RoomBooker;
 }
+
+
 
 export interface BookingRoomData {
   meetingTitle: string;

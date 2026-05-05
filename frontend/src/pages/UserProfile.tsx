@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography, Avatar } from "@mui/material";
 import "../assets/scss/pages/UserProfile.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileSection from "../components/Settings/ProfileSection";
 import MyButton from "../components/ui/Button";
 import { useUserProfileViewModel } from "../viewmodels/useUserProfileViewModel";

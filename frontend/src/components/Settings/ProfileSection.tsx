@@ -95,6 +95,7 @@ const ProfileSection = ({
               value={profile?.email}
               onChange={handleChange}
               error={!!errors.email}
+              disabled
             />
             <ErrorText error={errors.email} />
           </div>
