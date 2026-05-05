@@ -18,8 +18,9 @@ import { set } from "zod";
 import { current } from "@reduxjs/toolkit";
 
 interface TimeSlotSelectorProps {
-  onSave?: (slot: { startTime: string; endTime: string; date: string }) => void;
+  onSave?: (slot: { startTime: string; endTime: string; startDate: string }) => void;
   initialSlot?: { startTime: string; endTime: string };
+  id?: number;
 }
 
 const PIXELS_PER_HOUR = 120;
@@ -37,7 +38,7 @@ type InteractionMode =
   | "resize-bottom"
   | "create";
 const initialStartTime = {};
-export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
+export const TimeSlotSelector = ({ onSave, id }: TimeSlotSelectorProps) => {
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
 
@@ -88,7 +89,7 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
     onSave?.({
       startTime: minutesToTimeString(startTime),
       endTime: minutesToTimeString(endTime),
-      date: backendFormattedDate,
+      startDate: backendFormattedDate,
     });
     // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
     console.log(minutesToTimeString(startTime));
@@ -288,17 +289,18 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
               {formatDisplayTime(timeStringToMinutes(slot.end))}
             </div>
           ))}
-          {/* The Slot */}
+          {/* ---------------------prev past timeslot---------------- */}
           <div
             className="slot"
             style={{
               top: 0,
-              height: currentMinutes * MINUTE_HEIGHT,
+              height: snapToInterval((currentMinutes * MINUTE_HEIGHT), 5),
               backgroundColor: "#fff3cd",
               pointerEvents: "auto",
               cursor: "not-allowed",
             }}
           ></div>
+          {/* The Slot */}
           <div
             className="slot"
             style={{

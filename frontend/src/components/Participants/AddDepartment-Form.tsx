@@ -67,9 +67,18 @@ export const AddDepartmentForm = () => {
         </DialogContent>
         <DialogActions>
           <MyButton
-            text="Add"
+            text="Cancel"
             className=""
             customVariant="ghost"
+            onClick={() => {
+              // submitDepartment(departmentFormData);
+              handleDepartmentFormClose();
+            }}
+          ></MyButton>
+          <MyButton
+            text="Add"
+            className=""
+            customVariant="dark"
             onClick={() => {
               submitDepartment(departmentFormData);
               handleDepartmentFormClose();

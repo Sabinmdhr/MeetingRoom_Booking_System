@@ -23,13 +23,15 @@ import {
 } from "lucide-react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import type { CalendarEvent } from "../../models/calendar.model";
-import type { BookedRoomDataResponse } from "../../models/bookRoom.model";
+import type { BookedRoomDataResponse, BookingRoomData } from "../../models/bookRoom.model";
 import "../../assets/scss/components/Calendar/CalendarModal.scss";
 import { useNavigate } from "react-router-dom";
 import MyButton from "../ui/Button";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
 
 interface CalendarModalProps {
   open: boolean;
@@ -86,7 +88,7 @@ export const CalendarModal = ({
   const formattedDate = event?.date
     ? dayjs(event.date).format("ddd, MMMM D, YYYY")
     : "—";
-
+const dispatch = useDispatch();
   return (
     <Dialog
       open={open}
@@ -329,7 +331,11 @@ export const CalendarModal = ({
           variant="contained"
           customVariant="dark"
           startIcon={<SquarePen size={16} />}
-          onClick={() => navigate("/book-room")}
+          onClick={() => {
+            dispatch(
+              setBookingRoomFormData(eventData),
+            );
+            navigate("/book-room")}}
           text="Edit Meeting"
         />
       </DialogActions>

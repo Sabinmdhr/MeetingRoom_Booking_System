@@ -20,7 +20,7 @@ import { getAllMeetingType } from "../services/report.service";
 type BookingTimeAndDatePeops = {
   startTime: string;
   endTime: string;
-  date: string;
+  startDate: string;
 };
 export const useBookingRoomViewModel = () => {
   const [bookedSlots, setBookedSlots] = useState<
@@ -52,9 +52,9 @@ export const useBookingRoomViewModel = () => {
   const updateBookingTimeAndDate = ({
     startTime,
     endTime,
-    date,
+    startDate,
   }: BookingTimeAndDatePeops) => {
-    dispatch(updateBookingRoomFormData({ startTime, endTime, date }));
+    dispatch(updateBookingRoomFormData({ startTime, endTime, startDate }));
     navigate("/book-room");
   };
 

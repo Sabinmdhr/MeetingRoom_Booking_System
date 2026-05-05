@@ -3,8 +3,8 @@ import type { BookingRoomData } from "../models/bookRoom.model";
 
 const initialState: BookingRoomData = {
   meetingTitle: "",
-  roomId: 0,
-  date: "",
+  roomId: 1,
+  startDate: "",
   startTime: "",
   endTime: "",
   meetingTypeId: 0,
@@ -20,6 +20,11 @@ const BookingRoomSlice = createSlice({
   name: "BookingRoom",
   initialState,
   reducers: {
+
+    setBookingRoomFormData: (state, action: PayloadAction<BookingRoomData>) => {
+      return action.payload;
+    },
+
     updateBookingRoomFormData: (
       state,
       action: PayloadAction<Partial<BookingRoomData>>,
@@ -41,7 +46,10 @@ const BookingRoomSlice = createSlice({
         state.internalParticipantIds.push(participantId);
       }
     },
-    toggleExternalParticipantsSelection: (state, action: PayloadAction<{name:String, email:string}>) => {
+    toggleExternalParticipantsSelection: (
+      state,
+      action: PayloadAction<{ name: String; email: string }>,
+    ) => {
       const participant = action.payload;
       const isSelected = state.externalParticipants.some(
         (p) => p.email === participant.email,
@@ -59,7 +67,12 @@ const BookingRoomSlice = createSlice({
   },
 });
 
-export const { updateBookingRoomFormData, toggleExternalParticipantsSelection ,toggleParticipantsSelection, clearBookingRoomFormData } =
-  BookingRoomSlice.actions;
+export const {
+  updateBookingRoomFormData,
+  toggleExternalParticipantsSelection,
+  toggleParticipantsSelection,
+  clearBookingRoomFormData,
+  setBookingRoomFormData,
+} = BookingRoomSlice.actions;
 
 export default BookingRoomSlice.reducer;

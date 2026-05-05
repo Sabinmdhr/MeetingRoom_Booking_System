@@ -16,7 +16,10 @@ import { useEffect, useState } from "react";
 import type { meeting_rooms } from "../../models/meeting_room.model";
 import MyButton from "../ui/Button";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
-import { addMeetingResources, EditMeetingRoom } from "../../services/Meetinf_room.service";
+import {
+  addMeetingResources,
+  EditMeetingRoom,
+} from "../../services/Meetinf_room.service";
 
 type props = {
   roomFormState: {
@@ -130,10 +133,7 @@ export const AddMeetingRoomForm = ({
             <FormGroup>
               <Grid container>
                 {roomResources.map((resource) => (
-                  <Grid
-                    size={6}
-                    key={resource.id}
-                  >
+                  <Grid size={6} key={resource.id}>
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -150,31 +150,37 @@ export const AddMeetingRoomForm = ({
                 ))}
               </Grid>
               <hr />
-             {!addResourceMode && (
-               <MyButton
-                 text="Add Resources"
-                 customVariant="ghost"
-                 onClick={() => setAddResourceMode(true)}
-               />
-             )}
-{addResourceMode && (<>
-<label htmlFor="resourceName">Write Name for Resource</label>
-<TextField
-  id="resourceName"
-  placeholder="Resource Name"
-  className="customTextField"
-  value={meetingTypeName}
-  onChange={(e) => setMeetingTypeName(e.target.value)}
-/>
-<MyButton
-  text="Submit"
-  customVariant="ghost"
-  onClick={() => {
-    addMeetingResources(meetingTypeName);
-    setMeetingTypeName("");
-  }}
-/>
-</>)}
+              {!addResourceMode && (
+                <MyButton
+                  text="Add Resources"
+                  customVariant="ghost"
+                  onClick={() => setAddResourceMode(true)}
+                />
+              )}
+              {addResourceMode && (
+                <div className="add-resource-section">
+                    <label htmlFor="resourceName">
+                      Write Name for Resource
+                    </label>
+                  <div className="add-resource-form">
+                    <TextField
+                      id="resourceName"
+                      placeholder="Resource Name"
+                      className="customTextField"
+                      value={meetingTypeName}
+                      onChange={(e) => setMeetingTypeName(e.target.value)}
+                    />
+                    <MyButton
+                      text="Submit"
+                      customVariant="ghost"
+                      onClick={() => {
+                        addMeetingResources(meetingTypeName);
+                        setMeetingTypeName("");
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </FormGroup>
           </FormControl>
         </DialogContent>

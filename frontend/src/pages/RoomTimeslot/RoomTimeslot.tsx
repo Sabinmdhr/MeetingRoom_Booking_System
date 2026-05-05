@@ -14,7 +14,7 @@ const RoomTimeslot = () => {
   const [slot, setSlot] = useState({
     startTime: "00:00",
     endTime: "00:00",
-    date: "",
+    startDate: "",
   });
   return (
     <div className="room-timeslot">
@@ -43,10 +43,10 @@ const RoomTimeslot = () => {
             updateBookingTimeAndDate({
               startTime: slot.startTime,
               endTime: slot.endTime,
-              date: slot.date,
+              startDate: slot.startDate,
             });
             console.log(slot);
-            
+
           }}
         />
       </div>

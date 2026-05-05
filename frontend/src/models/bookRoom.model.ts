@@ -48,20 +48,6 @@ export type WeekDays =
   | "FRIDAY"
   | "SATURDAY";
 
-export interface BookingRoomData {
-  meetingTitle: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  meetingTypeId: number;
-  description: string;
-  externalParticipants: ExternalParticipant[];
-  internalParticipantIds: number[];
-  roomId: number;
-  recurrenceEndDate: string;
-  recurrenceType: RecurrenceType;
-  weekDays: WeekDays[];
-}
 export interface GetBookedRoomData {
   roomId: number;
   roomBookingId: number;
@@ -93,10 +79,24 @@ export interface BookedRoomDataResponse {
   status?: Status;
   meetingStatus?: MeetingStatus;
   recurrenceType: RecurrenceType;
-
   meetingType: MeetingTypeInfo[];
   externalParticipant?: BookedExternalParticipant[];
   internalParticipant?: BookedInternalParticipant[];
   room: Room;
   roomBooker: RoomBooker;
+}
+
+export interface BookingRoomData {
+  meetingTitle: string;
+  startDate: string;
+  startTime: string;
+  endTime: string;
+  meetingTypeId: number;
+  description: string;
+  externalParticipants: ExternalParticipant[];
+  internalParticipantIds: number[];
+  roomId: number;
+  recurrenceEndDate: string;
+  recurrenceType: RecurrenceType;
+  weekDays: WeekDays[];
 }

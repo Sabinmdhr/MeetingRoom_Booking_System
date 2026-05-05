@@ -112,7 +112,7 @@ const BookRoom = () => {
                 <label className="field-label">Date *</label>
                 <TextField
                   name="date"
-                  value={bookinRoomFormData.date}
+                  value={bookinRoomFormData.startDate}
                   onChange={handleChange}
                   // error={!!errors.date}
                   fullWidth
@@ -188,7 +188,9 @@ const BookRoom = () => {
                 <TextField
                   select
                   name="meetingTypeId"
-                  value={bookinRoomFormData.meetingTypeId}
+                  placeholder="Select Meeting Type"
+                  // value={bookinRoomFormData.meetingTypeId}
+                  value={meetingTypes.find((m) => m.id === bookinRoomFormData.meetingTypeId)?.name || ""}
                   onChange={handleChange}
                   // error={!!errors.meetingType}
                   fullWidth
@@ -207,6 +209,7 @@ const BookRoom = () => {
                     },
                   }}
                 >
+
                   {meetingTypes.map((meetingType) => (
                     <MenuItem key={meetingType.id} value={meetingType.id}>
                       {meetingType.name}

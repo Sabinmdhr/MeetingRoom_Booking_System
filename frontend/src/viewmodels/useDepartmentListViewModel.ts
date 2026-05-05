@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDepartmentList, handleAddDepartment } from "../services/departmentList.service";
+import { getDepartmentList, handleAddDepartment, handleEditDepartment } from "../services/departmentList.service";
 import type {
   addDepartment,
   departmentList,
@@ -74,6 +74,13 @@ const submitDepartment = async (data: addDepartment) => {
     console.error("Error adding department:", error);
   }
   }
+  const editDepartment = async (id: number, data: addDepartment) => {
+    try {
+      await handleEditDepartment(id, data);
+    } catch (error) {
+      console.error("Error editing department:", error);
+    }
+  }
   // Here you would typically send departmentFormData to your backend API
   useEffect(() => {
     fetchDepartments();
@@ -90,5 +97,6 @@ const submitDepartment = async (data: addDepartment) => {
     setDepartmentFormData,
     handleChange,
     submitDepartment,
+    editDepartment,
   };
 };
