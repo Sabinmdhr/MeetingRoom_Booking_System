@@ -7,6 +7,7 @@ import {
   TextField,
   MenuItem,
   Popover,
+  alpha,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -73,7 +74,7 @@ export const Calendar = () => {
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
   const { roomId } = useAppSelector((state) => state.bookingRoom);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
-  // ── Scroll sync ────────────────────────────────────────────────────────────
+  //  Scroll sync
   // Body is the only user-scrollable element. Header mirrors it via JS.
   // We use a setTimeout so the listener always attaches after React has painted
   // the month-view DOM (fixes the intermittent "header doesn't scroll" bug).
@@ -120,7 +121,7 @@ export const Calendar = () => {
     };
   }, [view]);
 
-  // ── Scroll to today ────────────────────────────────────────────────────────
+  //  Scroll to today
   const scrollToToday = useCallback(() => {
     const body = bodyScrollRef.current;
     if (!body) return;
@@ -139,7 +140,7 @@ export const Calendar = () => {
     return () => clearTimeout(t);
   }, [view, currentMonth.month(), currentMonth.year(), scrollToToday]);
 
-  // ── Derived ────────────────────────────────────────────────────────────────
+  //  Derived
   const todayStr = dayjs().format("YYYY-MM-DD");
   const isDayView = view === "day";
   const isMonthView = view === "month";
@@ -157,7 +158,7 @@ export const Calendar = () => {
     return out;
   })();
 
-  // ── Handlers ───────────────────────────────────────────────────────────────
+  //  Handlers
   const handleRoomCellClick = (date: dayjs.Dayjs, roomName: string) => {
     setSelectedRoom(roomName);
     goToToday(date);
@@ -181,7 +182,7 @@ export const Calendar = () => {
     }
   };
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+  //  Render
   return (
     <Card className="calendar">
       {/* TOP BAR */}
@@ -230,8 +231,14 @@ export const Calendar = () => {
                 }}
                 className="cal-tabs"
               >
-                <Tab label="Day" value="day" />
-                <Tab label="Month" value="month" />
+                <Tab
+                  label="Day"
+                  value="day"
+                />
+                <Tab
+                  label="Month"
+                  value="month"
+                />
               </Tabs>
 
               {isDayView && (
@@ -328,7 +335,10 @@ export const Calendar = () => {
           //   </div>
           // </div>
           <>
-            <TimeSlotSelector id={roomId} key={roomId} />
+            <TimeSlotSelector
+              id={roomId}
+              key={roomId}
+            />
           </>
         )}
 
@@ -337,7 +347,10 @@ export const Calendar = () => {
           <div className="room-grid">
             <div className="room-grid__header">
               <div className="room-grid__corner">Rooms</div>
-              <div className="room-grid__date-strip" ref={headerScrollRef}>
+              <div
+                className="room-grid__date-strip"
+                ref={headerScrollRef}
+              >
                 {gridDates.map((date) => {
                   const key = date.format("YYYY-MM-DD");
                   return (
@@ -360,19 +373,28 @@ export const Calendar = () => {
             <div className="room-grid__body">
               <div className="room-grid__labels">
                 {rooms.map((rm) => (
-                  <div key={rm.id} className="room-grid__label">
+                  <div
+                    key={rm.id}
+                    className="room-grid__label"
+                  >
                     <span>{rm.roomName}</span>
                   </div>
                 ))}
               </div>
 
               {/* THE only scrollable element */}
-              <div className="room-grid__scroll" ref={bodyScrollRef}>
+              <div
+                className="room-grid__scroll"
+                ref={bodyScrollRef}
+              >
                 {/* Loading skeleton — shown while rooms or events are fetching */}
                 {loading ? (
                   <div className="room-grid__skeleton">
                     {Array.from({ length: 3 }).map((_, ri) => (
-                      <div key={ri} className="room-grid__row">
+                      <div
+                        key={ri}
+                        className="room-grid__row"
+                      >
                         {Array.from({ length: 7 }).map((_, ci) => (
                           <div
                             key={ci}
@@ -384,7 +406,10 @@ export const Calendar = () => {
                   </div>
                 ) : (
                   rooms.map((rm) => (
-                    <div key={rm.id} className="room-grid__row">
+                    <div
+                      key={rm.id}
+                      className="room-grid__row"
+                    >
                       {gridDates.map((date) => {
                         const key = date.format("YYYY-MM-DD");
                         const cellEvents = (eventsByDate[key] ?? []).filter(
@@ -411,10 +436,35 @@ export const Calendar = () => {
                               );
                             }}
                           >
-                            {visible.map((event) => (
+                            {visible.map((event) => {
+                              const raw = event.meetingType?.colorCode;
+
+                              return (
+                                <div
+                                  key={event.id}
+                                  style={{
+                                    borderLeft: `5px solid rgb${raw}`,
+                                    background: alpha(`rgb${raw}`, 0.3),
+                                  }}
+                                  className="room-grid__event"
+                                  onClick={(e) => handleEventClick(e, event)}
+                                >
+                                  <span className="room-grid__event__time">
+                                    {event.startTime} – {event.endTime}
+                                  </span>
+                                  <span className="room-grid__event__title">
+                                    {event.meetingTitle}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                            {/* {visible.map((event) => (
                               <div
                                 key={event.id}
-                                className={`room-grid__event room-grid__event--${event.category}`}
+                                style={{
+                                  backgroundColor: `rgba(${colors})`,
+                                }}
+                                className={`room-grid__event`}
                                 onClick={(e) => handleEventClick(e, event)}
                               >
                                 <span className="room-grid__event__time">
@@ -424,7 +474,7 @@ export const Calendar = () => {
                                   {event.meetingTitle}
                                 </span>
                               </div>
-                            ))}
+                            ))} */}
 
                             {isHovered && (
                               <div
@@ -434,7 +484,10 @@ export const Calendar = () => {
                                   handleRoomCellClick(date, rm.roomName);
                                 }}
                               >
-                                <Plus size={12} strokeWidth={2.5} />
+                                <Plus
+                                  size={12}
+                                  strokeWidth={2.5}
+                                />
                                 <span>Book</span>
                               </div>
                             )}

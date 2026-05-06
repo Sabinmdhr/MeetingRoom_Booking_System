@@ -34,7 +34,7 @@ export function useMeetingReportViewModel() {
 
   const defaultPayload: ReportPayload = {
     pageNo: 0,
-    pageSize: 10000,
+    pageSize: 100,
     sortBy: "date",
     sortDir: "desc",
   };

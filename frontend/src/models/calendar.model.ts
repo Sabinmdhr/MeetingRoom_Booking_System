@@ -12,6 +12,13 @@ export type CalendarEvent = {
   participants: string[];
   description: string;
   department: string;
+
+  meetingType: {
+    id: number | string;
+    name: string;
+    colorCode: string;
+    status: string;
+  };
 };
 
 export interface CalenderMonth {
