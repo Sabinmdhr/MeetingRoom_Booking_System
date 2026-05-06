@@ -1,118 +1,47 @@
-// import { Card, Typography, Box, Paper } from "@mui/material";
-// import "../../assets/scss/pages/Settings.scss";
-// import { Palette } from "lucide-react";
-// import MyButton from "../ui/Button";
-
-// import { useState } from "react";
-// import { SketchPicker } from "react-color";
-
-// const ColorSection = () => {
-
-//   return (
-//     <>
-//       <Paper className="third-card">
-//         <Typography className="third-header">
-//           <Palette size={22} />
-//           Meeting Type Colors
-//         </Typography>
-//         <Typography variant="body2"
-//           className="third-subheader">
-//           Customize the color scheme for different meeting types across the
-//           dashboard
-//         </Typography>
-
-//         <div className="settings-color">
-//           <div className="color-item">
-//             <div className="color-heading">
-//               <Typography className="title">Internal Meetings</Typography>
-//               <Typography className="subtitle">
-//                 Team meetings, standups, reviews
-//               </Typography>
-//             </div>
-//             <div className="color-container">
-//               <Box className="color-picker"
-//               sx={{backgroundColor: color}}
-//               onClick={()=> setShowPicker(true)}>
-//                 {showPicker && (
-//                   <Box>
-//                     <SketchPicker
-//                     color={color}/>
-//                   </Box>
-//                 )}
-//               </Box>
-//             </div>
-//           </div>
-//           <hr />
-
-//           <div className="color-item">
-//             <div className="color">
-//               <Typography className="title">Client Meetings</Typography>
-//               <Typography className="subtitle">
-//                 External client presentations
-//               </Typography>
-//             </div>
-//           </div>
-//           <hr />
-
-//           <div className="color-item">
-//             <div className="color">
-//               <Typography className="title">Executive Meetings</Typography>
-//               <Typography className="subtitle">
-//                 Board meetings, leadership sessions
-//               </Typography>
-//             </div>
-//           </div>
-
-// <div className="color-btn">
-//   <MyButton
-//     variant="contained"
-//     customVariant="ghost"
-//     onClick={() => {}}
-//     text="Reset to Defaults"
-//   ></MyButton>
-//   <MyButton
-//     className="colors-btn"
-//     variant="contained"
-//     onClick={()=>{}}
-//     text="Save Colors"
-//     customVariant="dark"
-//   ></MyButton>
-
-// </div>
-//         </div>
-//       </Paper>
-//     </>
-//   );
-// };
-
-// export default ColorSection;
-
-import { Typography, IconButton, Paper, Box } from "@mui/material";
+import { Typography, IconButton, Paper, Box, TextField } from "@mui/material";
 import "../../assets/scss/pages/Settings.scss";
-import { SketchPicker } from "react-color";
+import { SketchPicker, type ColorResult } from "react-color";
 import { useSettingsViewModel } from "../../viewmodels/useSettingsViewModel";
 import { Palette, Pen, Plus, X } from "lucide-react";
 import MyButton from "../ui/Button";
+import ConfirmDialog from "../ui/ConfirmDialog";
 
 export default function MeetingTypeColors() {
   const {
     meetingTypes,
+    setMeetingTypes,
     activePickerId,
+    setActivePickerId,
     handleColorChange,
     togglePicker,
-    saveMeetingType,
+    addMeetingType,
+    pickerRef,
+    openDialog,
+    setOpenDialog,
+    deleteMeetingType,
+    selectedId,
+    setSelectedId,
+    editingId,
+    setEditingId,
+    handleUpdateMeetingType,
+    addForm,
+    setAddForm,
+    openPicker,
+    setOpenPicker,
+    meetingTypeFormData,
+    setMeetingTypeFormData,
   } = useSettingsViewModel();
 
   return (
     <Paper className="meeting-type-colors">
-      <Typography className="meeting-type-colors__title"><Palette size={22} />
+      <Typography className="meeting-type-colors__title">
+        <Palette size={22} />
         Meeting Type Colors
       </Typography>
-      <Typography variant="body2"
-          className="meeting-type-colors__subheader">
-          Customize the color scheme for different meeting types across the
-          dashboard
-        </Typography>
+      <Typography variant="body2" className="meeting-type-colors__subheader">
+        Customize the color scheme for different meeting types across the
+        dashboard
+      </Typography>
 
       {meetingTypes.map((item) => (
         <div className="meeting-type-colors__row" key={item.id}>
@@ -120,50 +49,194 @@ export default function MeetingTypeColors() {
             <div
               className="meeting-type-colors__color-preview"
               style={{
-                backgroundColor: `rgba(${item.color.r}, ${item.color.g}, ${item.color.b}, ${item.color.a})`,
+                backgroundColor: `rgb${item.colorCode}`,
               }}
             />
+          </div>
 
+          {editingId != item.id ? (
             <div className="meeting-type-colors__text">
-              <Typography className="title">{item.name}</Typography>
-              <Typography className="subtitle">{item.desc}</Typography>
+              <Typography className="title">{item.name}</Typography>{" "}
+              <div className="meeting-type-colors__right">
+                <Box className="meeting-type-colors__outer-color-box">
+                  <Box
+                    className="meeting-type-colors__color-box"
+                    onClick={() => togglePicker(item.id!)}
+                    style={{
+                      backgroundColor: `rgb${item.colorCode}`,
+                    }}
+                  />
+                </Box>
+
+                <IconButton
+                  className="meeting-type-colors__outer-icon-box"
+                  onClick={() => {
+                    setEditingId(item.id);
+                  }}
+                >
+                  <Pen size={18} />
+                </IconButton>
+
+                <IconButton
+                  className="meeting-type-colors__outer-icon-box"
+                  onClick={() => {
+                    setSelectedId(item.id);
+                    setOpenDialog(true);
+                  }}
+                >
+                  <X size={18} color="red" />
+                </IconButton>
+              </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="editable-meeting-type">
+                <TextField
+                  placeholder="Meeting type name"
+                  value={item.name}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setMeetingTypes((prev) =>
+                      prev.map((m) =>
+                        m.id === item.id ? { ...m, name: newValue } : m,
+                      ),
+                    );
+                  }}
+                  size="small"
+                  variant="outlined"
+                  className="editable-meeting-type__input"
+                />
+                <Box className="editable-meeting-type__outer-color-box">
+                  <Box
+                    className="editable-meeting-type__color-box"
+                    onClick={() => togglePicker(item.id!)}
+                    style={{
+                      backgroundColor: `rgb${item.colorCode}`,
+                    }}
+                  />
+                </Box>
+                <div className="meeting-type-color-btn">
+                  <MyButton
+                    className="meeting-type-colors-btn"
+                    variant="contained"
+                    customVariant="dark"
+                    onClick={() => handleUpdateMeetingType(item)}
+                    text="Save"
+                  />
+                  <MyButton
+                    className="meeting-type-colors-btn"
+                    variant="contained"
+                    onClick={() => {
+                      setEditingId(null);
+                    }}
+                    text="Cancel"
+                    customVariant="ghost"
+                  />
+                </div>
+              </div>
+            </>
+          )}
 
-          <div className="meeting-type-colors__right">
-            <Box className="meeting-type-colors__outer-color-box">
-              <Box
-                className="meeting-type-colors__color-box"
-                onClick={() => togglePicker(item.id!)}
-                style={{
-                  backgroundColor: `rgba(${item.color.r}, ${item.color.g}, ${item.color.b}, ${item.color.a})`,
-                }}
-              />
-            </Box>
-
-            <IconButton
-              className="meeting-type-colors__outer-icon-box"
-              onClick={() => saveMeetingType(item)}
-            >
-              <Pen size={18} />
-            </IconButton>
-
-            <IconButton className="meeting-type-colors__outer-icon-box">
-              <X size={18} color="red" />
-            </IconButton>
-
-          </div>
+          <ConfirmDialog
+            open={openDialog}
+            title="Delete Meeting Type"
+            content="Are you sure you want to delete this meeting type?"
+            text="Delete"
+            onConfirm={async () => {
+              if (selectedId !== null) {
+                await deleteMeetingType(selectedId);
+                console.log("deleted");
+              }
+              setOpenDialog(false);
+            }}
+            onClose={() => {
+              setOpenDialog(false);
+            }}
+          />
 
           {activePickerId === item.id && (
-            <div className="meeting-type-colors__picker">
+            <div className="meeting-type-colors__picker" ref={pickerRef}>
               <SketchPicker
-                color={item.color}
-                onChange={(color) => handleColorChange(item.id!, color)}
+                color={`${item?.colorCode}`}
+                onChangeComplete={(color: ColorResult) => {
+                  handleColorChange(item.id, color);
+                }}
               />
             </div>
           )}
         </div>
       ))}
+
+      {addForm && (
+        <>
+          <div className="meeting-type-colors__row">
+            <div className="meeting-type-colors__left">
+              <div
+                className="meeting-type-colors__color-preview"
+                style={{
+                  backgroundColor: `rgb${meetingTypeFormData.colorCode}`,
+                }}
+              />
+            </div>
+            <div className="editable-meeting-type">
+              <TextField
+                placeholder="Meeting type name"
+                value={meetingTypeFormData.name}
+                onChange={(e) => {
+                  setMeetingTypeFormData((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }));
+                }}
+                size="small"
+                variant="outlined"
+                className="editable-meeting-type__input"
+              />
+              <Box className="editable-meeting-type__outer-color-box">
+                <Box
+                  className="editable-meeting-type__color-box"
+                  onClick={() => setOpenPicker(!openPicker)}
+                  style={{
+                    backgroundColor: `rgb${meetingTypeFormData.colorCode}`,
+                  }}
+                />
+              </Box>
+              {addForm && openPicker && (
+                <div className="meeting-type-colors__picker" ref={pickerRef}>
+                  <SketchPicker
+                    color={meetingTypeFormData.colorCode}
+                    onChangeComplete={(color: ColorResult) => {
+                      const { r, g, b } = color.rgb;
+                      setMeetingTypeFormData((prev) => ({
+                        ...prev,
+                        colorCode: `(${r},${g},${b})`,
+                      }));
+                    }}
+                  />
+                </div>
+              )}
+              <div className="meeting-type-color-btn">
+                <MyButton
+                  className="meeting-type-colors-btn"
+                  variant="contained"
+                  customVariant="dark"
+                  onClick={() => addMeetingType(meetingTypeFormData)}
+                  text="Save"
+                />
+                <MyButton
+                  className="meeting-type-colors-btn"
+                  variant="contained"
+                  onClick={() => {
+                    setAddForm(false);
+                  }}
+                  text="Cancel"
+                  customVariant="ghost"
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="color-btn">
         <MyButton
@@ -172,15 +245,18 @@ export default function MeetingTypeColors() {
           customVariant="ghost"
           onClick={() => {}}
           text="Reset to Defaults"
-        ></MyButton>
+        />
         <MyButton
           className="colors-btn"
           variant="contained"
-          startIcon={<Plus  size={18}/>}
-          onClick={() => {}}
+          startIcon={<Plus size={18} />}
+          onClick={() => {
+            setAddForm(!addForm);
+            setOpenPicker(false);
+          }}
           text="Add Meeting Type"
           customVariant="dark"
-        ></MyButton>
+        />
       </div>
     </Paper>
   );

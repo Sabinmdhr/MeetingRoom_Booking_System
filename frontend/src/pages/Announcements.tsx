@@ -19,19 +19,18 @@ import { Spinner } from "../components/ui/Spinner";
 
 const Announcements = () => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const [click, setClick] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [confirmAction, setConfirmAction] = useState<"deleteBulk" | null>(null);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const handleOpen=()=> setOpen(true);
+  const handleClose=()=> setOpen(false);
 
   const {
     pinnedData,
     setPinnedData,
-    setUnpinnedData,
     unpinnedData,
+    setUnpinnedData,
     hasMore,
     fetchUnpinnedAnnouncements, // always a "reset" refresh
     loadMoreUnpinned, // Show More — appends next page
@@ -42,22 +41,22 @@ const Announcements = () => {
   const handleMarkRead = async (id: number) => {
     try {
       await markAsRead(id);
-      const markRead = (list: Announcements[]) =>
+      const apply = (list: Announcements[]) =>
         list.map((item) => (item.id === id ? { ...item, read: true } : item));
-      setPinnedData(markRead);
-      setUnpinnedData(markRead);
+      setPinnedData(apply);
+      setUnpinnedData(apply);
     } catch (error) {
       console.error("Failed to mark as read", error);
     }
   };
 
   //  Delete single
+  //  Delete single
   const handleDelete = async (id: number) => {
     try {
       await deleteAnnouncement(id);
       toast.success("Announcement deleted successfully");
-      // Remove optimistically so the UI is instant,
-      // then re-fetch both lists to get correct server state.
+      // Optimistic remove first so UI feels instant
       setPinnedData((prev) => prev.filter((x) => x.id !== id));
       setUnpinnedData((prev) => prev.filter((x) => x.id !== id));
       fetchUnpinnedAnnouncements();
@@ -69,10 +68,12 @@ const Announcements = () => {
   };
 
   //  Bulk delete
+  //  Bulk delete
   const handleBulkDelete = async (ids: number[]) => {
     try {
       await deleteBulk(ids);
       setSelectedIds([]);
+      setClick(false);
       toast.success("Announcements deleted successfully");
       fetchUnpinnedAnnouncements();
       setClick(false);
@@ -97,16 +98,14 @@ const Announcements = () => {
   // If the API fails, handlePinChange rolls back by re-fetching.
   const handleTogglePin = (updatedItem: Announcements) => {
     if (updatedItem.pinned) {
-      // Moving unpinned → pinned
-      // Guard: don't add if already in pinned list (double-click protection)
+      // unpinned → pinned: move to top of pinned, cap at 5
       setPinnedData((prev) => {
         if (prev.some((x) => x.id === updatedItem.id)) return prev;
         return [updatedItem, ...prev].slice(0, 5);
       });
       setUnpinnedData((prev) => prev.filter((x) => x.id !== updatedItem.id));
     } else {
-      // Moving pinned  unpinned
-      // Insert at top of unpinned list so it's visible immediately
+      // pinned → unpinned: move to top of unpinned
       setUnpinnedData((prev) => {
         if (prev.some((x) => x.id === updatedItem.id)) return prev;
         return [updatedItem, ...prev];
@@ -169,23 +168,21 @@ const Announcements = () => {
           </div>
 
           <div className="announcement__header-actions">
+            {/* Delete button only visible in select mode with items selected */}
             {click && (
               <MyButton
                 disabled={selectedIds.length === 0}
                 onClick={() => {
-                  if (selectedIds.length === 0) {
-                    toast.warning("Please select at least one announcement");
-                    return;
-                  }
                   setConfirmAction("deleteBulk");
                   setOpenConfirm(true);
                 }}
-                text="Delete"
+                text={`Delete${selectedIds.length > 0 ? ` (${selectedIds.length})` : ""}`}
                 variant="outlined"
                 customVariant="danger"
                 color="error"
               />
             )}
+
             {hasAny && (
               <MyButton
                 text={click ? "Cancel" : "Select"}
@@ -196,12 +193,13 @@ const Announcements = () => {
                 }}
               />
             )}
+
             <MyButton
               variant="contained"
               text="New Announcement"
               startIcon={<Plus size={19} />}
               customVariant="dark"
-              onClick={handleOpen}
+              onClick={() => setOpen(true)}
             />
           </div>
         </CardContent>
@@ -272,7 +270,7 @@ const Announcements = () => {
         )}
       </Card>
 
-      {/* Add modal */}
+      {/* Add modal — refresh resets both lists so new item appears at top */}
       <AnnouncementModal
         open={open}
         handleClose={handleClose}

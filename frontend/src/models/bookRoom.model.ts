@@ -90,7 +90,7 @@ export interface BookedRoomDataResponse {
 
   recurrenceId: string;
   recurrenceType: RecurrenceType;
-  meetingType: MeetingTypeInfo[];
+  meetingType: MeetingTypeInfo;
 
   externalParticipant?: BookedExternalParticipant[];
   internalParticipant?: BookedInternalParticipant[];

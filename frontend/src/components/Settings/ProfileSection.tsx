@@ -7,18 +7,18 @@ import { DepartmentList } from "../Participants/DepartmentList";
 import { RoleDropdown } from "../Participants/RoleDropdown";
 import { useAuth } from "../../hooks/useAuth";
 import { useUserProfileViewModel } from "../../viewmodels/useUserProfileViewModel";
-
+ 
 interface ProfileProps {
   // profile: UserProfileInfo;
   // onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   // onSave: () => Promise<boolean>;
   onCancel: () => void;
   // errors: Record<string, string>;
-
+ 
   // handleDepartmentChange: (id: number) => void;
   // handleRoleChange: (id: number) => void;
 }
-
+ 
 const ProfileSection = ({
   // onChange,
   // onSave,
@@ -31,7 +31,7 @@ const ProfileSection = ({
     error ? (
       <Typography className="profile-section__error">{error}</Typography>
     ) : null;
-
+ 
   const positions = [
     "Senior Engineer",
     "Tech Lead",
@@ -59,7 +59,7 @@ const ProfileSection = ({
       >
         Edit User Information
       </Typography>
-
+ 
       <Card className="profile-section__card">
         {/* Row 1 */}
         <div className="profile-section__row">
@@ -73,7 +73,7 @@ const ProfileSection = ({
             />
             <ErrorText error={errors.firstname} />
           </div>
-
+ 
           <div className="profile-section__field">
             <label className="profile-section__label">Last Name</label>
             <TextField
@@ -85,7 +85,7 @@ const ProfileSection = ({
             <ErrorText error={errors.lastname} />
           </div>
         </div>
-
+ 
         {/* Row 2 */}
         <div className="profile-section__row">
           <div className="profile-section__field">
@@ -99,7 +99,7 @@ const ProfileSection = ({
             />
             <ErrorText error={errors.email} />
           </div>
-
+ 
           <div className="profile-section__field">
             <label className="profile-section__label">Phone Number</label>
             <TextField
@@ -111,7 +111,7 @@ const ProfileSection = ({
             <ErrorText error={errors.phoneNo} />
           </div>
         </div>
-
+ 
         {
           <div className="profile-section__row">
             <div className="profile-section__field">
@@ -120,7 +120,7 @@ const ProfileSection = ({
                 onChange={handleDepartmentChange}
               />
             </div>
-
+ 
             <div className="profile-section__field">
               <RoleDropdown
                 value={profile?.roleId ?? 1}
@@ -129,7 +129,7 @@ const ProfileSection = ({
             </div>
           </div>
         }
-
+ 
         {
           <div className="profile-section__row">
             <div className="profile-section__field">
@@ -150,12 +150,12 @@ const ProfileSection = ({
                 ))}
               </TextField>
             </div>
-
+ 
             {/* empty space to keep alignment */}
             <div className="profile-section__field profile-section__field--empty" />
           </div>
         }
-
+ 
         <div className="profile-section__actions">
           <MyButton
             text="Save Changes"
@@ -165,11 +165,11 @@ const ProfileSection = ({
               console.log("CLICKED SAVE"); //  ADD THIS
               const success = await saveProfile();
               console.log("RESULT:", success);
-
+ 
               if (success) toast.success("Changes saved successfully");
             }}
           />
-
+ 
           <MyButton
             text="Cancel"
             variant="contained"
@@ -181,5 +181,5 @@ const ProfileSection = ({
     </div>
   );
 };
-
+ 
 export default ProfileSection;

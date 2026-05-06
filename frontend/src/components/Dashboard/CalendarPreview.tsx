@@ -188,7 +188,7 @@ const CalendarPreview: React.FC = () => {
         startIcon={<CalendarIcon size={18} />}
         variant="outlined"
         fullWidth
-        text="Open Full Calender View"
+        text="Open Full Calendar View"
         customVariant="primary"
         onClick={() => navigate("/Calendar")}
       />

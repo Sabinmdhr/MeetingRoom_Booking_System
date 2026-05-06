@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import "../../assets/scss/pages/Announcements.scss";
 // import "../../assets/scss/components/Announcement/AnnouncementCard.scss";
+// import "../../assets/scss/components/Announcement/AnnouncementCard.scss";
 import {
   Circle,
   CircleCheck,
@@ -65,6 +66,7 @@ const AnnouncementCard = ({
   };
 
   //  Menu
+  //  Menu
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     suppress();
@@ -78,6 +80,7 @@ const AnnouncementCard = ({
   };
 
   //  Detail modal
+  //  Detail modal
   const handleOpenDetail = () => {
     suppress();
     setAnchorEl(null);
@@ -85,6 +88,7 @@ const AnnouncementCard = ({
     setOpenDetailModal(true);
   };
 
+  //  Edit modal
   //  Edit modal
   const handleOpenEdit = () => {
     suppress();
@@ -107,6 +111,7 @@ const AnnouncementCard = ({
   };
 
   //  Delete
+  //  Delete
   const handleDeleteClick = () => {
     suppress();
     setConfirmAction("delete");
@@ -122,6 +127,7 @@ const AnnouncementCard = ({
     setAnchorEl(null);
   };
 
+  //  Confirm dialog
   //  Confirm dialog
   const handleConfirmAction = () => {
     if (confirmAction === "delete") {
@@ -143,6 +149,7 @@ const AnnouncementCard = ({
   };
 
   //  Card click
+  //  Card click
   const handleCardClick = () => {
     if (suppressCardClick.current) return;
 
@@ -161,10 +168,12 @@ const AnnouncementCard = ({
   };
 
   //  CSS classes
+  //  CSS classes
   const cardClass = [
     "announcement__card",
     item.pinned ? "pinned" : "",
     item.read ? "card__read" : "card__unread",
+    // isSelected ? "card__selected" : "",
     // isSelected ? "card__selected" : "",
   ]
     .filter(Boolean)
@@ -212,7 +221,20 @@ const AnnouncementCard = ({
                   }}
                 />
               </Badge> */}
+              {/* <Badge
+                // badgeContent={unreadCount}
+                color="error"
+              >
+                <Dot
+                  size={30}
+                  color="red"
+                  style={{
+                    visibility: item.read ? "hidden" : "visible",
+                  }}
+                />
+              </Badge> */}
             </Typography>
+
 
             <div className="announcement__card-left__bottom">
               <Typography
@@ -268,6 +290,7 @@ const AnnouncementCard = ({
                   size={20}
                   color="green"
                   fill="#8cf1bd"
+                  fill="#8cf1bd"
                 />
               ) : (
                 <Circle
@@ -285,8 +308,10 @@ const AnnouncementCard = ({
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
               slotProps={{ paper: { className: "announcement-menu__button" } }}
+              slotProps={{ paper: { className: "announcement-menu__button" } }}
             >
               <MenuItem
+                className="announcement-menu__button"
                 className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -298,6 +323,7 @@ const AnnouncementCard = ({
               </MenuItem>
               <MenuItem
                 className="announcement-menu__button"
+                className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenEdit();
@@ -307,6 +333,7 @@ const AnnouncementCard = ({
                 <Typography variant="body1">Edit</Typography>
               </MenuItem>
               <MenuItem
+                className="announcement-menu__button"
                 className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -319,6 +346,7 @@ const AnnouncementCard = ({
                 </Typography>
               </MenuItem>
               <MenuItem
+                className="announcement-menu__button"
                 className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();

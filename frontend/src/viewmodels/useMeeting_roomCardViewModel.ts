@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { AddRoomModal, meeting_rooms } from "../models/meeting_room.model";
+import type { AddRoomModal, meeting_rooms, UpcomingMeetingResponse } from "../models/meeting_room.model";
 import {
   addRoom,
   getMeetingRooms,
@@ -8,7 +8,6 @@ import {
 } from "../services/Meetinf_room.service";
 import { toast } from "react-toastify";
 import { getUpcomingMeeting } from "../services/Meetinf_room.service";
-import type { UpcomingMeetingApi } from "../models/meeting_room.model";
 import dayjs from "dayjs";
 
 export const useMeetingCardViewModel = () => {
@@ -18,7 +17,7 @@ export const useMeetingCardViewModel = () => {
   const [addResourceMode, setAddResourceMode] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
-  const [upcomingMeeting, setUpcomingMeeting] = useState<UpcomingMeetingApi[]>(
+  const [upcomingMeeting, setUpcomingMeeting] = useState<UpcomingMeetingResponse[]>(
     [],
   );
 
@@ -117,7 +116,7 @@ export const useMeetingCardViewModel = () => {
   const fetchUpcomingMeetings = async () => {
     try {
       setLoading(true);
-      const res = await getUpcomingMeeting();
+      const res = await getUpcomingMeeting(); 
       const sorted = [...res.data].sort(
         (a, b) =>
           dayjs(`${a.date} ${a.startTime}`).valueOf() -
@@ -126,6 +125,8 @@ export const useMeetingCardViewModel = () => {
       const filtered = sorted.slice(0, 5);
 
       setUpcomingMeeting(filtered);
+      console.log(upcomingMeeting);
+      
     } catch (error) {
       console.error(error);
     } finally {

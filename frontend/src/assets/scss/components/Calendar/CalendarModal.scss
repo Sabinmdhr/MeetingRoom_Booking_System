@@ -6,26 +6,26 @@
   overflow: hidden;
   // max-height: 90vh;
   position: relative !important;
-
+ 
   &__header {
     padding: 18px 16px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
-
+ 
     &__left {
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
-
+ 
     &__title {
       font-size: 20px !important;
       font-weight: 700 !important;
       color: #0f172a !important;
     }
-
+ 
     &__chip {
       width: fit-content;
       font-size: 12px !important;
@@ -34,7 +34,7 @@
       text-transform: capitalize;
       border-radius: 6px !important;
     }
-
+ 
     &__close {
       color: #94a3b8 !important;
       &:hover {
@@ -43,27 +43,27 @@
       }
     }
   }
-
+ 
   //  Content area
   &__content {
     overflow-y: auto !important;
     padding: 0 !important;
   }
-
+ 
   &__loading {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 48px;
   }
-
+ 
   &__body {
     padding: 16px !important;
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
-
+ 
   &__icon-wrap {
     width: 34px;
     height: 34px;
@@ -72,37 +72,37 @@
     align-items: center;
     justify-content: center;
   }
-
+ 
   &__row {
     display: flex;
     align-items: flex-start;
     gap: 12px;
     padding: 8px 0;
-
+ 
     &__content {
       display: flex;
       flex-direction: column;
       gap: 3px;
       padding-top: 2px;
     }
-
+ 
     &__label {
       font-size: 16px !important;
       font-weight: 600 !important;
       color: #000 !important;
     }
-
+ 
     &__primary {
       font-size: 14px !important;
       color: #6f757d !important;
     }
-
+ 
     &__secondary {
       font-size: 13px !important;
       color: #64748b !important;
     }
   }
-
+ 
   &__accordion {
     position: sticky !important;
     width: 100%;
@@ -110,69 +110,69 @@
     border-radius: 10px !important;
     background: #fff !important;
     overflow: hidden;
-
+ 
     &__summary {
       padding: 10px 14px !important;
       min-height: unset !important;
       gap: 12px;
-
+ 
       .MuiAccordionSummary-content {
         display: flex;
         align-items: center;
         gap: 12px;
         margin: 0 !important;
       }
-
+ 
       &:hover {
         background: #f8fafc;
       }
     }
-
+ 
     &__details {
       padding: 0 !important;
       border-top: 1px solid #f1f5f9;
     }
   }
-
+ 
   //  Tabs inside accordion
-
+ 
   &__tabs {
     padding: 0 8px;
-
+ 
     .MuiTabs-indicator {
       background: #1251e5;
       height: 2px;
     }
   }
-
+ 
   &__tab {
     font-size: 13px !important;
     text-transform: none !important;
     // min-height: 38px !important;
     color: #94a3b8 !important;
     padding: 6px 12px !important;
-
+ 
     &.Mui-selected {
       color: #0f172a !important;
     }
   }
-
+ 
   &__tab-panel {
     padding: 12px !important;
     // min-height: 48px !important;
     // overflow-y: scroll !important;
     // height: 30vh !important;
   }
-
+ 
   //  Participant chips
-
+ 
   &__chips {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     gap: 6px;
   }
-
+ 
   &__participant-chip {
     display: flex !important;
     // font-weight: 500 !important;
@@ -182,24 +182,24 @@
     border-radius: 14px !important;
     padding: 8px !important;
     align-items: center !important;
-
+ 
     &Typography {
       font-size: 10px !important;
     }
-
+ 
     &--external {
       background: #f0fdf4 !important;
       color: #15803d !important;
     }
   }
-
+ 
   &__empty {
     font-size: 14px !important;
     color: #334155 !important;
   }
-
+ 
   //  Description box
-
+ 
   &__description-box {
     width: 100%;
     background: #f8fafc;
@@ -210,25 +210,27 @@
     flex-direction: column;
     gap: 10px;
   }
-
+ 
   &__description-header {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-
+ 
   &__description-text {
     margin-left: 22px !important;
     font-size: 14px !important;
     color: #475569 !important;
     white-space: pre-wrap;
   }
-
+ 
   //  Actions
-
+ 
   &__actions {
     padding: 12px 20px !important;
     gap: 8px;
     background: #fafafa;
   }
 }
+ 
+ 

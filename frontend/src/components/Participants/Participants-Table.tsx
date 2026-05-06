@@ -20,6 +20,7 @@ import type {
   ParticipantResponse,
   ParticipantsRequest,
 } from "../../models/participants.model";
+  
 import { useState } from "react";
 import { permissions } from "../../utils/permissions";
 import { useAuth } from "../../hooks/useAuth";
@@ -76,6 +77,7 @@ export const ParticipantsTable = ({
   };
   // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
+ 
     <TableContainer
       component={Paper}
       className="TableContainer"
@@ -89,6 +91,7 @@ export const ParticipantsTable = ({
             ))}
           </TableRow>
         </TableHead>
+        {loading && <Spinner />}
         {loading && <Spinner />}
 
         <TableBody>

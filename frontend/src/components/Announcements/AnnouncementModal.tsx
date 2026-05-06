@@ -35,17 +35,14 @@ const AnnouncementModal = ({
     initialData,
     onUpdate,
   );
-  type AnnouncementForm = {
-    title: string;
-    message: string;
-    startDate: string;
-    endDate: string;
-    pinned: boolean;
-  };
+
+  // Restrict to string-only fields so `.length` is always valid.
+  // "pinned" (boolean) is intentionally excluded — it has its own checkbox below.
+  type StringFields = "title" | "message" | "startDate" | "endDate";
 
   const fields: {
     label: string;
-    name: keyof AnnouncementForm;
+    name: StringFields;
     placeholder: string;
     type: string;
     rows?: number;
@@ -67,6 +64,7 @@ const AnnouncementModal = ({
       maxLength: 500,
     },
   ];
+
   return (
     <Dialog
       open={open}
@@ -76,7 +74,6 @@ const AnnouncementModal = ({
       slotProps={{ paper: { className: "announcement__modal__main" } }}
     >
       <div className="announcementModal">
-        {/* HEADER */}
         <DialogTitle className="announcementModal__header">
           <div className="announcementModal__header__main">
             <Megaphone size={20} />
@@ -84,16 +81,13 @@ const AnnouncementModal = ({
               {isEditing ? "Edit Announcement" : "Add New Announcement"}
             </span>
           </div>
-
           <X
             className="announcementModal__header__close"
             onClick={closeAnnouncementForm}
           />
         </DialogTitle>
 
-        {/* CONTENT */}
         <DialogContent>
-          {/* TEXT FIELDS */}
           {fields.map((field) => (
             <div
               className="announcementModal__inputGroup"
@@ -105,29 +99,25 @@ const AnnouncementModal = ({
               >
                 {field.label}
               </label>
-
               <TextField
                 id={field.name}
                 name={field.name}
-                value={announcementFormData[field.name] || ""}
+                value={announcementFormData[field.name]}
                 onChange={handleChange}
                 fullWidth
                 multiline={field.type === "multiline"}
-                rows={field.rows || 1}
+                rows={field.rows ?? 1}
                 placeholder={field.placeholder}
                 inputProps={{ maxLength: field.maxLength }}
               />
-
+              {/* .length is safe because field.name is always a string key */}
               <span className="announcementModal__counter">
-                {announcementFormData[field.name]?.length || 0}/
-                {field.maxLength}
+                {announcementFormData[field.name].length}/{field.maxLength}
               </span>
             </div>
           ))}
 
-          {/* DATE PICKERS */}
           <div className="announcementModal__row">
-            {/* START DATE */}
             <div className="announcementModal__inputGroup">
               <label className="announcementModal__label">
                 <Calendar size={15} /> Start Date
@@ -135,14 +125,13 @@ const AnnouncementModal = ({
               <TextField
                 type="date"
                 name="startDate"
-                value={announcementFormData.startDate || ""}
+                value={announcementFormData.startDate}
                 onChange={handleChange}
                 fullWidth
                 inputProps={{ min: dayjs().format("YYYY-MM-DD") }}
               />
             </div>
 
-            {/* END DATE */}
             <div className="announcementModal__inputGroup">
               <label className="announcementModal__label">
                 <Calendar size={15} /> End Date
@@ -150,7 +139,7 @@ const AnnouncementModal = ({
               <TextField
                 type="date"
                 name="endDate"
-                value={announcementFormData.endDate || ""}
+                value={announcementFormData.endDate}
                 onChange={handleChange}
                 fullWidth
                 inputProps={{
@@ -162,40 +151,43 @@ const AnnouncementModal = ({
             </div>
           </div>
 
-          {/* CHECKBOX */}
-          <div className="announcementModal__checkbox">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  color="primary"
-                  checked={announcementFormData.pinned}
-                  onChange={(e) =>
-                    setAnnouncementFormData((prev: any) => ({
-                      ...prev,
-                      pinned: e.target.checked,
-                    }))
-                  }
-                />
-              }
-              label={
-                <span className="announcementModal__checkbox-style">
-                  <Pin
-                    fill="#8646C3"
-                    size={18}
-                    color="#8646C3"
+          {/* Pin checkbox — only shown when adding, not editing.
+              Pin status on existing announcements is managed via the
+              pin icon / menu, not the edit form. */}
+          {!isEditing && (
+            <div className="announcementModal__checkbox">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    checked={announcementFormData.pinned}
+                    onChange={(e) =>
+                      setAnnouncementFormData((prev) => ({
+                        ...prev,
+                        pinned: e.target.checked,
+                      }))
+                    }
                   />
-                  <Typography className="announcementModal__label">
-                    Pin this announcement to the top
-                  </Typography>
-                </span>
-              }
-            />
-          </div>
+                }
+                label={
+                  <span className="announcementModal__checkbox-style">
+                    <Pin
+                      fill="#8646C3"
+                      size={18}
+                      color="#8646C3"
+                    />
+                    <Typography className="announcementModal__label">
+                      Pin this announcement to the top
+                    </Typography>
+                  </span>
+                }
+              />
+            </div>
+          )}
         </DialogContent>
 
         <Divider className="announcementModal__divider" />
 
-        {/* ACTIONS */}
         <DialogActions className="announcementModal__actions">
           <MyButton
             variant="outlined"
@@ -203,7 +195,6 @@ const AnnouncementModal = ({
             onClick={closeAnnouncementForm}
             text="Cancel"
           />
-
           <MyButton
             variant="contained"
             text={isEditing ? "Save Changes" : "Publish Announcement"}

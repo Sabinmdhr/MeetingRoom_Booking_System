@@ -4,6 +4,7 @@
 }
 
 // ── Outer card — fixed height, internal scroll ─────────────
+// ── Outer card — fixed height, internal scroll ─────────────
 .announcement {
   border-radius: 12px !important;
   padding: 0 20px;
@@ -49,10 +50,27 @@
   }
 
   // ── Scrollable body — grows to fill remaining card height ──
+  // ── Scrollable body — grows to fill remaining card height ──
   &__content {
+    flex: 1;
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // Empty / loading state — fills remaining space and centers
+  &__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
     overflow-y: auto;
     scrollbar-width: none;
 
@@ -81,15 +99,18 @@
     gap: 7px;
     padding-top: 7px !important;
     padding-bottom: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   &__bottom {
+    margin: 12px auto;
     margin: 12px auto;
     display: flex;
     gap: 8px;
     justify-content: center;
   }
 
+  // ── Individual card ────────────────────────────────────
   // ── Individual card ────────────────────────────────────
   &__card {
     border-radius: 12px !important;
@@ -111,10 +132,13 @@
     padding: 4px;
     rotate: 320deg;
     cursor: pointer;
+    cursor: pointer;
   }
 
   &__card-content {
     display: flex;
+    align-items: stretch !important;
+    padding: 8px 12px !important;
     align-items: stretch !important;
     padding: 8px 12px !important;
   }
@@ -152,16 +176,26 @@
   // ── Right column — menu + circle selector ─────────────
   // Both buttons are position:absolute so they stack in the same
   // 28×28 space. visibility:hidden/visible keeps layout stable.
+  // ── Right column — menu + circle selector ─────────────
+  // Both buttons are position:absolute so they stack in the same
+  // 28×28 space. visibility:hidden/visible keeps layout stable.
   &__card-right {
+    position: relative;
     position: relative;
     flex-shrink: 0;
     width: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__menu-btn {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     position: absolute !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
@@ -183,6 +217,9 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: 28px;
     height: 28px;
     display: flex;
@@ -194,14 +231,22 @@
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.08);
+      background-color: rgba(0, 0, 0, 0.08);
     }
   }
 }
+  
 
+
+// ── Read / Unread ──────────────────────────────────────────
 // ── Read / Unread ──────────────────────────────────────────
 .card__read {
   color: #808692 !important;
 }
+
+// ── Pinned card background ─────────────────────────────────
+.announcement__card.pinned {
+  background-color: #f2eff6 !important;
 
 // ── Pinned card background ─────────────────────────────────
 .announcement__card.pinned {
@@ -211,9 +256,15 @@
 // ── Menu paper gap ─────────────────────────────────────────
 .announcement-menu__button {
   gap: 5px !important;
+// ── Menu paper gap ─────────────────────────────────────────
+.announcement-menu__button {
+  gap: 5px !important;
 }
 
 // ── Checkbox wrapper — display:contents removes layout effect ──
+// ── Checkbox wrapper — display:contents removes layout effect ──
 .checkbox__card {
   display: contents;
+}
+}
 }
