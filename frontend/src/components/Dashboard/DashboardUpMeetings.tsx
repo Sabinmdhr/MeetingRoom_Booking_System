@@ -18,12 +18,12 @@ const DashboardUpMeetings = () => {
             className="dashboard-upmeetings__cardheader"
             title={
               <Typography className="dashboard-upmeetings__cardheader__meetingtitle">
-                {m.meetingTitle}
+                {m}
               </Typography>
             }
             action={
               <Chip
-                style={{ color: `rgba${m.meetingType.colorCode}` }}
+                style={{ color: `rgb(${m.meetingType.colorCode})` }}
                 label={m.meetingType.name}
                 className="dashboard-upmeetings__chip"
               />

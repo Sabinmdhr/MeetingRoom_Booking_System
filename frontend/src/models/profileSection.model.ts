@@ -5,14 +5,11 @@ export interface UserProfileInfo {
   firstname: string;
   lastname: string;
   email: string;
-  phoneNo: string;
-
+phoneNo: string;
   department: string;
   departmentId: number;
-
   role: string;
   roleId?: number;
-
   position: string;
   status: Status;
 }

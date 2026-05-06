@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import type { CalendarEvent } from "../../models/calendar.model";
-import type { BookedRoomDataResponse, BookingRoomData } from "../../models/bookRoom.model";
+import type { BookedRoomDataResponse } from "../../models/bookRoom.model";
 import "../../assets/scss/components/Calendar/CalendarModal.scss";
 import { useNavigate } from "react-router-dom";
 import MyButton from "../ui/Button";
@@ -33,7 +33,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
-
+ 
 interface CalendarModalProps {
   open: boolean;
   event: CalendarEvent | null;
@@ -43,19 +43,7 @@ interface CalendarModalProps {
   eventData?: BookedRoomDataResponse | null;
   eventDataLoading?: boolean;
 }
-
-const CATEGORY_COLORS: Record<
-  string,
-  { bg: string; text: string; iconBg: string }
-> = {
-  internal: { bg: "#dbeafe", text: "#1d4ed8", iconBg: "#eff6ff" },
-  client: { bg: "#ffedd5", text: "#c2410c", iconBg: "#fff7ed" },
-  executive: { bg: "#f3e8ff", text: "#7e22ce", iconBg: "#faf5ff" },
-  external: { bg: "#dcfce7", text: "#15803d", iconBg: "#f0fdf4" },
-};
-
-const DEFAULT_COLORS = { bg: "#f1f5f9", text: "#475569", iconBg: "#f8fafc" };
-
+ 
 export const CalendarModal = ({
   open,
   event,
@@ -64,21 +52,14 @@ export const CalendarModal = ({
   eventDataLoading,
 }: CalendarModalProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState("internal");
-  // console.log(eventData);
-
-  const category = event?.category?.toLowerCase() ?? "";
-  const colors = CATEGORY_COLORS[category] ?? DEFAULT_COLORS;
-
-  const internalNames =
-    eventData?.internalParticipant?.map(
-      (p) => `${p.firstName} ${p.lastName} `,
-    ) ?? [];
-
-  // const internalParticipantEmail =
-  const externalNames =
-    eventData?.externalParticipant?.map((p) => `${p.name} ${p.email}`) ?? [];
-
+ 
+  const colorCode = eventData?.meetingType?.colorCode;
+ 
+  const internalParticipants = eventData?.internalParticipant ?? [];
+  const externalParticipants = eventData?.externalParticipant ?? [];
+ 
   const booker = eventData?.roomBooker;
   const bookerName = booker
     ? `${booker.firstName} ${booker.lastName}`
@@ -91,7 +72,7 @@ export const CalendarModal = ({
   const formattedDate = event?.date
     ? dayjs(event.date).format("ddd, MMMM D, YYYY")
     : "—";
-const dispatch = useDispatch();
+ 
   return (
     <Dialog
       open={open}
@@ -101,17 +82,20 @@ const dispatch = useDispatch();
       TransitionProps={{ timeout: 200 }}
       PaperProps={{ className: "calendar-modal" }}
     >
-      {/*  Header  */}
+      {/* Header */}
       <div className="calendar-modal__header">
         <div className="calendar-modal__header__left">
           <Typography className="calendar-modal__header__title">
             {title}
           </Typography>
           <Chip
-            label={event?.category || "—"}
+            label={eventData?.meetingType?.name || event?.category || "—"}
             size="small"
             className="calendar-modal__header__chip"
-            style={{ backgroundColor: colors.bg, color: colors.text }}
+            style={{
+              backgroundColor: `rgb${colorCode}`,
+              color: "#fff",
+            }}
           />
         </div>
         <IconButton
@@ -122,10 +106,10 @@ const dispatch = useDispatch();
           <X size={18} />
         </IconButton>
       </div>
-
+ 
       <Divider />
-
-      {/*  Body  */}
+ 
+      {/* Body */}
       <DialogContent className="calendar-modal__content">
         {eventDataLoading ? (
           <div className="calendar-modal__loading">
@@ -156,7 +140,7 @@ const dispatch = useDispatch();
                 </Typography>
               </div>
             </div>
-
+ 
             {/* Room */}
             <div className="calendar-modal__row">
               <div
@@ -177,7 +161,7 @@ const dispatch = useDispatch();
                 </Typography>
               </div>
             </div>
-
+ 
             {/* Booked By */}
             <div className="calendar-modal__row">
               <div
@@ -198,7 +182,7 @@ const dispatch = useDispatch();
                 </Typography>
               </div>
             </div>
-
+ 
             {/* Participants */}
             <div className="calendar-modal__row">
               <Accordion
@@ -224,13 +208,14 @@ const dispatch = useDispatch();
                       Participants
                     </Typography>
                     <Typography className="calendar-modal__row__secondary">
-                      {internalNames.length + externalNames.length} Participants
-                      ({internalNames.length} Internal, {externalNames.length}{" "}
-                      External)
+                      {internalParticipants.length +
+                        externalParticipants.length}{" "}
+                      Participants ({internalParticipants.length} Internal,{" "}
+                      {externalParticipants.length} External)
                     </Typography>
                   </div>
                 </AccordionSummary>
-
+ 
                 <AccordionDetails className="calendar-modal__accordion__details">
                   <TabContext value={tabValue}>
                     <TabList
@@ -238,32 +223,42 @@ const dispatch = useDispatch();
                       className="calendar-modal__tabs"
                     >
                       <Tab
-                        label={`Internal (${internalNames.length})`}
+                        label={`Internal (${internalParticipants.length})`}
                         value="internal"
                         className="calendar-modal__tab"
                       />
                       <Tab
-                        label={`External (${externalNames.length})`}
+                        label={`External (${externalParticipants.length})`}
                         value="external"
                         className="calendar-modal__tab"
                       />
                     </TabList>
-
-                    <TabPanel
+ 
+                    
+ 
+ 
+<TabPanel
                       value="internal"
                       className="calendar-modal__tab-panel"
                     >
-                      {eventData?.internalParticipant?.length ? (
+                      {internalParticipants.length ? (
                         <div className="calendar-modal__chips">
-                          {eventData?.internalParticipant?.map((p) => (
-                            <div className="calendar-modal__participant-chip">
+                          {internalParticipants.map((p) => (
+                            <div
+                              key={p.id}
+                              className="calendar-modal__participant-chip"
+                            >
                               <Avatar>
                                 {p.firstName[0]}
                                 {p.lastName[0]}
                               </Avatar>
                               <div>
-                                <Typography className="calendar-modal__empty">{`${p.firstName} ${p.lastName}`}</Typography>
-                                <Typography className="calendar-modal__empty">{`${p.email}`}</Typography>
+                                <Typography className="calendar-modal__empty">
+                                  {p.firstName} {p.lastName}
+                                </Typography>
+                                <Typography className="calendar-modal__empty">
+                                  {p.email}
+                                </Typography>
                               </div>
                             </div>
                           ))}
@@ -274,31 +269,38 @@ const dispatch = useDispatch();
                         </Typography>
                       )}
                     </TabPanel>
-
+ 
                     <TabPanel
                       value="external"
                       className="calendar-modal__tab-panel"
                     >
-                      {eventData?.externalParticipant?.length ? (
+                      {externalParticipants.length ? (
                         <div className="calendar-modal__chips">
-                          {eventData?.externalParticipant?.map((p) => (
-                            <div className="calendar-modal__participant-chip">
+                          {externalParticipants.map((p) => (
+                            <div
+                              key={p.id}
+                              className="calendar-modal__participant-chip"
+                            >
                               <Avatar>
                                 {p.name
                                   .split(" ")
-                                  .map((word) => word[0])
+                                  .map((w) => w[0])
                                   .join("")}
                               </Avatar>
                               <div>
-                                <Typography className="calendar-modal__empty">{`${p.name}`}</Typography>
-                                <Typography className="calendar-modal__empty">{`${p.email}`}</Typography>
+                                <Typography className="calendar-modal__empty">
+                                  {p.name}
+                                </Typography>
+                                <Typography className="calendar-modal__empty">
+                                  {p.email}
+                                </Typography>
                               </div>
                             </div>
                           ))}
                         </div>
                       ) : (
                         <Typography className="calendar-modal__empty">
-                          No External participants
+                          No external participants
                         </Typography>
                       )}
                     </TabPanel>
@@ -306,7 +308,7 @@ const dispatch = useDispatch();
                 </AccordionDetails>
               </Accordion>
             </div>
-
+ 
             {/* Description */}
             <div className="calendar-modal__row calendar-modal__row--full">
               <div className="calendar-modal__description-box">
@@ -332,9 +334,10 @@ const dispatch = useDispatch();
           </div>
         )}
       </DialogContent>
-
-      {/*  Actions  */}
+ 
       <Divider />
+ 
+      {/* Actions */}
       <DialogActions className="calendar-modal__actions">
         <MyButton
           variant="outlined"
@@ -347,15 +350,16 @@ const dispatch = useDispatch();
           customVariant="dark"
           startIcon={<SquarePen size={16} />}
           onClick={() => {
-            dispatch(
-              setBookingRoomFormData(eventData),
-            );
-            navigate("/book-room")}}
+            dispatch(setBookingRoomFormData(eventData));
+            navigate("/book-room");
+          }}
           text="Edit Meeting"
         />
       </DialogActions>
     </Dialog>
   );
 };
-
+ 
 export default CalendarModal;
+ 
+ 

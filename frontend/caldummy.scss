@@ -1,0 +1,664 @@
+
+
+
+// Calendar.scss
+// ─────────────────────────────────────────────────────────────────────────────
+// Design direction: Refined, professional data-dense tool.
+// Clean whites and cool slates, sharp typographic hierarchy,
+// confident use of color only for categories, generous breathing room.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Tokens ────────────────────────────────────────────────────────────────────
+// Change these two numbers and the whole grid reflows correctly.
+$col-width: 180px;
+$col-gap: 8px;
+// Column slot = card width + gap (used by both header cells and body cells)
+$col-slot: $col-width + $col-gap;
+
+$label-width: 180px;
+$cell-height: 260px;
+$header-height: 64px;
+
+$border: #e8edf2;
+$surface: #f7f9fb;
+$white: #ffffff;
+$text-primary: #1a2332;
+$text-secondary: #64748b;
+$text-muted: #94a3b8;
+
+// Category palette
+$internal-bg: #dbeafe;
+$internal-fg: #1d4ed8;
+$internal-border: #3b82f6;
+
+$client-bg: #fff3e8;
+$client-fg: #c2410c;
+$client-border: #f97316;
+
+$executive-bg: #f3e8ff;
+$executive-fg: #7e22ce;
+$executive-border: #a855f7;
+
+$external-bg: #e8f5e9;
+$external-fg: #166534;
+$external-border: #22c55e;
+
+$today-accent: #2563eb;
+
+// ── Root card ────────────────────────────────────────────────────────────────
+.calendar {
+  border-radius: 14px !important;
+  background: $white;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  // Let the card grow to fill whatever container it's in
+  height: 100%;
+  overflow: hidden;
+}
+
+// ── Top bar ───────────────────────────────────────────────────────────────────
+.calendar__topbar {
+  padding: 18px 24px !important;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+}
+
+.calendar__topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.calendar__topbar__left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calendar__topbar__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+// Navigation row (prev / date button / next / today)
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-nav__date-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid $border;
+  border-radius: 8px;
+  background: $white;
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-primary;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  white-space: nowrap;
+
+  &:hover {
+    background: $surface;
+    border-color: darken($border, 6%);
+  }
+
+  svg {
+    color: $text-secondary;
+    flex-shrink: 0;
+  }
+}
+
+// Filters row (tabs + room dropdown)
+.cal-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+// Pill-style tab switcher
+.cal-tabs {
+  background: $surface;
+  border-radius: 10px;
+  padding: 3px;
+  min-height: unset !important;
+
+  .MuiTabs-indicator {
+    display: none;
+  }
+
+  .MuiTabs-flexContainer {
+    gap: 2px;
+  }
+
+  .MuiTab-root {
+    min-height: 32px !important;
+    min-width: 64px !important;
+    padding: 0 14px !important;
+    border-radius: 8px;
+    text-transform: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: $text-secondary;
+    transition: all 0.15s;
+  }
+
+  .MuiTab-root.Mui-selected {
+    background: $white;
+    color: $text-primary;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  .MuiTouchRipple-root {
+    display: none;
+  }
+}
+
+// Room dropdown in day view
+.cal-room-select {
+  min-width: 170px;
+
+  .MuiInputBase-root {
+    font-size: 13px;
+    border-radius: 8px;
+  }
+}
+
+// Category legend
+.cat-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: $text-secondary;
+}
+
+.cat-legend__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--internal {
+    background: $internal-border;
+  }
+  &--client {
+    background: $client-border;
+  }
+  &--executive {
+    background: $executive-border;
+  }
+}
+
+// ── Main area ─────────────────────────────────────────────────────────────────
+.calendar__main {
+  padding: 0 24px 24px !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; // critical: lets flex child scroll rather than expand
+}
+
+// ── Day view ──────────────────────────────────────────────────────────────────
+.day {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border: 1px solid $border;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.day__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: $surface;
+  border-bottom: 1px solid $border;
+  font-size: 15px;
+  font-weight: 700;
+  color: $text-primary;
+  flex-shrink: 0;
+}
+
+.day__header__room {
+  color: $text-secondary;
+  font-weight: 400;
+}
+
+.day__body {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.day__hour {
+  padding: 10px 10px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: $text-muted;
+  text-align: right;
+  border-right: 1px solid $border;
+  border-bottom: 1px solid $border;
+  background: $surface;
+  min-height: 72px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.day__cell {
+  min-height: 72px;
+  padding: 6px 8px;
+  border-bottom: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &:hover {
+    background: lighten($surface, 1%);
+  }
+}
+
+// Day view event tiles
+.day__event {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    opacity 0.15s,
+    transform 0.1s;
+
+  &:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  &--internal {
+    background: $internal-border;
+    color: #fff;
+  }
+  &--client {
+    background: $client-border;
+    color: #fff;
+  }
+  &--executive {
+    background: $executive-border;
+    color: #fff;
+  }
+  &--external {
+    background: $external-border;
+    color: #fff;
+  }
+}
+
+.day__event-time {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.day__event-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+// ── Room × Date grid ──────────────────────────────────────────────────────────
+//
+// ALIGNMENT CONTRACT
+// ──────────────────
+// Header cells  → min-width: $col-slot  (card + trailing gap)
+// Body cells    → width: $col-width, separated by gap: $col-gap on the row
+// Room labels   → width: $label-width (= corner width)
+// __date-strip starts with padding-left: $col-gap (matches __scroll padding)
+//
+// Result: every date label sits perfectly centred above its card column.
+
+.room-grid {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $border;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+// ── Grid header ───────────────────────────────────────────────────────────────
+.room-grid__header {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 1px solid $border;
+  background: $surface;
+  height: $header-height;
+}
+
+.room-grid__corner {
+  width: $label-width;
+  min-width: $label-width;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $text-muted;
+  border-right: 1px solid $border;
+  flex-shrink: 0;
+}
+
+// JS-driven mirror of the body scroll — user cannot scroll it directly
+.room-grid__date-strip {
+  display: flex;
+  flex: 1;
+  overflow: hidden; // scrolled by JS only
+  padding-left: $col-gap; // aligns first header cell with first body cell
+}
+
+.room-grid__date-cell {
+  // slot = card width + gap so the label centres over card + gap
+  min-width: $col-slot;
+  width: $col-slot;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 8px;
+  border-right: 1px solid $border;
+  cursor: default;
+
+  &--today {
+    background: lighten($today-accent, 45%);
+
+    .room-grid__date-cell__num {
+      background: $today-accent;
+      color: #fff;
+      border-radius: 50%;
+    }
+  }
+}
+
+.room-grid__date-cell__day {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: $text-muted;
+}
+
+.room-grid__date-cell__num {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: $text-primary;
+}
+
+// ── Grid body ─────────────────────────────────────────────────────────────────
+.room-grid__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+// Sticky room name column
+.room-grid__labels {
+  width: $label-width;
+  min-width: $label-width;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: $surface;
+  border-right: 1px solid $border;
+  z-index: 2;
+  // padding + gap must match __scroll exactly so labels line up with rows
+  padding: $col-gap 0;
+  gap: $col-gap;
+  overflow-y: auto;
+  // hide the scrollbar — it scrolls in sync with the body's Y scroll (future)
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.room-grid__label {
+  height: $cell-height;
+  min-height: $cell-height;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+
+  span {
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-primary;
+    line-height: 1.3;
+  }
+}
+
+// The ONE scroll container
+.room-grid__scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: $col-gap;
+  gap: $col-gap;
+  // Thin, tasteful scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: darken($border, 10%) transparent;
+
+  &::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: darken($border, 12%);
+    border-radius: 3px;
+  }
+}
+
+.room-grid__row {
+  display: flex;
+  height: $cell-height;
+  min-height: $cell-height;
+  flex-shrink: 0;
+  gap: $col-gap;
+}
+
+// Individual date × room card
+.room-grid__cell {
+  width: $col-width;
+  min-width: $col-width;
+  flex-shrink: 0;
+  height: 100%;
+  padding: 8px 7px;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s,
+    border-color 0.15s;
+  // Hide inner scrollbar — content just scrolls silently
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:hover {
+    background: $surface;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    border-color: darken($border, 6%);
+  }
+
+  &--today {
+    border-color: lighten($today-accent, 25%);
+    background: lighten($today-accent, 48%);
+
+    &:hover {
+      background: lighten($today-accent, 44%);
+    }
+  }
+}
+
+// Event tile inside the grid cell
+.room-grid__event {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &--internal {
+    background: $internal-bg;
+    color: $internal-fg;
+    border-left-color: $internal-border;
+  }
+
+  &--client {
+    background: $client-bg;
+    color: $client-fg;
+    border-left-color: $client-border;
+  }
+
+  &--executive {
+    background: $executive-bg;
+    color: $executive-fg;
+    border-left-color: $executive-border;
+  }
+
+  &--external {
+    background: $external-bg;
+    color: $external-fg;
+    border-left-color: $external-border;
+  }
+}
+
+.room-grid__event__time {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.room-grid__event__title {
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// "+N more" button
+.room-grid__more-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 6px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: $text-secondary;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  width: 100%;
+  text-align: center;
+
+  &:hover {
+    background: darken($surface, 3%);
+    color: $text-primary;
+  }
+}
+
+// Hover placeholder shown on empty cells
+.room-grid__cell-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  border: 1.5px dashed darken($border, 8%);
+  border-radius: 7px;
+  color: $text-muted;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+
+  &:hover {
+    border-color: $today-accent;
+    color: $today-accent;
+  }
+}
+
+// Overflow list (in the Popover)
+.overflow-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px;
+}
+
+.overflow-list__item {
+  margin-bottom: 0 !important;
+}
+

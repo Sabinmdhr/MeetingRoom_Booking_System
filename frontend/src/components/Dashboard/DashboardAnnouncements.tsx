@@ -1,6 +1,7 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import AnnouncementCard from "../Announcements/AnnouncementCard";
 import useAnnouncementCardViewModel from "../../viewmodels/useAnnouncementCardViewModel";
+
 import {
   deleteAnnouncement,
   markAsRead,
@@ -12,6 +13,7 @@ import "../../assets/scss/components/Dashboard/DashboardAnnouncements.scss";
 import MyButton from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 
+
 const DashboardAnnouncements = () => {
   const navigate = useNavigate();
   const {
@@ -21,6 +23,7 @@ const DashboardAnnouncements = () => {
     fetchPinnedAnnouncements,
     fetchUnpinnedAnnouncements,
   } = useAnnouncementCardViewModel();
+
 
   const handleMarkRead = async (id: number) => {
     try {
@@ -59,6 +62,10 @@ const DashboardAnnouncements = () => {
         if (prev.some((x) => x.id === updatedItem.id)) return prev;
         return [updatedItem, ...prev].slice(0, 5);
       });
+      setPinnedData((prev) => {
+        if (prev.some((x) => x.id === updatedItem.id)) return prev;
+        return [updatedItem, ...prev].slice(0, 5);
+      });
     } else {
       // Unpinned from dashboard — refresh since the dashboard only shows pinned
       setPinnedData((prev) => prev.filter((x) => x.id !== updatedItem.id));
@@ -75,6 +82,7 @@ const DashboardAnnouncements = () => {
       fetchUnpinnedAnnouncements();
     }
   };
+
 
   return (
     <div className="dashboard-announcements">

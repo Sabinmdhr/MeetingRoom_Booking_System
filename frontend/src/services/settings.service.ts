@@ -1,6 +1,6 @@
 import axios from "axios";
 import api from "../api/api";
-import type { Settings } from "../models/settings.model";
+import type { meetingTypeChange, MeetingTypeStatus, Settings } from "../models/settings.model";
 import type { MeetingTypeRequest } from "../models/settings.model";
 
 // const GET_URL = "https://mocki.io/v1/b5b839b5-75a6-48ce-941e-5c6dd4bd4097";
@@ -24,5 +24,15 @@ export const updateSettings = async (data: Settings) => {
 
 export const meetingType= async(data: MeetingTypeRequest)=>{
   const res= await api.post("/api/v1/meeting-type", data);
+  return res.data;
+}
+
+export const updateMeetingType= async(data: MeetingTypeRequest, id:number)=>{
+  const res= await api.put(`/api/v1/update/${id}`, data);
+  return res.data;
+}
+
+export const changeStatus= async(data: meetingTypeChange, id:number)=>{
+  const res= await api.patch(`/api/v1/meeting-type/${id}/change-status`, data);
   return res.data;
 }

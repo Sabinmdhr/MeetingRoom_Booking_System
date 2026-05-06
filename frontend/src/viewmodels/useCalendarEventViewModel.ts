@@ -345,6 +345,7 @@ const mapToCalendarEvent = (
   participants: [],
   description: "",
   department: "",
+  meetingType: item.meetingType,
 });
 
 //  Hook ─
@@ -428,8 +429,7 @@ export const useCalendarEventViewModel = () => {
   const fetchEventDetail = useCallback(async (meetingId: number) => {
     try {
       setEventDataLoading(true);
-      const res: BookedRoomDataResponse =
-        await getBookedDataByMeetingId(meetingId);
+      const res = await getBookedDataByMeetingId(meetingId);
 
       setEventData(res?.data);
     } catch (e) {
@@ -463,7 +463,7 @@ export const useCalendarEventViewModel = () => {
     fetchDayEvents(selectedDates);
   }, [selectedDates.format("YYYY-MM-DD")]);
 
-  //  Derived maps 
+  //  Derived maps ─
 
   // Month grid: "YYYY-MM-DD" → CalendarEvent[]
   const eventsByDate = useMemo(() => {

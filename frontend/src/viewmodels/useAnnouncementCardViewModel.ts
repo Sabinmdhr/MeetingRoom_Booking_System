@@ -1,39 +1,39 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { Announcements } from "../models/announcements.model";
-import { getAnnouncementsByPin } from "../services/announcements.service";
-
+import { getPinnedAnnouncement } from "../services/announcements.service";
+ 
 const PAGE_SIZE = 5; // keeping it consistent with backend pagination
-
+ 
 const useAnnouncementCardViewModel = () => {
   const [pinnedData, setPinnedData] = useState<Announcements[]>([]);
   const [unpinnedData, setUnpinnedData] = useState<Announcements[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
-
+ 
   // keeps track of which page to fetch next (for "Show More")
   const nextPageRef = useRef(1);
-
+ 
   // prevents multiple API calls at the same time
   const loadingRef = useRef(false);
-
+ 
   // fetch pinned announcements (always page 0, max 5 items)
   const fetchPinnedAnnouncements = useCallback(async () => {
     try {
-      const result = await getAnnouncementsByPin({
+      const result = await getPinnedAnnouncement({
         pageNo: 0,
         pageSize: 5,
         sortBy: "modifiedAt",
         sortDir: "desc",
         pinStatus: true,
       });
-
+ 
       const pinned = result.data.content ?? [];
       setPinnedData(pinned);
     } catch (error) {
       console.error("Error fetching pinned announcements", error);
     }
   }, []);
-
+ 
   /**
    * Handles unpinned announcements
    * mode:
@@ -44,20 +44,20 @@ const useAnnouncementCardViewModel = () => {
     async (mode: "reset" | "more") => {
       if (loadingRef.current) return;
       loadingRef.current = true;
-
+ 
       const page = mode === "reset" ? 0 : nextPageRef.current;
-
+ 
       try {
-        const result = await getAnnouncementsByPin({
+        const result = await getPinnedAnnouncement({
           pageNo: page,
           pageSize: PAGE_SIZE,
           sortBy: "modifiedAt",
           sortDir: "desc",
           pinStatus: false,
         });
-
+ 
         const content = result.data.content ?? [];
-
+ 
         if (mode === "reset") {
           // replace existing list
           setUnpinnedData(content);
@@ -67,7 +67,7 @@ const useAnnouncementCardViewModel = () => {
           setUnpinnedData((prev) => [...prev, ...content]);
           nextPageRef.current += 1;
         }
-
+ 
         // backend tells us if more pages exist
         setHasMore(!result.data.last);
       } catch (error) {
@@ -79,7 +79,7 @@ const useAnnouncementCardViewModel = () => {
     },
     [],
   );
-
+ 
   // initial load
   useEffect(() => {
     const init = async () => {
@@ -88,18 +88,18 @@ const useAnnouncementCardViewModel = () => {
     };
     init();
   }, []);
-
+ 
   // used after add / delete / update
   const refreshUnpinned = useCallback(async () => {
     await fetchPinnedAnnouncements();
     await fetchUnpinnedAnnouncements("reset");
   }, [fetchPinnedAnnouncements, fetchUnpinnedAnnouncements]);
-
+ 
   // used by "Show More"
   const loadMoreUnpinned = useCallback(() => {
     fetchUnpinnedAnnouncements("more");
   }, [fetchUnpinnedAnnouncements]);
-
+ 
   return {
     pinnedData,
     setPinnedData,
@@ -112,5 +112,5 @@ const useAnnouncementCardViewModel = () => {
     loading,
   };
 };
-
+ 
 export default useAnnouncementCardViewModel;

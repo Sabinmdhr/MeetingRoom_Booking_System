@@ -33,6 +33,7 @@ const UserProfile = () => {
       </Typography>
 
       {!isEditing ? (
+
         <Card className="profile__card">
           <CardContent>
             <div className="profile__header">

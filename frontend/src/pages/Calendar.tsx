@@ -7,6 +7,7 @@ import {
   TextField,
   MenuItem,
   Popover,
+  alpha,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -73,7 +74,7 @@ export const Calendar = () => {
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
   const { roomId } = useAppSelector((state) => state.bookingRoom);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
-  // ── Scroll sync ────────────────────────────────────────────────────────────
+  //  Scroll sync
   // Body is the only user-scrollable element. Header mirrors it via JS.
   // We use a setTimeout so the listener always attaches after React has painted
   // the month-view DOM (fixes the intermittent "header doesn't scroll" bug).
@@ -120,7 +121,7 @@ export const Calendar = () => {
     };
   }, [view]);
 
-  // ── Scroll to today ────────────────────────────────────────────────────────
+  //  Scroll to today
   const scrollToToday = useCallback(() => {
     const body = bodyScrollRef.current;
     if (!body) return;
@@ -139,7 +140,7 @@ export const Calendar = () => {
     return () => clearTimeout(t);
   }, [view, currentMonth.month(), currentMonth.year(), scrollToToday]);
 
-  // ── Derived ────────────────────────────────────────────────────────────────
+  //  Derived
   const todayStr = dayjs().format("YYYY-MM-DD");
   const isDayView = view === "day";
   const isMonthView = view === "month";
@@ -157,7 +158,7 @@ export const Calendar = () => {
     return out;
   })();
 
-  // ── Handlers ───────────────────────────────────────────────────────────────
+  //  Handlers
   const handleRoomCellClick = (date: dayjs.Dayjs, roomName: string) => {
     setSelectedRoom(roomName);
     goToToday(date);
@@ -181,7 +182,6 @@ export const Calendar = () => {
     }
   };
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <Card className="calendar">
       {/* TOP BAR */}
@@ -290,47 +290,7 @@ export const Calendar = () => {
       {/* MAIN */}
       <CardContent className="calendar__main">
         {/* DAY VIEW */}
-        {isDayView && (
-          // <div className="day">
-          //   <div className="day__header">
-          //     <span>{currentMonth.format("dddd, MMMM D, YYYY")}</span>
-          //     {selectedRoom && (
-          //       <span className="day__header__room">— {selectedRoom}</span>
-          //     )}
-          //   </div>
-          //   <div className="day__body">
-          //     {hours.map((hour) => {
-          //       const events = dayViewEvents[hour] ?? [];
-          //       return (
-          //         <React.Fragment key={hour}>
-          //           <div className="day__hour">
-          //             {dayjs().hour(hour).minute(0).format("h A")}
-          //           </div>
-          //           <div className="day__cell">
-          //             {events.map((event) => (
-          //               <div
-          //                 key={event.id}
-          //                 className={`day__event day__event--${event.category}`}
-          //                 onClick={(e) => handleEventClick(e, event)}
-          //               >
-          //                 <span className="day__event-time">
-          //                   {event.startTime} – {event.endTime}
-          //                 </span>
-          //                 <span className="day__event-title">
-          //                   {event.meetingTitle}
-          //                 </span>
-          //               </div>
-          //             ))}
-          //           </div>
-          //         </React.Fragment>
-          //       );
-          //     })}
-          //   </div>
-          // </div>
-          <>
-            <TimeSlotSelector id={roomId} key={roomId} />
-          </>
-        )}
+        {isDayView && <TimeSlotSelector id={roomId} key={roomId} />}
 
         {/* MONTH GRID */}
         {isMonthView && (
@@ -411,10 +371,41 @@ export const Calendar = () => {
                               );
                             }}
                           >
-                            {visible.map((event) => (
+                            {visible.map((event) => {
+                              // console.log("EVENT:", event);
+
+                              const color = event.meetingType?.colorCode;
+                              console.log(color);
+
+                              return (
+                                <div
+                                  key={event.id}
+                                  style={{
+                                    borderLeft: `5px solid rgb${
+                                      event.meetingType?.colorCode
+                                    }`,
+                                    backgroundColor: alpha(`rgb${event.meetingType?.colorCode}`, 0.3),
+                                    opacity:0.6
+                                  }}
+                                  className="room-grid__event"
+                                  onClick={(e) => handleEventClick(e, event)}
+                                >
+                                  <span className="room-grid__event__time">
+                                    {event.startTime} – {event.endTime}
+                                  </span>
+                                  <span className="room-grid__event__title">
+                                    {event.meetingTitle}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                            {/* {visible.map((event) => (
                               <div
                                 key={event.id}
-                                className={`room-grid__event room-grid__event--${event.category}`}
+                                style={{
+                                  backgroundColor: `rgba(${colors})`,
+                                }}
+                                className={`room-grid__event`}
                                 onClick={(e) => handleEventClick(e, event)}
                               >
                                 <span className="room-grid__event__time">
@@ -424,7 +415,7 @@ export const Calendar = () => {
                                   {event.meetingTitle}
                                 </span>
                               </div>
-                            ))}
+                            ))} */}
 
                             {isHovered && (
                               <div

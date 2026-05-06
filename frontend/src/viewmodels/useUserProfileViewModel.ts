@@ -10,6 +10,7 @@ export const useUserProfileViewModel = () => {
   const [profile, setProfile] = useState<UserProfileInfo | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+
   const loadUser = async () => {
     try {
       const data = await fetchCurrentUser();
@@ -114,7 +115,7 @@ export const useUserProfileViewModel = () => {
         departmentId: profile.departmentId,
       };
       console.log("PROFILE ID:", profile.id);
-      await updateProfile(profile.id, payload);
+      const res = await updateProfile(profile.id, payload);
       await loadUser();
       return true;
     } catch (err) {

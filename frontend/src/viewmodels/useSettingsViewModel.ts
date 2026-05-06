@@ -1,119 +1,131 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef  } from "react";
 import type {
   Settings,
   MeetingTypeUI,
   MeetingTypeRequest,
+  meetingTypeChange,
 } from "../models/settings.model";
-import { getSettings, meetingType } from "../services/settings.service";
+import {
+  meetingType,
+  changeStatus,
+  updateMeetingType,
+} from "../services/settings.service";
 import type { ColorResult } from "react-color";
-
-const defaultData: MeetingTypeUI[] = [
-  {
-    id: 1,
-    name: "Internal Meetings",
-    desc: "Team meetings, standups, reviews",
-    status: "ACTIVE",
-    color: { r: 66, g: 133, b: 244, a: 1 },
-  },
-  {
-    id: 2,
-    name: "Client Meetings",
-    desc: "External client presentations",
-    status: "ACTIVE",
-    color: { r: 255, g: 112, b: 67, a: 1 },
-  },
-  {
-    id: 3,
-    name: "Executive Meetings",
-    desc: "Board meetings, leadership sessions",
-    status: "ACTIVE",
-    color: { r: 168, g: 85, b: 247, a: 1 },
-  },
-];
+import { getAllMeetingType } from "../services/report.service";
 
 export const useSettingsViewModel = () => {
-  // const [settings, setSettings] = useState<Settings | null>(null);
-  // const [loading, setLoading] = useState(false);
-  const [meetingTypes, setMeetingTypes] = useState(defaultData);
+  const [meetingTypes, setMeetingTypes] = useState<MeetingTypeUI[]>([]);
   const [activePickerId, setActivePickerId] = useState<number | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const[selectedId, setSelectedId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+const [addForm, setAddForm] = useState<boolean>(false);
+  const [openPicker, setOpenPicker] = useState<boolean>(false);
 
-  //converting RGB to string
-  const toRgbaString = (color: MeetingTypeUI["color"]) => {
-    return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
-  };
-
-  const handleColorChange = (id: number, color: ColorResult) => {
-    const safeColor = {
-      r: color.rgb.r,
-      g: color.rgb.g,
-      b: color.rgb.b,
-      a: color.rgb.a ?? 1,
-    };
-    setMeetingTypes((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, color: safeColor } : item,
-      ),
-    );
-  };
+  const initialMeetingTypeFormData:MeetingTypeRequest = { name: "", colorCode: "(0,0,255)", status: "ACTIVE" }
+  const [meetingTypeFormData, setMeetingTypeFormData] =
+    useState<MeetingTypeRequest>(initialMeetingTypeFormData);
 
   const togglePicker = (id: number) => {
     setActivePickerId((prev) => (prev === id ? null : id));
   };
 
-  const saveMeetingType = async (item: MeetingTypeUI) => {
-    const payload: MeetingTypeRequest = {
-      name: item.name,
-      colorCode: toRgbaString(item.color),
-      status: item.status,
-    };
-    await meetingType(payload);
+  const fetchMeetingType = async () => {
+    try {
+      const res = await getAllMeetingType();
+      setMeetingTypes(res.data);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchMeetingType();
+  }, []);
+
+  const addMeetingType = async (data: MeetingTypeRequest) => {
+    try {
+      await meetingType(data);
+      setAddForm(false);
+      setMeetingTypeFormData(initialMeetingTypeFormData);
+      fetchMeetingType();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // const loadSettings = async () => {
-  //   try {
-  //     const data = await getSettings();
+  const handleColorChange = async (id: number, color: ColorResult) => {
+    const { r, g, b } = color.rgb;
 
-  //     setSettings({
-  //       ...data,
-  //       profile: {
-  //         firstName: data.profile?.firstName ?? "",
-  //         lastName: data.profile?.lastName ?? "",
-  //         email: data.profile?.email ?? "",
-  //         phone: data.profile?.phone ?? "",
-  //         department: data.profile?.department ?? "",
-  //         role: data.profile?.role ?? "",
-  //       },
-  //     });
-  //   } catch (error) {
-  //     console.log("Failed to fetch settings");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   loadSettings();
-  // }, []);
+    const rgb = `(${r}, ${g}, ${b})`;
+    const selectedItem = meetingTypes.find((item) => item.id === id);
+    if (!selectedItem) return;
 
-  // const updateProfileSection = (field: string, value: string) => {
-  //   if (!settings) return;
+    const updatedItem = { ...selectedItem, colorCode: rgb };
 
-  //   setSettings({
-  //     ...settings,
-  //     profile: {
-  //       ...settings.profile,
-  //       [field]: value,
-  //     }, //update garxa single field inside profile.Uses spread operator (...) to keep other data unchanged. yesle update garxa only settings.profile.firstName="abcde"
-  //   });
-  // };
+    try {
+      const res = await updateMeetingType(updatedItem, id);
+      setMeetingTypes((prev)=> prev.map((item)=> item.id === id ? {...item, colorCode: rgb} : item))
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdateMeetingType= async(item: MeetingTypeUI)=>{
+    try {
+    const payload: MeetingTypeRequest={
+      name: item.name,
+      colorCode: item.colorCode,
+      status: item.status,
+    }
+    await updateMeetingType(payload, item.id);
+    setEditingId(null);
+    } catch (error) {
+      console.log("Update failed", error);
+    }
+  }
+
+    const pickerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (pickerRef.current && !pickerRef.current.contains(target)) {
+        setActivePickerId(null); // close picker
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+const deleteMeetingType= async(id: number)=>{
+  const data:meetingTypeChange = {status:"INACTIVE"}
+  await changeStatus(data, id);
+    fetchMeetingType();
+  // setMeetingTypes((prev)=> prev.map((item)=> item.id === id? {...item, status: "INACTIVE"}: item))
+
+}
 
   return {
-    // settings,
-    // loading,
-
     meetingTypes,
+    setMeetingTypes,
     activePickerId,
+    setActivePickerId,
     handleColorChange,
     togglePicker,
-    saveMeetingType,
+    addMeetingType,
+    pickerRef,
+    openDialog,
+    setOpenDialog,
+    deleteMeetingType,
+    selectedId,
+    setSelectedId,
+    editingId, setEditingId,
+    handleUpdateMeetingType,
+    addForm, setAddForm,
+    openPicker, setOpenPicker,
+    meetingTypeFormData, setMeetingTypeFormData,
   };
 };
