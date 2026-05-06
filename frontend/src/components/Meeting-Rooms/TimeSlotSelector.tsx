@@ -37,8 +37,7 @@ type InteractionMode =
   | "resize-top"
   | "resize-bottom"
   | "create";
-const initialStartTime = {};
-export const TimeSlotSelector = ({ onSave, id }: TimeSlotSelectorProps) => {
+export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
 
@@ -274,9 +273,9 @@ export const TimeSlotSelector = ({ onSave, id }: TimeSlotSelectorProps) => {
                     timeStringToMinutes(slot.start)) *
                   MINUTE_HEIGHT,
 
-                backgroundColor: "rgba(255, 0, 0, 0.3)",
-                // backgroundColor: `rgba${slot.color}`,
-                border: "1px solid red",
+                // backgroundColor: "rgba(255, 0, 0, 0.3)",
+                backgroundColor: `rgb${slot.color}`,
+                border: `1px solid rgb${slot.color}`,
                 pointerEvents: "none",
                 zIndex: 999,
                 display: "flex",
@@ -294,7 +293,7 @@ export const TimeSlotSelector = ({ onSave, id }: TimeSlotSelectorProps) => {
             className="slot"
             style={{
               top: 0,
-              height: snapToInterval((currentMinutes * MINUTE_HEIGHT), 5),
+              height: snapToInterval(currentMinutes * MINUTE_HEIGHT, 5),
               backgroundColor: "#fff3cd",
               pointerEvents: "auto",
               cursor: "not-allowed",
