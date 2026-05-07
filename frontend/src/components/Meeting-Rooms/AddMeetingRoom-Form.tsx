@@ -91,6 +91,7 @@ export const AddMeetingRoomForm = ({
         customVariant="dark"
         variant="outlined"
         onClick={() => handleRoomFormOpen("add")}
+        className=""
       />
 
       <Dialog

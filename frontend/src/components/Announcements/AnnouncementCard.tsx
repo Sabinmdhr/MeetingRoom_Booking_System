@@ -24,6 +24,7 @@ import React, { useRef, useState } from "react";
 import AnnouncementModal from "./AnnouncementModal";
 import AnnouncementDetailModal from "./AnnouncementDetailModal";
 import ConfirmDialog from "../ui/ConfirmDialog";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const AnnouncementCard = ({
   item,
@@ -36,6 +37,8 @@ const AnnouncementCard = ({
   selectedIds,
   setSelectedIds,
 }: any) => {
+
+const perms = usePermissions()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const isSelected = selectedIds?.includes(item.id) ?? false;
@@ -230,7 +233,7 @@ const AnnouncementCard = ({
           </div>
 
           {/* RIGHT — fixed width, always same height */}
-          <div className="announcement__card-right">
+         {perms.canMannageAnnouncements && <div className="announcement__card-right">
             {/* Ellipsis menu — hidden (visibility:hidden) in select mode so width is preserved */}
             <Button
               id={`announcement-button-${item.id}`}
@@ -335,7 +338,7 @@ const AnnouncementCard = ({
                 </Typography>
               </MenuItem>
             </Menu>
-          </div>
+          </div>}
         </CardContent>
       </Card>
 

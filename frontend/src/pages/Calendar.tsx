@@ -30,6 +30,8 @@ import { TimeSlotSelector } from "../components/Meeting-Rooms/TimeSlotSelector";
 import { useDispatch } from "react-redux";
 import { updateBookingRoomFormData } from "../redux/bookRoomSlice";
 import { useAppSelector } from "../redux/store";
+import { usePermissions } from "../hooks/usePermissions";
+import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
 
 // Must stay in sync with $col-width and $col-gap in Calendar.scss
 const COL_WIDTH = 180;
@@ -40,6 +42,8 @@ const VISIBLE_EVENT_LIMIT = 4;
 
 export const Calendar = () => {
   const navigate = useNavigate();
+  const perms = usePermissions()
+  const { updateBookingTimeAndDate, setSlot, slot } = useBookingRoomViewModel();
 
   const {
     view,
@@ -268,13 +272,33 @@ export const Calendar = () => {
           </div>
 
           <div className="cal-bar__right">
-            <MyButton
-              onClick={() => navigate("/meeting-rooms")}
-              variant="contained"
-              customVariant="dark"
-              startIcon={<Plus size={17} />}
-              text="New Meeting"
-            />
+            {perms.canManageRooms && isDayView && (
+              <MyButton
+                onClick={() => {
+                  if(slot.startTime === "00:00") return;
+                  updateBookingTimeAndDate({
+                    startTime: slot.startTime,
+                    endTime: slot.endTime,
+                    startDate: slot.startDate,
+                  });
+                }}
+                variant="contained"
+                customVariant="dark"
+                startIcon={<Plus size={17} />}
+                text="Procced to booking"
+              />
+            )}
+            {perms.canManageRooms && !isDayView && (
+              <MyButton
+                onClick={() => {
+               navigate("/meeting-rooms")
+                }}
+                variant="contained"
+                customVariant="dark"
+                startIcon={<Plus size={17} />}
+                text="Add New Meeting"
+              />
+            )}
             <div className="cat-legend">
               <i className="cat-dot cat-dot--internal" />
               <span>Internal</span>
@@ -290,7 +314,9 @@ export const Calendar = () => {
       {/* MAIN */}
       <CardContent className="calendar__main">
         {/* DAY VIEW */}
-        {isDayView && <TimeSlotSelector id={roomId} key={roomId} />}
+        {isDayView && (
+          <TimeSlotSelector id={roomId} key={roomId} onSave={setSlot} calendarView={true}/>
+        )}
 
         {/* MONTH GRID */}
         {isMonthView && (
@@ -384,8 +410,11 @@ export const Calendar = () => {
                                     borderLeft: `5px solid rgb${
                                       event.meetingType?.colorCode
                                     }`,
-                                    backgroundColor: alpha(`rgb${event.meetingType?.colorCode}`, 0.3),
-                                    opacity:0.6
+                                    backgroundColor: alpha(
+                                      `rgb${event.meetingType?.colorCode}`,
+                                      0.3,
+                                    ),
+                                    opacity: 0.6,
                                   }}
                                   className="room-grid__event"
                                   onClick={(e) => handleEventClick(e, event)}

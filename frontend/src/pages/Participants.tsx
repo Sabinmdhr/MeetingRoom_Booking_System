@@ -76,7 +76,7 @@ const Participants = () => {
 
       {/* ------------------------Edit Mode Button------------ */}
       {perms?.canAddUsers && (
-        <div>
+        <div style={{textAlign:"right"}}>
           {activeTab == "Tab1" ? (
             <AddParticipantsForm
               participantsFormState={participantsFormState}

@@ -16,6 +16,7 @@ import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewMo
 import { useState } from "react";
 import { useGroupCardViewModel } from "../../viewmodels/useGroupCardViewModel";
 import type { groupCardRequest } from "../../models/groupCard.model";
+import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
 
 interface ParticipantsCardProps {
   type: "internal" | "external" | "";
@@ -32,7 +33,7 @@ const ParticipantsCard = ({
   const { users } = useparticipantsViewModel();
   const { group } = useGroupCardViewModel();
   // const [participants, setParticipants] = useState<participantsApi[]>([]);
-
+  const { departmentList } = useDepartmentListViewModel();
   const [search, setSearch] = useState("");
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
@@ -188,7 +189,9 @@ const ParticipantsCard = ({
                               {p.department}
                             </Typography>
                             &bull;
-                            <Typography className="role">{p.position}</Typography>
+                            <Typography className="role">
+                              {p.position}
+                            </Typography>
                           </div>
                         </div>
                       </div>
@@ -196,7 +199,74 @@ const ParticipantsCard = ({
                   </div>
                 </TabPanel>
 
-                <TabPanel value="teams">Teams view</TabPanel>
+                <TabPanel value="teams">
+                  {departmentList.map((d, index) => {
+                    return (
+                      <>
+                        <Accordion
+                          expanded={expandedGroup === d.departmentName}
+                          onChange={() => {
+                            setExpandedGroup(
+                              expandedGroup === d.departmentName
+                                ? false
+                                : d.departmentName,
+                            );
+                          }}
+                          key={d.id}
+                        >
+                          <AccordionSummary
+                            expandIcon={<ChevronDown />}
+                            aria-controls={`panel${index}-content`}
+                          >
+                            <input
+                              type="checkbox"
+                              className="check"
+                              checked={users
+                                .filter(
+                                  (p) => p.department === d.departmentName,
+                                )
+                                .every((m) =>
+                                  selectedParticipants.includes(m.id),
+                                )}
+                              onClick={() =>
+                                toggleGroupSelection(
+                                  users
+                                    .filter(
+                                      (p) => p.department === d.departmentName,
+                                    )
+                                    .map((m) => m.id),
+                                )
+                              }
+                            />
+                            <Typography>{d.departmentName}</Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <div className={`participants-list `}>
+                              {users.map((p) => {
+                                if (p.department !== d.departmentName) return;
+                                return (
+                                  <div
+                                    key={p.id}
+                                    className={`participant-item   `}
+                                  >
+                                    <div className="participant-info">
+                                      <Typography
+                                        variant="subtitle2"
+                                        className="name"
+                                      >
+                                        {p.firstname} {p.lastname}
+                                      </Typography>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </AccordionDetails>
+                        </Accordion>
+                      </>
+                    );
+                  })}
+                </TabPanel>
 
                 <TabPanel value="all">
                   {group.map((g, index) => {
@@ -258,9 +328,6 @@ const ParticipantsCard = ({
               </TabContext>
             </div>
           )}
-
-
-
         </div>
       </>
     </>

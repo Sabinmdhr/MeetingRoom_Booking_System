@@ -16,8 +16,13 @@ import MyButton from "../components/ui/Button";
 import type { Announcements } from "../models/announcements.model";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { Spinner } from "../components/ui/Spinner";
+import { useAuth } from "../hooks/useAuth";
+import { permissions } from "../utils/permissions";
 
-const Announcements = () => {
+const Announcement = () => {
+const {role} = useAuth()
+const perms = permissions[role as keyof typeof permissions];
+
   const [open, setOpen] = useState(false);
   const [click, setClick] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -167,7 +172,7 @@ const Announcements = () => {
             </Typography>
           </div>
 
-          <div className="announcement__header-actions">
+       {  perms.canMannageAnnouncements && <div className="announcement__header-actions">
             {/* Delete button only visible in select mode with items selected */}
             {click && (
               <MyButton
@@ -201,7 +206,7 @@ const Announcements = () => {
               customVariant="dark"
               onClick={() => setOpen(true)}
             />
-          </div>
+          </div>}
         </CardContent>
         {loading ? (
           <div className="announcement__empty">
@@ -271,11 +276,11 @@ const Announcements = () => {
       </Card>
 
       {/* Add modal — refresh resets both lists so new item appears at top */}
-      <AnnouncementModal
+     {perms.canMannageAnnouncements && <AnnouncementModal
         open={open}
         handleClose={handleClose}
         refreshAnnouncements={fetchUnpinnedAnnouncements}
-      />
+      />}
 
       {/* Bulk delete confirm */}
       <ConfirmDialog
@@ -294,4 +299,4 @@ const Announcements = () => {
   );
 };
 
-export default Announcements;
+export default Announcement;

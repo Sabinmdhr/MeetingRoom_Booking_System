@@ -10,16 +10,12 @@ import { useState } from "react";
 
 const RoomTimeslot = () => {
   const { room } = useRoomTimeslotViewModel();
-  const { updateBookingTimeAndDate } = useBookingRoomViewModel();
-  const [slot, setSlot] = useState({
-    startTime: "00:00",
-    endTime: "00:00",
-    startDate: "",
-  });
+  const { updateBookingTimeAndDate, setSlot, slot } = useBookingRoomViewModel();
+
   return (
     <div className="room-timeslot">
       <div>
-        <div className="timeslot-heading">    
+        <div className="timeslot-heading">
           <Calendar size={20} />
           <Typography variant="h1">{room?.roomName}</Typography>
           {/* <Typography variant="h1">{room?.capacity}</Typography> */}
@@ -45,13 +41,12 @@ const RoomTimeslot = () => {
               endTime: slot.endTime,
               startDate: slot.startDate,
             });
-            console.log(slot);
 
           }}
         />
       </div>
 
-      <TimeSlotSelector onSave={setSlot} />
+      <TimeSlotSelector onSave={setSlot} calendarView={false}/>
     </div>
   );
 };

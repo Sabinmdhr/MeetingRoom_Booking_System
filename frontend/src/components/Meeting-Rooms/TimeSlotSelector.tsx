@@ -18,6 +18,7 @@ import { set } from "zod";
 import { current } from "@reduxjs/toolkit";
 import { useAuth } from "../../hooks/useAuth";
 import { permissions } from "../../utils/permissions";
+import { useLocation } from "react-router-dom";
 
 interface TimeSlotSelectorProps {
   onSave?: (slot: {
@@ -27,6 +28,7 @@ interface TimeSlotSelectorProps {
   }) => void;
   initialSlot?: { startTime: string; endTime: string };
   id?: number;
+  calendarView: boolean;
 }
 
 const PIXELS_PER_HOUR = 120;
@@ -43,12 +45,15 @@ type InteractionMode =
   | "resize-top"
   | "resize-bottom"
   | "create";
-export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
+export const TimeSlotSelector = ({
+  onSave,
+  calendarView,
+}: TimeSlotSelectorProps) => {
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
-const {role} = useAuth()
+  const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
-
+  const location = useLocation();
   const [interaction, setInteraction] = useState<{
     mode: InteractionMode;
     startY: number;
@@ -67,8 +72,13 @@ const {role} = useAuth()
   const isOverlapping = (start: string, end: string) => {
     return bookedSlots.some((slot) => start < slot.end && end > slot.start);
   };
-  const { formattedDate,isToday, changeDate, jumpToToday, backendFormattedDate } =
-    useRoomTimeslotViewModel();
+  const {
+    formattedDate,
+    isToday,
+    changeDate,
+    jumpToToday,
+    backendFormattedDate,
+  } = useRoomTimeslotViewModel();
 
   const { roomId } = useAppSelector((state) => state.bookingRoom);
   useEffect(() => {
@@ -110,8 +120,8 @@ const {role} = useAuth()
     Math.round(y / MINUTE_HEIGHT) + START_MINUTES;
 
   const [mannualScroll, setManualScroll] = useState(false);
-  const handlePointerDown =(e: React.PointerEvent, mode: InteractionMode) => {
-    if(!perms.canBookRoom)return;
+  const handlePointerDown = (e: React.PointerEvent, mode: InteractionMode) => {
+    if (!perms.canBookRoom) return;
     e.stopPropagation();
     setManualScroll(true);
     const timelineRect = timelineRef.current?.getBoundingClientRect();
@@ -125,10 +135,10 @@ const {role} = useAuth()
     });
 
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
-  }
+  };
 
   const handleGridClick = (e: React.PointerEvent) => {
-    if(!perms.canBookRoom) return;
+    if (!perms.canBookRoom) return;
     if (interaction.mode !== "none") return;
 
     const timelineRect = timelineRef.current?.getBoundingClientRect();
@@ -156,62 +166,65 @@ const {role} = useAuth()
     setEndTime(newEnd);
   };
 
-  const handlePointerMove =perms.canBookRoom ? (e: React.PointerEvent) => {
-    if (interaction.mode === "none") return;
+  const handlePointerMove = perms.canBookRoom
+    ? (e: React.PointerEvent) => {
+        if (interaction.mode === "none") return;
 
-    const deltaY = e.clientY - interaction.startY;
-    const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT);
-    const snappedDelta = snapToInterval(deltaMinutes, 5);
+        const deltaY = e.clientY - interaction.startY;
+        const deltaMinutes = Math.round(deltaY / MINUTE_HEIGHT);
+        const snappedDelta = snapToInterval(deltaMinutes, 5);
 
-    if (interaction.mode === "drag") {
-      const duration = interaction.initialEnd - interaction.initialStart;
-      let newStart = interaction.initialStart + snappedDelta;
+        if (interaction.mode === "drag") {
+          const duration = interaction.initialEnd - interaction.initialStart;
+          let newStart = interaction.initialStart + snappedDelta;
 
-      // Keep within bounds
-      if (newStart < START_MINUTES) newStart = START_MINUTES;
-      if (newStart + duration > END_MINUTES) newStart = END_MINUTES - duration;
-      if (newStart < currentMinutes) return;
+          // Keep within bounds
+          if (newStart < START_MINUTES) newStart = START_MINUTES;
+          if (newStart + duration > END_MINUTES)
+            newStart = END_MINUTES - duration;
+          if (newStart < currentMinutes) return;
 
-      if (
-        isOverlapping(
-          minutesToTimeString(newStart + 5),
-          minutesToTimeString(newStart + duration),
-        )
-      )
-        return;
+          if (
+            isOverlapping(
+              minutesToTimeString(newStart + 5),
+              minutesToTimeString(newStart + duration),
+            )
+          )
+            return;
 
-      setStartTime(newStart);
-      setEndTime(newStart + duration);
-    } else if (interaction.mode === "resize-top") {
-      let newStart = interaction.initialStart + snappedDelta;
-      if (newStart < START_MINUTES) newStart = START_MINUTES;
-      if (newStart > endTime - 10) newStart = endTime - 10; // Min 10 min duration
-      if (newStart < currentMinutes) return;
+          setStartTime(newStart);
+          setEndTime(newStart + duration);
+        } else if (interaction.mode === "resize-top") {
+          let newStart = interaction.initialStart + snappedDelta;
+          if (newStart < START_MINUTES) newStart = START_MINUTES;
+          if (newStart > endTime - 10) newStart = endTime - 10; // Min 10 min duration
+          if (newStart < currentMinutes) return;
 
-      if (
-        isOverlapping(
-          minutesToTimeString(newStart + 5),
-          minutesToTimeString(endTime),
-        )
-      )
-        return;
-      setStartTime(newStart);
-    } else if (interaction.mode === "resize-bottom") {
-      let newEnd = interaction.initialEnd + snappedDelta;
-      if (newEnd > END_MINUTES) newEnd = END_MINUTES;
-      if (newEnd < startTime + 10) newEnd = startTime + 10; // Min 10 min duration
-      // if (newStart < currentMinutes) return;
+          if (
+            isOverlapping(
+              minutesToTimeString(newStart + 5),
+              minutesToTimeString(endTime),
+            )
+          )
+            return;
+          setStartTime(newStart);
+        } else if (interaction.mode === "resize-bottom") {
+          let newEnd = interaction.initialEnd + snappedDelta;
+          if (newEnd > END_MINUTES) newEnd = END_MINUTES;
+          if (newEnd < startTime + 10) newEnd = startTime + 10; // Min 10 min duration
+          // if (newStart < currentMinutes) return;
 
-      if (
-        isOverlapping(
-          minutesToTimeString(startTime),
-          minutesToTimeString(newEnd),
-        )
-      )
-        return;
-      setEndTime(newEnd);
-    }
-  } : undefined;
+          if (
+            isOverlapping(
+              minutesToTimeString(startTime),
+              minutesToTimeString(newEnd),
+            )
+          )
+            return;
+          setEndTime(newEnd);
+        }
+      }
+    : undefined;
 
   const handlePointerUp = (e: React.PointerEvent) => {
     setInteraction({ ...interaction, mode: "none" });
@@ -228,7 +241,19 @@ const {role} = useAuth()
     <div className="container">
       <div className="header">
         <Box className="timeslot-nav">
-          <Box className="date">
+          {calendarView && (
+            <MyButton
+              onClick={() => changeDate(-1)}
+              variant="outlined"
+              text="Previous"
+              customVariant="ghost"
+              endIcon={<ChevronLeft size={18} />}
+            />
+          )}
+          <Box
+            className="date"
+            style={!calendarView ? { marginLeft: "50%" } : {}}
+          >
             <Typography className="timeslot-date">{formattedDate}</Typography>
             <Typography className="jump-today" onClick={jumpToToday}>
               Jump to Today
@@ -283,32 +308,60 @@ const {role} = useAuth()
                     timeStringToMinutes(slot.start)) *
                   MINUTE_HEIGHT,
 
-                // backgroundColor: "rgba(255, 0, 0, 0.3)",
-                backgroundColor: `rgb${slot.color}`,
-                border: `1px solid rgb${slot.color}`,
+                backgroundColor: "rgba(255, 0, 0, 0.3)",
+                border: "1px solid rgba(255, 0, 0, 0.3)",
+                ...(calendarView && {
+                  backgroundColor: `rgb${slot.color}`,
+                  border: `1px solid rgb${slot.color}`,
+                  fontSize: 10,
+                  // alignItems: "normal",
+                }),
+                justifyContent: "center",
+                ...(!calendarView && {
+                  alignItems: "center",
+                }),
                 pointerEvents: "none",
                 zIndex: 999,
+                color: "white",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 12,
+                padding: "0px",
               }}
             >
-              {formatDisplayTime(timeStringToMinutes(slot.start))} -{" "}
-              {formatDisplayTime(timeStringToMinutes(slot.end))}
+              {calendarView ? (
+                <div
+                  style={{
+                    display: "flex",
+                    // flexDirection: "column",
+                    justifyContent: "space-between",
+                    margin: "0px 12px",
+                  }}
+                >
+                  <Typography>{slot.title}</Typography>
+                  <Typography>
+                    {formatDisplayTime(timeStringToMinutes(slot.start))} -
+                    {formatDisplayTime(timeStringToMinutes(slot.end))}
+                  </Typography>
+                </div>
+              ) : (
+                ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
+              ${formatDisplayTime(timeStringToMinutes(slot.end))}`
+              )}
             </div>
           ))}
           {/* ---------------------prev past timeslot---------------- */}
-        { isToday && <div
-            className="slot"
-            style={{
-              top: 0,
-              height: snapToInterval(currentMinutes * MINUTE_HEIGHT, 5),
-              backgroundColor: "#fff3cd",
-              pointerEvents: "auto",
-              cursor: "not-allowed",
-            }}
-          ></div>}
+          {isToday && (
+            <div
+              className="slot"
+              style={{
+                top: 0,
+                height: snapToInterval(currentMinutes * MINUTE_HEIGHT, 5),
+                backgroundColor: "#fff3cd",
+                pointerEvents: "auto",
+                cursor: "not-allowed",
+                border:"none"
+              }}
+            ></div>
+          )}
           {/* The Slot */}
           <div
             className="slot"

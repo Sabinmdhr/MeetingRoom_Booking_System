@@ -1,5 +1,5 @@
 import { Meeting_roomCard } from "../components/Meeting-Rooms/Meeting_roomCard";
-import "../assets/scss/pages/MeetingRooms.scss";
+import "../assets/scss/pages/MeetingRooms.scss"
 import {
   Button,
   Card,
@@ -36,22 +36,21 @@ const MeetingRooms = () => {
   if (loading) return <CircularProgress />;
   //   const {handleClose} = useAddRoomViewModel();
   // const {isEditOpen} = useAppSelector((state) => state.meetingRoom)
-  return (
-    <div>
+  return (<>
+    <div className="meeting-table__main">
       <div className="titleDesc">
         <Typography variant="h1">Meeting Rooms</Typography>
         <Typography variant="subtitle1">Book available rooms</Typography>
       </div>
-      {perms?.canBookRoom && (
-        <div>
+        {perms?.canBookRoom && (
           <AddMeetingRoomForm
             roomFormState={roomFormState}
             handleRoomFormOpen={handleRoomFormOpen}
             handleRoomFormClose={handleRoomFormClose}
           />
-        </div>
-      )}
+        )}
 
+    </div>
       <CardContent className="MeetingRooms">
         {/* <Grid container> */}
         <Meeting_roomCard
@@ -60,7 +59,7 @@ const MeetingRooms = () => {
         />
         {/* </Grid> */}
       </CardContent>
-    </div>
+  </>
   );
 };
 

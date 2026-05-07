@@ -14,6 +14,8 @@ import { Megaphone, X, Pin, Calendar } from "lucide-react";
 import "../../assets/scss/components/Announcement/AnnouncementModal.scss";
 import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
 import MyButton from "../ui/Button";
+import { useAuth } from "../../hooks/useAuth";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const AnnouncementModal = ({
   open,
@@ -22,6 +24,8 @@ const AnnouncementModal = ({
   initialData,
   onUpdate,
 }: any) => {
+const perms = usePermissions()
+
   const {
     handleSubmit,
     handleChange,
@@ -73,7 +77,7 @@ const AnnouncementModal = ({
       maxWidth="sm"
       slotProps={{ paper: { className: "announcement__modal__main" } }}
     >
-      <div className="announcementModal">
+     {perms.canMannageAnnouncements&& <div className="announcementModal">
         <DialogTitle className="announcementModal__header">
           <div className="announcementModal__header__main">
             <Megaphone size={20} />
@@ -203,7 +207,7 @@ const AnnouncementModal = ({
             customVariant="dark"
           />
         </DialogActions>
-      </div>
+      </div>}
     </Dialog>
   );
 };

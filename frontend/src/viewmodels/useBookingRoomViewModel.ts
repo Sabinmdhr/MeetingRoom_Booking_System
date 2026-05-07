@@ -28,11 +28,17 @@ type BookingTimeAndDatePeops = {
   startTime: string;
   endTime: string;
   startDate: string;
-};
+}
+
 export const useBookingRoomViewModel = () => {
   const [bookedSlots, setBookedSlots] = useState<
-    { start: string; end: string; color: string }[]
+    { start: string; end: string; color: string; title:string }[]
   >([]);
+   const [slot, setSlot] = useState({
+     startTime: "00:00",
+     endTime: "00:00",
+     startDate: "",
+   });
   const [externalParticipant, setExternalParticipant] = useState<{
     name: string;
     email: string;
@@ -148,6 +154,7 @@ export const useBookingRoomViewModel = () => {
         start: slot.startTime,
         end: slot.endTime,
         color: slot.meetingType.colorCode,
+        title: slot.meetingTitle
       }));
       setBookedSlots(formatted);
     } catch (error) {}
@@ -181,5 +188,7 @@ export const useBookingRoomViewModel = () => {
     handleEditBookRoomByRecurrenceId,
     handleInternalCard,
     handleWeekDays,
+    slot,
+    setSlot,
   };
 };
