@@ -19,7 +19,7 @@ const RoomTimeslot = () => {
   return (
     <div className="room-timeslot">
       <div>
-        <div className="timeslot-heading">
+        <div className="timeslot-heading">    
           <Calendar size={20} />
           <Typography variant="h1">{room?.roomName}</Typography>
           {/* <Typography variant="h1">{room?.capacity}</Typography> */}

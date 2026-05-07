@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { BookingRoomData } from "../models/bookRoom.model";
+import type { BookingRoomData, WeekDays } from "../models/bookRoom.model";
 
 const initialState: BookingRoomData = {
   meetingTitle: "",
@@ -20,11 +20,18 @@ const BookingRoomSlice = createSlice({
   name: "BookingRoom",
   initialState,
   reducers: {
-
     setBookingRoomFormData: (state, action: PayloadAction<BookingRoomData>) => {
       return action.payload;
     },
+    toggleWeekDay: (state, action: PayloadAction<WeekDays>) => {
+      const day = action.payload;
 
+      if (state.weekDays.includes(day)) {
+        state.weekDays = state.weekDays.filter((d) => d !== day);
+      } else {
+        state.weekDays.push(day);
+      }
+    },
     updateBookingRoomFormData: (
       state,
       action: PayloadAction<Partial<BookingRoomData>>,
@@ -73,6 +80,7 @@ export const {
   toggleParticipantsSelection,
   clearBookingRoomFormData,
   setBookingRoomFormData,
+  toggleWeekDay,
 } = BookingRoomSlice.actions;
 
 export default BookingRoomSlice.reducer;

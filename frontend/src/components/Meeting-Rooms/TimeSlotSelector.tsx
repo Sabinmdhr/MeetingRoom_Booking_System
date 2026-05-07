@@ -16,9 +16,15 @@ import MyButton from "../ui/Button";
 import { useAppSelector } from "../../redux/store";
 import { set } from "zod";
 import { current } from "@reduxjs/toolkit";
+import { useAuth } from "../../hooks/useAuth";
+import { permissions } from "../../utils/permissions";
 
 interface TimeSlotSelectorProps {
-  onSave?: (slot: { startTime: string; endTime: string; startDate: string }) => void;
+  onSave?: (slot: {
+    startTime: string;
+    endTime: string;
+    startDate: string;
+  }) => void;
   initialSlot?: { startTime: string; endTime: string };
   id?: number;
 }
@@ -40,6 +46,8 @@ type InteractionMode =
 export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
+const {role} = useAuth()
+  const perms = permissions[role as keyof typeof permissions];
 
   const [interaction, setInteraction] = useState<{
     mode: InteractionMode;
@@ -59,7 +67,7 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
   const isOverlapping = (start: string, end: string) => {
     return bookedSlots.some((slot) => start < slot.end && end > slot.start);
   };
-  const { formattedDate, changeDate, jumpToToday, backendFormattedDate } =
+  const { formattedDate,isToday, changeDate, jumpToToday, backendFormattedDate } =
     useRoomTimeslotViewModel();
 
   const { roomId } = useAppSelector((state) => state.bookingRoom);
@@ -102,7 +110,8 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
     Math.round(y / MINUTE_HEIGHT) + START_MINUTES;
 
   const [mannualScroll, setManualScroll] = useState(false);
-  const handlePointerDown = (e: React.PointerEvent, mode: InteractionMode) => {
+  const handlePointerDown =(e: React.PointerEvent, mode: InteractionMode) => {
+    if(!perms.canBookRoom)return;
     e.stopPropagation();
     setManualScroll(true);
     const timelineRect = timelineRef.current?.getBoundingClientRect();
@@ -116,9 +125,10 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
     });
 
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
-  };
+  }
 
   const handleGridClick = (e: React.PointerEvent) => {
+    if(!perms.canBookRoom) return;
     if (interaction.mode !== "none") return;
 
     const timelineRect = timelineRef.current?.getBoundingClientRect();
@@ -146,7 +156,7 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
     setEndTime(newEnd);
   };
 
-  const handlePointerMove = (e: React.PointerEvent) => {
+  const handlePointerMove =perms.canBookRoom ? (e: React.PointerEvent) => {
     if (interaction.mode === "none") return;
 
     const deltaY = e.clientY - interaction.startY;
@@ -201,7 +211,7 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
         return;
       setEndTime(newEnd);
     }
-  };
+  } : undefined;
 
   const handlePointerUp = (e: React.PointerEvent) => {
     setInteraction({ ...interaction, mode: "none" });
@@ -289,7 +299,7 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
             </div>
           ))}
           {/* ---------------------prev past timeslot---------------- */}
-          <div
+        { isToday && <div
             className="slot"
             style={{
               top: 0,
@@ -298,7 +308,7 @@ export const TimeSlotSelector = ({ onSave }: TimeSlotSelectorProps) => {
               pointerEvents: "auto",
               cursor: "not-allowed",
             }}
-          ></div>
+          ></div>}
           {/* The Slot */}
           <div
             className="slot"

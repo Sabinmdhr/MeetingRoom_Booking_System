@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
-import { BookRoom, getBookedDataByRoomId } from "../services/bookRoom.service";
+import {
+  BookRoom,
+  EditBookedRoomById,
+  EditBookedRoomByRecurrenceId,
+  getBookedDataByRoomId,
+} from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearBookingRoomFormData,
+  toggleWeekDay,
   updateBookingRoomFormData,
 } from "../redux/bookRoomSlice";
 import { clamp, snapToInterval } from "../utils/timeUtils";
@@ -11,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import type {
   GetBookedRoomDataResponse,
   MeetingTypeInfo,
+  WeekDays,
 } from "../models/bookRoom.model";
 import { getCalendarByDay } from "../services/calendar.service";
 import type { CalendarByDay } from "../models/calendar.model";
@@ -37,7 +44,9 @@ export const useBookingRoomViewModel = () => {
   const navigate = useNavigate();
   const [meetingTypes, setMeetingTypes] = useState<MeetingTypeInfo[]>([]);
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
-  const [openCard, setOpenCard] = useState<"internal" | "external" | null>(null);
+  const [openCard, setOpenCard] = useState<"internal" | "external" | null>(
+    null,
+  );
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -47,6 +56,9 @@ export const useBookingRoomViewModel = () => {
         [name]: value,
       }),
     );
+  };
+  const handleWeekDays = (day: WeekDays) => {
+    dispatch(toggleWeekDay(day));
   };
 
   const updateBookingTimeAndDate = ({
@@ -60,7 +72,7 @@ export const useBookingRoomViewModel = () => {
 
   const handleBookRoom = async () => {
     try {
-      // console.log("success", bookingRoomFormData);
+      console.log("success", bookingRoomFormData);
       const response = await BookRoom(bookingRoomFormData);
       dispatch(clearBookingRoomFormData());
       navigate("/meeting-rooms");
@@ -69,6 +81,32 @@ export const useBookingRoomViewModel = () => {
       console.log("FULL ERROR:", error);
       console.log("STATUS:", error.response?.status);
       console.log("BACKEND MESSAGE:", error.response?.data);
+    }
+  };
+  const handleEditBookRoomById = async (bookingId: number) => {
+    try {
+      const res = await EditBookedRoomById(bookingRoomFormData, bookingId);
+      dispatch(clearBookingRoomFormData());
+      navigate("/meeting-rooms");
+      return res;
+    } catch (error) {
+      console.error("Error editing booked room:", error);
+      throw error;
+    }
+  };
+
+  const handleEditBookRoomByRecurrenceId = async (recurrenceId: number) => {
+    try {
+      const res = await EditBookedRoomByRecurrenceId(
+        bookingRoomFormData,
+        recurrenceId,
+      );
+      dispatch(clearBookingRoomFormData());
+      navigate("/meeting-rooms");
+      return res;
+    } catch (error) {
+      console.error("Error editing booked room:", error);
+      throw error;
     }
   };
 
@@ -99,9 +137,9 @@ export const useBookingRoomViewModel = () => {
   const handleExternalCard = () => {
     setOpenCard((prev) => (prev === "external" ? null : "external"));
   };
-   const handleInternalCard = () => {
-     setOpenCard((prev) => (prev === "internal" ? null : "internal"));
-   };
+  const handleInternalCard = () => {
+    setOpenCard((prev) => (prev === "internal" ? null : "internal"));
+  };
   const handleGetBookedRoomByDay = async (date: string, RoomId: number) => {
     try {
       const res = await getCalendarByDay(date, role);
@@ -139,6 +177,9 @@ export const useBookingRoomViewModel = () => {
     handleExternalParticipantsAdd,
     handleExternalCard,
     openCard,
+    handleEditBookRoomById,
+    handleEditBookRoomByRecurrenceId,
     handleInternalCard,
+    handleWeekDays,
   };
 };

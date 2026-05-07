@@ -33,17 +33,18 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
- 
+import { mapEventToBookingFormData } from "../../models/mapper/CalendarToBookRoomMapper";
+
 interface CalendarModalProps {
   open: boolean;
   event: CalendarEvent | null;
   anchorEl?: HTMLElement | null;
   onClose: () => void;
   onEdit: () => void;
-  eventData?: BookedRoomDataResponse | null;
+  eventData?: BookedRoomDataResponse;
   eventDataLoading?: boolean;
 }
- 
+
 export const CalendarModal = ({
   open,
   event,
@@ -54,12 +55,14 @@ export const CalendarModal = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState("internal");
- 
+  const submitMode =
+    eventData?.recurrenceType === "NONE" ? "editOnce" : "editAll";
+
   const colorCode = eventData?.meetingType?.colorCode;
- 
+
   const internalParticipants = eventData?.internalParticipant ?? [];
   const externalParticipants = eventData?.externalParticipant ?? [];
- 
+
   const booker = eventData?.roomBooker;
   const bookerName = booker
     ? `${booker.firstName} ${booker.lastName}`
@@ -72,7 +75,7 @@ export const CalendarModal = ({
   const formattedDate = event?.date
     ? dayjs(event.date).format("ddd, MMMM D, YYYY")
     : "—";
- 
+
   return (
     <Dialog
       open={open}
@@ -106,9 +109,9 @@ export const CalendarModal = ({
           <X size={18} />
         </IconButton>
       </div>
- 
+
       <Divider />
- 
+
       {/* Body */}
       <DialogContent className="calendar-modal__content">
         {eventDataLoading ? (
@@ -123,10 +126,7 @@ export const CalendarModal = ({
                 className="calendar-modal__icon-wrap"
                 style={{ backgroundColor: "#eff6ff" }}
               >
-                <Clock
-                  size={16}
-                  color="#2b7fff"
-                />
+                <Clock size={16} color="#2b7fff" />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -140,17 +140,14 @@ export const CalendarModal = ({
                 </Typography>
               </div>
             </div>
- 
+
             {/* Room */}
             <div className="calendar-modal__row">
               <div
                 className="calendar-modal__icon-wrap"
                 style={{ backgroundColor: "#faf5ff" }}
               >
-                <MapPin
-                  size={16}
-                  color="#9333ea"
-                />
+                <MapPin size={16} color="#9333ea" />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -161,17 +158,14 @@ export const CalendarModal = ({
                 </Typography>
               </div>
             </div>
- 
+
             {/* Booked By */}
             <div className="calendar-modal__row">
               <div
                 className="calendar-modal__icon-wrap"
                 style={{ backgroundColor: "#eff6ff" }}
               >
-                <CircleUser
-                  size={16}
-                  color="#2b7fff"
-                />
+                <CircleUser size={16} color="#2b7fff" />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -182,7 +176,7 @@ export const CalendarModal = ({
                 </Typography>
               </div>
             </div>
- 
+
             {/* Participants */}
             <div className="calendar-modal__row">
               <Accordion
@@ -198,10 +192,7 @@ export const CalendarModal = ({
                     className="calendar-modal__icon-wrap"
                     style={{ backgroundColor: "#f0fdf4" }}
                   >
-                    <Users
-                      size={16}
-                      color="#16a34a"
-                    />
+                    <Users size={16} color="#16a34a" />
                   </div>
                   <div className="calendar-modal__row__content">
                     <Typography className="calendar-modal__row__label">
@@ -215,7 +206,7 @@ export const CalendarModal = ({
                     </Typography>
                   </div>
                 </AccordionSummary>
- 
+
                 <AccordionDetails className="calendar-modal__accordion__details">
                   <TabContext value={tabValue}>
                     <TabList
@@ -233,11 +224,8 @@ export const CalendarModal = ({
                         className="calendar-modal__tab"
                       />
                     </TabList>
- 
-                    
- 
- 
-<TabPanel
+
+                    <TabPanel
                       value="internal"
                       className="calendar-modal__tab-panel"
                     >
@@ -269,7 +257,7 @@ export const CalendarModal = ({
                         </Typography>
                       )}
                     </TabPanel>
- 
+
                     <TabPanel
                       value="external"
                       className="calendar-modal__tab-panel"
@@ -308,7 +296,7 @@ export const CalendarModal = ({
                 </AccordionDetails>
               </Accordion>
             </div>
- 
+
             {/* Description */}
             <div className="calendar-modal__row calendar-modal__row--full">
               <div className="calendar-modal__description-box">
@@ -317,10 +305,7 @@ export const CalendarModal = ({
                     className="calendar-modal__icon-wrap"
                     style={{ backgroundColor: "#f8fafc" }}
                   >
-                    <AlignLeft
-                      size={16}
-                      color="#64748b"
-                    />
+                    <AlignLeft size={16} color="#64748b" />
                   </div>
                   <Typography className="calendar-modal__row__label">
                     Description
@@ -334,9 +319,9 @@ export const CalendarModal = ({
           </div>
         )}
       </DialogContent>
- 
+
       <Divider />
- 
+
       {/* Actions */}
       <DialogActions className="calendar-modal__actions">
         <MyButton
@@ -345,21 +330,66 @@ export const CalendarModal = ({
           onClick={onClose}
           text="Close"
         />
-        <MyButton
-          variant="contained"
-          customVariant="dark"
-          startIcon={<SquarePen size={16} />}
-          onClick={() => {
-            dispatch(setBookingRoomFormData(eventData));
-            navigate("/book-room");
-          }}
-          text="Edit Meeting"
-        />
+        {submitMode === "editOnce" && (
+          <MyButton
+            variant="contained"
+            customVariant="dark"
+            startIcon={<SquarePen size={16} />}
+            onClick={() => {
+              dispatch(
+                setBookingRoomFormData(mapEventToBookingFormData(eventData!)),
+              );
+              navigate("/book-room", {
+                state: {
+                  submitMode: submitMode,
+                  bookingId: eventData?.id,
+                },
+              });
+            }}
+            text={"Edit Meeting"}
+          />
+        )}
+        {submitMode === "editAll" && (
+          <>
+            <MyButton
+              variant="contained"
+              customVariant="dark"
+              startIcon={<SquarePen size={16} />}
+              onClick={() => {
+                dispatch(
+                  setBookingRoomFormData(mapEventToBookingFormData(eventData!)),
+                );
+                navigate("/book-room", {
+                  state: {
+                    submitMode: "editOnce",
+                    bookingId: event?.id,
+                  },
+                });
+              }}
+              text="Edit This Meeting"
+            />
+            <MyButton
+              variant="contained"
+              customVariant="dark"
+              startIcon={<SquarePen size={16} />}
+              onClick={() => {
+                dispatch(
+                  setBookingRoomFormData(mapEventToBookingFormData(eventData!)),
+                );
+                navigate("/book-room", {
+                  state: {
+                    submitMode: submitMode,
+                    bookingId: eventData?.recurrenceId,
+                  },
+                });
+              }}
+              text="Edit All"
+            />
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );
 };
- 
+
 export default CalendarModal;
- 
- 

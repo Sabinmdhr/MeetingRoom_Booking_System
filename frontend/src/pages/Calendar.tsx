@@ -527,7 +527,7 @@ export const Calendar = () => {
         open={mode === "view"}
         event={selectedEvent}
         anchorEl={modalAnchor}
-        eventData={eventData}
+        eventData={eventData!}
         eventDataLoading={eventDataLoading}
         onClose={() => {
           setMode(null);

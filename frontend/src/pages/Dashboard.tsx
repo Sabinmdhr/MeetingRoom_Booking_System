@@ -7,6 +7,8 @@ import useDashboardViewModel from "../viewmodels/useDashboardViewModel";
 import { Spinner } from "../components/ui/Spinner";
 import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
 import "../assets/scss/pages/Dashboard.scss"
+import { useAuth } from "../hooks/useAuth";
+import { permissions } from "../utils/permissions";
 
 export default function Dashboard() {
   const accessToken = localStorage.getItem("accessToken");
@@ -71,13 +73,14 @@ export default function Dashboard() {
         },
       ]
     : [];
-
+const {role} = useAuth()
+const perms = permissions[role as keyof typeof permissions]
   return (
     <div className="dashboard-container">
       <main className="dashboard-content">
-        <DashboardCard cards={cards} />
+      { role === "ADMIN" && <DashboardCard cards={cards} />}
 
-        
+
         <div className="dashboard-subcontainer">
           <div className="dashboard__announcements">
           </div>
@@ -87,7 +90,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        
+
 
         <div className="dashboard_calenderpreview">
           <CalendarPreview />
