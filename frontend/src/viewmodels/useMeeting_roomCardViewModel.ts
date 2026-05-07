@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import type { AddRoomModal, meeting_rooms, UpcomingMeetingResponse } from "../models/meeting_room.model";
+import type {
+  AddRoomModal,
+  meeting_rooms,
+  recurrenceRoomBookings,
+  RoomBookings,
+  singleRoomBookings,
+  UpcomingMeetingResponse,
+} from "../models/meeting_room.model";
 import {
   addRoom,
   getMeetingRooms,
@@ -17,9 +24,7 @@ export const useMeetingCardViewModel = () => {
   const [addResourceMode, setAddResourceMode] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
-  const [upcomingMeeting, setUpcomingMeeting] = useState<UpcomingMeetingResponse[]>(
-    [],
-  );
+  const [upcomingMeeting, setUpcomingMeeting] = useState<RoomBookings[]>([]);
 
   const initialAddMeetingFormData = {
     roomName: "",
@@ -101,6 +106,53 @@ export const useMeetingCardViewModel = () => {
     }
   };
 
+  const normalizeBookings = (data: UpcomingMeetingResponse): RoomBookings[] => {
+    const single = (data?.singleRoomBookings || []).map(
+      (item: singleRoomBookings) => ({
+        id: item.id,
+        recurrenceId: item.recurrenceId,
+        meetingTitle: item.meetingTitle,
+        startDate: item.startDate, // consider converting to Dayjs in ViewModel
+        endDate: item.endDate,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        description: item.description,
+        status: item.status,
+        meetingStatus: item.meetingStatus,
+        recurrenceType: item.recurrenceType,
+
+        meetingType: item.meetingType,
+        internalParticipant: item.internalParticipant,
+        room: item.room,
+        roomBooker: item.roomBooker,
+      }),
+    );
+
+    const recurring = (data?.recurrenceRoomBookings || []).map((item) => {
+      const nextDate = item.dates?.sort(
+        (a, b) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf(),
+      )[0];
+
+      return {
+        recurrenceId: item.recurrenceId,
+        meetingTitle: item.meetingTitle,
+        startDate: nextDate?.date || item.startDate,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        description: item.description,
+        status: item.status,
+        meetingStatus: item.meetingStatus,
+        recurrenceType: item.recurrenceType,
+        meetingType: item.meetingType,
+        internalParticipant: item.internalParticipant,
+        room: item.room,
+        roomBooker: item.roomBooker,
+      };
+    });
+
+    return [...single, ...recurring];
+  };
+
   const handleRoomFormOpen = (mode: "edit" | "add", room?: meeting_rooms) => {
     setRoomFormState({ open: true, mode: mode, room: room || null });
   };
@@ -116,17 +168,17 @@ export const useMeetingCardViewModel = () => {
   const fetchUpcomingMeetings = async () => {
     try {
       setLoading(true);
-      const res = await getUpcomingMeeting(); 
-      const sorted = [...res.data].sort(
+      const res = await getUpcomingMeeting();
+      const normalized = normalizeBookings(res.data);
+      const sorted = normalized.sort(
         (a, b) =>
-          dayjs(`${a.date} ${a.startTime}`).valueOf() -
-          dayjs(`${b.date} ${b.startTime}`).valueOf(),
+          dayjs(`${a.startDate} ${a.startTime}`).valueOf() -
+          dayjs(`${b.startDate} ${b.startTime}`).valueOf(),
       );
       const filtered = sorted.slice(0, 5);
 
       setUpcomingMeeting(filtered);
       console.log(upcomingMeeting);
-      
     } catch (error) {
       console.error(error);
     } finally {

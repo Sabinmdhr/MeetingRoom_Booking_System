@@ -209,30 +209,6 @@ const AnnouncementCard = ({
               variant="subtitle2"
             >
               {item.authorName} • {item.startDate}
-              {/* <Badge
-                // badgeContent={unreadCount}
-                color="error"
-              >
-                <Dot
-                  size={30}
-                  color="red"
-                  style={{
-                    visibility: item.read ? "hidden" : "visible",
-                  }}
-                />
-              </Badge> */}
-              {/* <Badge
-                // badgeContent={unreadCount}
-                color="error"
-              >
-                <Dot
-                  size={30}
-                  color="red"
-                  style={{
-                    visibility: item.read ? "hidden" : "visible",
-                  }}
-                />
-              </Badge> */}
             </Typography>
 
 
@@ -290,7 +266,6 @@ const AnnouncementCard = ({
                   size={20}
                   color="green"
                   fill="#8cf1bd"
-                  fill="#8cf1bd"
                 />
               ) : (
                 <Circle
@@ -308,10 +283,8 @@ const AnnouncementCard = ({
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
               slotProps={{ paper: { className: "announcement-menu__button" } }}
-              slotProps={{ paper: { className: "announcement-menu__button" } }}
             >
               <MenuItem
-                className="announcement-menu__button"
                 className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -323,7 +296,6 @@ const AnnouncementCard = ({
               </MenuItem>
               <MenuItem
                 className="announcement-menu__button"
-                className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenEdit();
@@ -333,7 +305,6 @@ const AnnouncementCard = ({
                 <Typography variant="body1">Edit</Typography>
               </MenuItem>
               <MenuItem
-                className="announcement-menu__button"
                 className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -346,7 +317,6 @@ const AnnouncementCard = ({
                 </Typography>
               </MenuItem>
               <MenuItem
-                className="announcement-menu__button"
                 className="announcement-menu__button"
                 onClick={(e) => {
                   e.stopPropagation();
