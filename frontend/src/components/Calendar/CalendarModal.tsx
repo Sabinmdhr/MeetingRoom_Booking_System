@@ -35,6 +35,7 @@ import { useDispatch } from "react-redux";
 import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
 
 import { mapEventToBookingFormData } from "../../models/mapper/CalendarToBookRoomMapper";
+import { usePermissions } from "../../hooks/usePermissions";
 
 interface CalendarModalProps {
   open: boolean;
@@ -54,6 +55,7 @@ export const CalendarModal = ({
   eventData,
   eventDataLoading,
 }: CalendarModalProps) => {
+  const perms = usePermissions()
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState("internal");
@@ -376,7 +378,7 @@ export const CalendarModal = ({
 
 
       {/* Actions */}
-      <DialogActions className="calendar-modal__actions">
+    {perms.canManageRooms &&  <DialogActions className="calendar-modal__actions">
         <MyButton
           variant="outlined"
           customVariant="ghost"
@@ -440,7 +442,7 @@ export const CalendarModal = ({
             />
           </>
         )}
-      </DialogActions>
+      </DialogActions>}
     </Dialog>
   );
 };
