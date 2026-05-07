@@ -1,5 +1,20 @@
-import { Card, CardContent, Typography } from "@mui/material";
-import { Megaphone, Plus, Trash } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
+import {
+  CircleCheckBig,
+  CircleX,
+  Megaphone,
+  Plus,
+  Trash,
+  Trash2,
+} from "lucide-react";
 import "../assets/scss/pages/Announcements.scss";
 import { useState } from "react";
 import AnnouncementModal from "../components/Announcements/AnnouncementModal";
@@ -28,8 +43,9 @@ const perms = permissions[role as keyof typeof permissions];
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [confirmAction, setConfirmAction] = useState<"deleteBulk" | null>(null);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const handleOpen=()=> setOpen(true);
-  const handleClose=()=> setOpen(false);
+  // const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [filterClick, setFilterClick] = useState(false);
 
   const {
     pinnedData,
@@ -40,6 +56,8 @@ const perms = permissions[role as keyof typeof permissions];
     fetchUnpinnedAnnouncements, // always a "reset" refresh
     loadMoreUnpinned, // Show More — appends next page
     loading,
+    fetchScheduledAnnouncement,
+    scheduledAnnouncements,
   } = useAnnouncementCardViewModel();
 
   //  Mark read (optimistic in both lists)
@@ -56,7 +74,6 @@ const perms = permissions[role as keyof typeof permissions];
   };
 
   //  Delete single
-  //  Delete single
   const handleDelete = async (id: number) => {
     try {
       await deleteAnnouncement(id);
@@ -72,7 +89,6 @@ const perms = permissions[role as keyof typeof permissions];
     }
   };
 
-  //  Bulk delete
   //  Bulk delete
   const handleBulkDelete = async (ids: number[]) => {
     try {
@@ -156,58 +172,98 @@ const perms = permissions[role as keyof typeof permissions];
 
   return (
     <div className="announcement__main">
-      <Card className="announcement">
-        {/*  Header  */}
-        <CardContent className="announcement__header">
-          <div className="announcement__title-wrapper">
-            <div className="announcement__title">
-              <Megaphone size={23} />
-              <Typography variant="h1">Announcements</Typography>
-            </div>
-            <Typography
-              variant="subtitle1"
-              className="announcement__subtitle"
-            >
-              Stay updated with important notifications and updates
-            </Typography>
-          </div>
+      <div className="announcement__title-wrapper">
+        <div className="announcement__title">
+          {/* <Megaphone size={23} /> */}
+          <Typography variant="h1">Announcements</Typography>
+          <Typography
+            variant="subtitle1"
+            className="announcement__subtitle"
+          >
+            Stay updated with important notifications and updates
+          </Typography>
+        </div>
 
-       {  perms.canMannageAnnouncements && <div className="announcement__header-actions">
-            {/* Delete button only visible in select mode with items selected */}
-            {click && (
-              <MyButton
-                disabled={selectedIds.length === 0}
-                onClick={() => {
-                  setConfirmAction("deleteBulk");
-                  setOpenConfirm(true);
-                }}
-                text={`Delete${selectedIds.length > 0 ? ` (${selectedIds.length})` : ""}`}
-                variant="outlined"
-                customVariant="danger"
-                color="error"
-              />
-            )}
 
-            {hasAny && (
-              <MyButton
-                text={click ? "Cancel" : "Select"}
-                customVariant="ghost"
-                onClick={() => {
-                  setClick((prev) => !prev);
-                  if (click) setSelectedIds([]);
-                }}
-              />
-            )}
+        { perms.canMannageAnnouncements && <div className="announcement__header-actions">
 
+
+          {click && (
             <MyButton
-              variant="contained"
-              text="New Announcement"
-              startIcon={<Plus size={19} />}
-              customVariant="dark"
-              onClick={() => setOpen(true)}
+              disabled={selectedIds.length === 0}
+              onClick={() => {
+                setConfirmAction("deleteBulk");
+                setOpenConfirm(true);
+              }}
+              startIcon={<Trash2 size={19} />}
+              text={`Delete${selectedIds.length > 0 ? ` (${selectedIds.length})` : ""}`}
+              variant="outlined"
+              customVariant="danger"
+              color="error"
             />
-          </div>}
-        </CardContent>
+
+          )}
+          {hasAny && (
+            <MyButton
+              text={click ? "Cancel" : "Select"}
+              startIcon={
+                click ? <CircleX size={19} /> : <CircleCheckBig size={19} />
+              }
+              customVariant="ghost"
+              onClick={() => {
+                setClick((prev) => !prev);
+                if (click) setSelectedIds([]);
+              }}
+            />
+          )}
+
+          <MyButton
+            variant="contained"
+            text="New Announcement"
+            startIcon={<Plus size={19} />}
+            customVariant="dark"
+            onClick={() => setOpen(true)}
+          />
+        </div>}
+      </div>
+      <Card className="announcement">
+        {perms.canMannageAnnouncements && <div className="announcement__dropdown">
+          <Typography variant="h6">
+            {filterClick ? "Scheduled Announcements" : "All Announcements"}
+          </Typography>
+
+          <FormControl
+            size="small"
+            sx={{ minWidth: 125 }}
+          >
+            {/* <InputLabel>Filter</InputLabel> */}
+
+            <Select
+              value={filterClick ? "scheduled" : "all"}
+              // label="Filter"
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (value === "scheduled") {
+                  setFilterClick(true);
+                  fetchScheduledAnnouncement();
+                } else {
+                  setFilterClick(false);
+                }
+              }}
+              className="customTextField"
+            >
+              <MenuItem value="all">All</MenuItem>
+
+              <MenuItem value="scheduled">Scheduled</MenuItem>
+            </Select>
+          </FormControl>
+        </div>}
+
+        {/*
+        CONTENT
+   */}
+
         {loading ? (
           <div className="announcement__empty">
             <Spinner />
@@ -215,23 +271,54 @@ const perms = permissions[role as keyof typeof permissions];
         ) : !hasAny ? (
           <div className="announcement__empty">
             <Typography
+              variant="h5"
               style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: 24,
+                textAlign: "center",
               }}
-              variant="h4"
             >
               No announcements available
             </Typography>
           </div>
         ) : (
           <div className="announcement__content">
-            {/* Pinned section */}
-            {pinnedData.length > 0 && (
+            {!filterClick ? (
+              <>
+                {/* PINNED */}
+
+                {pinnedData.length > 0 && (
+                  <div className="announcement__section">
+                    <CardContent className="announcement__list">
+                      {pinnedData.map((item) => (
+                        <AnnouncementCard
+                          key={item.id}
+                          item={item}
+                          {...sharedCardProps}
+                        />
+                      ))}
+                    </CardContent>
+                  </div>
+                )}
+
+                {/* UNPINNED */}
+
+                {unpinnedData.length > 0 && (
+                  <div className="announcement__section">
+                    <CardContent className="announcement__list">
+                      {unpinnedData.map((item) => (
+                        <AnnouncementCard
+                          key={item.id}
+                          item={item}
+                          {...sharedCardProps}
+                        />
+                      ))}
+                    </CardContent>
+                  </div>
+                )}
+              </>
+            ) : (
               <div className="announcement__section">
                 <CardContent className="announcement__list">
-                  {pinnedData.map((item) => (
+                  {scheduledAnnouncements.map((item) => (
                     <AnnouncementCard
                       key={item.id}
                       item={item}
@@ -242,35 +329,18 @@ const perms = permissions[role as keyof typeof permissions];
               </div>
             )}
 
-            {/* Unpinned section */}
-            {unpinnedData.length > 0 && (
-              <div className="announcement__section">
-                <CardContent className="announcement__list">
-                  {unpinnedData.map((item) => (
-                    <AnnouncementCard
-                      key={item.id}
-                      item={item}
-                      {...sharedCardProps}
-                    />
-                  ))}
-                </CardContent>
-              </div>
-            )}
+            {/* SHOW MORE */}
 
-            {/* Bottom bar */}
-            <div className="announcement__bottom">
-              {/* Only render Show More when there are actually more pages */}
-              {hasMore ? (
+            {hasMore && !filterClick && (
+              <div className="announcement__bottom">
                 <MyButton
                   variant="outlined"
                   onClick={loadMoreUnpinned}
                   text="Show More"
                   customVariant="dark"
                 />
-              ) : (
-                ""
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
       </Card>

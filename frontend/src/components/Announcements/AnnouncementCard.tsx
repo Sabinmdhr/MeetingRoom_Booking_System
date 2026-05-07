@@ -7,8 +7,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import "../../assets/scss/pages/Announcements.scss";
-// import "../../assets/scss/components/Announcement/AnnouncementCard.scss";
-// import "../../assets/scss/components/Announcement/AnnouncementCard.scss";
 import {
   Circle,
   CircleCheck,
@@ -83,7 +81,6 @@ const perms = usePermissions()
   };
 
   //  Detail modal
-  //  Detail modal
   const handleOpenDetail = () => {
     suppress();
     setAnchorEl(null);
@@ -91,7 +88,6 @@ const perms = usePermissions()
     setOpenDetailModal(true);
   };
 
-  //  Edit modal
   //  Edit modal
   const handleOpenEdit = () => {
     suppress();
@@ -114,7 +110,6 @@ const perms = usePermissions()
   };
 
   //  Delete
-  //  Delete
   const handleDeleteClick = () => {
     suppress();
     setConfirmAction("delete");
@@ -130,7 +125,6 @@ const perms = usePermissions()
     setAnchorEl(null);
   };
 
-  //  Confirm dialog
   //  Confirm dialog
   const handleConfirmAction = () => {
     if (confirmAction === "delete") {
@@ -152,7 +146,6 @@ const perms = usePermissions()
   };
 
   //  Card click
-  //  Card click
   const handleCardClick = () => {
     if (suppressCardClick.current) return;
 
@@ -171,12 +164,10 @@ const perms = usePermissions()
   };
 
   //  CSS classes
-  //  CSS classes
   const cardClass = [
     "announcement__card",
     item.pinned ? "pinned" : "",
     item.read ? "card__read" : "card__unread",
-    // isSelected ? "card__selected" : "",
     // isSelected ? "card__selected" : "",
   ]
     .filter(Boolean)
@@ -212,8 +203,19 @@ const perms = usePermissions()
               variant="subtitle2"
             >
               {item.authorName} • {item.startDate}
+              {/* <Badge
+                // badgeContent={unreadCount}
+                color="error"
+              >
+                <Dot
+                  size={30}
+                  color="red"
+                  style={{
+                    visibility: item.read ? "hidden" : "visible",
+                  }}
+                />
+              </Badge> */}
             </Typography>
-
 
             <div className="announcement__card-left__bottom">
               <Typography
@@ -285,7 +287,12 @@ const perms = usePermissions()
               onClose={handleMenuClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
-              slotProps={{ paper: { className: "announcement-menu__button" } }}
+              slotProps={{
+                paper: { className: "announcement-menu__button" },
+              }}
+              disableScrollLock
+              disableAutoFocusItem
+              disableEnforceFocus
             >
               <MenuItem
                 className="announcement-menu__button"

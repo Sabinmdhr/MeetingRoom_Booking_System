@@ -33,6 +33,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
+
 import { mapEventToBookingFormData } from "../../models/mapper/CalendarToBookRoomMapper";
 
 interface CalendarModalProps {
@@ -45,6 +46,7 @@ interface CalendarModalProps {
   eventDataLoading?: boolean;
 }
 
+
 export const CalendarModal = ({
   open,
   event,
@@ -55,13 +57,16 @@ export const CalendarModal = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState("internal");
+
   const submitMode =
     eventData?.recurrenceType === "NONE" ? "editOnce" : "editAll";
 
   const colorCode = eventData?.meetingType?.colorCode;
 
+
   const internalParticipants = eventData?.internalParticipant ?? [];
   const externalParticipants = eventData?.externalParticipant ?? [];
+
 
   const booker = eventData?.roomBooker;
   const bookerName = booker
@@ -76,6 +81,7 @@ export const CalendarModal = ({
     ? dayjs(event.date).format("ddd, MMMM D, YYYY")
     : "—";
 
+
   return (
     <Dialog
       open={open}
@@ -89,7 +95,7 @@ export const CalendarModal = ({
       <div className="calendar-modal__header">
         <div className="calendar-modal__header__left">
           <Typography className="calendar-modal__header__title">
-            {title}
+            {title.charAt(0)?.toUpperCase() + title.slice(1)}
           </Typography>
           <Chip
             label={eventData?.meetingType?.name || event?.category || "—"}
@@ -110,7 +116,9 @@ export const CalendarModal = ({
         </IconButton>
       </div>
 
+
       <Divider />
+
 
       {/* Body */}
       <DialogContent className="calendar-modal__content">
@@ -132,14 +140,21 @@ export const CalendarModal = ({
                 <Typography className="calendar-modal__row__label">
                   Date & Time
                 </Typography>
-                <Typography className="calendar-modal__row__primary">
+                <Typography
+                  variant="h4"
+                  className="calendar-modal__row__primary"
+                >
                   {formattedDate}
                 </Typography>
-                <Typography className="calendar-modal__row__secondary">
+                <Typography
+                  variant="h4"
+                  className="calendar-modal__row__secondary"
+                >
                   {startTime} – {endTime}
                 </Typography>
               </div>
             </div>
+
 
             {/* Room */}
             <div className="calendar-modal__row">
@@ -153,11 +168,15 @@ export const CalendarModal = ({
                 <Typography className="calendar-modal__row__label">
                   Meeting Room
                 </Typography>
-                <Typography className="calendar-modal__row__primary">
+                <Typography
+                  variant="h4"
+                  className="calendar-modal__row__primary"
+                >
                   {roomName}
                 </Typography>
               </div>
             </div>
+
 
             {/* Booked By */}
             <div className="calendar-modal__row">
@@ -171,8 +190,34 @@ export const CalendarModal = ({
                 <Typography className="calendar-modal__row__label">
                   Booked By
                 </Typography>
-                <Typography className="calendar-modal__row__primary">
+                <Typography
+                  variant="h4"
+                  className="calendar-modal__row__primary"
+                >
                   {bookerName}
+                </Typography>
+              </div>
+            </div>
+
+            <div className="calendar-modal__row">
+              <div
+                className="calendar-modal__icon-wrap"
+                // style={{ backgroundColor: "#f8fafc" }}
+              >
+                <AlignLeft
+                  size={16}
+                  color="#64748b"
+                />
+              </div>
+              <div className="calendar-modal__row__content">
+                <Typography className="calendar-modal__row__label">
+                  Description
+                </Typography>
+                <Typography
+                  variant="h4"
+                  className="calendar-modal__row__primary"
+                >
+                  {description || "No description provided."}
                 </Typography>
               </div>
             </div>
@@ -198,7 +243,10 @@ export const CalendarModal = ({
                     <Typography className="calendar-modal__row__label">
                       Participants
                     </Typography>
-                    <Typography className="calendar-modal__row__secondary">
+                    <Typography
+                      variant="h4"
+                      className="calendar-modal__row__secondary"
+                    >
                       {internalParticipants.length +
                         externalParticipants.length}{" "}
                       Participants ({internalParticipants.length} Internal,{" "}
@@ -206,6 +254,7 @@ export const CalendarModal = ({
                     </Typography>
                   </div>
                 </AccordionSummary>
+
 
                 <AccordionDetails className="calendar-modal__accordion__details">
                   <TabContext value={tabValue}>
@@ -225,6 +274,7 @@ export const CalendarModal = ({
                       />
                     </TabList>
 
+
                     <TabPanel
                       value="internal"
                       className="calendar-modal__tab-panel"
@@ -236,7 +286,7 @@ export const CalendarModal = ({
                               key={p.id}
                               className="calendar-modal__participant-chip"
                             >
-                              <Avatar>
+                              <Avatar className="calendar-modal__chips__avatar">
                                 {p.firstName[0]}
                                 {p.lastName[0]}
                               </Avatar>
@@ -258,6 +308,7 @@ export const CalendarModal = ({
                       )}
                     </TabPanel>
 
+
                     <TabPanel
                       value="external"
                       className="calendar-modal__tab-panel"
@@ -269,7 +320,7 @@ export const CalendarModal = ({
                               key={p.id}
                               className="calendar-modal__participant-chip"
                             >
-                              <Avatar>
+                              <Avatar className="calendar-modal__chips__avatar">
                                 {p.name
                                   .split(" ")
                                   .map((w) => w[0])
@@ -320,7 +371,9 @@ export const CalendarModal = ({
         )}
       </DialogContent>
 
+
       <Divider />
+
 
       {/* Actions */}
       <DialogActions className="calendar-modal__actions">
@@ -392,4 +445,6 @@ export const CalendarModal = ({
   );
 };
 
+
 export default CalendarModal;
+

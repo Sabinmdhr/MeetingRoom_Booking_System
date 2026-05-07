@@ -124,6 +124,14 @@ export const getUnpinnedAnnouncement = async (
   return res.data;
 };
 
+export const getScheduledAnnouncement = async (
+  data: AnnouncementListRequest,
+) => {
+  const res = await api.post("/api/v1/announcement/get-scheduled", data);
+
+  return res.data.data.content;
+};
+
 // Used for admin/full-list views (not the announcements page)
 export const getAnnouncements = async (data: AnnouncementListRequest) => {
   const res = await api.post("/api/v1/announcement/list", data);
@@ -159,4 +167,15 @@ export const deleteBulk = async (ids: number[]) => {
     data: { ids },
   });
   return res.data;
+};
+
+export const getAllAnnouncements = async (data: AnnouncementListRequest) => {
+  try {
+    const res = await api.post("/api/v1/announcement/list", data);
+    // console.log(res);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching announcement", error);
+    throw error;
+  }
 };

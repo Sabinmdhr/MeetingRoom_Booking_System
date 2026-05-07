@@ -15,12 +15,13 @@ import {
 } from "../services/report.service";
 
 export const COLUMNS: Column[] = [
+  { id: "date", label: "Date" },
   { id: "roomName", label: "Room" },
   { id: "meetingTitle", label: "Title" },
   { id: "startTime", label: "Start Time" },
   { id: "EndTime", label: "End Time" },
+  { id: "meetingType", label: "Meeting Type" },
   { id: "createdBy", label: "Created By" },
-  { id: "date", label: "Date" },
 ];
 
 export function useMeetingReportViewModel() {
@@ -34,15 +35,17 @@ export function useMeetingReportViewModel() {
 
   const defaultPayload: ReportPayload = {
     pageNo: 0,
-    pageSize: 10000,
-    sortBy: "date",
-    sortDir: "desc",
+    pageSize: rows.length,
+    sortBy: "startDate",
+    sortDir: "asc",
   };
+  // console.log(rows.length);
 
   const fetchReports = async () => {
     try {
       const res = await getAllReports();
       setRows(res.data ?? []);
+
       setIsFiltered(false);
       setLastFilter(null);
       setLoading(false);
@@ -56,6 +59,7 @@ export function useMeetingReportViewModel() {
       const data = await filterReport(payload);
       setRows(data ?? []);
       setIsFiltered(true);
+      console.log(data);
       setLastFilter(payload);
       setLoading(false);
     } catch (err) {
