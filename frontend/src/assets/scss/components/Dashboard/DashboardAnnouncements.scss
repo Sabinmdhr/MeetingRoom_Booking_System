@@ -1,15 +1,21 @@
 .dashboard-announcements {
-  width: 50%;
-  margin-top: 20px;
-
+  // width: 50%;
+  // margin-top: 20px;
+  // height: 90vh;
+  // overflow-y: scroll;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+  // scrollbar-width: none;
+  // ::-webkit-scrollbar {
+  //   width: none !important;
+  // }
   &__section {
     // flex: 1;
     border-radius: 8px !important;
-    padding: 10px !important;
+    padding: 10px 16px !important;
   }
 
   &__top {
-    padding: 10px;
+    padding: 10px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;

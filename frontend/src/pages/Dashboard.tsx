@@ -6,7 +6,7 @@ import DashboardAnnouncements from "../components/Dashboard/DashboardAnnouncemen
 import useDashboardViewModel from "../viewmodels/useDashboardViewModel";
 import { Spinner } from "../components/ui/Spinner";
 import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
-import "../assets/scss/pages/Dashboard.scss"
+import "../assets/scss/pages/Dashboard.scss";
 
 export default function Dashboard() {
   const accessToken = localStorage.getItem("accessToken");
@@ -74,25 +74,21 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <main className="dashboard-content">
+      <div className="dashboard-container__header">
         <DashboardCard cards={cards} />
-
-        
-        <div className="dashboard-subcontainer">
-          <div className="dashboard__announcements">
-          </div>
+      </div>
+      <div className="dashboard-container__content">
+        <div className="dashboard-container__content__announcements">
           <DashboardAnnouncements />
-          <div className="dashboard_dashboardupmeetings">
-          <DashboardUpMeetings   />
-          </div>
         </div>
-
-        
-
-        <div className="dashboard_calenderpreview">
-          <CalendarPreview />
+        <div className="dashboard-container__content__dashboardupmeetings">
+          <DashboardUpMeetings />
         </div>
-      </main>
+      </div>
+
+      <div className="dashboard_calenderpreview">
+        <CalendarPreview />
+      </div>
     </div>
   );
 }

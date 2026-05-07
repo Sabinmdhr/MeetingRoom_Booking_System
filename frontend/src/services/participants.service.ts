@@ -90,6 +90,6 @@ export const addUser = async (data: ParticipantsRequest) => {
 };
 
 export const editUser = async (id: number, data: ParticipantsRequest) => {
-  const response = await api.put(`/api/v1/user/${id}/update`, data);
+  const response = await api.put(`/api/v1/users/${id}/update`, data);
   return response.data;
 };

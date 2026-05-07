@@ -29,12 +29,12 @@
     border: 1px solid #d5d3d3;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+    cursor: pointer;
 
     &:hover {
       transform: translateY(-0.5px);
       // box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
       border-color: #bdbdbd;
-      cursor: pointer;
     }
   }
 

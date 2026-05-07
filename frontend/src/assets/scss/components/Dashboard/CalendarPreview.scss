@@ -3,6 +3,7 @@
   border-radius: 8px !important;
   margin-top: 20px;
   width: 100%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
 }
 
 .calendar-header {
@@ -17,11 +18,11 @@
   }
 }
 
-.calendar-box{
-    padding: 18px;
-    background: rgb(246, 246, 247);
-    border-radius: 8px;
-    margin-bottom: 16px !important;
+.calendar-box {
+  padding: 18px;
+  background: rgb(246, 246, 247);
+  border-radius: 8px;
+  margin-bottom: 16px !important;
 }
 .calendar-nav {
   position: relative;
@@ -77,21 +78,21 @@
   }
 }
 
-  .booking-dot {
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background-color: #1976d2;
-  }
+.booking-dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #1976d2;
+}
 
 .selected {
-    background: #7b2ff7;
-    color: white;
-  }
+  background: #7b2ff7;
+  color: white;
+}
 .today {
   border: 1px solid #1976d2;
 }
@@ -120,13 +121,13 @@
     font-size: 14px;
   }
 
-  &__header{
+  &__header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px !important;
   }
 
-  &__badge{
+  &__badge {
     background: #7b2ff7;
     color: white;
     padding: 2px 8px;
@@ -135,9 +136,9 @@
     font-size: 14px;
   }
 
-  &__list{
-    max-height: 350px; 
-    overflow-y: auto;    
+  &__list {
+    max-height: 350px;
+    overflow-y: auto;
     padding-right: 4px;
   }
 
@@ -151,12 +152,12 @@
     justify-content: space-between;
 
     &:hover {
-    border: 2px solid rgb(201, 171, 201) ;
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1) !important;
+      border: 2px solid rgb(201, 171, 201);
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1) !important;
     }
   }
 
-  &__subcard{
+  &__subcard {
     display: flex;
     justify-content: space-between;
   }
@@ -179,13 +180,13 @@
     margin-bottom: 8px;
   }
 
-  &__location{
+  &__location {
     display: flex;
     align-items: center;
     color: #777;
   }
-    
-    &__roomname {
+
+  &__roomname {
     font-size: 14px !important;
   }
 }
@@ -194,12 +195,12 @@ hr {
   border-top: 1px #e0dfdf;
   margin-bottom: 8px;
 }
- 
+
 .calenderpreview-btn:hover {
   background: #7b2ff7 !important;
-  }
+}
 
-.clearselection-btn{
+.clearselection-btn {
   color: red !important;
   border: 1px solid red !important;
   font-size: 12px !important;
@@ -209,5 +210,3 @@ hr {
     color: black !important;
   }
 }
-
-
