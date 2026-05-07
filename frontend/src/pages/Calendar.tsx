@@ -42,7 +42,7 @@ const VISIBLE_EVENT_LIMIT = 4;
 
 export const Calendar = () => {
   const navigate = useNavigate();
-  const perms = usePermissions()
+  const perms = usePermissions();
   const { updateBookingTimeAndDate, setSlot, slot } = useBookingRoomViewModel();
 
   const {
@@ -282,7 +282,7 @@ export const Calendar = () => {
             {perms.canManageRooms && isDayView && (
               <MyButton
                 onClick={() => {
-                  if(slot.startTime === "00:00") return;
+                  if (slot.startTime === "00:00") return;
                   updateBookingTimeAndDate({
                     startTime: slot.startTime,
                     endTime: slot.endTime,
@@ -298,7 +298,7 @@ export const Calendar = () => {
             {perms.canManageRooms && !isDayView && (
               <MyButton
                 onClick={() => {
-               navigate("/meeting-rooms")
+                  navigate("/meeting-rooms");
                 }}
                 variant="contained"
                 customVariant="dark"
@@ -322,7 +322,12 @@ export const Calendar = () => {
       <CardContent className="calendar__main">
         {/* DAY VIEW */}
         {isDayView && (
-          <TimeSlotSelector id={roomId} key={roomId} onSave={setSlot} calendarView={true}/>
+          <TimeSlotSelector
+            id={roomId}
+            key={roomId}
+            onSave={setSlot}
+            calendarView={true}
+          />
         )}
 
         {/* MONTH GRID */}
@@ -426,14 +431,9 @@ export const Calendar = () => {
                                 <div
                                   key={event.id}
                                   style={{
-                                    borderLeft: `5px solid rgb${
-                                      event.meetingType?.colorCode
-                                    }`,
-                                    backgroundColor: alpha(
-                                      `rgb${event.meetingType?.colorCode}`,
-                                      0.3,
-                                    ),
-                                    opacity: 0.6,
+                                    borderLeft: `5px solid rgb${raw}`,
+                                    backgroundColor: alpha(`rgb${raw}`, 0.3),
+                                    // opacity: 0.6,
                                   }}
                                   className="room-grid__event"
                                   onClick={(e) => handleEventClick(e, event)}

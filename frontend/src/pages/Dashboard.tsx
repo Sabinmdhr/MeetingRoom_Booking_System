@@ -9,9 +9,9 @@ import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
 import "../assets/scss/pages/Dashboard.scss";
 import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
+import "../assets/scss/pages/Dashboard.scss";
 
 export default function Dashboard() {
-
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     window.location.href = "/";
@@ -29,7 +29,12 @@ export default function Dashboard() {
           id: 1,
           title: "Total Rooms",
           number: dashboardData.totalRooms,
-          icon: <Building2 color="blue" size={19} />,
+          icon: (
+            <Building2
+              color="blue"
+              size={19}
+            />
+          ),
           description: `↑ ${dashboardData.totalRooms ?? 0} available now`,
         },
 
@@ -37,7 +42,12 @@ export default function Dashboard() {
           id: 2,
           title: "Active Users",
           number: dashboardData.totalUsers,
-          icon: <Users color="purple" size={19} />,
+          icon: (
+            <Users
+              color="purple"
+              size={19}
+            />
+          ),
           description: "Across all departments",
         },
         {
@@ -54,28 +64,33 @@ export default function Dashboard() {
           id: 4,
           title: "Peak Hours",
           number: "2-4PM",
-          icon: <ChartColumn color="#AD46FF" size={19} />,
+          icon: (
+            <ChartColumn
+              color="#AD46FF"
+              size={19}
+            />
+          ),
           description: "Busiest time",
         },
       ]
     : [];
   return (
     <div className="dashboard-container">
-      <main className="dashboard-content">
-       <DashboardCard cards={cards} />
-
-        <div className="dashboard-subcontainer">
-          <div className="dashboard__announcements"></div>
+      <div className="dashboard-container__header">
+        <DashboardCard cards={cards} />
+      </div>
+      <div className="dashboard-container__content">
+        <div className="dashboard-container__content__announcements">
           <DashboardAnnouncements />
-          <div className="dashboard_dashboardupmeetings">
-            <DashboardUpMeetings />
-          </div>
         </div>
+        <div className="dashboard-container__content__dashboardupmeetings">
+          <DashboardUpMeetings />
+        </div>
+      </div>
 
-        <div className="dashboard_calenderpreview">
-          <CalendarPreview />
-        </div>
-      </main>
+      <div className="dashboard_calenderpreview">
+        <CalendarPreview />
+      </div>
     </div>
   );
 }
