@@ -111,11 +111,11 @@ export const useUserProfileViewModel = () => {
         email: profile.email,
         position: profile.position,
         phoneNo: profile.phoneNo,
-        roleId: profile.roleId,
+        // roleId: profile.roleId,
         departmentId: profile.departmentId,
       };
       console.log("PROFILE ID:", profile.id);
-      const res = await updateProfile(profile.id, payload);
+      const res = await updateProfile(payload);
       await loadUser();
       return true;
     } catch (err) {

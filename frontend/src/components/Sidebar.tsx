@@ -10,7 +10,6 @@ import ListItemText from "@mui/material/ListItemText";
 import {
   LayoutDashboard,
   Calendar,
-  DoorOpen,
   Building2,
   ClipboardMinus,
   Users,
@@ -21,56 +20,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Divider, Typography } from "@mui/material";
+import { Badge, Chip, Divider, IconButton, Typography } from "@mui/material";
 import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
 import Logout from "./Auth/Logout";
 import { useAuth } from "../hooks/useAuth";
-
-const menuItems = [
-  {
-    text: "Dashboard",
-    icon: <LayoutDashboard size={20} />,
-    path: "/dashboard",
-    roles: ["ADMIN", "STAFF", "MANAGER"],
-  },
-  {
-    text: "Calendar",
-    icon: <Calendar size={20} />,
-    path: "/calendar",
-    roles: ["ADMIN", "STAFF", "MANAGER"],
-  },
-
-  {
-    text: "Meeting Rooms",
-    icon: <Building2 size={20} />,
-    path: "/meeting-rooms",
-    roles: ["ADMIN", "MANAGER"],
-  },
-  {
-    text: "Announcements",
-    icon: <Bell size={20} />,
-    path: "/announcements",
-    roles: ["ADMIN", "STAFF", "MANAGER"],
-  },
-  {
-    text: "Report",
-    icon: <ClipboardMinus size={20} />,
-    path: "/report",
-    roles: ["ADMIN"],
-  },
-  {
-    text: "Participants",
-    icon: <Users size={20} />,
-    path: "/participants",
-    roles: ["ADMIN", "MANAGER"],
-  },
-  {
-    text: "Settings",
-    icon: <Settings size={20} />,
-    path: "/settings",
-    roles: ["ADMIN", "STAFF", "MANAGER"],
-  },
-];
+import useAnnouncementCardViewModel from "../viewmodels/useAnnouncementCardViewModel";
 
 const logoutItem = {
   text: "Logout",
@@ -88,23 +42,58 @@ export default function Sidebar() {
     handleLogoutClose,
     handleLogoutConfirm,
   } = useLogoutViewModel();
+  const { unreadData } = useAnnouncementCardViewModel();
+  console.log("unreadData", unreadData);
+  const menuItems = [
+    {
+      text: "Dashboard",
+      icon: <LayoutDashboard size={20} />,
+      path: "/dashboard",
+      roles: ["ADMIN", "STAFF", "MANAGER"],
+    },
+    {
+      text: "Calendar",
+      icon: <Calendar size={20} />,
+      path: "/calendar",
+      roles: ["ADMIN", "STAFF", "MANAGER"],
+    },
+
+    {
+      text: "Meeting Rooms",
+      icon: <Building2 size={20} />,
+      path: "/meeting-rooms",
+      roles: ["ADMIN", "MANAGER"],
+    },
+    {
+      text: "Announcements",
+      icon: <Bell size={20} />,
+      badge: unreadData?.length || 0,
+      path: "/announcements",
+      roles: ["ADMIN", "STAFF", "MANAGER"],
+    },
+    {
+      text: "Report",
+      icon: <ClipboardMinus size={20} />,
+      path: "/report",
+      roles: ["ADMIN"],
+    },
+    {
+      text: "Participants",
+      icon: <Users size={20} />,
+      path: "/participants",
+      roles: ["ADMIN", "MANAGER"],
+    },
+    {
+      text: "Settings",
+      icon: <Settings size={20} />,
+      path: "/settings",
+      roles: ["ADMIN", "STAFF", "MANAGER"],
+    },
+  ];
 
   const filteredMenuItems = menuItems.filter((item) =>
     item.roles.includes(role as string),
   );
-  // const { logout } = useLoginViewModel();
-
-  // const[logoutOpen, setLogoutOpen]= useState(false);
-
-  //   const handleLogoutOpen= ()=>{
-  //       setLogoutOpen(true);
-  //   }
-  //   const handleLogoutClose= ()=>{
-  //       setLogoutOpen(false);
-  //   }
-  //   const handleLogoutConfirm = async () => {
-  //       await logout();
-  //   }
 
   return (
     <Drawer
@@ -116,7 +105,10 @@ export default function Sidebar() {
       <div className="sidebar-content">
         <List>
           {filteredMenuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
+            <ListItem
+              key={item.text}
+              disablePadding
+            >
               <ListItemButton
                 disableRipple
                 className={`sidebar-item ${
@@ -124,38 +116,63 @@ export default function Sidebar() {
                 }`}
                 onClick={() => navigate(item.path)}
               >
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon>
+                  {!open && item.badge ? (
+                    <Badge
+                      badgeContent={item.badge}
+                      color="error"
+                    >
+                      {item.icon}
+                    </Badge>
+                  ) : (
+                    item.icon
+                  )}
+                </ListItemIcon>
+
                 <Typography
                   className={`sidebar-text ${open ? "show" : "hide"}`}
                 >
                   {item.text}
                 </Typography>
+
+                {open && item.badge ? (
+                  <Chip
+                    label={item.badge}
+                    color="error"
+                    size="small"
+                  />
+                ) : null}
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
 
-        <div className="sidebar-header" onClick={() => setOpen(!open)}>
-          <div className="toggle-button">
-            {open ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+        <div className="sidebar-bottom">
+          <div
+            className="sidebar-header"
+            onClick={() => setOpen(!open)}
+          >
+            <div className="toggle-button">
+              {open ? <ChevronLeft size={23} /> : <ChevronRight size={23} />}
+            </div>
           </div>
-        </div>
 
-        <List className="logout-section">
-          <ListItem disablePadding>
-            <ListItemButton
-              className="sidebar-item logout"
-              onClick={handleLogoutOpen}
-            >
-              <ListItemIcon>{logoutItem.icon}</ListItemIcon>
-              <ListItemText
-                primary={"Logout"}
-                className={`sidebar-text ${open ? "show" : "hide"}`}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List>
+          <List className="logout-section">
+            <ListItem disablePadding>
+              <ListItemButton
+                className="sidebar-item logout"
+                onClick={handleLogoutOpen}
+              >
+                <ListItemIcon>{logoutItem.icon}</ListItemIcon>
+                <ListItemText
+                  primary={"Logout"}
+                  className={`sidebar-text ${open ? "show" : "hide"}`}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </div>
 
         <Logout
           open={logoutOpen}
