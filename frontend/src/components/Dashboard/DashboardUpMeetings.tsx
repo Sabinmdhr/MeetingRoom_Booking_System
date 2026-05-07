@@ -18,12 +18,12 @@ const DashboardUpMeetings = () => {
             className="dashboard-upmeetings__cardheader"
             title={
               <Typography className="dashboard-upmeetings__cardheader__meetingtitle">
-                {m}
+                {m.meetingTitle}
               </Typography>
             }
             action={
               <Chip
-                style={{ color: `rgb(${m.meetingType.colorCode})` }}
+                style={{ color: `rgb${m.meetingType.colorCode}` }}
                 label={m.meetingType.name}
                 className="dashboard-upmeetings__chip"
               />
@@ -32,15 +32,15 @@ const DashboardUpMeetings = () => {
           <CardContent className="dashboard-upmeetings__subheading">
             <div>
               <Typography className="dashboard-upmeetings__title">
-                {m.date},{formatDisplayTime(timeStringToMinutes(m.startTime))} -{" "}
+                {m.startDate},{formatDisplayTime(timeStringToMinutes(m.startTime))} -{" "}
                 {formatDisplayTime(timeStringToMinutes(m.endTime))}
               </Typography>
               <Typography className="dashboard-upmeetings__subtitle">
                 By: {m.roomBooker.firstName} {m.roomBooker.lastName}
               </Typography>
-              <Typography className="dashboard-upmeetings__participants"><Users size={14} />
+              {/* <Typography className="dashboard-upmeetings__participants"><Users size={14} />
                 {(m.internalParticipant?.length || 0) + (m.externalParticipant?.length || 0)} Participants
-              </Typography>
+              </Typography> */}
             </div>
             <div>
               <Typography className="dashboard-upmeetings__title">

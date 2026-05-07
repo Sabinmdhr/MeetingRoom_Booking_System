@@ -100,8 +100,6 @@ export interface BookedRoomDataResponse {
   roomBooker: RoomBooker;
 }
 
-
-
 export interface BookingRoomData {
   meetingTitle: string;
   startDate: string;
