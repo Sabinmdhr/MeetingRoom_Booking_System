@@ -150,21 +150,7 @@ export const AddParticipantsForm = ({
             id="Position"
             required
             className="customTextField"
-            select
-            SelectProps={{
-              MenuProps: {
-                disablePortal: true,
-                PaperProps: {
-                  className: "customTextField",
-                },
-              },
-            }}
-            value={participantFormData.position}
-            onChange={handleChange}
-          >
-            {positions.map((r) => (
-              <MenuItem value={r}>{r}</MenuItem>
-            ))}
+         >
           </TextField>
           <label htmlFor="Phone">Phone Number</label>
           <TextField

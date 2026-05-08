@@ -54,7 +54,7 @@ export const useCalendarEventViewModel = () => {
     start: Dayjs | null;
     end: Dayjs | null;
   }>({
-    start: null,
+    start: dayjs(),
     end: null,
   });
 

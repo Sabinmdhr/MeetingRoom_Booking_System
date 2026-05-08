@@ -38,7 +38,7 @@ export interface Settings {
 export type MeetingTypeStatus = "ACTIVE" | "INACTIVE";
 export interface meetingTypeChange{
   status: MeetingTypeStatus
-} 
+}
 export interface MeetingTypeUI {
   id: number;
   name: string;
@@ -52,3 +52,8 @@ export interface MeetingTypeRequest{
   status: MeetingTypeStatus;
 }
 
+export interface changePassDataType {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+};

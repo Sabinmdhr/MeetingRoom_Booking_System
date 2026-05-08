@@ -9,7 +9,6 @@ import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
 import "../assets/scss/pages/Dashboard.scss";
 import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
-import "../assets/scss/pages/Dashboard.scss";
 
 export default function Dashboard() {
   const accessToken = localStorage.getItem("accessToken");
@@ -63,7 +62,7 @@ export default function Dashboard() {
         {
           id: 4,
           title: "Peak Hours",
-          number: "2-4PM",
+          number: "2-4 PM",
           icon: (
             <ChartColumn
               color="#AD46FF"

@@ -15,6 +15,7 @@ export const mapEventToBookingFormData = (
   return {
     meetingTitle: eventData.meetingTitle,
     startDate: eventData.startDate,
+
     startTime: formatTo12Hour(eventData.startTime),
     endTime: formatTo12Hour(eventData.endTime),
     description: eventData.description,

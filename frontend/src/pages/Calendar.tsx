@@ -32,6 +32,7 @@ import { updateBookingRoomFormData } from "../redux/bookRoomSlice";
 import { useAppSelector } from "../redux/store";
 import { usePermissions } from "../hooks/usePermissions";
 import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
+import { useSettingsViewModel } from "../viewmodels/useSettingsViewModel";
 
 // Must stay in sync with $col-width and $col-gap in Calendar.scss
 const COL_WIDTH = 180;
@@ -43,7 +44,9 @@ const VISIBLE_EVENT_LIMIT = 4;
 export const Calendar = () => {
   const navigate = useNavigate();
   const perms = usePermissions();
-  const { updateBookingTimeAndDate, setSlot, slot } = useBookingRoomViewModel();
+  const { meetingTypes } = useSettingsViewModel();
+  const { updateBookingTimeAndDate, setSlot, slot, PastimeColor, bookedColor } =
+    useBookingRoomViewModel();
 
   const {
     view,
@@ -235,14 +238,8 @@ export const Calendar = () => {
                 }}
                 className="cal-tabs"
               >
-                <Tab
-                  label="Day"
-                  value="day"
-                />
-                <Tab
-                  label="Month"
-                  value="month"
-                />
+                <Tab label="Day" value="day" />
+                <Tab label="Month" value="month" />
               </Tabs>
 
               {isDayView && (
@@ -306,13 +303,23 @@ export const Calendar = () => {
                 text="Add New Meeting"
               />
             )}
-            <div className="cat-legend">
-              <i className="cat-dot cat-dot--internal" />
-              <span>Internal</span>
-              <i className="cat-dot cat-dot--client" />
-              <span>Client</span>
-              <i className="cat-dot cat-dot--executive" />
-              <span>Executive</span>
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                justifyContent: "space-between",
+              }}
+            >
+              {isDayView &&
+                meetingTypes.map((m) => (
+                  <div className="cat-legend">
+                    <i
+                      className="cat-dot "
+                      style={{ background: `rgb${m.colorCode}` }}
+                    />
+                    <span>{m.name}</span>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -335,10 +342,7 @@ export const Calendar = () => {
           <div className="room-grid">
             <div className="room-grid__header">
               <div className="room-grid__corner">Rooms</div>
-              <div
-                className="room-grid__date-strip"
-                ref={headerScrollRef}
-              >
+              <div className="room-grid__date-strip" ref={headerScrollRef}>
                 {gridDates.map((date) => {
                   const key = date.format("YYYY-MM-DD");
                   return (
@@ -361,28 +365,19 @@ export const Calendar = () => {
             <div className="room-grid__body">
               <div className="room-grid__labels">
                 {rooms.map((rm) => (
-                  <div
-                    key={rm.id}
-                    className="room-grid__label"
-                  >
+                  <div key={rm.id} className="room-grid__label">
                     <span>{rm.roomName}</span>
                   </div>
                 ))}
               </div>
 
               {/* THE only scrollable element */}
-              <div
-                className="room-grid__scroll"
-                ref={bodyScrollRef}
-              >
+              <div className="room-grid__scroll" ref={bodyScrollRef}>
                 {/* Loading skeleton — shown while rooms or events are fetching */}
                 {loading ? (
                   <div className="room-grid__skeleton">
                     {Array.from({ length: 3 }).map((_, ri) => (
-                      <div
-                        key={ri}
-                        className="room-grid__row"
-                      >
+                      <div key={ri} className="room-grid__row">
                         {Array.from({ length: 7 }).map((_, ci) => (
                           <div
                             key={ci}
@@ -394,10 +389,7 @@ export const Calendar = () => {
                   </div>
                 ) : (
                   rooms.map((rm) => (
-                    <div
-                      key={rm.id}
-                      className="room-grid__row"
-                    >
+                    <div key={rm.id} className="room-grid__row">
                       {gridDates.map((date) => {
                         const key = date.format("YYYY-MM-DD");
                         const cellEvents = (eventsByDate[key] ?? []).filter(
@@ -471,12 +463,14 @@ export const Calendar = () => {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleRoomCellClick(date, rm.roomName);
+                                  dispatch(
+                                    updateBookingRoomFormData({
+                                      roomId: rm.id,
+                                    }),
+                                  );
                                 }}
                               >
-                                <Plus
-                                  size={12}
-                                  strokeWidth={2.5}
-                                />
+                                <Plus size={12} strokeWidth={2.5} />
                                 <span>Book</span>
                               </div>
                             )}

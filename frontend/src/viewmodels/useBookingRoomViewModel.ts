@@ -39,6 +39,8 @@ export const useBookingRoomViewModel = () => {
      endTime: "00:00",
      startDate: "",
    });
+   const PastimeColor = "#fff3cd";
+   const bookedColor = "rgba(196, 38, 38, 0.72)";
   const [externalParticipant, setExternalParticipant] = useState<{
     name: string;
     email: string;
@@ -171,6 +173,8 @@ export const useBookingRoomViewModel = () => {
     fetchMeetingTypes();
   }, []);
   return {
+    bookedColor,
+    PastimeColor,
     updateBookingTimeAndDate,
     handleChange,
     handleGetBookedRoomByDay,

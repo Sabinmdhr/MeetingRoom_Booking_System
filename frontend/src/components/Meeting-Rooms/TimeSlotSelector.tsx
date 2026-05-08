@@ -53,7 +53,6 @@ export const TimeSlotSelector = ({
   const [endTime, setEndTime] = useState<number>(0);
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
-  const location = useLocation();
   const [interaction, setInteraction] = useState<{
     mode: InteractionMode;
     startY: number;
@@ -67,19 +66,30 @@ export const TimeSlotSelector = ({
   });
 
   const timelineRef = useRef<HTMLDivElement>(null);
-  const { bookedSlots, handleGetBookedRoomByDay } = useBookingRoomViewModel();
+  const { bookedSlots, handleGetBookedRoomByDay, bookedColor, PastimeColor } =
+    useBookingRoomViewModel();
 
-  const isOverlapping = (start: string, end: string) => {
-    return bookedSlots.some((slot) => start < slot.end && end > slot.start);
-  };
+const isOverlapping = (start: number, end: number) => {
+  return bookedSlots.some((slot) => {
+    const slotStart = timeStringToMinutes(slot.start);
+    const slotEnd = timeStringToMinutes(slot.end);
+
+    return start < slotEnd && end > slotStart;
+  });
+};
   const {
     formattedDate,
     isToday,
     changeDate,
     jumpToToday,
     backendFormattedDate,
+    isPastDay,
   } = useRoomTimeslotViewModel();
 
+  useEffect(() => {
+    setStartTime(0);
+    setEndTime(0);
+  }, [backendFormattedDate]);
   const { roomId } = useAppSelector((state) => state.bookingRoom);
   useEffect(() => {
     handleGetBookedRoomByDay(backendFormattedDate, roomId);
@@ -152,13 +162,14 @@ export const TimeSlotSelector = ({
 
     const newStart = clamp(snappedStart, START_MINUTES, END_MINUTES - 10);
     const newEnd = clamp(newStart + 10, START_MINUTES + 10, END_MINUTES);
-    if (newStart < currentMinutes) return;
+    if (isPastDay) return;
+    if (isToday && newStart < currentMinutes) return;
     if (
-      isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newEnd))
+      isOverlapping((newStart), (newEnd))
     )
       return;
     if (
-      isOverlapping(minutesToTimeString(newStart), minutesToTimeString(newEnd))
+      isOverlapping((newStart), (newEnd))
     )
       return;
 
@@ -182,12 +193,13 @@ export const TimeSlotSelector = ({
           if (newStart < START_MINUTES) newStart = START_MINUTES;
           if (newStart + duration > END_MINUTES)
             newStart = END_MINUTES - duration;
-          if (newStart < currentMinutes) return;
+          if (isPastDay) return;
+          if (isToday && newStart < currentMinutes) return;
 
           if (
             isOverlapping(
-              minutesToTimeString(newStart + 5),
-              minutesToTimeString(newStart + duration),
+              (newStart ),
+              (newStart + duration),
             )
           )
             return;
@@ -198,12 +210,13 @@ export const TimeSlotSelector = ({
           let newStart = interaction.initialStart + snappedDelta;
           if (newStart < START_MINUTES) newStart = START_MINUTES;
           if (newStart > endTime - 10) newStart = endTime - 10; // Min 10 min duration
-          if (newStart < currentMinutes) return;
+          if (isPastDay) return;
+          if (isToday && newStart < currentMinutes) return;
 
           if (
             isOverlapping(
-              minutesToTimeString(newStart + 5),
-              minutesToTimeString(endTime),
+              (newStart ),
+              (endTime),
             )
           )
             return;
@@ -212,12 +225,11 @@ export const TimeSlotSelector = ({
           let newEnd = interaction.initialEnd + snappedDelta;
           if (newEnd > END_MINUTES) newEnd = END_MINUTES;
           if (newEnd < startTime + 10) newEnd = startTime + 10; // Min 10 min duration
-          // if (newStart < currentMinutes) return;
 
           if (
             isOverlapping(
-              minutesToTimeString(startTime),
-              minutesToTimeString(newEnd),
+              (startTime),
+              (newEnd),
             )
           )
             return;
@@ -308,8 +320,8 @@ export const TimeSlotSelector = ({
                     timeStringToMinutes(slot.start)) *
                   MINUTE_HEIGHT,
 
-                backgroundColor: "rgba(255, 0, 0, 0.3)",
-                border: "1px solid rgba(255, 0, 0, 0.3)",
+                backgroundColor: bookedColor,
+                border: `1px solid ${bookedColor}`,
                 ...(calendarView && {
                   backgroundColor: `rgb${slot.color}`,
                   border: `1px solid rgb${slot.color}`,
@@ -320,11 +332,11 @@ export const TimeSlotSelector = ({
                 ...(!calendarView && {
                   alignItems: "center",
                 }),
-                pointerEvents: "none",
                 zIndex: 999,
                 color: "white",
                 display: "flex",
                 padding: "0px",
+                cursor: "not-allowed",
               }}
             >
               {calendarView ? (
@@ -355,46 +367,64 @@ export const TimeSlotSelector = ({
               style={{
                 top: 0,
                 height: snapToInterval(currentMinutes * MINUTE_HEIGHT, 5),
-                backgroundColor: "#fff3cd",
+                backgroundColor: PastimeColor,
                 pointerEvents: "auto",
                 cursor: "not-allowed",
-                border:"none"
+                border: "none",
+              }}
+            ></div>
+          )}
+          {isPastDay && (
+            <div
+              className="slot"
+              style={{
+                top: 0,
+                height: "100%",
+                backgroundColor: PastimeColor,
+                pointerEvents: "auto",
+                cursor: "not-allowed",
+                border: "none",
               }}
             ></div>
           )}
           {/* The Slot */}
-          <div
-            className="slot"
-            style={{
-              top: getYFromMinutes(startTime),
-              height: (endTime - startTime) * MINUTE_HEIGHT,
-            }}
-            onPointerDown={(e) => handlePointerDown(e, "drag")}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-          >
+          {startTime != 0 && (
             <div
-              className={`slotHandle top`}
-              onPointerDown={(e) => handlePointerDown(e, "resize-top")}
+              className="slot"
+              style={{
+                top: getYFromMinutes(startTime),
+                height: (endTime - startTime) * MINUTE_HEIGHT,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPointerDown={(e) => handlePointerDown(e, "drag")}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
             >
-              <div className="dot" />
-            </div>
-
-            {mannualScroll && (
-              <div className="content">
-                <div className="timeBox">{formatDisplayTime(startTime)}</div>
-                <div className="separator">-</div>
-                <div className="timeBox">{formatDisplayTime(endTime)}</div>
+              <div
+                className={`slotHandle top`}
+                onPointerDown={(e) => handlePointerDown(e, "resize-top")}
+              >
+                <div className="dot" />
               </div>
-            )}
 
-            <div
-              className="slotHandle bottom"
-              onPointerDown={(e) => handlePointerDown(e, "resize-bottom")}
-            >
-              <div className="dot"></div>
+              {mannualScroll && (
+                <div className="content">
+                  <div className="timeBox">{formatDisplayTime(startTime)}</div>
+                  <div className="separator">-</div>
+                  <div className="timeBox">{formatDisplayTime(endTime)}</div>
+                </div>
+              )}
+
+              <div
+                className="slotHandle bottom"
+                onPointerDown={(e) => handlePointerDown(e, "resize-bottom")}
+              >
+                <div className="dot"></div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

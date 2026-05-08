@@ -2,6 +2,8 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
+  Grid,
   Typography,
 } from "@mui/material";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
@@ -37,27 +39,18 @@ type props = {
   };
   handleRoomFormOpen: (mode: "add" | "edit", room?: meeting_rooms) => void;
 };
-export const Meeting_roomCard = ({
-  handleRoomFormOpen,
-}: props) => {
+export const Meeting_roomCard = ({ handleRoomFormOpen }: props) => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   // const [open , setOpen] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { meeting, error } =
-    useMeetingCardViewModel();
-  const perms = usePermissions()
+  const { meeting, error } = useMeetingCardViewModel();
+  const perms = usePermissions();
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!meeting) return null;
   // object for icons of features
-  const featureIcons: Record<string, any> = {
-    Projector: <Projector size={12} />,
-    Whiteboard: <Presentation size={12} />,
-    "Video Conferencing": <TvMinimal size={12} />,
-    "Wi-Fi": <Wifi size={12} />,
-  };
 
   const handleDeleteClick = (id: number) => {
     setSelectedRoomId(id);
@@ -73,88 +66,89 @@ export const Meeting_roomCard = ({
   };
   return (
     <div className="room-Card--Container">
-      {meeting.map((m) => {
-        return (
-          // <Grid size={6} key={m.id}>
-          <Card className="Meeting-Card">
-            <CardContent className="Meeting-Card--content">
-              <div>
-                <div className="cardHeader">
-                  <Typography className="Meeting-title" variant="h6">
-                    {m.roomName}
-                  </Typography>
+      <Grid container>
+        {meeting.map((m) => (
+          <Grid size={6} key={m.id}>
+            <Card className="Meeting-Card">
+              <CardContent className="Meeting-Card--content">
+                <div>
+                  <div className="cardHeader">
+                    <Typography className="Meeting-title" variant="h6">
+                      {m.roomName}
+                    </Typography>
 
-                  <Typography
-                    className={`Meeting_room-Available ${m.bookedStatus === "Available" ? "Available" : "Unavailable"}`}
-                  >
-                    {m.bookedStatus}
-                  </Typography>
-                </div>
+                    <Typography
+                      className={`Meeting_room-Available ${m.bookedStatus === "Available" ? "Available" : "Unavailable"}`}
+                    >
+                      {m.bookedStatus}
+                    </Typography>
+                  </div>
 
-                <div className="TimeCapacity">
-                  <Typography className="Time">
-                    {" "}
-                    Next Open slot: 4:00 PM
-                  </Typography>
+                  <div className="TimeCapacity">
+                    <Typography className="Time">
+                      {" "}
+                      Next Open slot: 4:00 PM
+                    </Typography>
 
-                  <Typography className="Capacity">
-                    Capacity: {m.capacity}
-                  </Typography>
-                </div>
+                    <Typography className="Capacity">
+                      Capacity: {m.capacity}
+                    </Typography>
+                  </div>
 
-                <Typography variant="body2" className="Features-Tabs">
-                  {m.resources.map((feature, index) => (
-                    <span className="Meeitng_room-Feature" key={index}>
-                      <span className="Feature-icons">
-                        {featureIcons[feature.name]}
-                      </span>
-                      <span className="Feature-title">{feature.name}</span>
-                    </span>
-                  ))}
-                </Typography>
-              </div>
-            </CardContent>
+                  <Typography variant="body2" className="Features-Tabs">
+                    {m.resources.map((feature, index) => (
+                      // <span className="Meeitng_room-Feature" key={index}>
 
-            <CardActions className="Meeting-Card--Actions">
-              <MyButton
-                text={m.bookedStatus === "Available" ? "Book Now" : "View Schedule"}
-                className={`Meeting_room-Book `}
-                variant="outlined"
-                customVariant={m.bookedStatus === "Available"? "dark": "ghost"}
-                onClick={() => {
-                  navigate("/room-timeslot", {
-                    state: { room: m, calendarView: false },
-                  });
-                  dispatch(updateBookingRoomFormData({ roomId: m.id }));
-                }}
-              />
-              {perms?.canManageRooms && (
-                <>
-                  <MyButton
-                    startIcon={<Pen size={18} style={{ marginLeft: "5px" }} />}
-                    text=""
-                    customVariant="ghost"
-                    onClick={() => handleRoomFormOpen("edit", m)}
-                  />
-                  <MyButton
-                    text=""
-                    customVariant="ghost"
-                    startIcon={
-                      <Trash2
-                        size={18}
-                        color="red"
-                        style={{ marginLeft: "5px" }}
+                      //   <span className="Feature-title">{feature.name}</span>
+                      // </span>
+                      <Chip
+                        size="small"
+                        className="Feature-title"
+                        label={feature.name}
                       />
-                    }
-                    onClick={() => handleDeleteClick(m.id)}
-                  />
-                </>
-              )}
-            </CardActions>
-          </Card>
-          // </Grid>
-        );
-      })}
+                    ))}
+                  </Typography>
+                </div>
+              </CardContent>
+
+              <CardActions className="Meeting-Card--Actions">
+                <MyButton
+                  text={
+                    m.bookedStatus === "Available"
+                      ? "Book Now"
+                      : "View Schedule"
+                  }
+                  className={`Meeting_room-Book `}
+                  variant="outlined"
+                  customVariant={
+                    m.bookedStatus === "Available" ? "dark" : "ghost"
+                  }
+                  onClick={() => {
+                    navigate("/room-timeslot", {
+                      state: { room: m, calendarView: false },
+                    });
+                    dispatch(updateBookingRoomFormData({ roomId: m.id }));
+                  }}
+                />
+                {perms?.canManageRooms && (
+                  <>
+                    <MyButton
+                      text={<Pen size={16} />}
+                      customVariant="ghost"
+                      onClick={() => handleRoomFormOpen("edit", m)}
+                    />
+                    <MyButton
+                      text={<Trash2 size={16} />}
+                      customVariant="danger"
+                      onClick={() => handleDeleteClick(m.id)}
+                    />
+                  </>
+                )}
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
 
       <ConfirmDialog
         open={openConfirm}
