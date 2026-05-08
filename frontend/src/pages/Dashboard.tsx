@@ -9,7 +9,6 @@ import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
 import "../assets/scss/pages/Dashboard.scss";
 import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
-import "../assets/scss/pages/Dashboard.scss";
 
 export default function Dashboard() {
   const accessToken = localStorage.getItem("accessToken");

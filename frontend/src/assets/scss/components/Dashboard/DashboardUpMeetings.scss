@@ -2,16 +2,15 @@
   padding: 10px 32px;
   border-radius: 8px !important;
   background: white;
-  
+
   &__header {
     display: flex;
     padding: 10px 0;
   }
 
-
-  &__list{
+  &__list {
     overflow-y: auto !important;
-    height: 59vh;
+    height: 440px;
     scrollbar-width: none;
     ::-webkit-scrollbar {
       width: none !important;
@@ -66,4 +65,3 @@
     font-size: 14px !important;
   }
 }
-
