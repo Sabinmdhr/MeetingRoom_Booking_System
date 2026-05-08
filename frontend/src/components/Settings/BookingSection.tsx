@@ -12,15 +12,15 @@ const BookingSection = () => {
         </div>
         <div className="field">
           <label className="field-label" htmlFor="hours">
-            Default Meeting Duration (hours)
+            Default Meeting Duration (hours) 
           </label>
-          <TextField id="hours" fullWidth size="small" />
+          <TextField id="hours" value={1} fullWidth size="small" />
         </div>
         <div className="field">
           <label className="field-label" htmlFor="minutes">
             Buffer Time Between Meetings (minutes)
           </label>
-          <TextField id="minutes" fullWidth size="small" />
+          <TextField id="minutes" value={10} fullWidth size="small" />
         </div>
 
         <div className="booking-item">

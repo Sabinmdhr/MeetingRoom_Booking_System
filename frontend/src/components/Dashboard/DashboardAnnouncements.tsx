@@ -97,7 +97,7 @@ const DashboardAnnouncements = () => {
           />
         </div>
 
-        <CardContent className="announcement__list">
+        <CardContent className="dashboard-announcements__list">
           {pinnedData.length === 0 ? (
             <Typography
               variant="body2"

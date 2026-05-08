@@ -1,24 +1,20 @@
 .dashboard-upmeetings {
-  // margin-top: 20px;
-  padding: 10px 16px;
+  padding: 10px 32px;
   border-radius: 8px !important;
   background: white;
-  height: 89vh;
-  overflow-y: scroll !important;
-  // width: 100%;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    width: none !important;
-  }
 
   &__header {
     display: flex;
+    padding: 10px 0;
   }
 
-  &__heading {
-    margin-bottom: 12px !important;
-    font-weight: 500 !important;
+  &__list {
+    overflow-y: auto !important;
+    height: 440px;
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+      width: none !important;
+    }
   }
 
   &__card {
@@ -27,27 +23,25 @@
     border: 1px solid #d2c5db !important;
     border-radius: 20px !important;
     padding: 4px;
-
     display: flex;
     flex-direction: column;
 
     cursor: pointer;
     &:hover {
-      // transform: translateY(-0.5px);
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
       border-color: #bdbdbd;
     }
+    justify-content: space-between;
+    margin-top: 20px;
   }
 
   &__cardheader {
-    &__meetingtitle {
-      font-size: 18px !important;
-      font-weight: 600 !important;
-    }
+    margin-bottom: -12px !important;
   }
 
   &__chip {
-    border: 1px solid !important;
+    height: 24px !important;
+    border: 1px solid #d2c5db !important;
   }
 
   &__subheading {
@@ -61,7 +55,6 @@
     font-weight: 400 !important;
   }
   &__subtitle {
-    font-weight: 400 !important;
     color: gray;
   }
   &__participants {

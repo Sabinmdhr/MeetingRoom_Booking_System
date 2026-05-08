@@ -54,7 +54,6 @@ export const CommonDropdown = ({
         }
       >
         {items.map((item) => (
-          
           <MenuItem
             key={item.id}
             value={item.id}

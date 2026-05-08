@@ -32,6 +32,7 @@ import { updateBookingRoomFormData } from "../redux/bookRoomSlice";
 import { useAppSelector } from "../redux/store";
 import { usePermissions } from "../hooks/usePermissions";
 import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
+import { useSettingsViewModel } from "../viewmodels/useSettingsViewModel";
 
 // Must stay in sync with $col-width and $col-gap in Calendar.scss
 const COL_WIDTH = 180;
@@ -43,6 +44,7 @@ const VISIBLE_EVENT_LIMIT = 4;
 export const Calendar = () => {
   const navigate = useNavigate();
   const perms = usePermissions();
+  const { meetingTypes } = useSettingsViewModel();
   const { updateBookingTimeAndDate, setSlot, slot, PastimeColor, bookedColor } =
     useBookingRoomViewModel();
 
@@ -301,13 +303,24 @@ export const Calendar = () => {
                 text="Add New Meeting"
               />
             )}
-          { isDayView && <div className="cat-legend">
-              <i className="cat-dot " style={{ background: PastimeColor }} />
-              <span>Past Time</span>
-              <i className="cat-dot " style={{ background: bookedColor }} />
-              <span>Booked</span>
-
-            </div>}
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                justifyContent: "space-between",
+              }}
+            >
+              {isDayView &&
+                meetingTypes.map((m) => (
+                  <div className="cat-legend">
+                    <i
+                      className="cat-dot "
+                      style={{ background: `rgb${m.colorCode}` }}
+                    />
+                    <span>{m.name}</span>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </CardContent>

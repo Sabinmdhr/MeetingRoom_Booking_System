@@ -350,7 +350,7 @@ export const CalendarModal = ({
               </Accordion>
             </div>
 
-           
+
           </div>
         )}
       </DialogContent>

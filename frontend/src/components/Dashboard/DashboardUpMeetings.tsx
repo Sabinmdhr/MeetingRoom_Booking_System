@@ -28,23 +28,24 @@ const DashboardUpMeetings = () => {
         />
       </div>
 
+    <div className="dashboard-upmeetings__list">
       {upcomingMeeting.map((m) => (
         <Card className="dashboard-upmeetings__card">
           <CardHeader
             className="dashboard-upmeetings__cardheader"
             title={
-              <Typography className="dashboard-upmeetings__cardheader__meetingtitle">
+              <Typography variant="h4">
                 {m.meetingTitle}
               </Typography>
             }
             action={
               <Chip
+                className="dashboard-upmeetings__chip"
                 style={{
                   background: alpha(`rgba${m.meetingType.colorCode}`, 0.8),
                   color: "#fff",
                 }}
                 label={m.meetingType.name}
-                className="dashboard-upmeetings__chip"
               />
             }
           ></CardHeader>
@@ -55,7 +56,7 @@ const DashboardUpMeetings = () => {
                 {formatDisplayTime(timeStringToMinutes(m.startTime))} -{" "}
                 {formatDisplayTime(timeStringToMinutes(m.endTime))}
               </Typography>
-              <Typography className="dashboard-upmeetings__subtitle">
+              <Typography className="dashboard-upmeetings__subtitle" variant="body2">
                 By: {m.roomBooker.firstName} {m.roomBooker.lastName}
               </Typography>
               {/* <Typography className="dashboard-upmeetings__participants"><Users size={14} />
@@ -63,16 +64,17 @@ const DashboardUpMeetings = () => {
               </Typography> */}
             </div>
             <div>
-              <Typography className="dashboard-upmeetings__title">
+              <Typography className="dashboard-upmeetings__title" variant="body2">
                 Room:
               </Typography>
-              <Typography className="dashboard-upmeetings__subtitle">
+              <Typography className="dashboard-upmeetings__subtitle" variant="body2">
                 {m.room?.roomName}
               </Typography>
             </div>
           </CardContent>
         </Card>
       ))}
+      </div>
     </Card>
   );
 };
