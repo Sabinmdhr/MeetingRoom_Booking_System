@@ -21,6 +21,11 @@ function CustomToolbar() {
 
 export default function Report() {
   const [filterOpen, setFilterOpen] = useState(false);
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
   const {
     columns,
     rows,
@@ -32,16 +37,28 @@ export default function Report() {
     rooms,
     meetingTypes,
     loading,
+    totalRows,
+    lastFilter,
   } = useMeetingReportViewModel();
 
-  useEffect(() => {
-    const timer = setTimeout(
-      () => window.dispatchEvent(new Event("resize")),
-      350,
-    );
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(
+  //     () => window.dispatchEvent(new Event("resize")),
+  //     350,
+  //   );
+  //   return () => clearTimeout(timer);
+  // }, []);
 
+  useEffect(() => {
+    fetchReports({
+      ...(lastFilter ?? {
+        sortBy: "startDate",
+        sortDir: "desc",
+      }),
+      pageNo: paginationModel.page,
+      pageSize: paginationModel.pageSize,
+    });
+  }, [paginationModel]);
   const gridColumns = columns.map((col) => ({
     field: col.id,
     headerName: col.label,
@@ -67,7 +84,16 @@ export default function Report() {
         <div className="meeting-table__buttons">
           {isFiltered && (
             <MyButton
-              onClick={fetchReports}
+              onClick={() => {
+                setPaginationModel({ page: 0, pageSize: 10 });
+
+                fetchReports({
+                  pageNo: 0,
+                  pageSize: 10,
+                  sortBy: "startDate",
+                  sortDir: "desc",
+                });
+              }}
               variant="outlined"
               text="Clear"
               startIcon={<X size={16} />}
@@ -91,32 +117,37 @@ export default function Report() {
           />
         </div>
       </div>
-
       <ReportFilters
         open={filterOpen}
         onClose={() => setFilterOpen(false)}
-        onApply={filterReports}
+        onApply={(payload) => {
+          setPaginationModel({ page: 0, pageSize: 10 });
+          filterReports(payload);
+        }}
         meetingTypes={meetingTypes}
         rooms={rooms}
       />
-
       <div className="meeting-table">
         <div className="meeting-table__grid">
           <DataGrid
             rows={gridRows}
             columns={gridColumns}
+            rowCount={totalRows}
+            loading={loading}
+            pagination
+            paginationMode="server"
+            // sortingMode="server"
+            // filterMode="server"
             pageSizeOptions={[5, 10, 25]}
-            initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
             slots={{ toolbar: CustomToolbar }}
             disableRowSelectionOnClick
             disableColumnResize
+            // disableColumnFilter
             autoHeight
-            disableColumnFilter
-            {...rows}
-            loading={loading}
             slotProps={{
               loadingOverlay: {
-                // variant: "linear-progress",
                 noRowsVariant: "skeleton",
               },
             }}

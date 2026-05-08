@@ -3,13 +3,13 @@ import {
   Drawer,
   Grid,
   IconButton,
+  MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
 import { Calendar, X } from "lucide-react";
 import { useState } from "react";
 import MyButton from "../ui/Button";
-import { CommonDropdown } from "../ui/Dropdown/CommonDropdown";
 import type {
   DropdownItem,
   ReportFilters as Filters,
@@ -17,15 +17,16 @@ import type {
 } from "../../models/meetingReport.model";
 import "../../assets/scss/components/Report/ReportFilters.scss";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
-import { DepartmentList } from "../Participants/DepartmentList";
+import dayjs from "dayjs";
+import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
 
 const DEFAULT_FILTERS: Filters = {
-  department: 1,
+  department: "",
   startDate: "",
   endDate: "",
-  room: 0,
-  user: 1,
-  meetingType: 1,
+  room: "",
+  user: "",
+  meetingType: "",
 };
 
 interface Props {
@@ -40,7 +41,6 @@ const ReportFilters = ({
   open,
   onClose,
   onApply,
-  // users,
   rooms,
   meetingTypes,
 }: Props) => {
@@ -51,6 +51,8 @@ const ReportFilters = ({
     id: index,
     label: r,
   }));
+
+  const { departmentItems } = useDepartmentListViewModel();
 
   const handleApply = () => {
     const payload: ReportPayload = {
@@ -82,10 +84,14 @@ const ReportFilters = ({
     onClose();
   };
 
-  const userItems = users.map((u) => ({
-    id: u.id,
-    label: `${u.firstname} ${u.lastname}`,
-  }));
+  const userItems = users
+    .filter((user) => {
+      return user.role === "ADMIN" || user.role === "MANAGER";
+    })
+    .map((u) => ({
+      id: u.id,
+      label: `${u.firstname} ${u.lastname}`,
+    }));
 
   return (
     <Drawer
@@ -142,6 +148,9 @@ const ReportFilters = ({
                     endDate: e.target.value,
                   }))
                 }
+                inputProps={{
+                  min: filters.startDate || dayjs().format("YYYY-MM-DD"),
+                }}
                 fullWidth
                 className="report-filter__input"
               />
@@ -153,8 +162,8 @@ const ReportFilters = ({
             spacing={2}
             className="report-filter__row"
           >
-            <Grid size={6}>
-              <CommonDropdown
+            {/* <Grid size={6}> */}
+            {/* <CommonDropdown
                 label="Meeting Type"
                 value={filters.meetingType}
                 items={meetingTypes}
@@ -162,20 +171,125 @@ const ReportFilters = ({
                   setFilters((prev) => ({
                     ...prev,
                     meetingType: id,
-                  }))
-                }
-              />
-            </Grid>
+                    }))
+                    }
+                    /> */}
+            {/* </Grid> */}
             <Grid size={6}>
-              <DepartmentList
-                value={filters.department}
-                onChange={(id: number | "") =>
+              <label className="label">Meeting Type</label>
+
+              <TextField
+                select
+                fullWidth
+                value={filters.meetingType}
+                className="customTextField"
+                SelectProps={{
+                  displayEmpty: true,
+                  renderValue: (selected) => {
+                    if (selected === "" || selected === undefined) {
+                      return "All Meeting Types";
+                    }
+
+                    const item = meetingTypes.find((i) => i.id === selected);
+                    return item ? item.label : "";
+                  },
+                }}
+                onChange={(e) =>
                   setFilters((prev) => ({
                     ...prev,
-                    department: id,
+                    meetingType:
+                      e.target.value === "" ? "" : Number(e.target.value),
                   }))
                 }
-              />
+              >
+                <MenuItem value="">All</MenuItem>
+
+                {meetingTypes.map((item) => (
+                  <MenuItem
+                    key={item.id}
+                    value={item.id}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            {/* <Grid size={6}>
+              <label className="label">Department</label>
+              <TextField
+                select
+                fullWidth
+                value={filters.department}
+                className="customTextField"
+                SelectProps={{
+                  displayEmpty: true,
+                  renderValue: (selected) => {
+                    if (selected === "" || selected === undefined) {
+                      return "All Department";
+                    }
+
+                    const item = departmentItems.find((i) => i.id === selected);
+                    return item ? item.label : "";
+                  },
+                }}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    department:
+                      e.target.value === "" ? "" : Number(e.target.value),
+                  }))
+                }
+              >
+                <MenuItem value="">All</MenuItem>
+
+                {departmentItems.map((item) => (
+                  <MenuItem
+                    key={item.id}
+                    value={item.id}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid> */}
+            <Grid size={6}>
+              <label className="label">Room</label>
+
+              <TextField
+                select
+                fullWidth
+                value={filters.room}
+                className="customTextField"
+                SelectProps={{
+                  displayEmpty: true,
+                  renderValue: (selected) => {
+                    if (selected === "" || selected === undefined) {
+                      return "All Rooms";
+                    }
+
+                    const item = roomItems.find((i) => i.id === selected);
+
+                    return item ? item.label : "";
+                  },
+                }}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    room: e.target.value === "" ? "" : Number(e.target.value),
+                  }))
+                }
+              >
+                <MenuItem value="">All Rooms</MenuItem>
+
+                {roomItems.map((item) => (
+                  <MenuItem
+                    key={item.id}
+                    value={item.id}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
           </Grid>
 
@@ -185,30 +299,43 @@ const ReportFilters = ({
             className="report-filter__row"
           >
             <Grid size={6}>
-              <CommonDropdown
-                label="Room"
-                value={filters.room}
-                items={roomItems}
-                onChange={(id: number | "") =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    room: id,
-                  }))
-                }
-              />
-            </Grid>
-            <Grid size={6}>
-              <CommonDropdown
-                label="User"
+              <label className="label">User</label>
+
+              <TextField
+                select
+                fullWidth
                 value={filters.user}
-                items={userItems}
-                onChange={(id: number | "") =>
+                className="customTextField"
+                SelectProps={{
+                  displayEmpty: true,
+                  renderValue: (selected) => {
+                    if (selected === "" || selected === undefined) {
+                      return "All Users";
+                    }
+
+                    const item = users.find((i) => i.id === selected);
+
+                    return item ? item.firstname : "";
+                  },
+                }}
+                onChange={(e) =>
                   setFilters((prev) => ({
                     ...prev,
-                    user: id,
+                    user: e.target.value === "" ? "" : Number(e.target.value),
                   }))
                 }
-              />
+              >
+                <MenuItem value="">All Users</MenuItem>
+
+                {userItems.map((item) => (
+                  <MenuItem
+                    key={item.id}
+                    value={item.id}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
           </Grid>
         </div>
@@ -228,6 +355,7 @@ const ReportFilters = ({
             text="Apply Filter"
             variant="contained"
             onClick={handleApply}
+            customVariant="dark"
             className="report-filter__footer__apply"
           />
         </div>
