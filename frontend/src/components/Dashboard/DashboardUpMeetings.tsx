@@ -9,15 +9,16 @@ const DashboardUpMeetings = () => {
   const { upcomingMeeting } = useMeetingCardViewModel();
   return (
     <Card className="dashboard-upmeetings">
-      <Typography className="dashboard-upmeetings__heading">
+      <Typography className="dashboard-upmeetings__heading" variant="h3">
         Upcoming Meetings
       </Typography>
+      <div className="dashboard-upmeetings__list">
       {upcomingMeeting.map((m) => (
         <Card className="dashboard-upmeetings__card">
           <CardHeader
             className="dashboard-upmeetings__cardheader"
             title={
-              <Typography className="dashboard-upmeetings__cardheader__meetingtitle">
+              <Typography variant="h4">
                 {m.meetingTitle}
               </Typography>
             }
@@ -31,11 +32,11 @@ const DashboardUpMeetings = () => {
           ></CardHeader>
           <CardContent className="dashboard-upmeetings__subheading">
             <div>
-              <Typography className="dashboard-upmeetings__title">
-                {m.startDate},{formatDisplayTime(timeStringToMinutes(m.startTime))} -{" "}
+              <Typography className="dashboard-upmeetings__title" variant="body2">
+                {m.startDate}, {formatDisplayTime(timeStringToMinutes(m.startTime))} - {" "}
                 {formatDisplayTime(timeStringToMinutes(m.endTime))}
               </Typography>
-              <Typography className="dashboard-upmeetings__subtitle">
+              <Typography className="dashboard-upmeetings__subtitle" variant="body2">
                 By: {m.roomBooker.firstName} {m.roomBooker.lastName}
               </Typography>
               {/* <Typography className="dashboard-upmeetings__participants"><Users size={14} />
@@ -43,10 +44,10 @@ const DashboardUpMeetings = () => {
               </Typography> */}
             </div>
             <div>
-              <Typography className="dashboard-upmeetings__title">
+              <Typography className="dashboard-upmeetings__title" variant="body2">
                 Room:
               </Typography>
-              <Typography className="dashboard-upmeetings__subtitle">
+              <Typography className="dashboard-upmeetings__subtitle" variant="body2">
                 {m.room?.roomName}
               </Typography>
               
@@ -62,6 +63,7 @@ const DashboardUpMeetings = () => {
         customVariant="ghost"
         onClick={() => {}}
       /> */}
+      </div>
     </Card>
   );
 };

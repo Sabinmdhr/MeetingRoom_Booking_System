@@ -3,7 +3,6 @@
   margin-top: 20px;
 
   &__section {
-    // flex: 1;
     border-radius: 8px !important;
     padding: 10px !important;
   }
@@ -16,7 +15,11 @@
     gap: 4px;
   }
 
-  &__title {
+  &__list{
+    height: 440px;
+    overflow-y: auto !important;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }
