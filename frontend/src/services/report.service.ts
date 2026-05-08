@@ -68,6 +68,7 @@ export const fetchRoom = async () => {
 export const getAllMeetingType = async () => {
   try {
     const res = await api.get(`/api/v1/get-all-meeting-type`);
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error("Error fetching meeting types", error);
