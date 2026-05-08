@@ -32,38 +32,60 @@ export function useMeetingReportViewModel() {
   const [meetingTypes, setMeetingTypes] = useState<DropdownItem[]>([]);
   const [lastFilter, setLastFilter] = useState<ReportPayload | null>(null);
   const [loading, setLoading] = useState(true);
+  const [totalRows, setTotalRows] = useState(0);
 
   const defaultPayload: ReportPayload = {
     pageNo: 0,
-    pageSize: rows.length,
+    pageSize: 10,
     sortBy: "startDate",
     sortDir: "asc",
   };
   // console.log(rows.length);
 
-  const fetchReports = async () => {
-    try {
-      const res = await getAllReports();
-      setRows(res.data ?? []);
+  // const fetchReports = async () => {
+  //   try {
+  //     const res = await getAllReports();
+  //     setRows(res.data ?? []);
+  //     // console.log(res);
 
+  //     setIsFiltered(false);
+  //     setLastFilter(null);
+  //     setLoading(false);
+  //   } catch (err) {
+  //     console.error("Error fetching reports", err);
+  //   }
+  // };
+
+  const fetchReports = async (payload: ReportPayload) => {
+    try {
+      setLoading(true);
+
+      const data = await filterReport(payload);
+
+      setRows(data?.content ?? []);
+      setTotalRows(data?.totalElements ?? 0);
+
+      // setLastFilter(payload);
       setIsFiltered(false);
-      setLastFilter(null);
-      setLoading(false);
     } catch (err) {
-      console.error("Error fetching reports", err);
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const filterReports = async (payload: ReportPayload) => {
     try {
+      setLoading(true);
       const data = await filterReport(payload);
-      setRows(data ?? []);
+      setRows(data?.content ?? []);
+      setTotalRows(data?.totalElements ?? 0);
       setIsFiltered(true);
-      console.log(data);
       setLastFilter(payload);
-      setLoading(false);
     } catch (err) {
       console.error("Filter failed", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,7 +128,7 @@ export function useMeetingReportViewModel() {
       }
     };
 
-    fetchReports();
+    fetchReports(defaultPayload);
     load();
   }, []);
 
@@ -121,5 +143,8 @@ export function useMeetingReportViewModel() {
     filterReports,
     exportReport,
     loading,
+
+    totalRows,
+    lastFilter,
   };
 }

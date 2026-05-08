@@ -351,7 +351,7 @@ export const CalendarModal = ({
             </div>
 
             {/* Description */}
-            <div className="calendar-modal__row calendar-modal__row--full">
+            {/* <div className="calendar-modal__row calendar-modal__row--full">
               <div className="calendar-modal__description-box">
                 <div className="calendar-modal__description-header">
                   <div
@@ -368,7 +368,7 @@ export const CalendarModal = ({
                   {description || "No description provided."}
                 </Typography>
               </div>
-            </div>
+            </div> */}
           </div>
         )}
       </DialogContent>
