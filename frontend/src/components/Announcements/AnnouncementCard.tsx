@@ -7,8 +7,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import "../../assets/scss/pages/Announcements.scss";
-// import "../../assets/scss/components/Announcement/AnnouncementCard.scss";
-// import "../../assets/scss/components/Announcement/AnnouncementCard.scss";
 import {
   Circle,
   CircleCheck,
@@ -24,6 +22,7 @@ import React, { useRef, useState } from "react";
 import AnnouncementModal from "./AnnouncementModal";
 import AnnouncementDetailModal from "./AnnouncementDetailModal";
 import ConfirmDialog from "../ui/ConfirmDialog";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const AnnouncementCard = ({
   item,
@@ -36,6 +35,8 @@ const AnnouncementCard = ({
   selectedIds,
   setSelectedIds,
 }: any) => {
+
+const perms = usePermissions()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const isSelected = selectedIds?.includes(item.id) ?? false;
@@ -80,7 +81,6 @@ const AnnouncementCard = ({
   };
 
   //  Detail modal
-  //  Detail modal
   const handleOpenDetail = () => {
     suppress();
     setAnchorEl(null);
@@ -88,7 +88,6 @@ const AnnouncementCard = ({
     setOpenDetailModal(true);
   };
 
-  //  Edit modal
   //  Edit modal
   const handleOpenEdit = () => {
     suppress();
@@ -111,7 +110,6 @@ const AnnouncementCard = ({
   };
 
   //  Delete
-  //  Delete
   const handleDeleteClick = () => {
     suppress();
     setConfirmAction("delete");
@@ -127,7 +125,6 @@ const AnnouncementCard = ({
     setAnchorEl(null);
   };
 
-  //  Confirm dialog
   //  Confirm dialog
   const handleConfirmAction = () => {
     if (confirmAction === "delete") {
@@ -149,7 +146,6 @@ const AnnouncementCard = ({
   };
 
   //  Card click
-  //  Card click
   const handleCardClick = () => {
     if (suppressCardClick.current) return;
 
@@ -168,12 +164,10 @@ const AnnouncementCard = ({
   };
 
   //  CSS classes
-  //  CSS classes
   const cardClass = [
     "announcement__card",
     item.pinned ? "pinned" : "",
     item.read ? "card__read" : "card__unread",
-    // isSelected ? "card__selected" : "",
     // isSelected ? "card__selected" : "",
   ]
     .filter(Boolean)
@@ -209,8 +203,19 @@ const AnnouncementCard = ({
               variant="subtitle2"
             >
               {item.authorName} • {item.startDate}
+              {/* <Badge
+                // badgeContent={unreadCount}
+                color="error"
+              >
+                <Dot
+                  size={30}
+                  color="red"
+                  style={{
+                    visibility: item.read ? "hidden" : "visible",
+                  }}
+                />
+              </Badge> */}
             </Typography>
-
 
             <div className="announcement__card-left__bottom">
               <Typography
@@ -230,7 +235,7 @@ const AnnouncementCard = ({
           </div>
 
           {/* RIGHT — fixed width, always same height */}
-          <div className="announcement__card-right">
+         {perms.canMannageAnnouncements && <div className="announcement__card-right">
             {/* Ellipsis menu — hidden (visibility:hidden) in select mode so width is preserved */}
             <Button
               id={`announcement-button-${item.id}`}
@@ -282,7 +287,12 @@ const AnnouncementCard = ({
               onClose={handleMenuClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
-              slotProps={{ paper: { className: "announcement-menu__button" } }}
+              slotProps={{
+                paper: { className: "announcement-menu__button" },
+              }}
+              disableScrollLock
+              disableAutoFocusItem
+              disableEnforceFocus
             >
               <MenuItem
                 className="announcement-menu__button"
@@ -335,7 +345,7 @@ const AnnouncementCard = ({
                 </Typography>
               </MenuItem>
             </Menu>
-          </div>
+          </div>}
         </CardContent>
       </Card>
 

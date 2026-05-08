@@ -1,270 +1,324 @@
-// ── Page wrapper ───────────────────────────────────────────
 .announcement__main {
-  // padding: 16px;
-}
-
-// ── Outer card — fixed height, internal scroll ─────────────
-// ── Outer card — fixed height, internal scroll ─────────────
-.announcement {
-  border-radius: 12px !important;
-  padding: 0 20px;
-  height: 80vh;
   display: flex;
   flex-direction: column;
-  overflow: scroll !important;
-  position: relative !important ;
+  gap: 12px;
+}
 
-  &__header {
-    flex-shrink: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
+/* 
+   PAGE HEADER
+ */
 
-    padding: 16px 0 8px !important;
+.announcement__title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    position: sticky;
-    top: 0;
-    z-index: 10;
+.announcement__title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-    background-color: #fff;
-    // border-bottom: 1px solid #f1f1f1;
-  }
+.announcement__subtitle {
+  color: #6b7280;
+}
 
-  &__title-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+.announcement__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
-  &__title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+/* MAIN CARD*/
 
-  &__header-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+.announcement {
+  height: 75vh !important;
 
-  // ── Scrollable body — grows to fill remaining card height ──
-  // ── Scrollable body — grows to fill remaining card height ──
-  &__content {
-    flex: 1;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
+  overflow: hidden;
 
-  // Empty / loading state — fills remaining space and centers
-  &__empty {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    overflow-y: auto;
-    scrollbar-width: none;
+  border-radius: 16px !important;
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
+  background: #fff;
+}
 
-  // Empty / loading state — fills remaining space and centers
-  &__empty {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
+/* 
+   CARD HEADER
+ */
 
-  &__section {
-    display: flex;
-    flex-direction: column;
-  }
+.announcement__dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    padding-top: 7px !important;
-    padding-bottom: 0 !important;
-    padding-bottom: 0 !important;
-  }
+  padding: 14px 20px;
 
-  &__bottom {
-    margin: 12px auto;
-    margin: 12px auto;
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
+  background: #fff;
+  // border-bottom: 1px solid rgb(197, 192, 192);
+  flex-shrink: 0;
+}
 
-  // ── Individual card ────────────────────────────────────
-  // ── Individual card ────────────────────────────────────
-  &__card {
-    border-radius: 12px !important;
-    border: 1px solid #d2c5db !important;
-    cursor: pointer;
-    position: relative;
-    overflow: visible !important;
-    transition: box-shadow 0.2s ease;
+/* 
+   CONTENT
+ */
 
-    &:hover {
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    }
-  }
+.announcement__content {
+  // flex: 1;
+  // min-height: 0;
 
-  &__pin-icon {
-    position: absolute;
-    top: -12px;
-    left: -15px;
-    padding: 4px;
-    rotate: 320deg;
-    cursor: pointer;
-    cursor: pointer;
-  }
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
-  &__card-content {
-    display: flex;
-    align-items: stretch !important;
-    padding: 8px 12px !important;
-    align-items: stretch !important;
-    padding: 8px 12px !important;
-  }
+  padding: 10px 16px;
 
-  &__card-left {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    padding-left: 7px;
-  }
+  // scrollbar-width: none;
 
-  &__author-date {
-    color: #6b7280;
-    font-size: 12px !important;
-    line-height: 1.4;
-  }
-
-  &__card-title {
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    line-height: 1.4;
-    color: #111;
-  }
-
-  &__description {
-    color: #535e6c;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 1.5;
-    overflow: hidden;
-  }
-
-  // ── Right column — menu + circle selector ─────────────
-  // Both buttons are position:absolute so they stack in the same
-  // 28×28 space. visibility:hidden/visible keeps layout stable.
-  // ── Right column — menu + circle selector ─────────────
-  // Both buttons are position:absolute so they stack in the same
-  // 28×28 space. visibility:hidden/visible keeps layout stable.
-  &__card-right {
-    position: relative;
-    position: relative;
-    flex-shrink: 0;
-    width: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__menu-btn {
-    position: absolute !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    position: absolute !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    min-width: unset !important;
-    width: 28px !important;
-    height: 28px !important;
-    padding: 0 !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    border-radius: 50% !important;
-    color: #111 !important;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.06) !important;
-    }
-  }
-
-  &__circle-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.08);
-      background-color: rgba(0, 0, 0, 0.08);
-    }
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
-  
 
+/* 
+   EMPTY STATE
+ */
 
-// ── Read / Unread ──────────────────────────────────────────
-// ── Read / Unread ──────────────────────────────────────────
+.announcement__empty {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+}
+
+/* 
+   SECTION
+ */
+
+.announcement__section {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 8px;
+}
+
+/* 
+   LIST
+ */
+
+.announcement__list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  padding: 0 !important;
+}
+
+/* 
+   SHOW MORE
+ */
+
+.announcement__bottom {
+  display: flex;
+  justify-content: center;
+
+  padding: 12px 0 4px;
+}
+
+/* 
+   ANNOUNCEMENT CARD
+ */
+
+.announcement__card {
+  position: relative;
+
+  overflow: visible !important;
+
+  border-radius: 12px !important;
+  border: 1px solid #d2c5db !important;
+
+  transition: box-shadow 0.2s ease;
+
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  }
+
+  &.pinned {
+    background-color: #f2eff6 !important;
+  }
+}
+
+/* 
+   PIN
+ */
+
+.announcement__pin-icon {
+  position: absolute;
+
+  top: -12px;
+  left: -15px;
+
+  padding: 4px;
+
+  rotate: 320deg;
+
+  cursor: pointer;
+}
+
+/* 
+   CARD CONTENT
+ */
+
+.announcement__card-content {
+  display: flex;
+  align-items: stretch !important;
+
+  padding: 8px 12px !important;
+}
+
+.announcement__card-left {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  padding-left: 7px;
+}
+
+.announcement__author-date {
+  font-size: 12px !important;
+  line-height: 1.4;
+
+  color: #6b7280;
+}
+
+.announcement__card-title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4;
+
+  color: #111;
+}
+
+.announcement__description {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.5;
+
+  color: #535e6c;
+
+  overflow: hidden;
+}
+
+/* 
+   RIGHT ACTION AREA
+ */
+
+.announcement__card-right {
+  position: relative;
+
+  width: 28px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 
+   MENU BUTTON
+ */
+
+.announcement__menu-btn {
+  position: absolute !important;
+
+  top: 50% !important;
+
+  transform: translateY(-50%) !important;
+
+  width: 28px !important;
+  height: 28px !important;
+
+  min-width: unset !important;
+
+  padding: 0 !important;
+
+  border-radius: 50% !important;
+
+  background-color: transparent !important;
+
+  box-shadow: none !important;
+
+  color: #111 !important;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06) !important;
+  }
+}
+
+/* 
+   SELECT BUTTON
+ */
+
+.announcement__circle-btn {
+  position: absolute;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* 
+   READ STATE
+ */
+
 .card__read {
   color: #808692 !important;
 }
 
-// ── Pinned card background ─────────────────────────────────
-.announcement__card.pinned {
-  background-color: #f2eff6 !important;
+/* 
+   CHECKBOX CARD
+ */
 
-// ── Pinned card background ─────────────────────────────────
-.announcement__card.pinned {
-  background-color: #f2eff6 !important;
-}
-
-// ── Menu paper gap ─────────────────────────────────────────
-.announcement-menu__button {
-  gap: 5px !important;
-// ── Menu paper gap ─────────────────────────────────────────
-.announcement-menu__button {
-  gap: 5px !important;
-}
-
-// ── Checkbox wrapper — display:contents removes layout effect ──
-// ── Checkbox wrapper — display:contents removes layout effect ──
 .checkbox__card {
   display: contents;
 }
-}
+
+/* 
+   MENU BUTTON GROUP
+ */
+
+.announcement-menu__button {
+  gap: 5px !important;
 }

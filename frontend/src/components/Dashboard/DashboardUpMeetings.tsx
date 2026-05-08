@@ -1,18 +1,34 @@
-import { Card, CardContent, CardHeader, Chip, Typography } from "@mui/material";
+import {
+  alpha,
+  Card,
+  CardContent,
+  CardHeader,
+  Chip,
+  Typography,
+} from "@mui/material";
 import "../../assets/scss/components/Dashboard/DashboardUpMeetings.scss";
 import MyButton from "../ui/Button";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import { formatDisplayTime, timeStringToMinutes } from "../../utils/timeUtils";
-import { Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const DashboardUpMeetings = () => {
+  const navigate = useNavigate();
+
   const { upcomingMeeting } = useMeetingCardViewModel();
   return (
     <Card className="dashboard-upmeetings">
-      <Typography className="dashboard-upmeetings__heading" variant="h3">
-        Upcoming Meetings
-      </Typography>
-      <div className="dashboard-upmeetings__list">
+      <div className="dashboard-announcements__top">
+        <Typography variant="h3">Upcoming Meetings</Typography>
+        <MyButton
+          text="View All"
+          customVariant="ghost"
+          size="small"
+          onClick={() => navigate("/calendar")}
+        />
+      </div>
+
+    <div className="dashboard-upmeetings__list">
       {upcomingMeeting.map((m) => (
         <Card className="dashboard-upmeetings__card">
           <CardHeader
@@ -24,16 +40,20 @@ const DashboardUpMeetings = () => {
             }
             action={
               <Chip
-                style={{ color: `rgb${m.meetingType.colorCode}` }}
-                label={m.meetingType.name}
                 className="dashboard-upmeetings__chip"
+                style={{
+                  background: alpha(`rgba${m.meetingType.colorCode}`, 0.8),
+                  color: "#fff",
+                }}
+                label={m.meetingType.name}
               />
             }
           ></CardHeader>
           <CardContent className="dashboard-upmeetings__subheading">
             <div>
-              <Typography className="dashboard-upmeetings__title" variant="body2">
-                {m.startDate}, {formatDisplayTime(timeStringToMinutes(m.startTime))} - {" "}
+              <Typography className="dashboard-upmeetings__title">
+                {m.startDate},{" "}
+                {formatDisplayTime(timeStringToMinutes(m.startTime))} -{" "}
                 {formatDisplayTime(timeStringToMinutes(m.endTime))}
               </Typography>
               <Typography className="dashboard-upmeetings__subtitle" variant="body2">
@@ -50,19 +70,10 @@ const DashboardUpMeetings = () => {
               <Typography className="dashboard-upmeetings__subtitle" variant="body2">
                 {m.room?.roomName}
               </Typography>
-              
             </div>
           </CardContent>
         </Card>
       ))}
-
-      {/* <MyButton
-        variant="outlined"
-        fullWidth
-        text="View Details"
-        customVariant="ghost"
-        onClick={() => {}}
-      /> */}
       </div>
     </Card>
   );

@@ -9,9 +9,9 @@ export const fetchCurrentUser = async () => {
     throw error;
   }
 };
-export const updateProfile = async (id: number, data: any) => {
+export const updateProfile = async (data: any) => {
   try {
-    const res = await api.put(`/api/v1/user/${id}/update`, data);
+    const res = await api.patch(`/api/v1/users/logged-in-user/update`, data);
     return res.data;
   } catch (error) {
     console.error("Error updating the user", error);

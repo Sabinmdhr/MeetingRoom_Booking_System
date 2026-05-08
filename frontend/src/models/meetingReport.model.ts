@@ -23,6 +23,7 @@ export interface Meeting {
   createdBy: string;
   date: string;
   meetingTitle: string;
+  meetingType: string;
   roomName: string;
   startTime: string;
 }
@@ -54,6 +55,7 @@ export interface ReportPayload {
   startDate?: string;
   endDate?: string;
   meetingTypeId?: number;
+  
   roomName?: string;
   createdBy?: string;
   department?: number;

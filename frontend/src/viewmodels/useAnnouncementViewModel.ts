@@ -285,8 +285,6 @@ const initialFormData = {
   endDate: "",
 };
 
-
-
 const useAnnouncementViewModel = (
   handleClose: () => void,
   refreshAnnouncements?: () => void,

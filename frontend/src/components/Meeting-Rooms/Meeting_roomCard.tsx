@@ -27,8 +27,7 @@ import { updateBookingRoomFormData } from "../../redux/bookRoomSlice";
 import { useState } from "react";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import MyButton from "../ui/Button";
-import { useAuth } from "../../hooks/useAuth";
-import { permissions } from "../../utils/permissions";
+import { usePermissions } from "../../hooks/usePermissions";
 
 type props = {
   roomFormState: {
@@ -48,8 +47,7 @@ export const Meeting_roomCard = ({
   const dispatch = useDispatch();
   const { meeting, error } =
     useMeetingCardViewModel();
-  const { role } = useAuth();
-  const perms = permissions[role as keyof typeof permissions];
+  const perms = usePermissions()
   // if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!meeting) return null;
@@ -119,12 +117,14 @@ export const Meeting_roomCard = ({
 
             <CardActions className="Meeting-Card--Actions">
               <MyButton
-                text="Book Now"
-                className="Meeting_room-Book Available"
+                text={m.bookedStatus === "Available" ? "Book Now" : "View Schedule"}
+                className={`Meeting_room-Book `}
                 variant="outlined"
-                customVariant="dark"
+                customVariant={m.bookedStatus === "Available"? "dark": "ghost"}
                 onClick={() => {
-                  navigate("/room-timeslot", { state: { room: m } });
+                  navigate("/room-timeslot", {
+                    state: { room: m, calendarView: false },
+                  });
                   dispatch(updateBookingRoomFormData({ roomId: m.id }));
                 }}
               />

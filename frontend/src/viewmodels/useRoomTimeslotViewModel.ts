@@ -6,7 +6,7 @@ export const useRoomTimeslotViewModel = () => {
   const room = location.state?.room;
 
   const [currentDate, setCurrentDate] = useState(new Date());
-
+const isToday = currentDate.toDateString() === new Date().toDateString();
   const changeDate = (days: number) => {
     const newDate = new Date(currentDate);
     newDate.setDate(currentDate.getDate() + days);
@@ -35,5 +35,6 @@ export const useRoomTimeslotViewModel = () => {
     changeDate,
     jumpToToday,
     backendFormattedDate,
+    isToday,
   };
 }

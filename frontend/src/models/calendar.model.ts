@@ -12,7 +12,7 @@ export type CalendarEvent = {
   participants: string[];
   description: string;
   department: string;
- 
+
   meetingType: {
     id: number | string;
     name: string;

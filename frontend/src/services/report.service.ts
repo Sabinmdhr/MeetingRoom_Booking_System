@@ -3,7 +3,7 @@ import type { ReportPayload } from "../models/meetingReport.model";
 
 export const getAllReports = async () => {
   try {
-    const res = await api.get("/api/v1/reports/get-all");
+    const res = await api.get("/api/v1/reports");
     return res.data;
   } catch (error) {
     console.error("Error fetching report", error);
@@ -20,6 +20,8 @@ export const exportReports = async (data?: ReportPayload): Promise<Blob> => {
 
 export const filterReport = async (data: ReportPayload) => {
   const res = await api.post("/api/v1/reports", data);
+  console.log(res);
+
   return res.data.data.content;
 };
 

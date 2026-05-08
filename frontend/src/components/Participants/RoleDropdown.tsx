@@ -3,8 +3,9 @@ import { CommonDropdown } from "../ui/Dropdown/CommonDropdown";
 type props = {
   value: number;
   onChange: (id: number) => void;
+  disabled?: boolean;
 };
-export const RoleDropdown = ({ value, onChange }: props) => {
+export const RoleDropdown = ({ value, onChange, disabled }: props) => {
   const roles = [
     { id: 1, label: "ADMIN" },
     { id: 2, label: "MANAGER" },
@@ -17,6 +18,7 @@ export const RoleDropdown = ({ value, onChange }: props) => {
       label="Role"
       value={value}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 };

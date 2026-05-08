@@ -1,4 +1,4 @@
-import { Divider, Box, Typography } from "@mui/material";
+import {  Typography } from "@mui/material";
 import { Calendar } from "lucide-react";
 import "../../assets/scss/pages/RoomTimeslot.scss";
 import { useRoomTimeslotViewModel } from "../../viewmodels/useRoomTimeslotViewModel";
@@ -6,16 +6,12 @@ import { TimeSlotSelector } from "../../components/Meeting-Rooms/TimeSlotSelecto
 import MyButton from "../../components/ui/Button";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import { useState } from "react";
-import { minutesToTimeString } from "../../utils/timeUtils";
+// import { minutesToTimeString } from "../../utils/timeUtils";
 
 const RoomTimeslot = () => {
   const { room } = useRoomTimeslotViewModel();
-  const { updateBookingTimeAndDate } = useBookingRoomViewModel();
-  const [slot, setSlot] = useState({
-    startTime: "00:00",
-    endTime: "00:00",
-    startDate: "",
-  });
+  const { updateBookingTimeAndDate, setSlot, slot } = useBookingRoomViewModel();
+
   return (
     <div className="room-timeslot">
       <div>
@@ -45,13 +41,12 @@ const RoomTimeslot = () => {
               endTime: slot.endTime,
               startDate: slot.startDate,
             });
-            console.log(slot);
 
           }}
         />
       </div>
 
-      <TimeSlotSelector onSave={setSlot} />
+      <TimeSlotSelector onSave={setSlot} calendarView={false}/>
     </div>
   );
 };

@@ -14,7 +14,7 @@ import "../assets/scss/pages/BookRoom.scss";
 import { Calendar, Clock4, UserPlus, Users, X } from "lucide-react";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useAppSelector } from "../redux/store";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 import { useDispatch } from "react-redux";
@@ -25,21 +25,43 @@ import {
   updateBookingRoomFormData,
 } from "../redux/bookRoomSlice";
 import { ExternalCard } from "../components/BookingRooms/ExternalCard";
+import { TimeSlotSelector } from "../components/Meeting-Rooms/TimeSlotSelector";
+import { useLocation } from "react-router-dom";
+import type { WeekDays } from "../models/bookRoom.model";
 
 const BookRoom = () => {
+  const location = useLocation();
+  const { submitMode, bookingId } = location.state || {};
+
   const {
     handleChange,
     handleBookRoom,
     meetingTypes,
     handleExternalCard,
     openCard,
+    handleEditBookRoomById,
+    handleEditBookRoomByRecurrenceId,
     handleInternalCard,
+    handleWeekDays,
   } = useBookingRoomViewModel();
   // const { participantType, handleInternalClick, handleExternalClick } =
   //   useparticipantsViewModel();
   const bookinRoomFormData = useAppSelector((state) => state.bookingRoom);
   const { users } = useparticipantsViewModel();
   const dispatch = useDispatch();
+  type customDay = {
+    name: string;
+    value: WeekDays;
+  };
+  const customDays: customDay[] = [
+    { name: "Sun", value: "SUNDAY" },
+    { name: "Mon", value: "MONDAY" },
+    { name: "Tues", value: "TUESDAY" },
+    { name: "WED", value: "WEDNESDAY" },
+    { name: "Thur", value: "THURSDAY" },
+    { name: "Fri", value: "FRIDAY" },
+    { name: "Sa", value: "SATURDAY" },
+  ];
   useEffect(() => {
     return () => {
       dispatch(clearBookingRoomFormData());
@@ -128,14 +150,13 @@ const BookRoom = () => {
                   <TextField
                     className="timefield"
                     name="startTime"
-                    placeholder="Select start time"
                     value={bookinRoomFormData.startTime}
                     onChange={handleChange}
-                    // onClick={() => handleTimeClick("start")}
+                    onClick={() => {}}
                     // error={!!errors.startTime || !!errors.endTime}
                     slotProps={{
                       htmlInput: {
-                        // readOnly: true,
+                        readOnly: true,
                       },
                       input: {
                         endAdornment: (
@@ -190,7 +211,11 @@ const BookRoom = () => {
                   name="meetingTypeId"
                   placeholder="Select Meeting Type"
                   // value={bookinRoomFormData.meetingTypeId}
-                  value={meetingTypes.find((m) => m.id === bookinRoomFormData.meetingTypeId)?.name || ""}
+                  value={
+                    meetingTypes.find(
+                      (m) => m.id === bookinRoomFormData.meetingTypeId,
+                    )?.name || ""
+                  }
                   onChange={handleChange}
                   // error={!!errors.meetingType}
                   fullWidth
@@ -209,7 +234,6 @@ const BookRoom = () => {
                     },
                   }}
                 >
-
                   {meetingTypes.map((meetingType) => (
                     <MenuItem key={meetingType.id} value={meetingType.id}>
                       {meetingType.name}
@@ -243,11 +267,34 @@ const BookRoom = () => {
                 </TextField>
                 {bookinRoomFormData.recurrenceType === "CUSTOM" && (
                   <div className="customDays">
-                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                      (option) => (
-                        <Chip label={option} key={option} />
-                      ),
-                    )}
+                    {customDays.map((option) => {
+                      const isSelected = bookinRoomFormData.weekDays.includes(
+                        option.value,
+                      );
+                      return (
+                        <Chip
+                          label={option.name}
+                          key={option.name}
+                          onClick={() => {
+                            handleWeekDays(option.value);
+                            console.log(bookinRoomFormData.weekDays);
+                          }}
+                          sx={{
+                            backgroundColor: isSelected
+                              ? "#2e7d32 !important"
+                              : "#f5f5f5 !important",
+                            color: isSelected ? "#fff !important" : "#000",
+                            fontWeight: isSelected ? 600 : 400,
+
+                            "&.MuiChip-clickable:hover": {
+                              backgroundColor: isSelected
+                                ? "#1b5e20"
+                                : "#e0e0e0",
+                            },
+                          }}
+                        />
+                      );
+                    })}
                   </div>
                 )}
                 {bookinRoomFormData.recurrenceType !== "NONE" && (
@@ -284,7 +331,14 @@ const BookRoom = () => {
               <Button
                 variant="contained"
                 onClick={() => {
-                  handleBookRoom();
+                  if (submitMode === "editOnce") {
+                    // Handle edit logic here
+                    handleEditBookRoomById(bookingId);
+                  } else if (submitMode === "editAll") {
+                    handleEditBookRoomByRecurrenceId(bookingId);
+                  } else {
+                    handleBookRoom();
+                  }
                 }}
               >
                 Book Room

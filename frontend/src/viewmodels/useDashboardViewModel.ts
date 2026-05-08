@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getDashboardDetails } from "../services/dashboard.service";
+import { useAuth } from "../hooks/useAuth";
 
 type DashboardData = {
   totalRooms: number;
@@ -13,8 +14,10 @@ const useDashboardViewModel = () => {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { role } = useAuth();
 
   const fetchDashboardDetails = async () => {
+      if (role === "STAFF") return;
     try {
       setLoading(true);
       const result = await getDashboardDetails();

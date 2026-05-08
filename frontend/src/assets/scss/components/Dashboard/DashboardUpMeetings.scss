@@ -1,45 +1,58 @@
 .dashboard-upmeetings {
-  margin-top: 20px;
-  padding: 22px;
+  padding: 10px 32px;
   border-radius: 8px !important;
   background: white;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  
+  &__header {
+    display: flex;
+    padding: 10px 0;
+  }
 
 
   &__list{
-    height: 453px;
-  overflow-y: auto !important;
+    overflow-y: auto !important;
+    height: 59vh;
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+      width: none !important;
+    }
   }
 
   &__card {
     font-weight: 600 !important;
     margin-bottom: 14px;
-    border: 2px solid #eee;
+    border: 1px solid #d2c5db !important;
     border-radius: 20px !important;
-    padding: 8px;
+    padding: 4px;
     display: flex;
     flex-direction: column;
+
+    cursor: pointer;
+    &:hover {
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+      border-color: #bdbdbd;
+    }
     justify-content: space-between;
     margin-top: 20px;
   }
 
   &__cardheader {
-    margin-bottom: -18px !important;
+    margin-bottom: -12px !important;
   }
 
   &__chip {
     height: 24px !important;
-    border: 1px solid !important;
+    border: 1px solid #d2c5db !important;
   }
 
   &__subheading {
+    margin-top: -15px;
     display: flex;
-    gap: 160px;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__title {
-    margin-bottom: 8px !important;
     font-weight: 400 !important;
   }
   &__subtitle {

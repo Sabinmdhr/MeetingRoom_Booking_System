@@ -1,20 +1,25 @@
-// .dashboard-container {
-//   font-family: var(--titleMediumFont);
-//   height: 100vh;
-//   display: flex;
-//   flex-direction: column;
-// }
+.dashboard-container {
+  &__header {
+    // display: flex !important;
+    // gap: 20px !important;
+  }
 
-// .dashboard-body {
-//   display: flex;
-//   flex: 1;
-// }
-
-// .dashboard-content {
-//   flex: 1;
-// }
-
-.dashboard-subcontainer{
+  &__content {
     display: flex;
+    margin-top: 20px;
     gap: 20px;
+    // width: 100% !important;
+    &__announcements {
+      width: 100%;
+    }
+
+    &__dashboardupmeetings {
+      width: 100%;
+    }
+  }
+}
+
+.dashboard-subcontainer {
+  display: flex;
+  // gap: 20px;
 }

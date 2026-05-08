@@ -11,6 +11,7 @@ type props = {
   value: number | string;
   items: DropdownItems[];
   onChange: (id: number | 1) => void;
+  disabled?: boolean;
 };
 
 export const CommonDropdown = ({
@@ -19,6 +20,7 @@ export const CommonDropdown = ({
   items,
   onChange,
   placeholder,
+  disabled,
 }: props) => {
   return (
     <>
@@ -30,6 +32,7 @@ export const CommonDropdown = ({
       </label>
 
       <TextField
+        disabled={disabled}
         select
         fullWidth
         id={label}
@@ -50,8 +53,8 @@ export const CommonDropdown = ({
           onChange(e.target.value === "" ? 1 : Number(e.target.value))
         }
       >
-
         {items.map((item) => (
+          
           <MenuItem
             key={item.id}
             value={item.id}

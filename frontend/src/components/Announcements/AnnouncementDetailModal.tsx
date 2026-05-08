@@ -12,6 +12,7 @@ import MyButton from "../ui/Button";
 import "../../assets/scss/components/Announcement/AnnouncementDetailModal.scss";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import { useState } from "react";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const AnnouncementDetailModal = ({
   open,
@@ -21,6 +22,7 @@ const AnnouncementDetailModal = ({
   onDelete,
 }: any) => {
   const [openConfirm, setOpenConfirm] = useState(false);
+const perms = usePermissions()
 
   if (!item) return null;
 
@@ -96,7 +98,7 @@ const AnnouncementDetailModal = ({
       </DialogContent>
 
       {/* ACTIONS */}
-      <DialogActions className="announcementDetailModal__actions">
+     {perms.canMannageAnnouncements && <DialogActions className="announcementDetailModal__actions">
         <MyButton
           variant="outlined"
           customVariant="ghost"
@@ -112,7 +114,7 @@ const AnnouncementDetailModal = ({
           onClick={onEdit}
           text="Edit"
         />
-      </DialogActions>
+      </DialogActions>}
 
       <ConfirmDialog
         open={openConfirm}

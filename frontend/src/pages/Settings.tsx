@@ -6,10 +6,11 @@ import ColorSection from "../components/Settings/ColorSection";
 import BookingSection from "../components/Settings/BookingSection";
 import SecuritySection from "../components/Settings/SecuritySection";
 import { useSettingsViewModel } from "../viewmodels/useSettingsViewModel";
+import { usePermissions } from "../hooks/usePermissions";
 
 const Settings = () => {
   // const { settings, loading } = useSettingsViewModel();
-
+const perms = usePermissions()
   // if (loading) return <div>Loading...</div>;
   // if (!settings) return <div>No settings found</div>;
 
@@ -28,7 +29,7 @@ const Settings = () => {
       /> */}
 
       <NotificationSection />
-      <ColorSection />
+    { perms.canManageMeetingType && <ColorSection />}
       <BookingSection />
       <SecuritySection />
     </div>

@@ -5,6 +5,8 @@ export interface Announcements {
   pinned: boolean;
   startDate: string;
   endDate: string;
+  modifiedAt?: string;
+  authorName?: string;
   read?: boolean;
 }
 

@@ -56,7 +56,7 @@ const ReportFilters = ({
     const payload: ReportPayload = {
       pageNo: 0,
       pageSize: 10,
-      sortBy: "date",
+      sortBy: "startDate",
       sortDir: "desc",
     };
 

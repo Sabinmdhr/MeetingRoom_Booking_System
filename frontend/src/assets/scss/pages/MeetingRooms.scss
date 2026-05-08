@@ -1,15 +1,21 @@
-.MeetingRooms{
-  // display: flex;
-  // gap: 48px;
-  // width: 100%;
-  // background-color: aliceblue;
-  // flex-direction: row;
-  // flex-wrap: wrap;
-  // align-items: center;
-  margin:  16px 80px ;
-  // justify-content: center;
-}
-.MeetingRooms > *{
-  flex: 0 0 45%;
-  // width: 30% !important;
-}
+// .MeetingRooms{
+//   // display: flex;
+//   // gap: 48px;
+//   // width: 100%;
+//   // background-color: aliceblue;
+//   // flex-direction: row;
+//   // flex-wrap: wrap;
+//   // align-items: center;
+//   margin:  16px 80px ;
+
+//   // justify-content: center;
+// }
+// .MeetingRooms > *{
+//   flex: 0 0 45%;
+//   // width: 30% !important;
+// }
+ .titleDesc{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }

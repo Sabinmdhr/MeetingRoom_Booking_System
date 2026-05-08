@@ -71,6 +71,7 @@ export type Status = "ACTIVE" | "INACTIVE";
 export type MeetingStatus = "COMPLETED" | "ONGOING" | "UPCOMING";
 export type dates = {
   meetingId: number;
+  date: string;
 };
 
 export interface BookedRoomDataResponse {
@@ -90,6 +91,7 @@ export interface BookedRoomDataResponse {
 
   recurrenceId: string;
   recurrenceType: RecurrenceType;
+  
   meetingType: MeetingTypeInfo;
 
   externalParticipant?: BookedExternalParticipant[];

@@ -16,8 +16,10 @@ import {
 import { toast } from "react-toastify";
 import { getUpcomingMeeting } from "../services/Meetinf_room.service";
 import dayjs from "dayjs";
+import { useAuth } from "../hooks/useAuth";
 
 export const useMeetingCardViewModel = () => {
+  const {role} = useAuth()
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -73,6 +75,7 @@ export const useMeetingCardViewModel = () => {
     });
   };
   const fetchMeeting = async () => {
+    if(role === "STAFF") return
     try {
       setLoading(true);
       // const data = await getMeetingRoomById(meetingId);

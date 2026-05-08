@@ -10,6 +10,38 @@ export const BookRoom = async (bookingData: BookingRoomData) => {
   return res;
 };
 
+export const EditBookedRoomById = async (
+  bookingData: BookingRoomData,
+  bookingId: number,
+) => {
+  try {
+    const res = await api.put(
+      `/api/v1/update-booked-room/${bookingId}`,
+      bookingData,
+    );
+    return res;
+  } catch (error) {
+    console.error("Error editing booked room:", error);
+    throw error;
+  }
+};
+
+export const EditBookedRoomByRecurrenceId = async (
+  bookingData: BookingRoomData,
+  recurrenceId: number,
+) => {
+  try {
+    const res = await api.put(
+      `/api/v1/update-recurrence-booked-room/${recurrenceId}`,
+      bookingData,
+    );
+    return res;
+  } catch (error) {
+    console.error("Error editing booked room:", error);
+    throw error;
+  }
+};
+
 export const getBookedDataByRoomId = async (
   roomId: number,
 ): Promise<GetBookedRoomDataResponse> => {
