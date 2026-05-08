@@ -6,7 +6,7 @@ export interface ButtonProps {
   customVariant?: "primary" | "dark" | "danger" | "ghost";
   size?: "small" | "medium" | "large";
   color?: "primary" | "secondary" | "success" | "error" | "warning" | "info";
-  text: string;
+  text: string | ReactElement;
   onClick: () => void;
   startIcon?: ReactElement;
   endIcon?: ReactElement;

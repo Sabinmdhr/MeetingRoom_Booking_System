@@ -1,16 +1,12 @@
 .Meeting-Card {
-  flex: 0 0 calc(50% - 30px);
   // padding: 8px !important;
   border-radius: 12px !important;
   border: 0.5px solid #e5e5e5;
   box-shadow: none !important;
-  margin: 10px 0px;
+  margin: 10px ;
 }
 .room-Card--Container {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  // padding: 10px;
 }
 .Meeting-title {
   font-size: var(--titleSmallSize) !important;
@@ -22,10 +18,6 @@
 .Meeting-Card--content {
   display: flex;
   flex-direction: column;
-  // gap: 28px;
-  // justify-content: space-between;
-  height: 100%;
-  width: 100%;
 }
 .cardHeader {
   display: flex;
@@ -66,12 +58,13 @@
   text-align: center;
   // align-items: center;
 
+
+}
   .Feature-title {
-    font-size: var(--bodySmallSize);
-    letter-spacing: var(--bodySmallTracking);
-    line-height: var(--bodySmallLineht);
-    color: #4a5565;
-  }
+    font-size: var(--bodySmallSize) !important;
+    letter-spacing: var(--bodySmallTracking) !important;
+    line-height: var(--bodySmallLineht) !important;
+    color: #4a5565 !important;
 }
 .Meeting_room-Available {
   padding: 4px 17px;

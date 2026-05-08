@@ -1,30 +1,55 @@
-import { useEffect, useState, useRef  } from "react";
+import { useEffect, useState, useRef } from "react";
 import type {
   Settings,
   MeetingTypeUI,
   MeetingTypeRequest,
   meetingTypeChange,
+  changePassDataType,
 } from "../models/settings.model";
 import {
   meetingType,
   changeStatus,
   updateMeetingType,
+  changePassword,
 } from "../services/settings.service";
 import type { ColorResult } from "react-color";
 import { getAllMeetingType } from "../services/report.service";
+import { toast } from "react-toastify";
 
 export const useSettingsViewModel = () => {
   const [meetingTypes, setMeetingTypes] = useState<MeetingTypeUI[]>([]);
   const [activePickerId, setActivePickerId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const[selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
-const [addForm, setAddForm] = useState<boolean>(false);
+  const [addForm, setAddForm] = useState<boolean>(false);
   const [openPicker, setOpenPicker] = useState<boolean>(false);
 
-  const initialMeetingTypeFormData:MeetingTypeRequest = { name: "", colorCode: "(0,0,255)", status: "ACTIVE" }
+  const initialMeetingTypeFormData: MeetingTypeRequest = {
+    name: "",
+    colorCode: "(0,0,255)",
+    status: "ACTIVE",
+  };
   const [meetingTypeFormData, setMeetingTypeFormData] =
     useState<MeetingTypeRequest>(initialMeetingTypeFormData);
+
+  const [openChangePass, setOpenChangePass] = useState<boolean>(false);
+  const [changePassData, setChangePassData] = useState<changePassDataType>({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
+  const handleChangePassData = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    const { name, value } = e.target;
+
+    setChangePassData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const togglePicker = (id: number) => {
     setActivePickerId((prev) => (prev === id ? null : id));
@@ -62,28 +87,32 @@ const [addForm, setAddForm] = useState<boolean>(false);
 
     try {
       const res = await updateMeetingType(updatedItem, id);
-      setMeetingTypes((prev)=> prev.map((item)=> item.id === id ? {...item, colorCode: rgb} : item))
+      setMeetingTypes((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, colorCode: rgb } : item,
+        ),
+      );
       return res;
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleUpdateMeetingType= async(item: MeetingTypeUI)=>{
+  const handleUpdateMeetingType = async (item: MeetingTypeUI) => {
     try {
-    const payload: MeetingTypeRequest={
-      name: item.name,
-      colorCode: item.colorCode,
-      status: item.status,
-    }
-    await updateMeetingType(payload, item.id);
-    setEditingId(null);
+      const payload: MeetingTypeRequest = {
+        name: item.name,
+        colorCode: item.colorCode,
+        status: item.status,
+      };
+      await updateMeetingType(payload, item.id);
+      setEditingId(null);
     } catch (error) {
       console.log("Update failed", error);
     }
-  }
+  };
 
-    const pickerRef = useRef<HTMLDivElement | null>(null);
+  const pickerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -100,14 +129,24 @@ const [addForm, setAddForm] = useState<boolean>(false);
     };
   }, []);
 
-const deleteMeetingType= async(id: number)=>{
-  const data:meetingTypeChange = {status:"INACTIVE"}
-  await changeStatus(data, id);
+  const deleteMeetingType = async (id: number) => {
+    const data: meetingTypeChange = { status: "INACTIVE" };
+    await changeStatus(data, id);
     fetchMeetingType();
-  // setMeetingTypes((prev)=> prev.map((item)=> item.id === id? {...item, status: "INACTIVE"}: item))
+    // setMeetingTypes((prev)=> prev.map((item)=> item.id === id? {...item, status: "INACTIVE"}: item))
+  };
+  const handleChangePassword = async (data:changePassDataType) => {
+    try {
+    const res = await changePassword(data);
+    toast.success("Password successfully Changed")
+    setOpenChangePass(false)
 
-}
 
+    } catch (error) {
+console.log(error);
+
+    }
+  };
   return {
     meetingTypes,
     setMeetingTypes,
@@ -122,10 +161,20 @@ const deleteMeetingType= async(id: number)=>{
     deleteMeetingType,
     selectedId,
     setSelectedId,
-    editingId, setEditingId,
+    editingId,
+    setEditingId,
     handleUpdateMeetingType,
-    addForm, setAddForm,
-    openPicker, setOpenPicker,
-    meetingTypeFormData, setMeetingTypeFormData,
+    addForm,
+    setAddForm,
+    openPicker,
+    setOpenPicker,
+    setChangePassData,
+    changePassData,
+    openChangePass,
+    handleChangePassData,
+    setOpenChangePass,
+    handleChangePassword,
+    meetingTypeFormData,
+    setMeetingTypeFormData,
   };
 };

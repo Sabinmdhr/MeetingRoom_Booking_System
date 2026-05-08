@@ -38,6 +38,7 @@
   position: relative;
   display: flex;
   height: 100%;
+  scrollbar-width: none;
 }
 
 .timeGutter {
@@ -81,8 +82,6 @@
   cursor: grab;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  // padding: 4px 8px;
   transition: box-shadow 0.2s;
   z-index: 10;
 
@@ -151,10 +150,9 @@
 .content {
   display: flex;
   gap: 8px;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
   // font-size: 10px;
-  top: 1px;
+  align-items: center;
 }
   .line {
     position: absolute;
