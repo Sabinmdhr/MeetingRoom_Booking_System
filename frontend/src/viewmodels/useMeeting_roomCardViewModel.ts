@@ -12,6 +12,7 @@ import {
   getMeetingRooms,
   deleteMeetingRoom,
   getMeetingRoomResources,
+  selfBookedRoom,
 } from "../services/Meetinf_room.service";
 import { toast } from "react-toastify";
 import { getUpcomingMeeting } from "../services/Meetinf_room.service";
@@ -22,6 +23,7 @@ export const useMeetingCardViewModel = () => {
   const { role } = useAuth();
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
   const [loading, setLoading] = useState(false);
+  const [historyMode, setHistoryMode] = useState<boolean>(false);
   const [loadingUpcoming, setLoadingUpcoming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [addResourceMode, setAddResourceMode] = useState(false);
@@ -86,15 +88,21 @@ export const useMeetingCardViewModel = () => {
       const data = await getMeetingRooms();
       // console.log(data);
       setMeeting(data.data.content);
-      const resources = await getMeetingRoomResources();
-      setRoomResources(resources.data);
+
     } catch (err: any) {
       setError(err.message || "Failed to load meeting room");
     } finally {
       setLoading(false);
     }
   };
-
+const fetchMeetingRoomResources = async() =>{
+  try {
+const resources = await getMeetingRoomResources();
+setRoomResources(resources.data);
+  } catch (error) {
+    toast.error(`${error}`)
+  }
+}
   const submitAddRomForm = async () => {
     try {
       const data = {
@@ -110,6 +118,7 @@ export const useMeetingCardViewModel = () => {
       return true;
     } catch (error) {
       console.log(error);
+      toast.error("Failed to create room");
     }
   };
 
@@ -175,7 +184,8 @@ export const useMeetingCardViewModel = () => {
   const fetchAllUpcomingMeetings = async () => {
     try {
       setLoadingUpcoming(true);
-      const res = await getUpcomingMeeting();
+
+      const res = await (historyMode ? selfBookedRoom() : getUpcomingMeeting());
       const normalized = normalizeBookings(res.data);
       setAllUpcomingMeeting(normalized);
     } catch (error) {
@@ -209,14 +219,21 @@ export const useMeetingCardViewModel = () => {
   useEffect(() => {
     fetchMeeting();
     fetchUpcomingMeetings();
-    fetchAllUpcomingMeetings();
+    fetchMeetingRoomResources()
   }, []);
+  useEffect(()=>{
+    fetchAllUpcomingMeetings();
+
+  },[historyMode])
 
   return {
     meeting,
     fetchMeeting,
+    fetchMeetingRoomResources,
     loading,
     error,
+    historyMode,
+    setHistoryMode,
     refresh,
     addMeetingFormData,
     setAddMeetingFormData,

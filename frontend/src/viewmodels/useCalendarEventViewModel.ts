@@ -219,7 +219,7 @@ export const useCalendarEventViewModel = () => {
     );
   };
 
-  const clearSelection = () => setDateRange({ start: null, end: null });
+  const clearSelection = () => setDateRange({ start: dayjs(), end: null });
 
   //  Navigation ─
 

@@ -8,13 +8,15 @@ import {
   Stack,
   capitalize,
   Chip,
+  Dialog,
+  DialogContent,
 } from "@mui/material";
 import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
 import "../assets/scss/pages/BookRoom.scss";
 import { Clock4, UserPlus, Users, X } from "lucide-react";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../redux/store";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 import { useDispatch } from "react-redux";
@@ -32,7 +34,7 @@ import type { WeekDays } from "../models/bookRoom.model";
 const BookRoom = () => {
   const location = useLocation();
   const { submitMode, bookingId } = location.state || {};
-
+  const [openTimeSelector, setOpenTimeSelector] = useState<boolean>(false);
   const {
     handleChange,
     handleBookRoom,
@@ -150,10 +152,12 @@ const BookRoom = () => {
                   <TextField
                     className="timefield"
                     name="startTime"
-                    placeholder="Select start time"
+                    placeholder="Select Starttime"
                     value={bookinRoomFormData.startTime}
                     onChange={handleChange}
-                    onClick={() => {}}
+                    onClick={() => {
+                      setOpenTimeSelector(true);
+                    }}
                     // error={!!errors.startTime || !!errors.endTime}
                     slotProps={{
                       htmlInput: {
@@ -169,6 +173,19 @@ const BookRoom = () => {
                     }}
                   />
                 </div>
+                <Dialog
+                  maxWidth="md"
+                  fullWidth
+                  open={openTimeSelector}
+                  onClose={() => {
+                    setOpenTimeSelector(false);
+                  }}
+                >
+                  <DialogContent>
+                    <TimeSlotSelector calendarView={false} DialogView={true} editingId={bookingId}/>
+                  </DialogContent>
+                </Dialog>
+
                 <div className="field">
                   <label className="field-label">End Time *</label>
                   <TextField
@@ -177,7 +194,7 @@ const BookRoom = () => {
                     placeholder="Select end time"
                     value={bookinRoomFormData.endTime}
                     onChange={handleChange}
-                    // onClick={() => handleTimeClick("end")}
+                    onClick={() => setOpenTimeSelector(true)}
                     slotProps={{
                       htmlInput: {
                         readOnly: true,

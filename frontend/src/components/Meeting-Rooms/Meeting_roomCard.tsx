@@ -66,14 +66,23 @@ export const Meeting_roomCard = ({ handleRoomFormOpen }: props) => {
   };
   return (
     <div className="room-Card--Container">
-      <Grid container>
+      <Grid
+        container
+        spacing={4}
+      >
         {meeting.map((m) => (
-          <Grid size={6} key={m.id}>
+          <Grid
+            size={6}
+            key={m.id}
+          >
             <Card className="Meeting-Card">
               <CardContent className="Meeting-Card--content">
                 <div>
                   <div className="cardHeader">
-                    <Typography className="Meeting-title" variant="h6">
+                    <Typography
+                      className="Meeting-title"
+                      variant="h6"
+                    >
                       {m.roomName}
                     </Typography>
 
@@ -95,7 +104,10 @@ export const Meeting_roomCard = ({ handleRoomFormOpen }: props) => {
                     </Typography>
                   </div>
 
-                  <Typography variant="body2" className="Features-Tabs">
+                  <Typography
+                    variant="body2"
+                    className="Features-Tabs"
+                  >
                     {m.resources.map((feature, index) => (
                       // <span className="Meeitng_room-Feature" key={index}>
 

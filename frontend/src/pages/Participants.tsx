@@ -17,7 +17,7 @@ const Participants = () => {
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
   const {
-    users,
+    // users,
     handleParticipantsFormClose,
     handleParticipantFormOpen,
     participantsFormState,
@@ -53,7 +53,7 @@ const Participants = () => {
         >
           <FolderPlus size={16} />{" "}
           <span>
-            Custom Groups 
+            Custom Groups
           </span>
         </div>
         <div
@@ -90,7 +90,7 @@ const Participants = () => {
         <div className="participants-container">
           <div className="participants-table">
             <ParticipantsTable
-              users={users}
+              // users={users}
               // participantsFormState={participantsFormState}
               handleParticipantFormOpen={handleParticipantFormOpen}
               handleParticipantsFormClose={handleParticipantsFormClose}

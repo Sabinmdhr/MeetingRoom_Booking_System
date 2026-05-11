@@ -9,8 +9,10 @@ import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
 import "../assets/scss/pages/Dashboard.scss";
 import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     window.location.href = "/";
@@ -35,6 +37,9 @@ export default function Dashboard() {
             />
           ),
           description: `↑ ${dashboardData.totalRooms ?? 0} available now`,
+          onClick: () => {
+            navigate("/meeting-rooms");
+          },
         },
 
         {
@@ -48,7 +53,11 @@ export default function Dashboard() {
             />
           ),
           description: "Across all departments",
+          onClick: () => {
+            navigate("/participants");
+          },
         },
+
         {
           id: 3,
           title: "Avg Duration",

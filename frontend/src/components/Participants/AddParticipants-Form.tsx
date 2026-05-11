@@ -59,17 +59,7 @@ export const AddParticipantsForm = ({
   //   (state) => state.participants,
   // );
 
-  // const departments = ["Engineering", "HR", "Product", "Finance", "Marketing"];
-  const positions = [
-    "Senior Engineer",
-    "Tech Lead",
-    "Senior",
-    "HR",
-    "DevOps Engineer",
-    "Frontend Developer",
-    "Product Manager",
-    "UX Researcher",
-  ];
+
   useEffect(() => {
     if (
       participantsFormState.mode === "edit" &&
@@ -149,6 +139,8 @@ export const AddParticipantsForm = ({
             placeholder="Position"
             id="Position"
             required
+            value={participantFormData.position}
+            onChange={handleChange}
             className="customTextField"
          >
           </TextField>

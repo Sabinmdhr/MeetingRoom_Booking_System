@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getDepartmentList, handleAddDepartment, handleEditDepartment } from "../services/departmentList.service";
+import { toast } from "react-toastify";
 import type {
   addDepartment,
   departmentList,
@@ -67,20 +68,24 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 const submitDepartment = async (data: addDepartment) => {
-
   try {
     await handleAddDepartment(data);
+    toast.success("Department added successfully!");
   } catch (error) {
     console.error("Error adding department:", error);
+    toast.error("Failed to add department");
   }
+};
+
+const editDepartment = async (id: number, data: addDepartment) => {
+  try {
+    await handleEditDepartment(id, data);
+    toast.success("Department updated successfully!");
+  } catch (error) {
+    console.error("Error editing department:", error);
+    toast.error("Failed to update department");
   }
-  const editDepartment = async (id: number, data: addDepartment) => {
-    try {
-      await handleEditDepartment(id, data);
-    } catch (error) {
-      console.error("Error editing department:", error);
-    }
-  }
+};
   // Here you would typically send departmentFormData to your backend API
   useEffect(() => {
     fetchDepartments();
