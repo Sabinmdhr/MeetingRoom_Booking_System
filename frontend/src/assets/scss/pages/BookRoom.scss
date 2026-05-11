@@ -7,7 +7,6 @@
 
   .bookroom-form {
     width: 100%;
-    // max-width: 1150px;
   }
 
   .bookroom-card {
@@ -18,17 +17,6 @@
 
   .bookroom-header {
     margin-bottom: 2px;
-
-    // .title {
-    //   font-weight: 500;
-    //   font-size: 20px;
-    //   margin-bottom: 4px;
-    // }
-
-    // .subtitle {
-    //   font-size: 13px;
-    //   color: #4a5565;
-    // }
   }
 
   .bookroom-body {
@@ -239,6 +227,10 @@
       font-size: 18px;
       color: #9aa0a6;
     }
+  }
+
+  .booking-btn{
+    margin-top: 24px;
   }
 
   .book-btn {

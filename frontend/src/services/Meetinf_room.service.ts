@@ -1,6 +1,5 @@
 // import { axiosInstance } from "../api/api";
 import api from "../api/api";
-import { useAuth } from "../hooks/useAuth";
 import type { AddRoomModal } from "../models/meeting_room.model";
 
 export const addRoom = async (data: AddRoomModal) => {

@@ -60,9 +60,6 @@ const DashboardUpMeetings = () => {
               <Typography className="dashboard-upmeetings__subtitle" variant="body2">
                 By: {m.roomBooker.firstName} {m.roomBooker.lastName}
               </Typography>
-              {/* <Typography className="dashboard-upmeetings__participants"><Users size={14} />
-                {(m.internalParticipant?.length || 0) + (m.externalParticipant?.length || 0)} Participants
-              </Typography> */}
             </div>
             <div>
               <Typography className="dashboard-upmeetings__title" variant="body2">

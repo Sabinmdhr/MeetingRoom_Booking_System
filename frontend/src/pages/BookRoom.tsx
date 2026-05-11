@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
 import "../assets/scss/pages/BookRoom.scss";
-import { Calendar, Clock4, UserPlus, Users, X } from "lucide-react";
+import { Clock4, UserPlus, Users, X } from "lucide-react";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
 
-import { use, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppSelector } from "../redux/store";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 import { useDispatch } from "react-redux";
@@ -150,6 +150,7 @@ const BookRoom = () => {
                   <TextField
                     className="timefield"
                     name="startTime"
+                    placeholder="Select start time"
                     value={bookinRoomFormData.startTime}
                     onChange={handleChange}
                     onClick={() => {}}
@@ -329,6 +330,7 @@ const BookRoom = () => {
                 />
               </div>
               <Button
+                className="booking-btn"
                 variant="contained"
                 onClick={() => {
                   if (submitMode === "editOnce") {
