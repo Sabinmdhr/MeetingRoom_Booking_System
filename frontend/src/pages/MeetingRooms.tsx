@@ -1,5 +1,5 @@
 import { Meeting_roomCard } from "../components/Meeting-Rooms/Meeting_roomCard";
-import "../assets/scss/pages/MeetingRooms.scss"
+import "../assets/scss/pages/MeetingRooms.scss";
 import {
   Button,
   Card,
@@ -36,30 +36,58 @@ const MeetingRooms = () => {
   if (loading) return <CircularProgress />;
   //   const {handleClose} = useAddRoomViewModel();
   // const {isEditOpen} = useAppSelector((state) => state.meetingRoom)
-  return (<>
-    <div className="meeting-table__main">
-      <div className="titleDesc">
-        <Typography variant="h1">Meeting Rooms</Typography>
-        <Typography variant="subtitle1">Book available rooms</Typography>
+  // return (
+  //   <>
+  //     <div className="meeting-table__main">
+  //       <div className="titleDesc">
+  //         <Typography variant="h1">Meeting Rooms</Typography>
+  //         <Typography variant="subtitle1">Book available rooms</Typography>
+  //       </div>
+  //       {perms?.canBookRoom && (
+  //         <AddMeetingRoomForm
+  //           roomFormState={roomFormState}
+  //           handleRoomFormOpen={handleRoomFormOpen}
+  //           handleRoomFormClose={handleRoomFormClose}
+  //         />
+  //       )}
+  //     </div>
+  //     <CardContent className="MeetingRooms">
+  //       {/* <Grid container> */}
+  //       <Meeting_roomCard
+  //         roomFormState={roomFormState}
+  //         handleRoomFormOpen={handleRoomFormOpen}
+  //       />
+  //       {/* </Grid> */}
+  //     </CardContent>
+  //   </>
+  // );
+  return (
+    <div className="meeting-table">
+      <div className="meeting-table__title-wrapper">
+        <div className="meeting-table__title">
+          <Typography variant="h1">Meeting Rooms</Typography>
+          <Typography variant="subtitle1">Book available rooms</Typography>
+        </div>
+        <div>
+          {perms?.canBookRoom && (
+            <AddMeetingRoomForm
+              roomFormState={roomFormState}
+              handleRoomFormOpen={handleRoomFormOpen}
+              handleRoomFormClose={handleRoomFormClose}
+            />
+          )}
+        </div>
       </div>
-        {perms?.canBookRoom && (
-          <AddMeetingRoomForm
-            roomFormState={roomFormState}
-            handleRoomFormOpen={handleRoomFormOpen}
-            handleRoomFormClose={handleRoomFormClose}
-          />
-        )}
 
-    </div>
-      <CardContent className="MeetingRooms">
+      <div className="meeting-table__content__card">
         {/* <Grid container> */}
         <Meeting_roomCard
           roomFormState={roomFormState}
           handleRoomFormOpen={handleRoomFormOpen}
         />
         {/* </Grid> */}
-      </CardContent>
-  </>
+      </div>
+    </div>
   );
 };
 

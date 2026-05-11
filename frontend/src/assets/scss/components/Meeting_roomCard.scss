@@ -3,7 +3,7 @@
   border-radius: 12px !important;
   border: 0.5px solid #e5e5e5;
   box-shadow: none !important;
-  margin: 10px ;
+  gap: 10px;
 }
 .room-Card--Container {
   // padding: 10px;
@@ -57,14 +57,12 @@
   gap: 4px;
   text-align: center;
   // align-items: center;
-
-
 }
-  .Feature-title {
-    font-size: var(--bodySmallSize) !important;
-    letter-spacing: var(--bodySmallTracking) !important;
-    line-height: var(--bodySmallLineht) !important;
-    color: #4a5565 !important;
+.Feature-title {
+  font-size: var(--bodySmallSize) !important;
+  letter-spacing: var(--bodySmallTracking) !important;
+  line-height: var(--bodySmallLineht) !important;
+  color: #4a5565 !important;
 }
 .Meeting_room-Available {
   padding: 4px 17px;
