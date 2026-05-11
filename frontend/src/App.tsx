@@ -20,6 +20,7 @@ import BookRoom from "./pages/BookRoom";
 import UserProfile from "./pages/UserProfile";
 import RoomTimeslot from "./pages/RoomTimeslot/RoomTimeslot";
 import { ProtectedRoutes } from "./layouts/ProtectedRoutes";
+import UpcomingMeetings from "./pages/UpcomingMeetings";
 // import TestTimeline from "./pages/TestTimeline";
 
 function App() {
@@ -86,6 +87,7 @@ function App() {
           />
           <Route path="settings" element={<Settings />} />
           <Route path="profile" element={<UserProfile />} />
+          <Route path="upcoming-meetings" element={<UpcomingMeetings />} />
           {/* <Route
           path="/test"
           element={<TestTimeline/>  }

@@ -1,0 +1,105 @@
+.upmeetings__main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upmeetings__title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upmeetings__title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.upmeetings__subtitle {
+  color: #6b7280;
+}
+
+.upmeetings {
+  height: 75vh !important;
+
+  display: flex;
+  flex-direction: column;
+
+
+  border-radius: 16px !important;
+
+  background: #fff;
+  overflow-y: scroll;
+
+}
+
+.upcoming-meetings__meetingtitle{
+   font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+.upmeetings__dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.upcoming-meetings{
+  padding: 10px 32px;
+  border-radius: 8px !important;
+  background: white;
+  overflow-y: scroll;
+
+  &__card {
+    font-weight: 600 !important;
+    margin-bottom: 14px;
+    border: 1px solid #d2c5db !important;
+    border-radius: 20px !important;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // margin-top: 20px;
+    // cursor: pointer;
+
+    // &:hover {
+    //   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+    //   border-color: #bdbdbd;
+    // }
+  }
+
+  &__cardheader {
+    margin-bottom: -12px !important;
+  }
+
+  &__chip {
+    height: 24px !important;
+    border: 1px solid #d2c5db !important;
+  }
+
+  &__subheading {
+    margin-top: -15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    font-weight: 400 !important;
+  }
+  &__subtitle {
+    color: gray;
+  }
+  &__participants {
+    color: gray;
+    display: flex;
+    align-items: center;
+    gap: 6px !important;
+    font-size: 14px !important;
+  }
+}
+

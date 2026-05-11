@@ -8,7 +8,12 @@
     padding: 10px 0;
   }
 
-  &__list {
+  &__meetingtitle {
+    font-weight: 600 !important;
+    font-size: 18px !important;
+  }
+
+  &__list{
     overflow-y: auto !important;
     height: 440px;
     scrollbar-width: none;
@@ -26,11 +31,11 @@
     display: flex;
     flex-direction: column;
 
-    cursor: pointer;
-    &:hover {
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
-      border-color: #bdbdbd;
-    }
+    // cursor: pointer;
+    // &:hover {
+    //   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+    //   border-color: #bdbdbd;
+    // }
     justify-content: space-between;
     margin-top: 20px;
   }

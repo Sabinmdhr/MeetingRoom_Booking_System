@@ -11,6 +11,7 @@ import MyButton from "../ui/Button";
 import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardViewModel";
 import { formatDisplayTime, timeStringToMinutes } from "../../utils/timeUtils";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const DashboardUpMeetings = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const DashboardUpMeetings = () => {
           text="View All"
           customVariant="ghost"
           size="small"
-          onClick={() => navigate("/calendar")}
+          onClick={() => navigate("/upcoming-meetings")}
         />
       </div>
 
@@ -34,7 +35,7 @@ const DashboardUpMeetings = () => {
           <CardHeader
             className="dashboard-upmeetings__cardheader"
             title={
-              <Typography variant="h4">
+              <Typography className="dashboard-upmeetings__meetingtitle">
                 {m.meetingTitle}
               </Typography>
             }
@@ -52,7 +53,7 @@ const DashboardUpMeetings = () => {
           <CardContent className="dashboard-upmeetings__subheading">
             <div>
               <Typography className="dashboard-upmeetings__title">
-                {m.startDate},{" "}
+                {m.startDate? dayjs(m.startDate).format("D MMM YYYY") : ""},{" "}
                 {formatDisplayTime(timeStringToMinutes(m.startTime))} -{" "}
                 {formatDisplayTime(timeStringToMinutes(m.endTime))}
               </Typography>
