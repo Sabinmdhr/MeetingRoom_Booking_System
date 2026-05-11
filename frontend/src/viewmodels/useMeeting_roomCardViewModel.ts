@@ -19,14 +19,18 @@ import dayjs from "dayjs";
 import { useAuth } from "../hooks/useAuth";
 
 export const useMeetingCardViewModel = () => {
-  const {role} = useAuth()
+  const { role } = useAuth();
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingUpcoming, setLoadingUpcoming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [addResourceMode, setAddResourceMode] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [upcomingMeeting, setUpcomingMeeting] = useState<RoomBookings[]>([]);
+  const [allUpcomingMeeting, setAllUpcomingMeeting] = useState<RoomBookings[]>(
+    [],
+  );
 
   const initialAddMeetingFormData = {
     roomName: "",
@@ -75,7 +79,7 @@ export const useMeetingCardViewModel = () => {
     });
   };
   const fetchMeeting = async () => {
-    if(role === "STAFF") return
+    if (role === "STAFF") return;
     try {
       setLoading(true);
       // const data = await getMeetingRoomById(meetingId);
@@ -115,7 +119,7 @@ export const useMeetingCardViewModel = () => {
         id: item.id,
         recurrenceId: item.recurrenceId,
         meetingTitle: item.meetingTitle,
-        startDate: item.startDate, // consider converting to Dayjs in ViewModel
+        startDate: item.startDate,
         endDate: item.endDate,
         startTime: item.startTime,
         endTime: item.endTime,
@@ -168,9 +172,22 @@ export const useMeetingCardViewModel = () => {
     await fetchMeeting();
   };
 
+  const fetchAllUpcomingMeetings = async () => {
+    try {
+      setLoadingUpcoming(true);
+      const res = await getUpcomingMeeting();
+      const normalized = normalizeBookings(res.data);
+      setAllUpcomingMeeting(normalized);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingUpcoming(false);
+    }
+  };
+
   const fetchUpcomingMeetings = async () => {
     try {
-      setLoading(true);
+      setLoadingUpcoming(true);
       const res = await getUpcomingMeeting();
       const normalized = normalizeBookings(res.data);
       const sorted = normalized.sort(
@@ -185,13 +202,14 @@ export const useMeetingCardViewModel = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setLoadingUpcoming(false);
     }
   };
 
   useEffect(() => {
     fetchMeeting();
     fetchUpcomingMeetings();
+    fetchAllUpcomingMeetings();
   }, []);
 
   return {
@@ -215,6 +233,8 @@ export const useMeetingCardViewModel = () => {
     submitAddRomForm,
     handleChange,
     setAddRoomFormData,
+    fetchAllUpcomingMeetings,
+    allUpcomingMeeting,
     fetchUpcomingMeetings,
     upcomingMeeting,
     roomResources,
