@@ -48,7 +48,7 @@ const DashboardUpMeetings = () => {
                   <Chip
                     className="dashboard-upmeetings__chip"
                     style={{
-                      background: alpha(`rgba${m.meetingType.colorCode}`, 0.8),
+                      background: alpha( `rgba(${m.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`, 0.8),
                       color: "#fff",
                     }}
                     label={m.meetingType.name}

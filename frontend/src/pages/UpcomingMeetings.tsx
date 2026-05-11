@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import "../assets/scss/pages/UpcomingMeetings.scss";
 import { useState } from "react";
-import MyButton from "../components/ui/Button";
 import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
 import { useMeetingCardViewModel } from "../viewmodels/useMeeting_roomCardViewModel";
@@ -32,7 +31,7 @@ const UpcomingMeeting = () => {
           <Typography variant="h1">Upcoming Meetings</Typography>
           <Typography
             variant="subtitle1"
-            className="upmeetings__subtitle"
+            className="upmeetings__subtitle" 
           >
             View your upcoming meetings and stay on schedule.
           </Typography>
@@ -100,9 +99,6 @@ const UpcomingMeeting = () => {
                               <Typography className="upcoming-meetings__subtitle" variant="body2">
                                 By: {m.roomBooker.firstName} {m.roomBooker.lastName}
                               </Typography>
-                              {/* <Typography className="dashboard-upmeetings__participants"><Users size={14} />
-                                {(m.internalParticipant?.length || 0) + (m.externalParticipant?.length || 0)} Participants
-                              </Typography> */}
                             </div>
                             <div>
                               <Typography className="upcoming-meetings__title" variant="body2">

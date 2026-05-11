@@ -13,10 +13,10 @@ import {
 } from "@mui/material";
 import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
 import "../assets/scss/pages/BookRoom.scss";
-import { Calendar, Clock4, UserPlus, Users, X } from "lucide-react";
+import { Clock4, UserPlus, Users, X } from "lucide-react";
 import { useparticipantsViewModel } from "../viewmodels/useParticipantsViewModel";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../redux/store";
 import ParticipantsCard from "../components/BookingRooms/ParticipantsCard";
 import { useDispatch } from "react-redux";
