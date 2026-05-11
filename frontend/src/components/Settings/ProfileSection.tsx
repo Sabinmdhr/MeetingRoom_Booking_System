@@ -1,8 +1,7 @@
-import { Card, MenuItem, TextField, Typography } from "@mui/material";
+import { Card, TextField, Typography } from "@mui/material";
 import "../../assets/scss/components/ProfileSection/ProfileSection.scss";
 import { toast } from "react-toastify";
 import MyButton from "../ui/Button";
-import type { UserProfileInfo } from "../../models/profileSection.model";
 import { DepartmentList } from "../Participants/DepartmentList";
 import { RoleDropdown } from "../Participants/RoleDropdown";
 import { useAuth } from "../../hooks/useAuth";
@@ -32,16 +31,6 @@ const ProfileSection = ({
       <Typography className="profile-section__error">{error}</Typography>
     ) : null;
 
-  const positions = [
-    "Senior Engineer",
-    "Tech Lead",
-    "Senior",
-    "HR",
-    "DevOps Engineer",
-    "Frontend Developer",
-    "Product Manager",
-    "UX Researcher",
-  ];
   const { role } = useAuth();
   const {
     profile,
@@ -136,20 +125,10 @@ const ProfileSection = ({
             <div className="profile-section__field">
               <label className="profile-section__label">Position</label>
               <TextField
-                select
                 name="position"
                 value={profile?.position}
                 onChange={handleChange}
-              >
-                {positions.map((p) => (
-                  <MenuItem
-                    key={p}
-                    value={p ?? 1}
-                  >
-                    {p}
-                  </MenuItem>
-                ))}
-              </TextField>
+              />
             </div>
 
             {/* empty space to keep alignment */}
@@ -163,7 +142,7 @@ const ProfileSection = ({
             variant="contained"
             customVariant="dark"
             onClick={async () => {
-              console.log("CLICKED SAVE"); //  ADD THIS
+              console.log("CLICKED SAVE");
               const success = await saveProfile();
               console.log("RESULT:", success);
 

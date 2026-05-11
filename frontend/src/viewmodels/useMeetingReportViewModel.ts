@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   Meeting,
   Column,
@@ -6,11 +6,10 @@ import type {
   ReportPayload,
 } from "../models/meetingReport.model";
 import {
+  fetchReportData,
   exportReports,
-  filterReport,
-  getAllReports,
-  fetchUser,
-  fetchRoom,
+  fetchUsers,
+  fetchRooms,
   getAllMeetingType,
 } from "../services/report.service";
 
@@ -24,127 +23,125 @@ export const COLUMNS: Column[] = [
   { id: "createdBy", label: "Created By" },
 ];
 
+const DEFAULT_PAYLOAD: ReportPayload = {
+  pageNo: 0,
+  pageSize: 10,
+  sortBy: "startDate",
+  sortDir: "desc",
+};
+
 export function useMeetingReportViewModel() {
   const [rows, setRows] = useState<Meeting[]>([]);
-  const [isFiltered, setIsFiltered] = useState(false);
-  // const [users, setUsers] = useState<string[]>([]);
   const [rooms, setRooms] = useState<string[]>([]);
   const [meetingTypes, setMeetingTypes] = useState<DropdownItem[]>([]);
-  const [lastFilter, setLastFilter] = useState<ReportPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [totalRows, setTotalRows] = useState(0);
+  const [isFiltered, setIsFiltered] = useState(false);
 
-  const defaultPayload: ReportPayload = {
-    pageNo: 0,
-    pageSize: 10,
-    sortBy: "startDate",
-    sortDir: "asc",
-  };
-  // console.log(rows.length);
+  // Tracks the current active filter params (excluding pagination).
+  // This is the source of truth for export and pagination page changes.
+  const activeFilters = useRef<Omit<ReportPayload, "pageNo" | "pageSize">>({
+    sortBy: DEFAULT_PAYLOAD.sortBy,
+    sortDir: DEFAULT_PAYLOAD.sortDir,
+  });
 
-  // const fetchReports = async () => {
-  //   try {
-  //     const res = await getAllReports();
-  //     setRows(res.data ?? []);
-  //     // console.log(res);
-
-  //     setIsFiltered(false);
-  //     setLastFilter(null);
-  //     setLoading(false);
-  //   } catch (err) {
-  //     console.error("Error fetching reports", err);
-  //   }
-  // };
-
-  const fetchReports = async (payload: ReportPayload) => {
+  const loadPage = useCallback(async (payload: ReportPayload) => {
     try {
       setLoading(true);
-
-      const data = await filterReport(payload);
-
+      const data = await fetchReportData(payload);
       setRows(data?.content ?? []);
       setTotalRows(data?.totalElements ?? 0);
-
-      // setLastFilter(payload);
-      setIsFiltered(false);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load reports:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const filterReports = async (payload: ReportPayload) => {
-    try {
-      setLoading(true);
-      const data = await filterReport(payload);
-      setRows(data?.content ?? []);
-      setTotalRows(data?.totalElements ?? 0);
+  // Called when pagination changes — reuses active filters, updates page/size only
+  const fetchPage = useCallback(
+    (pageNo: number, pageSize: number) => {
+      loadPage({ ...activeFilters.current, pageNo, pageSize });
+    },
+    [loadPage],
+  );
+
+  // Called when filters are applied — resets to page 0
+  const applyFilters = useCallback(
+    (payload: ReportPayload) => {
+      const { pageNo, pageSize, ...filters } = payload;
+      activeFilters.current = filters;
       setIsFiltered(true);
-      setLastFilter(payload);
-    } catch (err) {
-      console.error("Filter failed", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      loadPage({ ...filters, pageNo: 0, pageSize: pageSize ?? 10 });
+    },
+    [loadPage],
+  );
 
-  const exportReport = async () => {
+  // Clears filters, resets to default
+  const clearFilters = useCallback(() => {
+    activeFilters.current = {
+      sortBy: DEFAULT_PAYLOAD.sortBy,
+      sortDir: DEFAULT_PAYLOAD.sortDir,
+    };
+    setIsFiltered(false);
+    loadPage(DEFAULT_PAYLOAD);
+  }, [loadPage]);
+
+  const exportReport = useCallback(async () => {
     try {
-      const blob = await exportReports(lastFilter ?? defaultPayload);
+      // Export with active filters but request all rows (large pageSize)
+      const blob = await exportReports({
+        ...activeFilters.current,
+        pageNo: 0,
+        pageSize: 10000,
+      });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = "meeting-report.csv";
-
       document.body.appendChild(link);
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
     } catch (err) {
-      console.error("Export failed", err);
+      console.error("Export failed:", err);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    const load = async () => {
+    const init = async () => {
       try {
         const [userRes, roomRes, typeRes] = await Promise.all([
-          fetchUser(),
-          fetchRoom(),
-
+          fetchUsers(),
+          fetchRooms(),
           getAllMeetingType(),
+          loadPage(DEFAULT_PAYLOAD),
         ]);
 
-        // setUsers(userRes.data.content?.map((u: any) => u.lastname) ?? []);
-        // console.log("roomRes", roomRes);
         setRooms(roomRes.map((r: any) => r.roomName));
         setMeetingTypes(
           typeRes.data?.map((m: any) => ({ id: m.id, label: m.name })) ?? [],
         );
-        setLoading(false);
       } catch (err) {
-        console.error("Failed to load filter options", err);
+        console.error("Failed to initialize report page:", err);
       }
     };
 
-    fetchReports(defaultPayload);
-    load();
+    init();
   }, []);
 
   return {
     columns: COLUMNS,
     rows,
-    isFiltered,
-    meetingTypes,
-    // users,
     rooms,
-    fetchReports,
-    filterReports,
-    exportReport,
+    meetingTypes,
     loading,
-
     totalRows,
-    lastFilter,
+    isFiltered,
+
+    fetchPage, // for pagination changes
+    applyFilters, // for filter drawer apply
+    clearFilters, // for clear button
+    exportReport,
   };
 }

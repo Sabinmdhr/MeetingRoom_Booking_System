@@ -14,8 +14,8 @@ function DashboardCard({ cards }: any) {
         <Typography variant="h1">Dashboard Overview</Typography>
         {profile && (
           <Typography variant="subtitle1">
-            Welcome back {profile?.lastname}! Here's what's happening with your
-            meeting rooms.
+            Welcome back <strong>{profile?.firstname}!</strong> Here's what's
+            happening with your meeting rooms.
           </Typography>
         )}
       </div>
@@ -23,6 +23,7 @@ function DashboardCard({ cards }: any) {
       <Box className="dashboard__grid">
         {cards.map((card: any, index: any) => (
           <Card
+            onClick={card.onClick}
             key={card.id}
             className={`dashboard__card dashboard__card--${index}`}
           >
