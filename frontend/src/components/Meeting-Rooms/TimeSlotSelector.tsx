@@ -384,7 +384,7 @@ export const TimeSlotSelector = ({
           )}
           {/* The Slot */}
 
-            <div
+          {startTime != 0 &&  <div
               className="slot"
               style={{
                 top: getYFromMinutes(startTime),
@@ -404,7 +404,6 @@ export const TimeSlotSelector = ({
                 <div className="dot" />
               </div>
 
-              {
                 <div className="content">
                   <div className="timeDisplayWrapper">
                     <div className="timeBox">
@@ -417,7 +416,6 @@ export const TimeSlotSelector = ({
                     Duration: {formatDuration(startTime, endTime)}
                   </div>
                 </div>
-              }
 
               <div
                 className="slotHandle bottom"
@@ -425,8 +423,8 @@ export const TimeSlotSelector = ({
               >
                 <div className="dot"></div>
               </div>
-            </div>
-          
+            </div>}
+
         </div>
       </div>
 
@@ -453,7 +451,7 @@ export const TimeSlotSelector = ({
             }}
           />
         </div>
-      ) : (
+      ) : ( startTime != 0 &&
         <div className="footer">
           <div className="timeDuration">
             <div className="timeDisplayWrapper">

@@ -3,6 +3,10 @@
   align-items: center;
   flex-wrap: wrap;
   justify-content: space-between;
+  &.empty {
+    justify-content: center;
+    margin-top: 10px;
+  }
 }
 
 .groupCard {

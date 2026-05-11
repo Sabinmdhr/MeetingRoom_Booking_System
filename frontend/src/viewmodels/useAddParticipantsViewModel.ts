@@ -32,7 +32,7 @@ export const useAddParticipantsViewModel = () => {
     departmentId: 1,
     phoneNo: "",
     status: "",
-    position: "Senior Engineer",
+    position: "",
   };
 
   // const {isEditOpen , selectedParticipant} = useAppSelector((state) => state.participants)

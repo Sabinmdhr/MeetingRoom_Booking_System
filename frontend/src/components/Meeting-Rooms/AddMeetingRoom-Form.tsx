@@ -19,6 +19,7 @@ import { useMeetingCardViewModel } from "../../viewmodels/useMeeting_roomCardVie
 import {
   addMeetingResources,
   EditMeetingRoom,
+  getMeetingRoomResources,
 } from "../../services/Meetinf_room.service";
 
 type props = {
@@ -47,6 +48,7 @@ export const AddMeetingRoomForm = ({
     setRoomFormState,
     refresh,
     fetchMeeting,
+    fetchMeetingRoomResources,
     roomResources,
     setAddResourceMode,
     addResourceMode,
@@ -64,6 +66,9 @@ export const AddMeetingRoomForm = ({
   // }, [refresh]);
 
   const [meetingTypeName, setMeetingTypeName] = useState("");
+  useEffect(() => {
+    fetchMeetingRoomResources();
+  }, [meetingTypeName]);
   useEffect(() => {
     if (roomFormState.mode === "edit" && roomFormState.room) {
       setAddRoomFormData({
@@ -102,7 +107,7 @@ export const AddMeetingRoomForm = ({
         // onClose={() => setOpen((prev) => (prev = !prev))}
         slotProps={{ paper: { className: "Form__Container" } }}
       >
-        <DialogTitle className="title">Create a New Room</DialogTitle>
+        <DialogTitle className="title">{roomFormState.mode === "add" ? "Add a New Room": "Edit Room"}</DialogTitle>
         <DialogContent>
           <FormControl fullWidth>
             {/* TextFields */}
@@ -160,23 +165,30 @@ export const AddMeetingRoomForm = ({
               )}
               {addResourceMode && (
                 <div className="add-resource-section">
-                    <label htmlFor="resourceName">
-                      Write Name for Resource
-                    </label>
+                  <label htmlFor="resourceName">Write Name for Resource</label>
                   <div className="add-resource-form">
                     <TextField
                       id="resourceName"
+                      fullWidth
                       placeholder="Resource Name"
                       className="customTextField"
                       value={meetingTypeName}
                       onChange={(e) => setMeetingTypeName(e.target.value)}
                     />
                     <MyButton
-                      text="Submit"
+                      text="Cancel"
                       customVariant="ghost"
+                      onClick={() => {
+setAddResourceMode(false);
+                      }}
+                    />{" "}
+                    <MyButton
+                      text="Submit"
+                      customVariant="dark"
                       onClick={() => {
                         addMeetingResources(meetingTypeName);
                         setMeetingTypeName("");
+                        getMeetingRoomResources();
                       }}
                     />
                   </div>
@@ -187,7 +199,7 @@ export const AddMeetingRoomForm = ({
         </DialogContent>
         <DialogActions>
           <MyButton
-            customVariant="ghost"
+            customVariant="dark"
             text={roomFormState.mode == "edit" ? "Edit" : "Add"}
             onClick={async () => {
               const success = await (roomFormState.mode == "edit" &&
