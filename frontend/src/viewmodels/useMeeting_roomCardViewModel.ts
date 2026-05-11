@@ -106,6 +106,7 @@ export const useMeetingCardViewModel = () => {
       return true;
     } catch (error) {
       console.log(error);
+      toast.error("Failed to create room");
     }
   };
 

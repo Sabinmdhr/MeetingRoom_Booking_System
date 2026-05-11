@@ -6,6 +6,7 @@ import {
   clearSelectedParticipants,
 } from "../redux/ParticipantsSlice";
 import { addUser, editUser } from "../services/participants.service";
+import { toast } from "react-toastify";
 
 // import type { departmentList } from "../models/departmentList.model";
 import {
@@ -138,14 +139,17 @@ export const useAddParticipantsViewModel = () => {
       if (mode === "edit" && id) {
         console.log("EDITING USER"); // 👈 ADD
         await editUser(id, participantFormData);
+        toast.success("Participant updated successfully");
       } else {
         console.log("ADDING USER"); // 👈 ADD
         await addUser(participantFormData);
+        toast.success("Participant added successfully");
       }
 
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast.error("An error occurred");
       return false;
     }
   };

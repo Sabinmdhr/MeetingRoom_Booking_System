@@ -6,11 +6,11 @@
   user-select: none;
   font-family: inherit;
   overflow-y: auto;
-  height: 100vh;
+  height: 520px;
 }
 
 .header {
-  padding: 16px;
+  padding: 8px 18px;
   border-bottom: 1px solid var(--colorNeutral200);
   .timeslot-nav {
     display: flex;
@@ -98,14 +98,17 @@
     height: 10px;
     cursor: ns-resize;
     display: flex;
-    justify-content: center;
     align-items: center;
 
     &.top {
+    justify-content: start;
       top: -5px;
+      left: 10px;
     }
 
     &.bottom {
+      right: 10px ;
+    justify-content: end;
       bottom: -5px;
     }
 
@@ -121,6 +124,10 @@
 }
 
 .footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background:  rgba(36, 9, 135, 0.37);
   padding: 16px;
   border-top: 1px solid var(--colorNeutral200);
 }
@@ -149,7 +156,7 @@
 }
 .content {
   display: flex;
-  gap: 8px;
+  gap: 80px;
   justify-content: space-between;
   // font-size: 10px;
   align-items: center;
@@ -167,7 +174,7 @@
 }
 
 .durationDisplay {
-  color: var(--primary200);
+  color: var(--primary500);
   font-weight: 500;
   font-size: 14px;
 }

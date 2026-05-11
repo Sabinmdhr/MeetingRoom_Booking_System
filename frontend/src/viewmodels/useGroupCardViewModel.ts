@@ -4,6 +4,7 @@ import type {
 } from "../models/groupCard.model";
 import { addGroupCard, fetchGroupCards } from "../services/groupCard.services";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export const useGroupCardViewModel = () => {
   const [group, setGroup] = useState<groupCardResponse[]>([]);
@@ -64,12 +65,17 @@ export const useGroupCardViewModel = () => {
   };
 
   const handleSubmitGroup = async () => {
-    await addGroupCard(groupFormData);
-    setGroupFormData(initialGroupFormData);
-    // console.log(groupFormData);
-    await fetchData();
-
-    return true;
+    try {
+      await addGroupCard(groupFormData);
+      setGroupFormData(initialGroupFormData);
+      await fetchData();
+      toast.success("Group created successfully!");
+      return true;
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to create group");
+      return false;
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

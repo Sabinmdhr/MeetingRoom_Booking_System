@@ -25,3 +25,7 @@ export interface Columns {
   id: string;
   label: string;
 }
+export interface fetchUsersType  {
+  pageNo: number;
+  pageSize: number;
+};

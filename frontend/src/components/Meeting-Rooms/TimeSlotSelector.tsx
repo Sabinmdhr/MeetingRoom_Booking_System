@@ -18,7 +18,8 @@ import { set } from "zod";
 import { current } from "@reduxjs/toolkit";
 import { useAuth } from "../../hooks/useAuth";
 import { permissions } from "../../utils/permissions";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface TimeSlotSelectorProps {
   onSave?: (slot: {
@@ -29,6 +30,7 @@ interface TimeSlotSelectorProps {
   initialSlot?: { startTime: string; endTime: string };
   id?: number;
   calendarView: boolean;
+  DialogView?: boolean;
 }
 
 const PIXELS_PER_HOUR = 120;
@@ -48,9 +50,19 @@ type InteractionMode =
 export const TimeSlotSelector = ({
   onSave,
   calendarView,
+  DialogView,
 }: TimeSlotSelectorProps) => {
-  const [startTime, setStartTime] = useState<number>(0);
-  const [endTime, setEndTime] = useState<number>(0);
+  const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
+  const [startTime, setStartTime] = useState<number>(
+    bookingRoomFormData?.startTime
+      ? timeStringToMinutes(bookingRoomFormData.startTime)
+      : 0,
+  );
+  const [endTime, setEndTime] = useState<number>(
+    bookingRoomFormData?.endTime
+      ? timeStringToMinutes(bookingRoomFormData.endTime)
+      : 0,
+  );
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
   const [interaction, setInteraction] = useState<{
@@ -66,17 +78,23 @@ export const TimeSlotSelector = ({
   });
 
   const timelineRef = useRef<HTMLDivElement>(null);
-  const { bookedSlots, handleGetBookedRoomByDay, bookedColor, PastimeColor } =
-    useBookingRoomViewModel();
+  const {
+    bookedSlots,
+    handleGetBookedRoomByDay,
+    updateBookingTimeAndDate,
+    bookedColor,
+    PastimeColor,
+  } = useBookingRoomViewModel();
 
-const isOverlapping = (start: number, end: number) => {
-  return bookedSlots.some((slot) => {
-    const slotStart = timeStringToMinutes(slot.start);
-    const slotEnd = timeStringToMinutes(slot.end);
+  const navigate = useNavigate();
+  const isOverlapping = (start: number, end: number) => {
+    return bookedSlots.some((slot) => {
+      const slotStart = timeStringToMinutes(slot.start);
+      const slotEnd = timeStringToMinutes(slot.end);
 
-    return start < slotEnd && end > slotStart;
-  });
-};
+      return start < slotEnd && end > slotStart;
+    });
+  };
   const {
     formattedDate,
     isToday,
@@ -86,10 +104,10 @@ const isOverlapping = (start: number, end: number) => {
     isPastDay,
   } = useRoomTimeslotViewModel();
 
-  useEffect(() => {
-    setStartTime(0);
-    setEndTime(0);
-  }, [backendFormattedDate]);
+  // useEffect(() => {
+  //   setStartTime(0);
+  //   setEndTime(0);
+  // }, [backendFormattedDate]);
   const { roomId } = useAppSelector((state) => state.bookingRoom);
   useEffect(() => {
     handleGetBookedRoomByDay(backendFormattedDate, roomId);
@@ -119,9 +137,9 @@ const isOverlapping = (start: number, end: number) => {
       startDate: backendFormattedDate,
     });
     // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
-    console.log(minutesToTimeString(startTime));
-    console.log(bookedSlots, "bookedslots");
-    console.log(minutesToTimeString(endTime));
+    // console.log(minutesToTimeString(startTime));
+    // console.log(bookedSlots, "bookedslots");
+    // console.log(minutesToTimeString(endTime));
   }, [startTime, endTime, onSave]);
 
   const getYFromMinutes = (minutes: number) =>
@@ -164,14 +182,8 @@ const isOverlapping = (start: number, end: number) => {
     const newEnd = clamp(newStart + 10, START_MINUTES + 10, END_MINUTES);
     if (isPastDay) return;
     if (isToday && newStart < currentMinutes) return;
-    if (
-      isOverlapping((newStart), (newEnd))
-    )
-      return;
-    if (
-      isOverlapping((newStart), (newEnd))
-    )
-      return;
+    if (isOverlapping(newStart, newEnd)) return;
+    if (isOverlapping(newStart, newEnd)) return;
 
     setStartTime(newStart);
     setEndTime(newEnd);
@@ -188,7 +200,7 @@ const isOverlapping = (start: number, end: number) => {
         if (interaction.mode === "drag") {
           const duration = interaction.initialEnd - interaction.initialStart;
           let newStart = interaction.initialStart + snappedDelta;
-
+          newStart = clamp(newStart, START_MINUTES, END_MINUTES - duration);
           // Keep within bounds
           if (newStart < START_MINUTES) newStart = START_MINUTES;
           if (newStart + duration > END_MINUTES)
@@ -196,43 +208,26 @@ const isOverlapping = (start: number, end: number) => {
           if (isPastDay) return;
           if (isToday && newStart < currentMinutes) return;
 
-          if (
-            isOverlapping(
-              (newStart ),
-              (newStart + duration),
-            )
-          )
-            return;
+          if (isOverlapping(newStart, newStart + duration)) return;
 
           setStartTime(newStart);
           setEndTime(newStart + duration);
         } else if (interaction.mode === "resize-top") {
           let newStart = interaction.initialStart + snappedDelta;
-          if (newStart < START_MINUTES) newStart = START_MINUTES;
-          if (newStart > endTime - 10) newStart = endTime - 10; // Min 10 min duration
+          newStart = clamp(newStart, START_MINUTES, endTime - 10);
+          // if (newStart < START_MINUTES) newStart = START_MINUTES;
+          // if (newStart > endTime - 10) newStart = endTime - 10; // Min 10 min duration
           if (isPastDay) return;
           if (isToday && newStart < currentMinutes) return;
 
-          if (
-            isOverlapping(
-              (newStart ),
-              (endTime),
-            )
-          )
-            return;
+          if (isOverlapping(newStart, endTime)) return;
           setStartTime(newStart);
         } else if (interaction.mode === "resize-bottom") {
           let newEnd = interaction.initialEnd + snappedDelta;
           if (newEnd > END_MINUTES) newEnd = END_MINUTES;
           if (newEnd < startTime + 10) newEnd = startTime + 10; // Min 10 min duration
 
-          if (
-            isOverlapping(
-              (startTime),
-              (newEnd),
-            )
-          )
-            return;
+          if (isOverlapping(startTime, newEnd)) return;
           setEndTime(newEnd);
         }
       }
@@ -388,12 +383,12 @@ const isOverlapping = (start: number, end: number) => {
             ></div>
           )}
           {/* The Slot */}
-          {startTime != 0 && (
+
             <div
               className="slot"
               style={{
                 top: getYFromMinutes(startTime),
-                height: (endTime - startTime) * MINUTE_HEIGHT,
+                height: Math.max((endTime - startTime) * MINUTE_HEIGHT, 10),
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -409,13 +404,20 @@ const isOverlapping = (start: number, end: number) => {
                 <div className="dot" />
               </div>
 
-              {mannualScroll && (
+              {
                 <div className="content">
-                  <div className="timeBox">{formatDisplayTime(startTime)}</div>
-                  <div className="separator">-</div>
-                  <div className="timeBox">{formatDisplayTime(endTime)}</div>
+                  <div className="timeDisplayWrapper">
+                    <div className="timeBox">
+                      {formatDisplayTime(startTime)}
+                    </div>
+                    <div className="separator">-</div>
+                    <div className="timeBox">{formatDisplayTime(endTime)}</div>
+                  </div>
+                  <div className="durationDisplay">
+                    Duration: {formatDuration(startTime, endTime)}
+                  </div>
                 </div>
-              )}
+              }
 
               <div
                 className="slotHandle bottom"
@@ -424,22 +426,47 @@ const isOverlapping = (start: number, end: number) => {
                 <div className="dot"></div>
               </div>
             </div>
-          )}
+          
         </div>
       </div>
 
-      <div className="footer">
-        <div className="timeDuration">
-          <div className="timeDisplayWrapper">
-            <div className="timeBox">{formatDisplayTime(startTime)}</div>
-            <div className="separator">-</div>
-            <div className="timeBox">{formatDisplayTime(endTime)}</div>
-          </div>
-          <div className="durationDisplay">
-            Duration: {formatDuration(startTime, endTime)}
+      {DialogView ? (
+        <div className="bookRoomActions">
+          <MyButton
+            variant="contained"
+            text="Cancel"
+            customVariant="ghost"
+            onClick={() => {
+              navigate("/meeting-rooms");
+            }}
+          />
+          <MyButton
+            variant="contained"
+            text="Proceed to Booking"
+            customVariant="dark"
+            onClick={() => {
+              updateBookingTimeAndDate({
+                startTime: minutesToTimeString(startTime),
+                endTime: minutesToTimeString(endTime),
+                startDate: backendFormattedDate,
+              });
+            }}
+          />
+        </div>
+      ) : (
+        <div className="footer">
+          <div className="timeDuration">
+            <div className="timeDisplayWrapper">
+              <div className="timeBox">{formatDisplayTime(startTime)}</div>
+              <div className="separator">-</div>
+              <div className="timeBox">{formatDisplayTime(endTime)}</div>
+            </div>
+            <div className="durationDisplay">
+              Duration: {formatDuration(startTime, endTime)}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

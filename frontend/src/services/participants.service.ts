@@ -2,6 +2,7 @@
 import api from "../api/api";
 import type {
   Columns,
+  fetchUsersType,
   ParticipantResponse,
   ParticipantsRequest,
 } from "../models/participants.model";
@@ -76,12 +77,12 @@ export const DemoColumns = (): Columns[] => {
   ];
 };
 
-export const getAllUser = async () => {
+export const getAllUser = async (data: fetchUsersType) => {
   // const api = axiosInstance({});
 
-  const response = await api.get("/api/v1/user/get-all");
+  const response = await api.post("/api/v1/users/get-all", data);
 
-  return response.data.data.content;
+  return response.data.data;
 };
 
 export const addUser = async (data: ParticipantsRequest) => {

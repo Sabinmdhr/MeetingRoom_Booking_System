@@ -3,27 +3,49 @@ import type {
   Columns,
   ParticipantResponse,
   ParticipantsRequest,
+  fetchUsersType,
 } from "../models/participants.model";
 import { DemoColumns, getAllUser } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setParticipants,
-} from "../redux/ParticipantsSlice";
+import { setParticipants } from "../redux/ParticipantsSlice";
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchUserReqData, setFetchUSerReqData] = useState<fetchUsersType>({
+    pageNo: 0,
+    pageSize: 10,
+  });
+  const [totalElements, setTotalElements] = useState<number>(0);
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setFetchUSerReqData((prev) => ({ ...prev, pageNo: newPage }));
+  };
 
-  const fetchUsers = async () => {
-    const data = await getAllUser();
-    setUsers(data);
-    console.log(data);
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFetchUSerReqData((prev) => ({
+      ...prev,
+      pageNo: 0,
+      pageSize: parseInt(event.target.value, 10),
+    }));
+  };
+  const fetchUsers = async (data: fetchUsersType) => {
+    const res = await getAllUser(data);
+    setUsers(res.content);
+    setTotalElements(res.totalElements);
     setLoading(false);
   };
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    console.log("Updated Req:", fetchUserReqData);
+  }, [fetchUserReqData]);
 
+  useEffect(() => {
+    fetchUsers(fetchUserReqData);
+  }, [fetchUserReqData.pageNo, fetchUserReqData.pageSize]);
   const [participantsFormState, setParticipantsFormState] = useState({
     open: false,
     mode: "edit" as "edit" | "add",
@@ -46,7 +68,7 @@ export const useparticipantsViewModel = () => {
       ...prev,
       open: false,
     }));
-    await fetchUsers();
+    await fetchUsers(fetchUserReqData);
   };
 
   const [participantType, setParticipantType] = useState<
@@ -101,12 +123,16 @@ export const useparticipantsViewModel = () => {
   };
 
   return {
+    handleChangePage,
+    handleChangeRowsPerPage,
+    totalElements,
     participantType,
     handleInternalClick,
     handleExternalClick,
     tabValue,
     participants,
     setParticipants,
+    fetchUsers,
     isEditOpen,
     // handleClose,
     // handleEdit,
@@ -134,5 +160,8 @@ export const useparticipantsViewModel = () => {
     handleParticipantsFormClose,
 
     loading,
+
+    fetchUserReqData,
+    setFetchUSerReqData,
   };
 };

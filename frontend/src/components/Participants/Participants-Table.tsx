@@ -9,6 +9,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
@@ -21,7 +22,7 @@ import type {
   ParticipantsRequest,
 } from "../../models/participants.model";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { permissions } from "../../utils/permissions";
 import { useAuth } from "../../hooks/useAuth";
 import { Spinner } from "../ui/Spinner";
@@ -29,7 +30,7 @@ import { Spinner } from "../ui/Spinner";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 // import { useAddParticipantsViewModel } from "../../viewmodels/useAddParticipantsViewModel";
 type props = {
-  users: ParticipantResponse[];
+  // users: ParticipantResponse[];
   // participantsFormState: {
   //   open: boolean;
   //   mode: "add" | "edit";
@@ -42,12 +43,21 @@ type props = {
   handleParticipantsFormClose: () => void;
 };
 export const ParticipantsTable = ({
-  users,
+  // users,
   handleParticipantFormOpen,
 }: props) => {
   // const { openAddParticipantForm } = useAddParticipantsViewModel();
 
-  const { columns, loading } = useparticipantsViewModel();
+  const {
+    columns,
+    loading,
+    fetchUserReqData,
+    handleChangePage,
+    fetchUsers,
+    handleChangeRowsPerPage,
+    totalElements,
+    users,
+  } = useparticipantsViewModel();
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
 
@@ -75,134 +85,143 @@ export const ParticipantsTable = ({
       participant: null,
     });
   };
+    useEffect(() => {
+      fetchUsers(fetchUserReqData);
+    }, []);
+
+
   // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
-    <TableContainer
-      component={Paper}
-      className="TableContainer"
-    >
-      <Table>
-        <TableHead className="TableHead">
-          <TableRow>
-            <TableCell>S.N</TableCell>
-            {columns.map((col) => (
-              <TableCell key={col.id}>{col.label}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        {loading && <Spinner />}
-
-        <TableBody>
-          {users.map((participant: ParticipantResponse, index: number) => (
-            <TableRow
-              key={participant.id}
-              hover
-            >
-              <TableCell width="5%">{index + 1}.</TableCell>
-
-              {columns.map((col) => {
-                switch (col.id) {
-                  case "Name":
-                    return (
-                      <TableCell key={col.id}>
-                        <div className="name-Col">
-                          <Typography className="fullname">
-                            {participant.firstname} {participant.lastname}
-                          </Typography>
-                          <Typography className="role">
-                            {participant.position}
-                          </Typography>
-                        </div>
-                      </TableCell>
-                    );
-
-                  case "department":
-                    return (
-                      <TableCell key={col.id}>
-                        <Chip
-                          className="department-chip"
-                          label={participant.department}
-                        />
-                      </TableCell>
-                    );
-
-                  case "contact":
-                    return (
-                      <TableCell key={col.id}>
-                        <div className="Contact">
-                          <Typography className="email">
-                            <Mail size={12} /> {participant.email}
-                          </Typography>
-                          <Typography
-                            className="number"
-                            variant="body2"
-                            color="text.secondary"
-                          >
-                            <Phone size={12} /> {participant.phoneNo}
-                          </Typography>
-                        </div>
-                      </TableCell>
-                    );
-
-                  case "actions":
-                    return perms?.canManageUsers ? (
-                      <TableCell key={col.id}>
-                        <IconButton
-                          onClick={(e) => {
-                            handleMenuOpen(e, participant);
-                          }}
-                        >
-                          <EllipsisVertical size={16} />
-                        </IconButton>
-                        <Menu
-                          anchorEl={menuState.anchorEl}
-                          open={Boolean(menuState.anchorEl)}
-                          onClose={handleMenuClose}
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
-                          }}
-                          transformOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                          }}
-                        >
-                          <MenuItem
-                            className="menu-btn"
-                            onClick={() => {
-                              if (menuState.participant) {
-                                handleParticipantFormOpen(
-                                  "edit",
-                                  menuState.participant,
-                                );
-                              }
-                              handleMenuClose();
-                            }}
-                          >
-                            <Pen size={18} /> Edit
-                          </MenuItem>
-                          <MenuItem
-                            className="menu-btn"
-                            onClick={() => {
-                              // handleDelete(participant);
-                              handleMenuClose();
-                            }}
-                          >
-                            <Trash2 size={18} />
-                            <Typography color="red"> Delete</Typography>
-                          </MenuItem>
-                        </Menu>
-                      </TableCell>
-                    ) : null;
-
-                  default:
-                    return <TableCell key={col.id}>-</TableCell>;
-                }
-              })}
+    <div>
+      <TableContainer component={Paper} className="TableContainer">
+        <Table>
+          <TableHead className="TableHead">
+            <TableRow>
+              <TableCell>S.N</TableCell>
+              {columns.map((col) => (
+                <TableCell key={col.id}>{col.label}</TableCell>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          {loading && <Spinner />}
+
+          <TableBody>
+            {users.map((participant: ParticipantResponse, index: number) => (
+              <TableRow key={participant.id} hover>
+                <TableCell width="5%">{index + 1}.</TableCell>
+
+                {columns.map((col) => {
+                  switch (col.id) {
+                    case "Name":
+                      return (
+                        <TableCell key={col.id}>
+                          <div className="name-Col">
+                            <Typography className="fullname">
+                              {participant.firstname} {participant.lastname}
+                            </Typography>
+                            <Typography className="role">
+                              {participant.position}
+                            </Typography>
+                          </div>
+                        </TableCell>
+                      );
+
+                    case "department":
+                      return (
+                        <TableCell key={col.id}>
+                          <Chip
+                            className="department-chip"
+                            label={participant.department}
+                          />
+                        </TableCell>
+                      );
+
+                    case "contact":
+                      return (
+                        <TableCell key={col.id}>
+                          <div className="Contact">
+                            <Typography className="email">
+                              <Mail size={12} /> {participant.email}
+                            </Typography>
+                            <Typography
+                              className="number"
+                              variant="body2"
+                              color="text.secondary"
+                            >
+                              <Phone size={12} /> {participant.phoneNo}
+                            </Typography>
+                          </div>
+                        </TableCell>
+                      );
+
+                    case "actions":
+                      return perms?.canManageUsers ? (
+                        <TableCell key={col.id}>
+                          <IconButton
+                            onClick={(e) => {
+                              handleMenuOpen(e, participant);
+                            }}
+                          >
+                            <EllipsisVertical size={16} />
+                          </IconButton>
+                          <Menu
+                            anchorEl={menuState.anchorEl}
+                            open={Boolean(menuState.anchorEl)}
+                            onClose={handleMenuClose}
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "right",
+                            }}
+                          >
+                            <MenuItem
+                              className="menu-btn"
+                              onClick={() => {
+                                if (menuState.participant) {
+                                  handleParticipantFormOpen(
+                                    "edit",
+                                    menuState.participant,
+                                  );
+                                }
+                                handleMenuClose();
+                              }}
+                            >
+                              <Pen size={18} /> Edit
+                            </MenuItem>
+                            <MenuItem
+                              className="menu-btn"
+                              onClick={() => {
+                                // handleDelete(participant);
+                                handleMenuClose();
+                              }}
+                            >
+                              <Trash2 size={18} />
+                              <Typography color="red"> Delete</Typography>
+                            </MenuItem>
+                          </Menu>
+                        </TableCell>
+                      ) : null;
+
+                    default:
+                      return <TableCell key={col.id}>-</TableCell>;
+                  }
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component={Paper}
+        count={totalElements}
+        page={fetchUserReqData.pageNo}
+        onPageChange={handleChangePage}
+        rowsPerPage={fetchUserReqData.pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      ></TablePagination>
+    </div>
   );
 };
