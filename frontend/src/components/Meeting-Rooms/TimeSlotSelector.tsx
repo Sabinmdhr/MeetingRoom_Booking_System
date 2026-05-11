@@ -29,7 +29,8 @@ interface TimeSlotSelectorProps {
   }) => void;
   initialSlot?: { startTime: string; endTime: string };
   id?: number;
-  calendarView: boolean;
+  calendarView?: boolean;
+  setCalendarView?: (val: boolean) => void;
   DialogView?: boolean;
   editingId?: number;
 }
@@ -53,9 +54,24 @@ export const TimeSlotSelector = ({
   calendarView,
   DialogView,
   editingId,
+  setCalendarView,
 }: TimeSlotSelectorProps) => {
+  const {
+    formattedDate,
+    changeDate,
+    jumpToToday,
+    backendFormattedDate,
+    isPastDay,
+    currentDate,
+    getLocalDateString,
+  } = useRoomTimeslotViewModel();
+
+  const { roomId, startDate } = useAppSelector((state) => state.bookingRoom);
+  const selectedDate = startDate ? new Date(startDate) : currentDate;
+
+  const isToday = selectedDate.toDateString() === new Date().toDateString();
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
-  const [startTime, setStartTime] = useState<number | null >(
+  const [startTime, setStartTime] = useState<number | null>(
     bookingRoomFormData?.startTime
       ? timeStringToMinutes(bookingRoomFormData.startTime)
       : null,
@@ -88,35 +104,30 @@ export const TimeSlotSelector = ({
     PastimeColor,
   } = useBookingRoomViewModel();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
   const isOverlapping = (start: number, end: number) => {
     return bookedSlots.some((slot) => {
-      if(slot.id === editingId) return false;
+      if (slot.id === editingId) return false;
       const slotStart = timeStringToMinutes(slot.start);
       const slotEnd = timeStringToMinutes(slot.end);
 
       return start < slotEnd && end > slotStart;
     });
   };
-  const {
-    formattedDate,
-    isToday,
-    changeDate,
-    jumpToToday,
-    backendFormattedDate,
-    isPastDay,
-  } = useRoomTimeslotViewModel();
-
   // useEffect(() => {
   //   setStartTime(0);
   //   setEndTime(0);
   // }, [backendFormattedDate]);
-  const { roomId } = useAppSelector((state) => state.bookingRoom);
+
   useEffect(() => {
     handleGetBookedRoomByDay(backendFormattedDate, roomId);
     console.log("Room", roomId);
   }, [backendFormattedDate]);
-
+  useEffect(() => {
+    handleGetBookedRoomByDay(getLocalDateString(selectedDate), roomId);
+    console.log("Room", roomId);
+  }, [selectedDate]);
   const getCurrentMinutes = () => {
     const now = new Date();
     return now.getHours() * 60 + now.getMinutes();
@@ -185,7 +196,6 @@ export const TimeSlotSelector = ({
     const newEnd = clamp(newStart + 10, START_MINUTES + 10, END_MINUTES);
     if (isPastDay) return;
     if (isToday && newStart < currentMinutes) return;
-    if (isOverlapping(newStart, newEnd)) return;
     if (isOverlapping(newStart, newEnd)) return;
 
     setStartTime(newStart);
@@ -320,7 +330,7 @@ export const TimeSlotSelector = ({
 
                 backgroundColor: bookedColor,
                 border: `1px solid ${bookedColor}`,
-                ...(calendarView && {
+                ...(calendarView && !DialogView && {
                   backgroundColor: `rgb${slot.color}`,
                   border: `1px solid rgb${slot.color}`,
                   fontSize: 10,
@@ -337,7 +347,7 @@ export const TimeSlotSelector = ({
                 cursor: "not-allowed",
               }}
             >
-              {calendarView ? (
+              {calendarView ? !DialogView && (
                 <div
                   style={{
                     display: "flex",
@@ -387,13 +397,14 @@ export const TimeSlotSelector = ({
           )}
           {/* The Slot */}
 
-          {startTime !== null && endTime !== null && <div
+          {startTime !== null && endTime !== null && (
+            <div
               className="slot"
               style={{
-                top: getYFromMinutes(startTime ),
-                height: Math.max(((endTime ) - (startTime )) * MINUTE_HEIGHT, 10),
+                top: getYFromMinutes(startTime),
+                height: Math.max((endTime - startTime) * MINUTE_HEIGHT, 10),
                 display: "flex",
-                zIndex:999999,
+                zIndex: 999999,
                 // opacity: startTime ===0 ? 0: 1
                 justifyContent: "center",
                 alignItems: "center",
@@ -409,18 +420,20 @@ export const TimeSlotSelector = ({
                 <div className="dot" />
               </div>
 
-                <div className="content">
-                  <div className="timeDisplayWrapper">
-                    <div className="timeBox">
-                      {formatDisplayTime(startTime ?? 0)}
-                    </div>
-                    <div className="separator">-</div>
-                    <div className="timeBox">{formatDisplayTime(endTime ?? 0)}</div>
+              <div className="content">
+                <div className="timeDisplayWrapper">
+                  <div className="timeBox">
+                    {formatDisplayTime(startTime ?? 0)}
                   </div>
-                  <div className="durationDisplay">
-                    Duration: {formatDuration(startTime ?? 0, endTime ?? 0)}
+                  <div className="separator">-</div>
+                  <div className="timeBox">
+                    {formatDisplayTime(endTime ?? 0)}
                   </div>
                 </div>
+                <div className="durationDisplay">
+                  Duration: {formatDuration(startTime ?? 0, endTime ?? 0)}
+                </div>
+              </div>
 
               <div
                 className="slotHandle bottom"
@@ -428,8 +441,8 @@ export const TimeSlotSelector = ({
               >
                 <div className="dot"></div>
               </div>
-            </div>}
-
+            </div>
+          )}
         </div>
       </div>
 
@@ -440,7 +453,8 @@ export const TimeSlotSelector = ({
             text="Cancel"
             customVariant="ghost"
             onClick={() => {
-              navigate("/meeting-rooms");
+              setCalendarView?.(false);
+              // navigate(-1);
             }}
           />
           <MyButton
@@ -453,6 +467,7 @@ export const TimeSlotSelector = ({
                 endTime: minutesToTimeString(endTime ?? 0),
                 startDate: backendFormattedDate,
               });
+              setCalendarView?.(false);
             }}
           />
         </div>

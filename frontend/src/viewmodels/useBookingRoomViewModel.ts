@@ -75,7 +75,6 @@ export const useBookingRoomViewModel = () => {
     startDate,
   }: BookingTimeAndDatePeops) => {
     dispatch(updateBookingRoomFormData({ startTime, endTime, startDate }));
-    navigate("/book-room");
   };
 
   const handleBookRoom = async () => {

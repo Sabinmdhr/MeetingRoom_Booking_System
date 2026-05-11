@@ -30,6 +30,7 @@ import { ExternalCard } from "../components/BookingRooms/ExternalCard";
 import { TimeSlotSelector } from "../components/Meeting-Rooms/TimeSlotSelector";
 import { useLocation } from "react-router-dom";
 import type { WeekDays } from "../models/bookRoom.model";
+import MyButton from "../components/ui/Button";
 
 const BookRoom = () => {
   const location = useLocation();
@@ -55,6 +56,15 @@ const BookRoom = () => {
     name: string;
     value: WeekDays;
   };
+  const recurrenceOptions = [
+    { value: "NONE", label: "None" },
+    { value: "DAILY", label: "Daily" },
+    { value: "WEEKLY", label: "Weekly" },
+    { value: "MONTHLY", label: "Monthly" },
+    { value: "YEARLY", label: "Yearly" },
+    { value: "CUSTOM", label: "Custom" },
+    { value: "WEEKDAY", label: "Every weekday (Mon - Fri)" },
+  ];
   const customDays: customDay[] = [
     { name: "Sun", value: "SUNDAY" },
     { name: "Mon", value: "MONDAY" },
@@ -182,7 +192,12 @@ const BookRoom = () => {
                   }}
                 >
                   <DialogContent>
-                    <TimeSlotSelector calendarView={false} DialogView={true} editingId={bookingId}/>
+                    <TimeSlotSelector
+                      calendarView={openTimeSelector}
+                      setCalendarView={setOpenTimeSelector}
+                      DialogView={true}
+                      editingId={bookingId}
+                    />
                   </DialogContent>
                 </Dialog>
 
@@ -243,7 +258,7 @@ const BookRoom = () => {
                     renderValue: (selected) => {
                       if (!selected) {
                         return (
-                          <span style={{ color: "#245789", fontSize: "14px" }}>
+                          <span style={{  fontSize: "14px" }}>
                             Select meeting type
                           </span>
                         );
@@ -269,17 +284,10 @@ const BookRoom = () => {
                   size="small"
                   value={bookinRoomFormData.recurrenceType}
                 >
-                  {[
-                    "NONE",
-                    "Every weekday (Mon - Fri)",
-                    "DAILY",
-                    "WEEKLY",
-                    "MONTHLY",
-                    "YEARLY",
-                    "CUSTOM",
-                  ].map((option) => (
-                    <MenuItem key={option} value={capitalize(option)}>
-                      {option}
+                  {
+                  recurrenceOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -346,8 +354,9 @@ const BookRoom = () => {
                   multiline
                 />
               </div>
-              <Button
+              <MyButton
                 variant="contained"
+                customVariant="dark"
                 onClick={() => {
                   if (submitMode === "editOnce") {
                     // Handle edit logic here
@@ -358,9 +367,12 @@ const BookRoom = () => {
                     handleBookRoom();
                   }
                 }}
-              >
-                Book Room
-              </Button>
+               text={submitMode === "editOnce"
+                  ? "Edit This Meeting"
+                  : submitMode === "editAll"
+                    ? "Edit All Meeting"
+                    : "Book Now"}
+              />
             </div>
             <div>
               {/* {errors.meetingType && (

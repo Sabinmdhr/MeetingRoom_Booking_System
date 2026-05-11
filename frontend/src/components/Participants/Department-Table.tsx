@@ -10,9 +10,8 @@ import {
 import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
 
 export const DepartmentTable = () => {
-
-  const {departmentList} = useDepartmentListViewModel()
-  return (
+  const { departmentList } = useDepartmentListViewModel();
+  return departmentList.length === 0 ? (
     <TableContainer component={Paper} className="TableContainer">
       <Table>
         <TableHead className="TableHead">
@@ -33,5 +32,7 @@ export const DepartmentTable = () => {
         </TableBody>
       </Table>
     </TableContainer>
+  ) : (
+    <div>No Departmet Available</div>
   );
 };

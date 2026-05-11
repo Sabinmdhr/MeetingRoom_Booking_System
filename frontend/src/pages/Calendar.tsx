@@ -294,6 +294,7 @@ export const Calendar = () => {
                     endTime: slot.endTime,
                     startDate: slot.startDate,
                   });
+                  navigate("/book-room")
                 }}
                 disabled={
                   slot.startTime === "00:00" && slot.endTime === "00:00"

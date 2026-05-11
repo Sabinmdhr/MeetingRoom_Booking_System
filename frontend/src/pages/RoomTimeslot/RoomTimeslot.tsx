@@ -10,7 +10,8 @@ import { toast } from "react-toastify";
 
 const RoomTimeslot = () => {
   const { room } = useRoomTimeslotViewModel();
-  const { updateBookingTimeAndDate, setSlot, slot, PastimeColor, bookedColor } = useBookingRoomViewModel();
+  const { updateBookingTimeAndDate, setSlot, slot, PastimeColor, bookedColor } =
+    useBookingRoomViewModel();
 
   const navigate = useNavigate();
   return (
@@ -48,6 +49,7 @@ const RoomTimeslot = () => {
               endTime: slot.endTime,
               startDate: slot.startDate,
             });
+            navigate("/book-room");
           }}
         />
       </div>
