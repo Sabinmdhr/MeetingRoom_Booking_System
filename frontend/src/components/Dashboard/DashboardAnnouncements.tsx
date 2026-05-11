@@ -13,7 +13,6 @@ import "../../assets/scss/components/Dashboard/DashboardAnnouncements.scss";
 import MyButton from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 
-
 const DashboardAnnouncements = () => {
   const navigate = useNavigate();
   const {
@@ -23,7 +22,6 @@ const DashboardAnnouncements = () => {
     fetchPinnedAnnouncements,
     fetchUnpinnedAnnouncements,
   } = useAnnouncementCardViewModel();
-
 
   const handleMarkRead = async (id: number) => {
     try {
@@ -82,7 +80,6 @@ const DashboardAnnouncements = () => {
       fetchUnpinnedAnnouncements();
     }
   };
-
 
   return (
     <div className="dashboard-announcements">

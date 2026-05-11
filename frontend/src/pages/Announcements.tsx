@@ -2,19 +2,11 @@ import {
   Card,
   CardContent,
   FormControl,
-  InputLabel,
   MenuItem,
   Select,
   Typography,
 } from "@mui/material";
-import {
-  CircleCheckBig,
-  CircleX,
-  Megaphone,
-  Plus,
-  Trash,
-  Trash2,
-} from "lucide-react";
+import { CircleCheckBig, CircleX, Plus, Trash, Trash2 } from "lucide-react";
 import "../assets/scss/pages/Announcements.scss";
 import { useState } from "react";
 import AnnouncementModal from "../components/Announcements/AnnouncementModal";
@@ -35,8 +27,8 @@ import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
 
 const Announcement = () => {
-const {role} = useAuth()
-const perms = permissions[role as keyof typeof permissions];
+  const { role } = useAuth();
+  const perms = permissions[role as keyof typeof permissions];
 
   const [open, setOpen] = useState(false);
   const [click, setClick] = useState(false);
@@ -184,81 +176,81 @@ const perms = permissions[role as keyof typeof permissions];
           </Typography>
         </div>
 
+        {perms.canMannageAnnouncements && (
+          <div className="announcement__header-actions">
+            {click && (
+              <MyButton
+                disabled={selectedIds.length === 0}
+                onClick={() => {
+                  setConfirmAction("deleteBulk");
+                  setOpenConfirm(true);
+                }}
+                startIcon={<Trash2 size={19} />}
+                text={`Delete${selectedIds.length > 0 ? ` (${selectedIds.length})` : ""}`}
+                variant="outlined"
+                customVariant="danger"
+                color="error"
+              />
+            )}
+            {hasAny && (
+              <MyButton
+                text={click ? "Cancel" : "Select"}
+                startIcon={
+                  click ? <CircleX size={19} /> : <CircleCheckBig size={19} />
+                }
+                customVariant="ghost"
+                onClick={() => {
+                  setClick((prev) => !prev);
+                  if (click) setSelectedIds([]);
+                }}
+              />
+            )}
 
-        { perms.canMannageAnnouncements && <div className="announcement__header-actions">
-
-
-          {click && (
             <MyButton
-              disabled={selectedIds.length === 0}
-              onClick={() => {
-                setConfirmAction("deleteBulk");
-                setOpenConfirm(true);
-              }}
-              startIcon={<Trash2 size={19} />}
-              text={`Delete${selectedIds.length > 0 ? ` (${selectedIds.length})` : ""}`}
-              variant="outlined"
-              customVariant="danger"
-              color="error"
+              variant="contained"
+              text="New Announcement"
+              startIcon={<Plus size={19} />}
+              customVariant="dark"
+              onClick={() => setOpen(true)}
             />
-
-          )}
-          {hasAny && (
-            <MyButton
-              text={click ? "Cancel" : "Select"}
-              startIcon={
-                click ? <CircleX size={19} /> : <CircleCheckBig size={19} />
-              }
-              customVariant="ghost"
-              onClick={() => {
-                setClick((prev) => !prev);
-                if (click) setSelectedIds([]);
-              }}
-            />
-          )}
-
-          <MyButton
-            variant="contained"
-            text="New Announcement"
-            startIcon={<Plus size={19} />}
-            customVariant="dark"
-            onClick={() => setOpen(true)}
-          />
-        </div>}
+          </div>
+        )}
       </div>
       <Card className="announcement">
-        {perms.canMannageAnnouncements && <div className="announcement__dropdown">
-          <Typography variant="h6">
-            {filterClick ? "Scheduled Announcements" : "All Announcements"}
-          </Typography>
+        {perms.canMannageAnnouncements && (
+          <div className="announcement__dropdown">
+            <Typography variant="h6">
+              {filterClick ? "Scheduled Announcements" : "All Announcements"}
+            </Typography>
 
-          <FormControl
-            size="small"
-            sx={{ minWidth: 125 }}
-          >
-            {/* <InputLabel>Filter</InputLabel> */}
-
-            <Select
-              value={filterClick ? "scheduled" : "all"}
-              // label="Filter"
-              onChange={(e) => {
-                const value = e.target.value;
-
-                if (value === "scheduled") {
-                  setFilterClick(true);
-                  fetchScheduledAnnouncement();
-                } else {
-                  setFilterClick(false);
-                }
-              }}
-              className="customTextField"
+            <FormControl
+              size="small"
+              sx={{ minWidth: 125 }}
             >
-              <MenuItem value="all">All</MenuItem>
+              {/* <InputLabel>Filter</InputLabel> */}
 
-              <MenuItem value="scheduled">Scheduled</MenuItem>
-            </Select>
-          </FormControl>
-        </div>}
+              <Select
+                value={filterClick ? "scheduled" : "all"}
+                // label="Filter"
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  if (value === "scheduled") {
+                    setFilterClick(true);
+                    fetchScheduledAnnouncement();
+                  } else {
+                    setFilterClick(false);
+                  }
+                }}
+                className="customTextField"
+              >
+                <MenuItem value="all">All</MenuItem>
+
+                <MenuItem value="scheduled">Scheduled</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        )}
 
         {/*
         CONTENT
@@ -346,11 +338,13 @@ const perms = permissions[role as keyof typeof permissions];
       </Card>
 
       {/* Add modal — refresh resets both lists so new item appears at top */}
-     {perms.canMannageAnnouncements && <AnnouncementModal
-        open={open}
-        handleClose={handleClose}
-        refreshAnnouncements={fetchUnpinnedAnnouncements}
-      />}
+      {perms.canMannageAnnouncements && (
+        <AnnouncementModal
+          open={open}
+          handleClose={handleClose}
+          refreshAnnouncements={fetchUnpinnedAnnouncements}
+        />
+      )}
 
       {/* Bulk delete confirm */}
       <ConfirmDialog

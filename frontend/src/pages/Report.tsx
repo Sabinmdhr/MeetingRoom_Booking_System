@@ -8,7 +8,7 @@ import { useMeetingReportViewModel } from "../viewmodels/useMeetingReportViewMod
 import "../assets/scss/pages/Report.scss";
 import { Download, Funnel, X } from "lucide-react";
 import ReportFilters from "../components/Reports/ReportFilters";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MyButton from "../components/ui/Button";
 
 function CustomToolbar() {
@@ -21,44 +21,25 @@ function CustomToolbar() {
 
 export default function Report() {
   const [filterOpen, setFilterOpen] = useState(false);
-
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
+
   const {
     columns,
     rows,
-    filterReports,
-    exportReport,
-    isFiltered,
-    fetchReports,
-    // users,
     rooms,
     meetingTypes,
     loading,
     totalRows,
-    lastFilter,
+    isFiltered,
+    fetchPage,
+    applyFilters,
+    clearFilters,
+    exportReport,
   } = useMeetingReportViewModel();
 
-  // useEffect(() => {
-  //   const timer = setTimeout(
-  //     () => window.dispatchEvent(new Event("resize")),
-  //     350,
-  //   );
-  //   return () => clearTimeout(timer);
-  // }, []);
-
-  useEffect(() => {
-    fetchReports({
-      ...(lastFilter ?? {
-        sortBy: "startDate",
-        sortDir: "desc",
-      }),
-      pageNo: paginationModel.page,
-      pageSize: paginationModel.pageSize,
-    });
-  }, [paginationModel]);
   const gridColumns = columns.map((col) => ({
     field: col.id,
     headerName: col.label,
@@ -67,6 +48,24 @@ export default function Report() {
   }));
 
   const gridRows = rows.map((row, i) => ({ id: i, ...row }));
+
+  const handlePaginationChange = (model: {
+    page: number;
+    pageSize: number;
+  }) => {
+    setPaginationModel(model);
+    fetchPage(model.page, model.pageSize);
+  };
+
+  const handleClear = () => {
+    setPaginationModel({ page: 0, pageSize: 10 });
+    clearFilters();
+  };
+
+  const handleApplyFilters = (payload: any) => {
+    setPaginationModel({ page: 0, pageSize: 10 });
+    applyFilters(payload);
+  };
 
   return (
     <div>
@@ -84,16 +83,7 @@ export default function Report() {
         <div className="meeting-table__buttons">
           {isFiltered && (
             <MyButton
-              onClick={() => {
-                setPaginationModel({ page: 0, pageSize: 10 });
-
-                fetchReports({
-                  pageNo: 0,
-                  pageSize: 10,
-                  sortBy: "startDate",
-                  sortDir: "desc",
-                });
-              }}
+              onClick={handleClear}
               variant="outlined"
               text="Clear"
               startIcon={<X size={16} />}
@@ -117,16 +107,15 @@ export default function Report() {
           />
         </div>
       </div>
+
       <ReportFilters
         open={filterOpen}
         onClose={() => setFilterOpen(false)}
-        onApply={(payload) => {
-          setPaginationModel({ page: 0, pageSize: 10 });
-          filterReports(payload);
-        }}
+        onApply={handleApplyFilters}
         meetingTypes={meetingTypes}
         rooms={rooms}
       />
+
       <div className="meeting-table">
         <div className="meeting-table__grid">
           <DataGrid
@@ -136,20 +125,15 @@ export default function Report() {
             loading={loading}
             pagination
             paginationMode="server"
-            // sortingMode="server"
-            // filterMode="server"
             pageSizeOptions={[5, 10, 25]}
             paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
+            onPaginationModelChange={handlePaginationChange}
             slots={{ toolbar: CustomToolbar }}
             disableRowSelectionOnClick
             disableColumnResize
-            // disableColumnFilter
             autoHeight
             slotProps={{
-              loadingOverlay: {
-                noRowsVariant: "skeleton",
-              },
+              loadingOverlay: { noRowsVariant: "skeleton" },
             }}
           />
         </div>

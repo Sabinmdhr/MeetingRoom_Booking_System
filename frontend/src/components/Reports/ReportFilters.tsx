@@ -18,15 +18,13 @@ import type {
 import "../../assets/scss/components/Report/ReportFilters.scss";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import dayjs from "dayjs";
-import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
 
 const DEFAULT_FILTERS: Filters = {
-  department: "",
-  startDate: "",
-  endDate: "",
   room: "",
   user: "",
   meetingType: "",
+  startDate: "",
+  endDate: "",
 };
 
 interface Props {
@@ -45,14 +43,15 @@ const ReportFilters = ({
   meetingTypes,
 }: Props) => {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
-
   const { users } = useparticipantsViewModel();
-  const roomItems = rooms.map((r, index) => ({
-    id: index,
-    label: r,
-  }));
 
-  const { departmentItems } = useDepartmentListViewModel();
+  const roomItems = rooms.map((r, i) => ({ id: i, label: r }));
+  const userItems = users
+    .filter((u) => u.role === "ADMIN" || u.role === "MANAGER")
+    .map((u) => ({ id: u.id, label: `${u.firstname} ${u.lastname}` }));
+
+  const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) =>
+    setFilters((prev) => ({ ...prev, [key]: value }));
 
   const handleApply = () => {
     const payload: ReportPayload = {
@@ -67,31 +66,17 @@ const ReportFilters = ({
     if (filters.meetingType !== "")
       payload.meetingTypeId = filters.meetingType as number;
     if (filters.room !== "") {
-      const selected = roomItems.find((r) => r.id === filters.room);
-      if (selected) payload.roomName = selected.label;
+      const room = roomItems.find((r) => r.id === filters.room);
+      if (room) payload.roomName = room.label;
     }
     if (filters.user !== "") {
-      const selected = userItems.find((u) => u.id === filters.user);
-      if (selected) {
-        payload.createdBy = selected.label;
-      }
-    }
-    if (filters.department !== "") {
-      payload.department = filters.department;
+      const user = userItems.find((u) => u.id === filters.user);
+      if (user) payload.createdBy = user.label;
     }
 
     onApply(payload);
     onClose();
   };
-
-  const userItems = users
-    .filter((user) => {
-      return user.role === "ADMIN" || user.role === "MANAGER";
-    })
-    .map((u) => ({
-      id: u.id,
-      label: `${u.firstname} ${u.lastname}`,
-    }));
 
   return (
     <Drawer
@@ -114,6 +99,7 @@ const ReportFilters = ({
         <Divider />
 
         <div className="report-filter__content">
+          {/* Date Range */}
           <Grid
             container
             spacing={2}
@@ -125,12 +111,7 @@ const ReportFilters = ({
               <TextField
                 type="date"
                 value={filters.startDate}
-                onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    startDate: e.target.value,
-                  }))
-                }
+                onChange={(e) => setFilter("startDate", e.target.value)}
                 fullWidth
                 className="report-filter__input"
               />
@@ -142,12 +123,7 @@ const ReportFilters = ({
               <TextField
                 type="date"
                 value={filters.endDate}
-                onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    endDate: e.target.value,
-                  }))
-                }
+                onChange={(e) => setFilter("endDate", e.target.value)}
                 inputProps={{
                   min: filters.startDate || dayjs().format("YYYY-MM-DD"),
                 }}
@@ -157,27 +133,14 @@ const ReportFilters = ({
             </Grid>
           </Grid>
 
+          {/* Meeting Type & Room */}
           <Grid
             container
             spacing={2}
             className="report-filter__row"
           >
-            {/* <Grid size={6}> */}
-            {/* <CommonDropdown
-                label="Meeting Type"
-                value={filters.meetingType}
-                items={meetingTypes}
-                onChange={(id: number | "") =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    meetingType: id,
-                    }))
-                    }
-                    /> */}
-            {/* </Grid> */}
             <Grid size={6}>
               <label className="label">Meeting Type</label>
-
               <TextField
                 select
                 fullWidth
@@ -186,24 +149,20 @@ const ReportFilters = ({
                 SelectProps={{
                   displayEmpty: true,
                   renderValue: (selected) => {
-                    if (selected === "" || selected === undefined) {
-                      return "All Meeting Types";
-                    }
-
-                    const item = meetingTypes.find((i) => i.id === selected);
-                    return item ? item.label : "";
+                    if (!selected) return "All Meeting Types";
+                    return (
+                      meetingTypes.find((i) => i.id === selected)?.label ?? ""
+                    );
                   },
                 }}
                 onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    meetingType:
-                      e.target.value === "" ? "" : Number(e.target.value),
-                  }))
+                  setFilter(
+                    "meetingType",
+                    e.target.value === "" ? "" : Number(e.target.value),
+                  )
                 }
               >
                 <MenuItem value="">All</MenuItem>
-
                 {meetingTypes.map((item) => (
                   <MenuItem
                     key={item.id}
@@ -214,47 +173,9 @@ const ReportFilters = ({
                 ))}
               </TextField>
             </Grid>
-            {/* <Grid size={6}>
-              <label className="label">Department</label>
-              <TextField
-                select
-                fullWidth
-                value={filters.department}
-                className="customTextField"
-                SelectProps={{
-                  displayEmpty: true,
-                  renderValue: (selected) => {
-                    if (selected === "" || selected === undefined) {
-                      return "All Department";
-                    }
 
-                    const item = departmentItems.find((i) => i.id === selected);
-                    return item ? item.label : "";
-                  },
-                }}
-                onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    department:
-                      e.target.value === "" ? "" : Number(e.target.value),
-                  }))
-                }
-              >
-                <MenuItem value="">All</MenuItem>
-
-                {departmentItems.map((item) => (
-                  <MenuItem
-                    key={item.id}
-                    value={item.id}
-                  >
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid> */}
             <Grid size={6}>
               <label className="label">Room</label>
-
               <TextField
                 select
                 fullWidth
@@ -263,24 +184,20 @@ const ReportFilters = ({
                 SelectProps={{
                   displayEmpty: true,
                   renderValue: (selected) => {
-                    if (selected === "" || selected === undefined) {
-                      return "All Rooms";
-                    }
-
-                    const item = roomItems.find((i) => i.id === selected);
-
-                    return item ? item.label : "";
+                    if (!selected && selected !== 0) return "All Rooms";
+                    return (
+                      roomItems.find((i) => i.id === selected)?.label ?? ""
+                    );
                   },
                 }}
                 onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    room: e.target.value === "" ? "" : Number(e.target.value),
-                  }))
+                  setFilter(
+                    "room",
+                    e.target.value === "" ? "" : Number(e.target.value),
+                  )
                 }
               >
                 <MenuItem value="">All Rooms</MenuItem>
-
                 {roomItems.map((item) => (
                   <MenuItem
                     key={item.id}
@@ -293,6 +210,7 @@ const ReportFilters = ({
             </Grid>
           </Grid>
 
+          {/* User */}
           <Grid
             container
             spacing={2}
@@ -300,7 +218,6 @@ const ReportFilters = ({
           >
             <Grid size={6}>
               <label className="label">User</label>
-
               <TextField
                 select
                 fullWidth
@@ -309,24 +226,19 @@ const ReportFilters = ({
                 SelectProps={{
                   displayEmpty: true,
                   renderValue: (selected) => {
-                    if (selected === "" || selected === undefined) {
-                      return "All Users";
-                    }
-
-                    const item = users.find((i) => i.id === selected);
-
-                    return item ? item.firstname : "";
+                    if (!selected && selected !== 0) return "All Users";
+                    const u = users.find((i) => i.id === selected);
+                    return u ? `${u.firstname} ${u.lastname}` : "";
                   },
                 }}
                 onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    user: e.target.value === "" ? "" : Number(e.target.value),
-                  }))
+                  setFilter(
+                    "user",
+                    e.target.value === "" ? "" : Number(e.target.value),
+                  )
                 }
               >
                 <MenuItem value="">All Users</MenuItem>
-
                 {userItems.map((item) => (
                   <MenuItem
                     key={item.id}

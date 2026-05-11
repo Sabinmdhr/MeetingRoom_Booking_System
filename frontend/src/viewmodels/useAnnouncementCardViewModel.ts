@@ -100,10 +100,12 @@ const useAnnouncementCardViewModel = () => {
         sortDir: "desc",
       });
       setScheduledAnnouncements(result);
+      
       console.log(result);
     } catch (error) {
       console.error("Error fetching scheduled announcements", error);
     }
+
   };
 
   const fetchAllAnnouncementList = async () => {
