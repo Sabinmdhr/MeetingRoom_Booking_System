@@ -31,11 +31,7 @@ const DashboardUpMeetings = () => {
 
       <div className="dashboard-upmeetings__list">
         {upcomingMeeting.length === 0 ? (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ p: 1 }}
-          >
+          <Typography variant="body2" color="text.secondary" sx={{ p: 1 }}>
             No Upcoming Meetings
           </Typography>
         ) : (
@@ -48,7 +44,7 @@ const DashboardUpMeetings = () => {
                   <Chip
                     className="dashboard-upmeetings__chip"
                     style={{
-                      background: alpha( `rgba(${m.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`, 0.8),
+                      background: `rgba(${m.meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
                       color: "#fff",
                     }}
                     label={m.meetingType.name}
