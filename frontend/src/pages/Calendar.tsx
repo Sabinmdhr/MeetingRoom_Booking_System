@@ -285,10 +285,11 @@ export const Calendar = () => {
                     startDate: slot.startDate,
                   });
                 }}
-                disabled={slot.startTime === "00:00"}
+                disabled={
+                  slot.startTime === "00:00" && slot.endTime === "00:00"
+                }
                 variant="contained"
-                
-                customVariant={`${slot.startTime != "00:00" ? `dark` : ""}`}
+                customVariant={`${slot.startTime != "00:00" || slot.endTime != "00:00" ? `dark` : ""}`}
                 startIcon={<Plus size={17} />}
                 text="Procced to booking"
               />

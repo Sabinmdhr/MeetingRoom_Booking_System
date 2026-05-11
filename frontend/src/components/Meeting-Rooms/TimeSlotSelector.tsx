@@ -53,12 +53,12 @@ export const TimeSlotSelector = ({
   DialogView,
 }: TimeSlotSelectorProps) => {
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
-  const [startTime, setStartTime] = useState<number>(
+  const [startTime, setStartTime] = useState<number | null >(
     bookingRoomFormData?.startTime
       ? timeStringToMinutes(bookingRoomFormData.startTime)
-      : 0,
+      : null,
   );
-  const [endTime, setEndTime] = useState<number>(
+  const [endTime, setEndTime] = useState<number | null>(
     bookingRoomFormData?.endTime
       ? timeStringToMinutes(bookingRoomFormData.endTime)
       : 0,
@@ -132,8 +132,8 @@ export const TimeSlotSelector = ({
   }, []);
   useEffect(() => {
     onSave?.({
-      startTime: minutesToTimeString(startTime),
-      endTime: minutesToTimeString(endTime),
+      startTime: minutesToTimeString(startTime ?? 0),
+      endTime: minutesToTimeString(endTime ?? 0),
       startDate: backendFormattedDate,
     });
     // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
@@ -158,8 +158,8 @@ export const TimeSlotSelector = ({
     setInteraction({
       mode,
       startY: e.clientY,
-      initialStart: startTime,
-      initialEnd: endTime,
+      initialStart: startTime ?? 0,
+      initialEnd: endTime ?? 0,
     });
 
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -214,20 +214,20 @@ export const TimeSlotSelector = ({
           setEndTime(newStart + duration);
         } else if (interaction.mode === "resize-top") {
           let newStart = interaction.initialStart + snappedDelta;
-          newStart = clamp(newStart, START_MINUTES, endTime - 10);
+          newStart = clamp(newStart, START_MINUTES, endTime ?? 0 - 10);
           // if (newStart < START_MINUTES) newStart = START_MINUTES;
           // if (newStart > endTime - 10) newStart = endTime - 10; // Min 10 min duration
           if (isPastDay) return;
           if (isToday && newStart < currentMinutes) return;
 
-          if (isOverlapping(newStart, endTime)) return;
+          if (isOverlapping(newStart, endTime ?? 0)) return;
           setStartTime(newStart);
         } else if (interaction.mode === "resize-bottom") {
           let newEnd = interaction.initialEnd + snappedDelta;
           if (newEnd > END_MINUTES) newEnd = END_MINUTES;
-          if (newEnd < startTime + 10) newEnd = startTime + 10; // Min 10 min duration
+          if (newEnd < (startTime ?? 0) + 10) newEnd = (startTime ?? 0) + 10; // Min 10 min duration
 
-          if (isOverlapping(startTime, newEnd)) return;
+          if (isOverlapping(startTime ?? 0, newEnd)) return;
           setEndTime(newEnd);
         }
       }
@@ -384,12 +384,13 @@ export const TimeSlotSelector = ({
           )}
           {/* The Slot */}
 
-          {startTime != 0 &&  <div
+          {startTime !== null && endTime !== null && <div
               className="slot"
               style={{
-                top: getYFromMinutes(startTime),
-                height: Math.max((endTime - startTime) * MINUTE_HEIGHT, 10),
+                top: getYFromMinutes(startTime ),
+                height: Math.max(((endTime ) - (startTime )) * MINUTE_HEIGHT, 10),
                 display: "flex",
+                // opacity: startTime ===0 ? 0: 1
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -407,13 +408,13 @@ export const TimeSlotSelector = ({
                 <div className="content">
                   <div className="timeDisplayWrapper">
                     <div className="timeBox">
-                      {formatDisplayTime(startTime)}
+                      {formatDisplayTime(startTime ?? 0)}
                     </div>
                     <div className="separator">-</div>
-                    <div className="timeBox">{formatDisplayTime(endTime)}</div>
+                    <div className="timeBox">{formatDisplayTime(endTime ?? 0)}</div>
                   </div>
                   <div className="durationDisplay">
-                    Duration: {formatDuration(startTime, endTime)}
+                    Duration: {formatDuration(startTime ?? 0, endTime ?? 0)}
                   </div>
                 </div>
 
@@ -444,23 +445,23 @@ export const TimeSlotSelector = ({
             customVariant="dark"
             onClick={() => {
               updateBookingTimeAndDate({
-                startTime: minutesToTimeString(startTime),
-                endTime: minutesToTimeString(endTime),
+                startTime: minutesToTimeString(startTime ?? 0),
+                endTime: minutesToTimeString(endTime ?? 0),
                 startDate: backendFormattedDate,
               });
             }}
           />
         </div>
-      ) : ( startTime != 0 &&
+      ) : (
         <div className="footer">
           <div className="timeDuration">
             <div className="timeDisplayWrapper">
-              <div className="timeBox">{formatDisplayTime(startTime)}</div>
+              <div className="timeBox">{formatDisplayTime(startTime ?? 0)}</div>
               <div className="separator">-</div>
-              <div className="timeBox">{formatDisplayTime(endTime)}</div>
+              <div className="timeBox">{formatDisplayTime(endTime ?? 0)}</div>
             </div>
             <div className="durationDisplay">
-              Duration: {formatDuration(startTime, endTime)}
+              Duration: {formatDuration(startTime ?? 0, endTime ?? 0)}
             </div>
           </div>
         </div>
