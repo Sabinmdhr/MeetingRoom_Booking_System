@@ -19,11 +19,11 @@ import { formatDisplayTime, timeStringToMinutes } from "../utils/timeUtils";
 import dayjs from "dayjs";
 
 const UpcomingMeeting = () => {
-    const {allUpcomingMeeting} = useMeetingCardViewModel();
+    const {allUpcomingMeeting , historyMode, setHistoryMode} = useMeetingCardViewModel();
     const {role} = useAuth()
     const perms = permissions[role as keyof typeof permissions];
 
-    const [filterClick, setFilterClick] = useState(false);
+    // const [filterClick, setFilterClick] = useState(false);
 
   return (
     <div className="upmeetings__main">
@@ -41,7 +41,7 @@ const UpcomingMeeting = () => {
       <Card className="upmeetings">
         {perms.canMannageAnnouncements && <div className="upmeetings__dropdown">
           <Typography variant="h6">
-            {filterClick ? "Scheduled Upcoming Meetings" : "All Upcoming Meetings"}
+            {historyMode ? "Self Meetings" : "All Upcoming Meetings"}
           </Typography>
 
           <FormControl
@@ -51,15 +51,15 @@ const UpcomingMeeting = () => {
 
             <Select
               className="customTextField"
-              value={filterClick ? "Self" : "All"}
+              value={historyMode ? "Self" : "All"}
               onChange={(e) => {
                 const value = e.target.value;
 
                 if (value === "Self") {
-                  setFilterClick(true);
+                  setHistoryMode(true);
                 //   fetchScheduledAnnouncement();
                 } else {
-                  setFilterClick(false);
+                  setHistoryMode(false);
                 }
               }}
             >

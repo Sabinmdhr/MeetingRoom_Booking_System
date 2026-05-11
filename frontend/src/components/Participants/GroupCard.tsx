@@ -50,9 +50,14 @@ export const GroupCard = ({
     }
   };
   return (
-    <div className="groupCard-Container">
-      {group.map((group, index) => {
-        return (
+    <div className={`groupCard-Container ${group.length === 0 ? "empty" : ""}`}>
+      {group.length === 0 ? (
+        <div
+        >
+          No custom Card Available
+        </div>
+      ) : (
+        group.map((group, index) => (
           <Card className="groupCard" key={index}>
             <CardHeader
               className="groupCard-title"
@@ -106,8 +111,9 @@ export const GroupCard = ({
               </div>
             </CardContent>
           </Card>
-        );
-      })}
+        ))
+      )}
+
       <ConfirmDialog
         open={openConfirm}
         title="Delete Group"

@@ -289,15 +289,17 @@ export const Calendar = () => {
             {perms.canManageRooms && isDayView && (
               <MyButton
                 onClick={() => {
-                  if (slot.startTime === "00:00") return;
                   updateBookingTimeAndDate({
                     startTime: slot.startTime,
                     endTime: slot.endTime,
                     startDate: slot.startDate,
                   });
                 }}
+                disabled={
+                  slot.startTime === "00:00" && slot.endTime === "00:00"
+                }
                 variant="contained"
-                customVariant="dark"
+                customVariant={`${slot.startTime != "00:00" || slot.endTime != "00:00" ? `dark` : ""}`}
                 startIcon={<Plus size={17} />}
                 text="Procced to booking"
               />
