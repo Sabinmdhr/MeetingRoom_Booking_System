@@ -350,25 +350,7 @@ export const CalendarModal = ({
               </Accordion>
             </div>
 
-            {/* Description */}
-            {/* <div className="calendar-modal__row calendar-modal__row--full">
-              <div className="calendar-modal__description-box">
-                <div className="calendar-modal__description-header">
-                  <div
-                    className="calendar-modal__icon-wrap"
-                    style={{ backgroundColor: "#f8fafc" }}
-                  >
-                    <AlignLeft size={16} color="#64748b" />
-                  </div>
-                  <Typography className="calendar-modal__row__label">
-                    Description
-                  </Typography>
-                </div>
-                <Typography className="calendar-modal__description-text">
-                  {description || "No description provided."}
-                </Typography>
-              </div>
-            </div> */}
+
           </div>
         )}
       </DialogContent>

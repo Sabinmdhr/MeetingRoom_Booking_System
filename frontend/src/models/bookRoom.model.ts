@@ -80,7 +80,6 @@ export interface BookedRoomDataResponse {
 
   startDate: string;
   endDate?: string;
-
   startTime: string;
   endTime: string;
 
@@ -91,7 +90,7 @@ export interface BookedRoomDataResponse {
 
   recurrenceId: string;
   recurrenceType: RecurrenceType;
-  
+
   meetingType: MeetingTypeInfo;
 
   externalParticipant?: BookedExternalParticipant[];

@@ -1,18 +1,10 @@
 import "../assets/scss/pages/Participants.scss";
 import "../assets/scss/global.scss";
-import { FolderPlus, SquarePen, Users } from "lucide-react";
+import { Building2, FolderPlus, Users } from "lucide-react";
 import { ParticipantsTable } from "../components/Participants/Participants-Table";
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Chip,
-  Typography,
-} from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import { useState } from "react";
 import { AddParticipantsForm } from "../components/Participants/AddParticipants-Form";
-import { useAddParticipantsViewModel } from "../viewmodels/useAddParticipantsViewModel";
 import { GroupCard } from "../components/Participants/GroupCard";
 import { AddGroupForm } from "../components/Participants/AddGroup-Form";
 import { useGroupCardViewModel } from "../viewmodels/useGroupCardViewModel";
@@ -26,11 +18,9 @@ const Participants = () => {
   const perms = permissions[role as keyof typeof permissions];
   const {
     users,
-    setUsers,
     handleParticipantsFormClose,
     handleParticipantFormOpen,
     participantsFormState,
-    loading,
   } = useparticipantsViewModel();
 
   const { groupFormState, handleGroupFormOpen, handleGroupFormClose } =
@@ -63,20 +53,21 @@ const Participants = () => {
         >
           <FolderPlus size={16} />{" "}
           <span>
-            Custom Groups <Chip label={numOfGroup}></Chip>
+            Custom Groups 
           </span>
         </div>
         <div
           className={`participants-tab ${activeTab == "Tab3" ? `active` : ``}`}
           onClick={() => setActiveTab("Tab3")}
         >
+          <Building2 size={16} />
           <span>Departments</span>
         </div>
       </div>
 
       {/* ------------------------Edit Mode Button------------ */}
       {perms?.canAddUsers && (
-        <div style={{textAlign:"right"}}>
+        <div style={{ textAlign: "right" }}>
           {activeTab == "Tab1" ? (
             <AddParticipantsForm
               participantsFormState={participantsFormState}

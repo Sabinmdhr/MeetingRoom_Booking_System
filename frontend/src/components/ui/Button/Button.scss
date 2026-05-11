@@ -132,6 +132,11 @@
 
 .my-button--danger {
   color: red !important;
+    border: 1px solid #d1d5db !important;
+
+  &:hover {
+    background-color: #efeded !important;
+  }
 }
 
 .my-button--ghost {

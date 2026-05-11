@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from "dayjs";
-import { Box, Typography, IconButton, Paper, Chip } from "@mui/material";
+import { Box, Typography, IconButton, Paper, Chip, alpha } from "@mui/material";
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
@@ -118,8 +118,8 @@ const CalendarPreview: React.FC = () => {
           {days.map((day, index) => (
             <Box
               key={index}
-              className={`day-cell 
-                ${isInRange(day) ? "selected" : ""} 
+              className={`day-cell
+                ${isInRange(day) ? "selected" : ""}
                 ${isToday(day) ? "today" : ""}`}
               onClick={() => day && handleDateClick(day)}
             >
@@ -140,46 +140,52 @@ const CalendarPreview: React.FC = () => {
       ) : (
         <Box className="today-meetings">
           <div>
-            <Typography className="today-meetings__header" sx={{ fontWeight: 600, fontSize: 18 }}>
-            {dateRange.start && dateRange.end
-              ? `Meetings from ${dateRange.start.format("MMM D")} - ${dateRange.end.format("MMM D")}`
-              : dateRange.start
-                ? `Meetings on ${dateRange.start.format("MMM D")}`  
-                : "Select dates"}
-            <span className="today-meetings__badge">{meetings.length}</span>
-          </Typography>
+            <Typography
+              className="today-meetings__header"
+              sx={{ fontWeight: 600, fontSize: 18 }}
+            >
+              {dateRange.start && dateRange.end
+                ? `Meetings from ${dateRange.start.format("MMM D")} - ${dateRange.end.format("MMM D")}`
+                : dateRange.start
+                  ? `Meetings on ${dateRange.start.format("MMM D")}`
+                  : "Select dates"}
+            </Typography>
           </div>
           <div className="today-meetings__list">
-          {meetings.map((m) => (
-            <Box className="today-meetings__card" key={m.meetingId}>
-              <Box className="today-meetings__subcard">
-                <Typography className="today-meetings__title" >
-                  {m.meetingTitle}
-                </Typography>
-                <Chip
-                  label={m.meetingType.name}
-                  className="today-meetings__chip"
-                  style={{ color: `rgba${m.meetingType.colorCode}` }}
-                />
+            {meetings.map((m) => (
+              <Box className="today-meetings__card" key={m.meetingId}>
+                <Box className="today-meetings__subcard">
+                  <Typography className="today-meetings__title">
+                    {m.meetingTitle}
+                  </Typography>
+                  <Chip
+                    style={{
+                      background: alpha(`rgba${m.meetingType.colorCode}`, 0.8),
+                      color: "#fff",
+                    }}
+                    label={m.meetingType.name}
+                    className="dashboard-upmeetings__chip"
+                  />
                 </Box>
                 <div className="today-meetings__subtitle">
-                  <Typography sx={{fontWeight: 500}}>
+                  <Typography sx={{ fontWeight: 500 }}>
                     {m.date ? dayjs(m.date).format("MMM D") : ""}
                   </Typography>
                   <Dot />
                   <Typography>
-                    {formatDisplayTime(timeStringToMinutes(m.startTime))} - {formatDisplayTime(timeStringToMinutes(m.endTime))}
+                    {formatDisplayTime(timeStringToMinutes(m.startTime))} -{" "}
+                    {formatDisplayTime(timeStringToMinutes(m.endTime))}
                   </Typography>
                 </div>
                 <hr />
                 <div className="today-meetings__location">
                   <Typography className="today-meetings__roomname">
-                    <MapPin size={14}/>
+                    <MapPin size={14} />
                     {m.roomName}
                   </Typography>
                 </div>
-            </Box>
-          ))}
+              </Box>
+            ))}
           </div>
         </Box>
       )}

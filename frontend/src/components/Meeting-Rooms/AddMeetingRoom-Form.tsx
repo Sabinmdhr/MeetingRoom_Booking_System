@@ -86,7 +86,7 @@ export const AddMeetingRoomForm = ({
     <div className="add-Form">
       <MyButton
         startIcon={<Plus size={17} />}
-        text="Add Room"
+        text="Add Meeting Room"
         // className="add-btn"
         customVariant="dark"
         variant="outlined"
