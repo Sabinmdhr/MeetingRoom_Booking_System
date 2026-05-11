@@ -128,6 +128,7 @@ export const useUserProfileViewModel = () => {
     profile,
     loading,
     errors,
+    loadUser,
     handleChange,
     saveProfile,
     handleDepartmentChange,

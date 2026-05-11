@@ -39,6 +39,7 @@ const ProfileSection = ({
     errors,
     handleChange,
     saveProfile,
+    loadUser,
   } = useUserProfileViewModel();
   return (
     <div className="profile-section">
@@ -85,6 +86,7 @@ const ProfileSection = ({
               onChange={handleChange}
               error={!!errors.email}
               disabled
+              inputProps={{ readOnly: true }}
             />
             <ErrorText error={errors.email} />
           </div>
@@ -144,6 +146,9 @@ const ProfileSection = ({
             onClick={async () => {
               console.log("CLICKED SAVE");
               const success = await saveProfile();
+              if (success) {
+                onCancel();
+              }
               console.log("RESULT:", success);
 
               if (success) toast.success("Changes saved successfully");

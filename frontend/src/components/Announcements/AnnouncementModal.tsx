@@ -134,6 +134,7 @@ const AnnouncementModal = ({
                   onChange={handleChange}
                   fullWidth
                   inputProps={{ min: dayjs().format("YYYY-MM-DD") }}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
               </div>
 
@@ -152,6 +153,7 @@ const AnnouncementModal = ({
                       announcementFormData.startDate ||
                       dayjs().format("YYYY-MM-DD"),
                   }}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
               </div>
             </div>
