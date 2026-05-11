@@ -31,6 +31,7 @@ interface TimeSlotSelectorProps {
   id?: number;
   calendarView: boolean;
   DialogView?: boolean;
+  editingId?: number;
 }
 
 const PIXELS_PER_HOUR = 120;
@@ -51,6 +52,7 @@ export const TimeSlotSelector = ({
   onSave,
   calendarView,
   DialogView,
+  editingId,
 }: TimeSlotSelectorProps) => {
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
   const [startTime, setStartTime] = useState<number | null >(
@@ -89,6 +91,7 @@ export const TimeSlotSelector = ({
   const navigate = useNavigate();
   const isOverlapping = (start: number, end: number) => {
     return bookedSlots.some((slot) => {
+      if(slot.id === editingId) return false;
       const slotStart = timeStringToMinutes(slot.start);
       const slotEnd = timeStringToMinutes(slot.end);
 
@@ -390,6 +393,7 @@ export const TimeSlotSelector = ({
                 top: getYFromMinutes(startTime ),
                 height: Math.max(((endTime ) - (startTime )) * MINUTE_HEIGHT, 10),
                 display: "flex",
+                zIndex:999999,
                 // opacity: startTime ===0 ? 0: 1
                 justifyContent: "center",
                 alignItems: "center",

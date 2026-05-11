@@ -32,7 +32,7 @@ type BookingTimeAndDatePeops = {
 
 export const useBookingRoomViewModel = () => {
   const [bookedSlots, setBookedSlots] = useState<
-    { start: string; end: string; color: string; title:string }[]
+    { start: string; end: string; color: string; title:string ,id:number }[]
   >([]);
    const [slot, setSlot] = useState({
      startTime: "00:00",
@@ -156,7 +156,8 @@ export const useBookingRoomViewModel = () => {
         start: slot.startTime,
         end: slot.endTime,
         color: slot.meetingType.colorCode,
-        title: slot.meetingTitle
+        title: slot.meetingTitle,
+        id: slot.meetingId,
       }));
       setBookedSlots(formatted);
     } catch (error) {}

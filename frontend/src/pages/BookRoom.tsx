@@ -182,7 +182,7 @@ const BookRoom = () => {
                   }}
                 >
                   <DialogContent>
-                    <TimeSlotSelector calendarView={false} DialogView={true}/>
+                    <TimeSlotSelector calendarView={false} DialogView={true} editingId={bookingId}/>
                   </DialogContent>
                 </Dialog>
 
