@@ -55,3 +55,12 @@ export const getBookedDataByMeetingId = async (
   const res = await api.get(`/api/v1/get-booked-room/${roomBookingId}`);
   return res.data;
 };
+
+export const updateBookedRoomById = async (
+  roomBookingId: number,
+): Promise<BookedRoomDataResponse> => {
+  const res = await api.patch(
+    `/api/v1/booked-room/${roomBookingId}/change-status`,
+  );
+  return res.data;
+};
