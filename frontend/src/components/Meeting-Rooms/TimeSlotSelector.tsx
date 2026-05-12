@@ -14,12 +14,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import MyButton from "../ui/Button";
 import { useAppSelector } from "../../redux/store";
-import { set } from "zod";
-import { current } from "@reduxjs/toolkit";
 import { useAuth } from "../../hooks/useAuth";
 import { permissions } from "../../utils/permissions";
-import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
 
 interface TimeSlotSelectorProps {
   onSave?: (slot: {
@@ -33,6 +31,7 @@ interface TimeSlotSelectorProps {
   setCalendarView?: (val: boolean) => void;
   DialogView?: boolean;
   editingId?: number;
+  selectedDate?: Dayjs;
 }
 
 const PIXELS_PER_HOUR = 120;
@@ -55,6 +54,7 @@ export const TimeSlotSelector = ({
   DialogView,
   editingId,
   setCalendarView,
+  selectedDate,
 }: TimeSlotSelectorProps) => {
   const {
     formattedDate,
@@ -63,24 +63,28 @@ export const TimeSlotSelector = ({
     backendFormattedDate,
     isPastDay,
     currentDate,
+    setCurrentDate,
     getLocalDateString,
   } = useRoomTimeslotViewModel();
 
   const { roomId, startDate } = useAppSelector((state) => state.bookingRoom);
-  const selectedDate = startDate ? new Date(startDate) : currentDate;
+  const editingDate = startDate ? dayjs(startDate) : currentDate;
 
-  const isToday = selectedDate.toDateString() === new Date().toDateString();
+  useEffect(() => {
+    if (selectedDate) {
+      setCurrentDate(dayjs(selectedDate));
+    }
+  }, [selectedDate]);
   const bookingRoomFormData = useAppSelector((state) => state.bookingRoom);
-  const [startTime, setStartTime] = useState<number | null>(
-    bookingRoomFormData?.startTime
-      ? timeStringToMinutes(bookingRoomFormData.startTime)
-      : null,
-  );
-  const [endTime, setEndTime] = useState<number | null>(
-    bookingRoomFormData?.endTime
-      ? timeStringToMinutes(bookingRoomFormData.endTime)
-      : 0,
-  );
+  const defaultStartTime = bookingRoomFormData?.startTime
+    ? timeStringToMinutes(bookingRoomFormData.startTime)
+    : null;
+  const defaultEndTime = bookingRoomFormData?.startTime
+    ? timeStringToMinutes(bookingRoomFormData.endTime)
+    : null;
+  const isToday = editingDate.isSame(dayjs(), "day");
+  const [startTime, setStartTime] = useState<number | null>(defaultStartTime);
+  const [endTime, setEndTime] = useState<number | null>(defaultEndTime);
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
   const [interaction, setInteraction] = useState<{
@@ -102,6 +106,7 @@ export const TimeSlotSelector = ({
     updateBookingTimeAndDate,
     bookedColor,
     PastimeColor,
+    selectedColor,
   } = useBookingRoomViewModel();
 
   // const navigate = useNavigate();
@@ -122,12 +127,14 @@ export const TimeSlotSelector = ({
 
   useEffect(() => {
     handleGetBookedRoomByDay(backendFormattedDate, roomId);
-    console.log("Room", roomId);
+    setStartTime(defaultStartTime);
+    setEndTime(defaultEndTime);
+    // setStartTime(null);
   }, [backendFormattedDate]);
   useEffect(() => {
-    handleGetBookedRoomByDay(getLocalDateString(selectedDate), roomId);
+    handleGetBookedRoomByDay(editingDate.format("YYYY-MM-DD"), roomId);
     console.log("Room", roomId);
-  }, [selectedDate]);
+  }, [editingDate]);
   const getCurrentMinutes = () => {
     const now = new Date();
     return now.getHours() * 60 + now.getMinutes();
@@ -150,10 +157,6 @@ export const TimeSlotSelector = ({
       endTime: minutesToTimeString(endTime ?? 0),
       startDate: backendFormattedDate,
     });
-    // updateBookingTimeAndDate({startTime, endTime, date:formattedDate})
-    // console.log(minutesToTimeString(startTime));
-    // console.log(bookedSlots, "bookedslots");
-    // console.log(minutesToTimeString(endTime));
   }, [startTime, endTime, onSave]);
 
   const getYFromMinutes = (minutes: number) =>
@@ -261,7 +264,7 @@ export const TimeSlotSelector = ({
     <div className="container">
       <div className="header">
         <Box className="timeslot-nav">
-          {calendarView && (
+          {calendarView && !DialogView && (
             <MyButton
               onClick={() => changeDate(-1)}
               variant="outlined"
@@ -272,36 +275,39 @@ export const TimeSlotSelector = ({
           )}
           <Box
             className="date"
-            style={!calendarView ? { marginLeft: "50%" } : {}}
+            style={
+              !calendarView
+                ? { marginLeft: "50%" }
+                : DialogView
+                  ? {
+                      margin: " 4px auto",
+                    }
+                  : {}
+            }
           >
             <Typography className="timeslot-date">{formattedDate}</Typography>
-            <Typography
-              className="jump-today"
-              onClick={jumpToToday}
-            >
-              Jump to Today
-            </Typography>
+            {!DialogView && (
+              <Typography className="jump-today" onClick={jumpToToday}>
+                Jump to Today
+              </Typography>
+            )}
           </Box>
-          <MyButton
-            onClick={() => changeDate(1)}
-            variant="outlined"
-            text="Next"
-            customVariant="ghost"
-            endIcon={<ChevronRight size={18} />}
-          />
+          {!DialogView && (
+            <MyButton
+              onClick={() => changeDate(1)}
+              variant="outlined"
+              text="Next"
+              customVariant="ghost"
+              endIcon={<ChevronRight size={18} />}
+            />
+          )}
         </Box>
       </div>
 
-      <div
-        className="timelineWrapper"
-        ref={timelineRef}
-      >
+      <div className="timelineWrapper" ref={timelineRef}>
         <div className="timeGutter">
           {hours.map((hour) => (
-            <div
-              key={hour}
-              className="timeLabel"
-            >
+            <div key={hour} className="timeLabel">
               {hour.toString().padStart(2, "0")}:00
             </div>
           ))}
@@ -346,6 +352,13 @@ export const TimeSlotSelector = ({
                     fontSize: 10,
                     // alignItems: "normal",
                   }),
+                ...(calendarView &&
+                  !DialogView && {
+                    backgroundColor: `rgb${slot.color}`,
+                    border: `1px solid rgb${slot.color}`,
+                    fontSize: 10,
+                    // alignItems: "normal",
+                  }),
                 justifyContent: "center",
                 ...(!calendarView && {
                   alignItems: "center",
@@ -357,6 +370,25 @@ export const TimeSlotSelector = ({
                 cursor: "not-allowed",
               }}
             >
+              {calendarView
+                ? !DialogView && (
+                    <div
+                      style={{
+                        display: "flex",
+                        // flexDirection: "column",
+                        justifyContent: "space-between",
+                        margin: "0px 12px",
+                      }}
+                    >
+                      <Typography>{slot.title}</Typography>
+                      <Typography>
+                        {formatDisplayTime(timeStringToMinutes(slot.start))} -
+                        {formatDisplayTime(timeStringToMinutes(slot.end))}
+                      </Typography>
+                    </div>
+                  )
+                : ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
+              ${formatDisplayTime(timeStringToMinutes(slot.end))}`}
               {calendarView
                 ? !DialogView && (
                     <div
@@ -415,6 +447,7 @@ export const TimeSlotSelector = ({
                 height: Math.max((endTime - startTime) * MINUTE_HEIGHT, 10),
                 display: "flex",
                 zIndex: 999999,
+                background: `${selectedColor}`,
                 // opacity: startTime ===0 ? 0: 1
                 justifyContent: "center",
                 alignItems: "center",
@@ -475,7 +508,8 @@ export const TimeSlotSelector = ({
               updateBookingTimeAndDate({
                 startTime: minutesToTimeString(startTime ?? 0),
                 endTime: minutesToTimeString(endTime ?? 0),
-                startDate: backendFormattedDate,
+                startDate:
+                  editingDate.format("YYYY-MM-DD") ?? backendFormattedDate,
               });
               setCalendarView?.(false);
             }}

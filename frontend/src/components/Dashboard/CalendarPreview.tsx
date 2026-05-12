@@ -80,7 +80,7 @@ const CalendarPreview: React.FC = () => {
           <CalendarIcon size={18} /> Calendar Preview
         </Typography>
 
-        {meetings.length !== 0 && (
+        {dateRange.end != null && (
           <MyButton
             className="clearselection-btn"
             startIcon={<X size={16} />}
@@ -175,7 +175,7 @@ const CalendarPreview: React.FC = () => {
                   </Typography>
                   <Chip
                     style={{
-                      background: alpha(`rgba${m.meetingType.colorCode}`, 0.8),
+                      background: `rgba(${m.meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
                       color: "#fff",
                     }}
                     label={m.meetingType.name}

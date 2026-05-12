@@ -105,26 +105,32 @@ const ParticipantsCard = ({
           Add internal and external participants to your meeting.
         </Typography> */}
         {selectedParticipants.length > 0 && (
-          <div className="selected-participants">
-            <Typography variant="subtitle2">Selected Participants:</Typography>
-            {selectedParticipants.map((id) => {
-              const participant = users.find((p) => p.id === id);
-              return participant ? (
-                <Chip
-                  label={`${participant.firstname} ${participant.lastname}`}
-                  key={id}
-                  icon={
-                    <X
-                      size={18}
-                      onClick={() => {
-                        toggleParticipantSelection(id);
-                      }}
+          <div>
+              <Typography variant="subtitle2">
+                Selected Participants:
+              </Typography>
+            <div className="selected-participants">
+              {selectedParticipants.map((id) => {
+                const participant = users.find((p) => p.id === id);
+                return participant ? (
+                  <div className="selected-chips">
+                    <Chip
+                      label={`${participant.firstname} ${participant.lastname}`}
+                      key={id}
+                      icon={
+                        <X
+                          size={18}
+                          onClick={() => {
+                            toggleParticipantSelection(id);
+                          }}
+                        />
+                      }
+                      className="selected-participant"
                     />
-                  }
-                  className="selected-participant"
-                />
-              ) : null;
-            })}
+                  </div>
+                ) : null;
+              })}
+            </div>
           </div>
         )}
         <div className="participants-card">

@@ -41,6 +41,7 @@ export const useBookingRoomViewModel = () => {
    });
    const PastimeColor = "#fff3cd";
    const bookedColor = "rgba(196, 38, 38, 0.72)";
+   const selectedColor = " rgba(36, 9, 135, 0.37)"
   const [externalParticipant, setExternalParticipant] = useState<{
     name: string;
     email: string;
@@ -174,6 +175,7 @@ export const useBookingRoomViewModel = () => {
   }, []);
   return {
     bookedColor,
+    selectedColor,
     PastimeColor,
     updateBookingTimeAndDate,
     handleChange,
