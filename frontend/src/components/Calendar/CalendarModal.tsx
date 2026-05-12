@@ -104,7 +104,7 @@ export const CalendarModal = ({
             size="small"
             className="calendar-modal__header__chip"
             style={{
-              backgroundColor: `rgb${colorCode}`,
+              backgroundColor: `rgba(${eventData?.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`,
               color: "#fff",
             }}
           />
@@ -118,9 +118,7 @@ export const CalendarModal = ({
         </IconButton>
       </div>
 
-
       <Divider />
-
 
       {/* Body */}
       <DialogContent className="calendar-modal__content">
@@ -157,7 +155,6 @@ export const CalendarModal = ({
               </div>
             </div>
 
-
             {/* Room */}
             <div className="calendar-modal__row">
               <div
@@ -178,7 +175,6 @@ export const CalendarModal = ({
                 </Typography>
               </div>
             </div>
-
 
             {/* Booked By */}
             <div className="calendar-modal__row">
@@ -206,10 +202,7 @@ export const CalendarModal = ({
                 className="calendar-modal__icon-wrap"
                 // style={{ backgroundColor: "#f8fafc" }}
               >
-                <AlignLeft
-                  size={16}
-                  color="#64748b"
-                />
+                <AlignLeft size={16} color="#64748b" />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -257,7 +250,6 @@ export const CalendarModal = ({
                   </div>
                 </AccordionSummary>
 
-
                 <AccordionDetails className="calendar-modal__accordion__details">
                   <TabContext value={tabValue}>
                     <TabList
@@ -275,7 +267,6 @@ export const CalendarModal = ({
                         className="calendar-modal__tab"
                       />
                     </TabList>
-
 
                     <TabPanel
                       value="internal"
@@ -309,7 +300,6 @@ export const CalendarModal = ({
                         </Typography>
                       )}
                     </TabPanel>
-
 
                     <TabPanel
                       value="external"
@@ -349,62 +339,22 @@ export const CalendarModal = ({
                 </AccordionDetails>
               </Accordion>
             </div>
-
-
           </div>
         )}
       </DialogContent>
 
-
       <Divider />
 
-
       {/* Actions */}
-    {perms.canManageRooms &&  <DialogActions className="calendar-modal__actions">
-        <MyButton
-          variant="outlined"
-          customVariant="ghost"
-          onClick={onClose}
-          text="Close"
-        />
-        {submitMode === "editOnce" && (
+      {perms.canManageRooms && (
+        <DialogActions className="calendar-modal__actions">
           <MyButton
-            variant="contained"
-            customVariant="dark"
-            startIcon={<SquarePen size={16} />}
-            onClick={() => {
-              dispatch(
-                setBookingRoomFormData(mapEventToBookingFormData(eventData!)),
-              );
-              navigate("/book-room", {
-                state: {
-                  submitMode: submitMode,
-                  bookingId: eventData?.id,
-                },
-              });
-            }}
-            text={"Edit Meeting"}
+            variant="outlined"
+            customVariant="ghost"
+            onClick={onClose}
+            text="Close"
           />
-        )}
-        {submitMode === "editAll" && (
-          <>
-            <MyButton
-              variant="contained"
-              customVariant="dark"
-              startIcon={<SquarePen size={16} />}
-              onClick={() => {
-                dispatch(
-                  setBookingRoomFormData(mapEventToBookingFormData(eventData!)),
-                );
-                navigate("/book-room", {
-                  state: {
-                    submitMode: "editOnce",
-                    bookingId: event?.id,
-                  },
-                });
-              }}
-              text="Edit This Meeting"
-            />
+          {submitMode === "editOnce" && (
             <MyButton
               variant="contained"
               customVariant="dark"
@@ -416,15 +366,57 @@ export const CalendarModal = ({
                 navigate("/book-room", {
                   state: {
                     submitMode: submitMode,
-                    bookingId: eventData?.recurrenceId,
+                    bookingId: eventData?.id,
                   },
                 });
               }}
-              text="Edit All"
+              text={"Edit Meeting"}
             />
-          </>
-        )}
-      </DialogActions>}
+          )}
+          {submitMode === "editAll" && (
+            <>
+              <MyButton
+                variant="contained"
+                customVariant="dark"
+                startIcon={<SquarePen size={16} />}
+                onClick={() => {
+                  dispatch(
+                    setBookingRoomFormData(
+                      mapEventToBookingFormData(eventData!),
+                    ),
+                  );
+                  navigate("/book-room", {
+                    state: {
+                      submitMode: "editOnce",
+                      bookingId: event?.id,
+                    },
+                  });
+                }}
+                text="Edit This Meeting"
+              />
+              <MyButton
+                variant="contained"
+                customVariant="dark"
+                startIcon={<SquarePen size={16} />}
+                onClick={() => {
+                  dispatch(
+                    setBookingRoomFormData(
+                      mapEventToBookingFormData(eventData!),
+                    ),
+                  );
+                  navigate("/book-room", {
+                    state: {
+                      submitMode: submitMode,
+                      bookingId: eventData?.recurrenceId,
+                    },
+                  });
+                }}
+                text="Edit All"
+              />
+            </>
+          )}
+        </DialogActions>
+      )}
     </Dialog>
   );
 };
