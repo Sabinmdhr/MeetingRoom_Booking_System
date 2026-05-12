@@ -176,6 +176,14 @@ export const ParticipantsTable = ({
                               vertical: "top",
                               horizontal: "right",
                             }}
+                            slotProps={{
+                              paper: {
+                                sx: {
+                                  width: 180,
+                                  boxShadow: "none !important",
+                                },
+                              },
+                            }}
                           >
                             <MenuItem
                               className="menu-btn"
