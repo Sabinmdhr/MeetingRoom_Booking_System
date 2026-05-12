@@ -57,10 +57,12 @@ export const getBookedDataByMeetingId = async (
 };
 
 export const updateBookedRoomById = async (
-  roomBookingId: number,
+  roomBookingId: number | string,
 ): Promise<BookedRoomDataResponse> => {
+  const body = { status: "INACTIVE" };
   const res = await api.patch(
     `/api/v1/booked-room/${roomBookingId}/change-status`,
+    body,
   );
   return res.data;
 };

@@ -57,6 +57,7 @@ export const ParticipantsTable = ({
     handleChangeRowsPerPage,
     totalElements,
     users,
+    handleDeleteUser,
   } = useparticipantsViewModel();
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
@@ -85,10 +86,9 @@ export const ParticipantsTable = ({
       participant: null,
     });
   };
-    useEffect(() => {
-      fetchUsers(fetchUserReqData);
-    }, []);
-
+  useEffect(() => {
+    fetchUsers(fetchUserReqData);
+  }, []);
 
   // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
@@ -194,7 +194,9 @@ export const ParticipantsTable = ({
                             <MenuItem
                               className="menu-btn"
                               onClick={() => {
-                                // handleDelete(participant);
+                                if (menuState.participant) {
+                                  handleDeleteUser(menuState.participant.id);
+                                }
                                 handleMenuClose();
                               }}
                             >
