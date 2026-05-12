@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getDepartmentList, handleAddDepartment, handleEditDepartment } from "../services/departmentList.service";
+import {
+  deleteDepartment,
+  getDepartmentList,
+  handleAddDepartment,
+  handleEditDepartment,
+} from "../services/departmentList.service";
 import { toast } from "react-toastify";
 import type {
   addDepartment,
@@ -59,33 +64,41 @@ export const useDepartmentListViewModel = () => {
     }
   };
 
-const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const { name, value } = e.target;
-  setDepartmentFormData((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setDepartmentFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-const submitDepartment = async (data: addDepartment) => {
-  try {
-    await handleAddDepartment(data);
-    toast.success("Department added successfully!");
-  } catch (error) {
-    console.error("Error adding department:", error);
-    toast.error("Failed to add department");
-  }
-};
+  const submitDepartment = async (data: addDepartment) => {
+    try {
+      await handleAddDepartment(data);
+      toast.success("Department added successfully!");
+    } catch (error) {
+      console.error("Error adding department:", error);
+      toast.error("Failed to add department");
+    }
+  };
 
-const editDepartment = async (id: number, data: addDepartment) => {
-  try {
-    await handleEditDepartment(id, data);
-    toast.success("Department updated successfully!");
-  } catch (error) {
-    console.error("Error editing department:", error);
-    toast.error("Failed to update department");
-  }
-};
+  const editDepartment = async (id: number, data: addDepartment) => {
+    try {
+      await handleEditDepartment(id, data);
+      toast.success("Department updated successfully!");
+    } catch (error) {
+      console.error("Error editing department:", error);
+      toast.error("Failed to update department");
+    }
+  };
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteDepartment(id);
+      toast.success("Department is successfully Deleted");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // Here you would typically send departmentFormData to your backend API
   useEffect(() => {
     fetchDepartments();
@@ -103,5 +116,6 @@ const editDepartment = async (id: number, data: addDepartment) => {
     handleChange,
     submitDepartment,
     editDepartment,
+    handleDelete,
   };
 };

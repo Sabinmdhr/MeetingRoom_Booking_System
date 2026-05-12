@@ -354,6 +354,7 @@ const BookRoom = () => {
                 />
               </div>
               <MyButton
+                className="book-btn "
                 variant="contained"
                 customVariant="dark"
                 onClick={() => {
@@ -407,6 +408,7 @@ const BookRoom = () => {
                           const participant = users.find((p) => p.id === id);
                           return participant ? (
                             <Chip
+                              className="selected-participant"
                               label={`${participant.firstname} ${participant.lastname}`}
                               key={id}
                               icon={
@@ -417,7 +419,6 @@ const BookRoom = () => {
                                   }}
                                 />
                               }
-                              className="selected-participant"
                             />
                           ) : null;
                         })}
@@ -426,14 +427,15 @@ const BookRoom = () => {
                   )}
                 {bookinRoomFormData.externalParticipants.length > 0 && (
                   <>
-                    <div className="selected-participants">
+                    <div>
                       <Typography variant="subtitle2">
                         External Participants:
                       </Typography>
-                      <div className="selected-chips">
+                      <div className="external-participants">
                         {bookinRoomFormData.externalParticipants.map(
                           (participant) => (
                             <Chip
+                              className="external-participant"
                               label={`${participant.name} `}
                               key={participant.email}
                               icon={
@@ -448,7 +450,6 @@ const BookRoom = () => {
                                   }}
                                 />
                               }
-                              className="selected-participant"
                             />
                           ),
                         )}

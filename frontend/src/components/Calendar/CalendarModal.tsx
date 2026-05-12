@@ -37,6 +37,7 @@ import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
 import { mapEventToBookingFormData } from "../../models/mapper/CalendarToBookRoomMapper";
 import { usePermissions } from "../../hooks/usePermissions";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
+import { formatDisplayTime, timeStringToMinutes } from "../../utils/timeUtils";
 
 interface CalendarModalProps {
   open: boolean;
@@ -62,8 +63,6 @@ export const CalendarModal = ({
   const { handleDeleteBookedMeeting } = useBookingRoomViewModel();
   const submitMode =
     eventData?.recurrenceType === "NONE" ? "editOnce" : "editAll";
-
-  const colorCode = eventData?.meetingType?.colorCode;
 
   const internalParticipants = eventData?.internalParticipant ?? [];
   const externalParticipants = eventData?.externalParticipant ?? [];
@@ -147,7 +146,8 @@ export const CalendarModal = ({
                   variant="h4"
                   className="calendar-modal__row__secondary"
                 >
-                  {startTime} – {endTime}
+                  {formatDisplayTime(timeStringToMinutes(startTime))} –{" "}
+                  {formatDisplayTime(timeStringToMinutes(endTime))}
                 </Typography>
               </div>
             </div>
@@ -356,12 +356,7 @@ export const CalendarModal = ({
             }}
             text="Delete"
           />
-          <MyButton
-            variant="outlined"
-            customVariant="ghost"
-            onClick={onClose}
-            text="Close"
-          />
+
           {submitMode === "editOnce" && (
             <MyButton
               variant="contained"

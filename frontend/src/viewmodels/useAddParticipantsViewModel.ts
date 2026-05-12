@@ -128,20 +128,20 @@ export const useAddParticipantsViewModel = () => {
     setIsSubmitted(true);
 
     const isValid = validate(mode);
-    console.log("IS VALID:", isValid); // 👈 ADD THIS
+    console.log("IS VALID:", isValid);
 
     if (!isValid) {
-      console.log("ERRORS:", errors); // 👈 ADD THIS
+      console.log("ERRORS:", errors); 
       return false;
     }
 
     try {
       if (mode === "edit" && id) {
-        console.log("EDITING USER"); // 👈 ADD
+        console.log("EDITING USER"); 
         await editUser(id, participantFormData);
         toast.success("Participant updated successfully");
       } else {
-        console.log("ADDING USER"); // 👈 ADD
+        console.log("ADDING USER"); 
         await addUser(participantFormData);
         toast.success("Participant added successfully");
       }
