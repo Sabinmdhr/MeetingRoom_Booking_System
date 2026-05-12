@@ -11,7 +11,7 @@ import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListVi
 
 export const DepartmentTable = () => {
   const { departmentList } = useDepartmentListViewModel();
-  return departmentList.length === 0 ? (
+  return departmentList.length !== 0 ? (
     <TableContainer component={Paper} className="TableContainer">
       <Table>
         <TableHead className="TableHead">
