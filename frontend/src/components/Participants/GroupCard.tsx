@@ -4,7 +4,7 @@ import { Building2, Pen, Trash2 } from "lucide-react";
 import "../../assets/scss/components/GroupCard.scss";
 import { deleteGroupCard } from "../../services/groupCard.services";
 import MyButton from "../ui/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import {
   mappingGroupResponseToRequest,
@@ -31,11 +31,15 @@ export const GroupCard = ({
   handleGroupFormClose,
   groupFormState,
 }: props) => {
+ 
+
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
-  const { group } = useGroupCardViewModel();
+  const { group , fetchData} = useGroupCardViewModel();
+
+
 
   const handleDeleteClick = (id: number) => {
     setSelectedGroupId(id);

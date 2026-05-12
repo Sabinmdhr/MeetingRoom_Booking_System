@@ -18,3 +18,12 @@ export const handleEditDepartment = async(id: number, data: addDepartment) => {
     throw error;
   }
 }
+export const deleteDepartment = async(id: number) =>{
+  try {
+    const res = await api.patch(`/api/v1/department/${id}`)
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    
+  }
+}

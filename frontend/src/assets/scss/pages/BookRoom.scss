@@ -235,14 +235,11 @@
 
   .book-btn {
     padding: 10px 0;
-    margin-top: 5px;
-    background-color: #6d6f75;
-    text-transform: none;
-    font-weight: 500;
+    margin-top: 20px;
     border-radius: 8px;
 
     &:hover {
-      background-color: #5a5c61;
+      opacity: 0.9 !important;
     }
   }
 
@@ -293,8 +290,18 @@
   flex-wrap: wrap;
   gap: 4px;
   margin: 4px 0;
+}
+.selected-participant{
+  border: 2px solid #e5e7eb !important;
+}
 
-  .selected-chips{
-    display: flex;
-  }
+.external-participants{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+}
+.external-participant{
+  border: 2px solid #f26a00 !important;
+  background: #fff7f2 !important;
 }

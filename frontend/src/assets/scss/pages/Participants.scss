@@ -29,14 +29,14 @@
   border-bottom: 1.5px solid #e5e7eb;
   margin: 16px 0;
   gap: 10px;
-  cursor: pointer;
-
+  
   .active {
     color: #155dfc;
     border-bottom: 2px solid #155dfc !important;
   }
   .participants-tab,
   .group-tab {
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;

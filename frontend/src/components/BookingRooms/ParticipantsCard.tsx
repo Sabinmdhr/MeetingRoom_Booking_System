@@ -2,7 +2,6 @@ import {
   Typography,
   Tab,
   TextField,
-  Button,
   InputAdornment,
   AccordionSummary,
   AccordionDetails,
@@ -10,7 +9,7 @@ import {
 } from "@mui/material";
 import "../../assets/scss/components/ParticipantsCard.scss";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { UserPlus, Search, ChevronDown, X } from "lucide-react";
+import { Search, ChevronDown, X } from "lucide-react";
 import Accordion from "@mui/material/Accordion";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import { useState } from "react";
