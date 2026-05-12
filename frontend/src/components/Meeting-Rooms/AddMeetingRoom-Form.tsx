@@ -107,7 +107,9 @@ export const AddMeetingRoomForm = ({
         // onClose={() => setOpen((prev) => (prev = !prev))}
         slotProps={{ paper: { className: "Form__Container" } }}
       >
-        <DialogTitle className="title">{roomFormState.mode === "add" ? "Add a New Room": "Edit Room"}</DialogTitle>
+        <DialogTitle className="title">
+          {roomFormState.mode === "add" ? "Add a New Room" : "Edit Room"}
+        </DialogTitle>
         <DialogContent>
           <FormControl fullWidth>
             {/* TextFields */}
@@ -139,7 +141,10 @@ export const AddMeetingRoomForm = ({
             <FormGroup>
               <Grid container>
                 {roomResources.map((resource) => (
-                  <Grid size={6} key={resource.id}>
+                  <Grid
+                    size={6}
+                    key={resource.id}
+                  >
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -179,7 +184,7 @@ export const AddMeetingRoomForm = ({
                       text="Cancel"
                       customVariant="ghost"
                       onClick={() => {
-setAddResourceMode(false);
+                        setAddResourceMode(false);
                       }}
                     />{" "}
                     <MyButton

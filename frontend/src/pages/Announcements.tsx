@@ -332,7 +332,7 @@ const Announcement = () => {
 
             {/* SHOW MORE */}
 
-            {hasMore && !filterClick && (
+            {hasMore  && (
               <div className="announcement__bottom">
                 <MyButton
                   variant="outlined"

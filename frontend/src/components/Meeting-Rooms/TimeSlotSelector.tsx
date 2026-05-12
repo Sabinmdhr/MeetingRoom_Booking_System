@@ -275,7 +275,10 @@ export const TimeSlotSelector = ({
             style={!calendarView ? { marginLeft: "50%" } : {}}
           >
             <Typography className="timeslot-date">{formattedDate}</Typography>
-            <Typography className="jump-today" onClick={jumpToToday}>
+            <Typography
+              className="jump-today"
+              onClick={jumpToToday}
+            >
               Jump to Today
             </Typography>
           </Box>
@@ -289,10 +292,16 @@ export const TimeSlotSelector = ({
         </Box>
       </div>
 
-      <div className="timelineWrapper" ref={timelineRef}>
+      <div
+        className="timelineWrapper"
+        ref={timelineRef}
+      >
         <div className="timeGutter">
           {hours.map((hour) => (
-            <div key={hour} className="timeLabel">
+            <div
+              key={hour}
+              className="timeLabel"
+            >
               {hour.toString().padStart(2, "0")}:00
             </div>
           ))}
@@ -330,12 +339,13 @@ export const TimeSlotSelector = ({
 
                 backgroundColor: bookedColor,
                 border: `1px solid ${bookedColor}`,
-                ...(calendarView && !DialogView && {
-                  backgroundColor: `rgb${slot.color}`,
-                  border: `1px solid rgb${slot.color}`,
-                  fontSize: 10,
-                  // alignItems: "normal",
-                }),
+                ...(calendarView &&
+                  !DialogView && {
+                    backgroundColor: `rgb${slot.color}`,
+                    border: `1px solid rgb${slot.color}`,
+                    fontSize: 10,
+                    // alignItems: "normal",
+                  }),
                 justifyContent: "center",
                 ...(!calendarView && {
                   alignItems: "center",
@@ -347,25 +357,25 @@ export const TimeSlotSelector = ({
                 cursor: "not-allowed",
               }}
             >
-              {calendarView ? !DialogView && (
-                <div
-                  style={{
-                    display: "flex",
-                    // flexDirection: "column",
-                    justifyContent: "space-between",
-                    margin: "0px 12px",
-                  }}
-                >
-                  <Typography>{slot.title}</Typography>
-                  <Typography>
-                    {formatDisplayTime(timeStringToMinutes(slot.start))} -
-                    {formatDisplayTime(timeStringToMinutes(slot.end))}
-                  </Typography>
-                </div>
-              ) : (
-                ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
-              ${formatDisplayTime(timeStringToMinutes(slot.end))}`
-              )}
+              {calendarView
+                ? !DialogView && (
+                    <div
+                      style={{
+                        display: "flex",
+                        // flexDirection: "column",
+                        justifyContent: "space-between",
+                        margin: "0px 12px",
+                      }}
+                    >
+                      <Typography>{slot.title}</Typography>
+                      <Typography>
+                        {formatDisplayTime(timeStringToMinutes(slot.start))} -
+                        {formatDisplayTime(timeStringToMinutes(slot.end))}
+                      </Typography>
+                    </div>
+                  )
+                : ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
+              ${formatDisplayTime(timeStringToMinutes(slot.end))}`}
             </div>
           ))}
           {/* ---------------------prev past timeslot---------------- */}
@@ -471,19 +481,23 @@ export const TimeSlotSelector = ({
             }}
           />
         </div>
-      ) : ( mannualScroll &&
-        <div className="footer">
-          <div className="timeDuration">
-            <div className="timeDisplayWrapper">
-              <div className="timeBox">{formatDisplayTime(startTime ?? 0)}</div>
-              <div className="separator">-</div>
-              <div className="timeBox">{formatDisplayTime(endTime ?? 0)}</div>
-            </div>
-            <div className="durationDisplay">
-              Duration: {formatDuration(startTime ?? 0, endTime ?? 0)}
+      ) : (
+        mannualScroll && (
+          <div className="footer">
+            <div className="timeDuration">
+              <div className="timeDisplayWrapper">
+                <div className="timeBox">
+                  {formatDisplayTime(startTime ?? 0)}
+                </div>
+                <div className="separator">-</div>
+                <div className="timeBox">{formatDisplayTime(endTime ?? 0)}</div>
+              </div>
+              <div className="durationDisplay">
+                Duration: {formatDuration(startTime ?? 0, endTime ?? 0)}
+              </div>
             </div>
           </div>
-        </div>
+        )
       )}
     </div>
   );

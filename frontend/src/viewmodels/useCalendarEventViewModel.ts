@@ -163,21 +163,6 @@ export const useCalendarEventViewModel = () => {
     return map;
   }, [monthEvents]);
 
-  // Day view: "YYYY-MM-DD" → hour (0-23) → CalendarEvent[]
-  const eventsByDateHour = useMemo(() => {
-    const map: Record<string, Record<number, CalendarEvent[]>> = {};
-    dayEvents.forEach((e) => {
-      const hour = dayjs(
-        `${e.date} ${e.startTime}`,
-        "YYYY-MM-DD h:mm A",
-      ).hour();
-      if (!map[e.date]) map[e.date] = {};
-      if (!map[e.date][hour]) map[e.date][hour] = [];
-      map[e.date][hour].push(e);
-    });
-    return map;
-  }, [dayEvents]);
-
   // CalendarPreview: meetings within the selected date range
   const meetings = useMemo(() => {
     if (!dateRange.start) return [];
@@ -263,7 +248,6 @@ export const useCalendarEventViewModel = () => {
     setCurrentMonth,
     hours,
     eventsByDate,
-    eventsByDateHour,
     selectedEvent,
     eventData,
     setEventData,
