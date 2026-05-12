@@ -10,8 +10,14 @@ import { toast } from "react-toastify";
 
 const RoomTimeslot = () => {
   const { room } = useRoomTimeslotViewModel();
-  const { updateBookingTimeAndDate, setSlot, slot, PastimeColor, bookedColor } =
-    useBookingRoomViewModel();
+  const {
+    updateBookingTimeAndDate,
+    setSlot,
+    slot,
+    PastimeColor,
+    selectedColor,
+    bookedColor,
+  } = useBookingRoomViewModel();
 
   const navigate = useNavigate();
   return (
@@ -54,10 +60,18 @@ const RoomTimeslot = () => {
         />
       </div>
       <div className="cat-legend">
-        <i className="cat-dot " style={{ background: PastimeColor }} />
-        <span>Past Time</span>
-        <i className="cat-dot " style={{ background: bookedColor }} />
-        <span>Booked</span>
+        <div>
+          <i className="cat-dot " style={{ background: selectedColor }} />
+          <span>Selected time</span>
+        </div>{" "}
+        <div>
+          <i className="cat-dot " style={{ background: PastimeColor }} />
+          <span>Past Time</span>
+        </div>{" "}
+        <div>
+          <i className="cat-dot " style={{ background: bookedColor }} />
+          <span>Booked Time</span>
+        </div>
       </div>
 
       <TimeSlotSelector onSave={setSlot} calendarView={false} />

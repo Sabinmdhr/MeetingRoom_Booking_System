@@ -286,3 +286,15 @@
     color: #2f2f2f;
   }
 }
+
+
+.selected-participants{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+
+  .selected-chips{
+    display: flex;
+  }
+}

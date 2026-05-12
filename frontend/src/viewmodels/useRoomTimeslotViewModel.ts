@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -5,29 +6,22 @@ export const useRoomTimeslotViewModel = () => {
   const location = useLocation();
   const room = location.state?.room;
 
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(dayjs());
 
   const changeDate = (days: number) => {
-    const newDate = new Date(currentDate);
-    newDate.setDate(currentDate.getDate() + days);
-    setCurrentDate(newDate);
+    setCurrentDate((prev) => prev.add(days, "day"));
   };
 
-  const jumpToToday = () => setCurrentDate(new Date());
+  const jumpToToday = () => setCurrentDate(dayjs());
 
-  const formattedDate = currentDate.toLocaleDateString("en-US", {
-    weekday: "long",
-    // year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const formattedDate  = currentDate.format("dddd, MMMM D");
   const getLocalDateString = (date: Date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-  const backendFormattedDate = getLocalDateString(currentDate);
+  const backendFormattedDate = currentDate.format("YYYY-MM-DD");
   const isPastDay =
     new Date(backendFormattedDate).getTime() < new Date().setHours(0, 0, 0, 0);
   return {
@@ -37,7 +31,8 @@ export const useRoomTimeslotViewModel = () => {
     getLocalDateString,
     jumpToToday,
     backendFormattedDate,
-currentDate,
+    currentDate,
+    setCurrentDate,
     isPastDay,
   };
 };

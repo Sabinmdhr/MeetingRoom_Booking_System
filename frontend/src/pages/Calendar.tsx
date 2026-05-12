@@ -64,6 +64,7 @@ export const Calendar = () => {
     closeModal,
     setSelectedDates,
     eventData,
+    selectedDates,
     eventDataLoading,
     rooms,
     loading,
@@ -173,6 +174,7 @@ export const Calendar = () => {
   const handleRoomCellClick = (date: dayjs.Dayjs, roomName: string) => {
     setSelectedRoom(roomName);
     goToToday(date);
+
     setSelectedDates(date);
     setView("day");
   };
@@ -246,7 +248,7 @@ export const Calendar = () => {
                 <Tab label="Month" value="month" />
               </Tabs>
 
-              {isDayView && (
+              {perms.canManageRooms && isDayView && (
                 <div className="cal-room-select">
                   <TextField
                     select
@@ -314,19 +316,22 @@ export const Calendar = () => {
               style={{
                 display: "flex",
                 gap: "12px",
-                justifyContent: "space-between",
+                // justifyContent: "space-between",
               }}
             >
               {isDayView &&
                 meetingTypes.map((m) => (
                   <div className="cat-legend">
-                    <i
+                    <div>
+                        <i
                       className="cat-dot "
                       style={{
                         background: `rgba(${m.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
                       }}
                     />
                     <span>{m.name}</span>
+                    </div>
+
                   </div>
                 ))}
             </div>
@@ -343,6 +348,7 @@ export const Calendar = () => {
             key={roomId}
             onSave={setSlot}
             calendarView={true}
+            selectedDate={selectedDates}
           />
         )}
 
@@ -426,7 +432,6 @@ export const Calendar = () => {
                             }}
                           >
                             {visible.map((event) => {
-
                               return (
                                 <div
                                   key={event.id}
