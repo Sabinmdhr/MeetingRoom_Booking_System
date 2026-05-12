@@ -242,14 +242,8 @@ export const Calendar = () => {
                 }}
                 className="cal-tabs"
               >
-                <Tab
-                  label="Day"
-                  value="day"
-                />
-                <Tab
-                  label="Month"
-                  value="month"
-                />
+                <Tab label="Day" value="day" />
+                <Tab label="Month" value="month" />
               </Tabs>
 
               {isDayView && (
@@ -294,7 +288,7 @@ export const Calendar = () => {
                     endTime: slot.endTime,
                     startDate: slot.startDate,
                   });
-                  navigate("/book-room")
+                  navigate("/book-room");
                 }}
                 disabled={
                   slot.startTime === "00:00" && slot.endTime === "00:00"
@@ -328,7 +322,9 @@ export const Calendar = () => {
                   <div className="cat-legend">
                     <i
                       className="cat-dot "
-                      style={{ background: `rgb${m.colorCode}` }}
+                      style={{
+                        background: `rgba(${m.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
+                      }}
                     />
                     <span>{m.name}</span>
                   </div>
@@ -355,10 +351,7 @@ export const Calendar = () => {
           <div className="room-grid">
             <div className="room-grid__header">
               <div className="room-grid__corner">Rooms</div>
-              <div
-                className="room-grid__date-strip"
-                ref={headerScrollRef}
-              >
+              <div className="room-grid__date-strip" ref={headerScrollRef}>
                 {gridDates.map((date) => {
                   const key = date.format("YYYY-MM-DD");
                   return (
@@ -381,28 +374,19 @@ export const Calendar = () => {
             <div className="room-grid__body">
               <div className="room-grid__labels">
                 {rooms.map((rm) => (
-                  <div
-                    key={rm.id}
-                    className="room-grid__label"
-                  >
+                  <div key={rm.id} className="room-grid__label">
                     <span>{rm.roomName}</span>
                   </div>
                 ))}
               </div>
 
               {/* THE only scrollable element */}
-              <div
-                className="room-grid__scroll"
-                ref={bodyScrollRef}
-              >
+              <div className="room-grid__scroll" ref={bodyScrollRef}>
                 {/* Loading skeleton — shown while rooms or events are fetching */}
                 {loading ? (
                   <div className="room-grid__skeleton">
                     {Array.from({ length: 3 }).map((_, ri) => (
-                      <div
-                        key={ri}
-                        className="room-grid__row"
-                      >
+                      <div key={ri} className="room-grid__row">
                         {Array.from({ length: 7 }).map((_, ci) => (
                           <div
                             key={ci}
@@ -414,10 +398,7 @@ export const Calendar = () => {
                   </div>
                 ) : (
                   rooms.map((rm) => (
-                    <div
-                      key={rm.id}
-                      className="room-grid__row"
-                    >
+                    <div key={rm.id} className="room-grid__row">
                       {gridDates.map((date) => {
                         const key = date.format("YYYY-MM-DD");
                         const cellEvents = (eventsByDate[key] ?? []).filter(
@@ -445,14 +426,13 @@ export const Calendar = () => {
                             }}
                           >
                             {visible.map((event) => {
-                              const raw = event.meetingType?.colorCode;
 
                               return (
                                 <div
                                   key={event.id}
                                   style={{
-                                    borderLeft: `5px solid rgb${raw}`,
-                                    backgroundColor: alpha(`rgb${raw}`, 0.3),
+                                    borderLeft: `5px solid rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`,
+                                    backgroundColor: `rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.3)`,
                                     // opacity: 0.6,
                                   }}
                                   className="room-grid__event"
@@ -481,10 +461,7 @@ export const Calendar = () => {
                                   );
                                 }}
                               >
-                                <Plus
-                                  size={12}
-                                  strokeWidth={2.5}
-                                />
+                                <Plus size={12} strokeWidth={2.5} />
                                 <span>Book</span>
                               </div>
                             )}
@@ -573,8 +550,8 @@ export const Calendar = () => {
                   handleEventClick(e, event);
                 }}
                 style={{
-                  borderLeft: `5px solid rgb${raw}`,
-                  background: alpha(`rgb${raw}`, 0.3),
+                  borderLeft: `5px solid rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`,
+                  background: ``,
                 }}
               >
                 <span className="room-grid__event__time">

@@ -471,7 +471,7 @@ export const TimeSlotSelector = ({
             }}
           />
         </div>
-      ) : (
+      ) : ( mannualScroll &&
         <div className="footer">
           <div className="timeDuration">
             <div className="timeDisplayWrapper">
