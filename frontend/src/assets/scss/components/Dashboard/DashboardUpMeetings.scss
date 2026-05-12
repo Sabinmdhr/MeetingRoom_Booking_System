@@ -12,7 +12,7 @@
     font-size: 18px !important;
   }
 
-  &__list{
+  &__list {
     overflow-y: auto !important;
     height: 440px;
     scrollbar-width: none;
@@ -25,7 +25,7 @@
     font-weight: 600 !important;
     margin-bottom: 14px;
     border: 1px solid #d2c5db !important;
-    border-radius: 20px !important;
+    border-radius: 10px !important;
     padding: 4px;
     display: flex;
     flex-direction: column;
@@ -69,4 +69,3 @@
     font-size: 14px !important;
   }
 }
-

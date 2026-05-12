@@ -647,3 +647,14 @@ $cat-external-border: #22c55e;
   flex-direction: column;
   gap: 6px;
 }
+
+.room-grid__cell--past {
+  cursor: not-allowed;
+  background: #f8fafc;
+  border: none;
+
+  &:hover {
+    background: #f8fafc;
+    box-shadow: none;
+  }
+}

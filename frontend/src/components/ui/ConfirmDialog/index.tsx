@@ -1,4 +1,3 @@
-
 import {
   Dialog,
   DialogTitle,
@@ -34,6 +33,7 @@ const ConfirmDialog = ({
       onClose={onClose}
       fullWidth
       maxWidth="sm"
+     
     >
       <DialogTitle>{title}</DialogTitle>
 

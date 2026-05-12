@@ -136,12 +136,24 @@ const ParticipantsCard = ({
                   onChange={(_e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab label="People" value="people" />
-                  <Tab label="Teams" value="teams" />
-                  <Tab label="All" value="all" />
+                  <Tab
+                    label="People"
+                    value="people"
+                  />
+                  <Tab
+                    label="Teams"
+                    value="teams"
+                  />
+                  <Tab
+                    label="All"
+                    value="all"
+                  />
                 </TabList>
 
-                <TabPanel value="people" className="tab-panel">
+                <TabPanel
+                  value="people"
+                  className="tab-panel"
+                >
                   <TextField
                     fullWidth
                     size="small"
@@ -151,7 +163,10 @@ const ParticipantsCard = ({
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search size={18} color="gray" />
+                          <Search
+                            size={18}
+                            color="gray"
+                          />
                         </InputAdornment>
                       ),
                     }}
@@ -181,7 +196,10 @@ const ParticipantsCard = ({
                         />
 
                         <div className="participant-info">
-                          <Typography variant="subtitle2" className="name">
+                          <Typography
+                            variant="subtitle2"
+                            className="name"
+                          >
                             {p.firstname} {p.lastname}
                           </Typography>
                           <div className="participant-Subinfo">
@@ -213,32 +231,39 @@ const ParticipantsCard = ({
                             );
                           }}
                           key={d.id}
+                          className="teams-list"
                         >
                           <AccordionSummary
                             expandIcon={<ChevronDown />}
                             aria-controls={`panel${index}-content`}
                           >
-                            <input
-                              type="checkbox"
-                              className="check"
-                              checked={users
-                                .filter(
-                                  (p) => p.department === d.departmentName,
-                                )
-                                .every((m) =>
-                                  selectedParticipants.includes(m.id),
-                                )}
-                              onClick={() =>
-                                toggleGroupSelection(
-                                  users
-                                    .filter(
-                                      (p) => p.department === d.departmentName,
-                                    )
-                                    .map((m) => m.id),
-                                )
-                              }
-                            />
-                            <Typography>{d.departmentName}</Typography>
+                            <div className="teams-list__header">
+                              <input
+                              size={25}
+                                type="checkbox"
+                                className="check"
+                                checked={users
+                                  .filter(
+                                    (p) => p.department === d.departmentName,
+                                  )
+                                  .every((m) =>
+                                    selectedParticipants.includes(m.id),
+                                  )}
+                                onClick={() =>
+                                  toggleGroupSelection(
+                                    users
+                                      .filter(
+                                        (p) =>
+                                          p.department === d.departmentName,
+                                      )
+                                      .map((m) => m.id),
+                                  )
+                                }
+                              />
+                              <Typography variant="h5">
+                                {d.departmentName}
+                              </Typography>
+                            </div>
                           </AccordionSummary>
                           <AccordionDetails>
                             <div className={`participants-list `}>

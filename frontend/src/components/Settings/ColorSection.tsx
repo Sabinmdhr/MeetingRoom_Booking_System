@@ -38,13 +38,19 @@ export default function MeetingTypeColors() {
         <Palette size={22} />
         Meeting Type Colors
       </Typography>
-      <Typography variant="body2" className="meeting-type-colors__subheader">
+      <Typography
+        variant="body2"
+        className="meeting-type-colors__subheader"
+      >
         Customize the color scheme for different meeting types across the
         dashboard
       </Typography>
 
       {meetingTypes.map((item) => (
-        <div className="meeting-type-colors__row" key={item.id}>
+        <div
+          className="meeting-type-colors__row"
+          key={item.id}
+        >
           <div className="meeting-type-colors__left">
             <div
               className="meeting-type-colors__color-preview"
@@ -84,7 +90,10 @@ export default function MeetingTypeColors() {
                     setOpenDialog(true);
                   }}
                 >
-                  <X size={18} color="red" />
+                  <X
+                    size={18}
+                    color="red"
+                  />
                 </IconButton>
               </div>
             </div>
@@ -137,25 +146,11 @@ export default function MeetingTypeColors() {
             </>
           )}
 
-          <ConfirmDialog
-            open={openDialog}
-            title="Delete Meeting Type"
-            content="Are you sure you want to delete this meeting type?"
-            text="Delete"
-            onConfirm={async () => {
-              if (selectedId !== null) {
-                await deleteMeetingType(selectedId);
-                console.log("deleted");
-              }
-              setOpenDialog(false);
-            }}
-            onClose={() => {
-              setOpenDialog(false);
-            }}
-          />
-
           {activePickerId === item.id && (
-            <div className="meeting-type-colors__picker" ref={pickerRef}>
+            <div
+              className="meeting-type-colors__picker"
+              ref={pickerRef}
+            >
               <SketchPicker
                 color={`${item?.colorCode}`}
                 onChangeComplete={(color: ColorResult) => {
@@ -202,7 +197,10 @@ export default function MeetingTypeColors() {
                 />
               </Box>
               {addForm && openPicker && (
-                <div className="meeting-type-colors__picker" ref={pickerRef}>
+                <div
+                  className="meeting-type-colors__picker"
+                  ref={pickerRef}
+                >
                   <SketchPicker
                     color={meetingTypeFormData.colorCode}
                     onChangeComplete={(color: ColorResult) => {
@@ -258,6 +256,23 @@ export default function MeetingTypeColors() {
           customVariant="dark"
         />
       </div>
+
+      <ConfirmDialog
+        open={openDialog}
+        title="Delete Meeting Type"
+        content="Are you sure you want to delete this meeting type?"
+        text="Delete"
+        onConfirm={async () => {
+          if (selectedId !== null) {
+            await deleteMeetingType(selectedId);
+            console.log("deleted");
+          }
+          setOpenDialog(false);
+        }}
+        onClose={() => {
+          setOpenDialog(false);
+        }}
+      />
     </Paper>
   );
 }

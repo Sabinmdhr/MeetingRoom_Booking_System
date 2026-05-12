@@ -114,6 +114,9 @@ const ReportFilters = ({
                 onChange={(e) => setFilter("startDate", e.target.value)}
                 fullWidth
                 className="report-filter__input"
+                inputProps={{
+                  max: filters.startDate || dayjs().format("YYYY-MM-DD"),
+                }}
               />
             </Grid>
             <Grid size={6}>

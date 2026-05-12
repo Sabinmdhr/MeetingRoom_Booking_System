@@ -14,7 +14,6 @@ import { Megaphone, X, Pin, Calendar } from "lucide-react";
 import "../../assets/scss/components/Announcement/AnnouncementModal.scss";
 import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
 import MyButton from "../ui/Button";
-import { useAuth } from "../../hooks/useAuth";
 import { usePermissions } from "../../hooks/usePermissions";
 
 const AnnouncementModal = ({
@@ -134,6 +133,7 @@ const AnnouncementModal = ({
                   onChange={handleChange}
                   fullWidth
                   inputProps={{ min: dayjs().format("YYYY-MM-DD") }}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
               </div>
 
@@ -152,6 +152,7 @@ const AnnouncementModal = ({
                       announcementFormData.startDate ||
                       dayjs().format("YYYY-MM-DD"),
                   }}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
               </div>
             </div>
