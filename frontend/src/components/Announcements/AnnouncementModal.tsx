@@ -14,7 +14,6 @@ import { Megaphone, X, Pin, Calendar } from "lucide-react";
 import "../../assets/scss/components/Announcement/AnnouncementModal.scss";
 import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
 import MyButton from "../ui/Button";
-import { useAuth } from "../../hooks/useAuth";
 import { usePermissions } from "../../hooks/usePermissions";
 
 const AnnouncementModal = ({

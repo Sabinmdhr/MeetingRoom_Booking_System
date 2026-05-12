@@ -52,7 +52,7 @@
 .participant-item {
   background: white;
   border-radius: 8px;
-  padding: 10px;
+  padding: 12px !important;
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -75,6 +75,7 @@
   display: flex;
   font-size: 14px !important;
   flex-direction: column;
+  padding-left: 6px;
 
   .name {
     font-weight: 500;
@@ -148,4 +149,19 @@
 .calendar-participants {
   display: flex;
   gap: 6px;
+}
+
+.teams-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px !important;
+  margin-bottom: 10px;
+
+  &__header {
+    display: flex !important;
+    gap: 12px;
+    .check {
+      accent-color: black;
+    }
+  }
 }

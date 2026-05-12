@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography, Avatar } from "@mui/material";
 import "../assets/scss/pages/UserProfile.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProfileSection from "../components/Settings/ProfileSection";
 import MyButton from "../components/ui/Button";
 import { useUserProfileViewModel } from "../viewmodels/useUserProfileViewModel";
@@ -10,11 +10,11 @@ const UserProfile = () => {
   const {
     profile,
     loading,
-    // handleChange,
-    // saveProfile,
-    // errors,
-    // handleDepartmentChange,
-    // handleRoleChange,
+    errors,
+    handleChange,
+    saveProfile,
+    handleDepartmentChange,
+    handleRoleChange,
   } = useUserProfileViewModel();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -33,7 +33,6 @@ const UserProfile = () => {
       </Typography>
 
       {!isEditing ? (
-
         <Card className="profile__card">
           <CardContent>
             <div className="profile__header">
@@ -87,13 +86,13 @@ const UserProfile = () => {
         </Card>
       ) : (
         <ProfileSection
-          // profile={profile}
-          // onChange={handleChange}
-          // onSave={saveProfile}
+          profile={profile}
+          errors={errors}
+          handleChange={handleChange}
+          saveProfile={saveProfile}
+          handleDepartmentChange={handleDepartmentChange}
+          handleRoleChange={handleRoleChange}
           onCancel={() => setIsEditing(false)}
-          // errors={errors}
-          // handleDepartmentChange={handleDepartmentChange}
-          // handleRoleChange={handleRoleChange}
         />
       )}
     </div>

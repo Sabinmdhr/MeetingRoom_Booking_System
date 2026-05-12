@@ -123,7 +123,7 @@ const BookRoom = () => {
                   name="meetingTitle"
                   value={bookinRoomFormData.meetingTitle}
                   onChange={handleChange}
-                  // error={!!errors.meetingTitle} // !! converts a value into a boolean. We do this bcuz material UI textfield expects error: boolean. So we convert the error message to true/false. !!"Meeting title required" → true. !!undefined → false
+                  // error={!!errors.meetingTitle} //  converts a value into a boolean. We do this bcuz material UI textfield expects error: boolean. So we convert the error message to true/false. !!"Meeting title required" → true. !!undefined → false
                   // helperText={errors.meetingTitle}
                   fullWidth
                 />

@@ -14,8 +14,7 @@ export const useUserProfileViewModel = () => {
   const loadUser = async () => {
     try {
       const data = await fetchCurrentUser();
-      console.log("RAW API RESPONSE:", data); //  check the shape
-      console.log("PROFILE DATA:", data?.data); //  check if id exists here
+
       setProfile(data?.data);
     } catch (err) {
       console.error(err);
@@ -116,7 +115,15 @@ export const useUserProfileViewModel = () => {
       };
       console.log("PROFILE ID:", profile.id);
       const res = await updateProfile(payload);
-      await loadUser();
+
+      setProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...payload,
+            }
+          : prev,
+      );
       return true;
     } catch (err) {
       console.error("Update failed", err);

@@ -14,7 +14,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { useCalendarEventViewModel } from "../viewmodels/useCalendarEventViewModel";
 import CalendarModal from "../components/Calendar/CalendarModal";
-import EditCalendarModal from "../components/Calendar/EditCalendarModal";
 import MyButton from "../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -95,6 +94,8 @@ export const Calendar = () => {
       dispatch(updateBookingRoomFormData({ roomId: rooms[0].id }));
     }
   }, [rooms]);
+  const isPastDate = (date: dayjs.Dayjs) =>
+    date.startOf("day").isBefore(dayjs().startOf("day"));
 
   useEffect(() => {
     if (view !== "month") return;
@@ -200,38 +201,48 @@ export const Calendar = () => {
       <CardContent className="calendar__topbar">
         <div className="cal-bar">
           <div className="cal-bar__left">
-            <div className="cal-nav">
-              <MyButton
-                onClick={goToPrev}
-                text=""
-                color="secondary"
-                startIcon={<ChevronLeft size={18} />}
-              />
-
-              <button
-                className="cal-nav__date-btn"
-                onClick={(e) => setDatePickerAnchor(e.currentTarget)}
-              >
-                <CalendarIcon size={15} />
-                <span>{currentMonth.format("MMMM YYYY")}</span>
-              </button>
-
-              <MyButton
-                onClick={goToNext}
-                text=""
-                color="secondary"
-                startIcon={<ChevronRight size={18} />}
-              />
-
-              {isMonthView && (
+            {isMonthView && (
+              <div className="cal-nav">
                 <MyButton
-                  onClick={handleTodayClick}
-                  variant="outlined"
+                  onClick={goToPrev}
+                  text=""
                   customVariant="ghost"
-                  text="Today"
+                  color="secondary"
+                  startIcon={<ChevronLeft size={19} />}
+                  size="large"
                 />
-              )}
-            </div>
+                {/* <button
+                  className="cal-nav__date-btn"
+                  onClick={(e) => setDatePickerAnchor(e.currentTarget)}
+                >
+                  <CalendarIcon size={15} />
+                  <span>{currentMonth.format("MMMM YYYY")}</span>
+                </button> */}
+                <MyButton
+                  startIcon={<CalendarIcon size={20} />}
+                  text={<span>{currentMonth.format("MMMM YYYY")}</span>}
+                  customVariant="ghost"
+                  size="medium"
+                  className="cal-nav__date-btn"
+                  onClick={() => {}}
+                  // onClick={(e) => setDatePickerAnchor(e.currentTarget)}
+                ></MyButton>
+                <MyButton
+                  customVariant="ghost"
+                  onClick={goToNext}
+                  text={<ChevronRight size={19} />}
+                  color="secondary"
+                />
+                <div style={{ marginLeft: "25px" }}>
+                  <MyButton
+                    onClick={handleTodayClick}
+                    variant="outlined"
+                    customVariant="ghost"
+                    text="Today"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="cal-filters">
               <Tabs
@@ -433,10 +444,15 @@ export const Calendar = () => {
                         return (
                           <div
                             key={cellId}
-                            className={`room-grid__cell${key === todayStr ? " room-grid__cell--today" : ""}`}
+                            className={`room-grid__cell
+                              ${key === todayStr ? " room-grid__cell--today" : ""}
+                              ${isPastDate(date) ? " room-grid__cell--past" : ""}
+                              `}
                             onMouseEnter={() => setHoveredCell(cellId)}
                             onMouseLeave={() => setHoveredCell(null)}
                             onClick={() => {
+                              if (isPastDate(date)) return;
+
                               handleRoomCellClick(date, rm.roomName);
                               dispatch(
                                 updateBookingRoomFormData({ roomId: rm.id }),
@@ -467,7 +483,7 @@ export const Calendar = () => {
                               );
                             })}
 
-                            {isHovered && cellId != todayStr && (
+                            {isHovered && !isPastDate(date) && (
                               <div
                                 className="room-grid__book-strip"
                                 onClick={(e) => {
@@ -523,7 +539,7 @@ export const Calendar = () => {
         transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <StaticDatePicker
+          {/* <StaticDatePicker
             value={currentMonth}
             // onAccept fires when the user clicks a day (no OK button needed)
             onAccept={(d) => {
@@ -536,6 +552,21 @@ export const Calendar = () => {
             // Remove the action bar (OK / Cancel buttons) entirely
             slotProps={{
               actionBar: { actions: [] },
+            }}
+          /> */}
+          <StaticDatePicker
+            value={currentMonth}
+            onChange={(d) => {
+              if (!d) return;
+
+              setCurrentMonth(d);
+              setSelectedDates(d);
+              setDatePickerAnchor(null);
+            }}
+            slotProps={{
+              actionBar: {
+                actions: [],
+              },
             }}
           />
         </LocalizationProvider>
@@ -601,15 +632,6 @@ export const Calendar = () => {
           setModalAnchor(null);
         }}
         onEdit={() => setMode("edit")}
-      />
-      <EditCalendarModal
-        openEdit={mode === "edit"}
-        event={selectedEvent}
-        onCloseAll={() => {
-          setMode(null);
-          closeModal();
-        }}
-        onBack={() => setMode("view")}
       />
     </Card>
   );

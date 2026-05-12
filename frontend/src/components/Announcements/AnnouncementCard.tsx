@@ -35,8 +35,7 @@ const AnnouncementCard = ({
   selectedIds,
   setSelectedIds,
 }: any) => {
-
-const perms = usePermissions()
+  const perms = usePermissions();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const isSelected = selectedIds?.includes(item.id) ?? false;
@@ -235,117 +234,121 @@ const perms = usePermissions()
           </div>
 
           {/* RIGHT — fixed width, always same height */}
-         {perms.canMannageAnnouncements && <div className="announcement__card-right">
-            {/* Ellipsis menu — hidden (visibility:hidden) in select mode so width is preserved */}
-            <Button
-              id={`announcement-button-${item.id}`}
-              aria-controls={open ? `announcement-menu-${item.id}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleMenuClick}
-              className="announcement__menu-btn"
-              style={{ visibility: click ? "hidden" : "visible" }}
-            >
-              <EllipsisVertical
-                color="black"
-                size={18}
-              />
-            </Button>
+          {perms.canMannageAnnouncements && (
+            <div className="announcement__card-right">
+              {/* Ellipsis menu — hidden (visibility:hidden) in select mode so width is preserved */}
+              <Button
+                id={`announcement-button-${item.id}`}
+                aria-controls={
+                  open ? `announcement-menu-${item.id}` : undefined
+                }
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleMenuClick}
+                className="announcement__menu-btn"
+                style={{ visibility: click ? "hidden" : "visible" }}
+              >
+                <EllipsisVertical
+                  color="black"
+                  size={18}
+                />
+              </Button>
 
-            {/* Circle selector — hidden (visibility:hidden) when NOT in select mode */}
-            <div
-              className="announcement__circle-btn"
-              style={{ visibility: click ? "visible" : "hidden" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                suppress();
-                setSelectedIds((prev: number[]) =>
-                  isSelected
-                    ? prev.filter((id) => id !== item.id)
-                    : [...prev, item.id],
-                );
-              }}
-            >
-              {isSelected ? (
-                <CircleCheck
-                  size={20}
-                  color="green"
-                  fill="#8cf1bd"
-                />
-              ) : (
-                <Circle
-                  size={20}
-                  color="#aaa"
-                />
-              )}
-            </div>
+              {/* Circle selector — hidden (visibility:hidden) when NOT in select mode */}
+              <div
+                className="announcement__circle-btn"
+                style={{ visibility: click ? "visible" : "hidden" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  suppress();
+                  setSelectedIds((prev: number[]) =>
+                    isSelected
+                      ? prev.filter((id) => id !== item.id)
+                      : [...prev, item.id],
+                  );
+                }}
+              >
+                {isSelected ? (
+                  <CircleCheck
+                    size={20}
+                    color="green"
+                    fill="#8cf1bd"
+                  />
+                ) : (
+                  <Circle
+                    size={20}
+                    color="#aaa"
+                  />
+                )}
+              </div>
 
-            <Menu
-              id={`announcement-menu-${item.id}`}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              transformOrigin={{ vertical: "top", horizontal: "right" }}
-              slotProps={{
-                paper: { className: "announcement-menu__button" },
-              }}
-              disableScrollLock
-              disableAutoFocusItem
-              disableEnforceFocus
-            >
-              <MenuItem
-                className="announcement-menu__button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleOpenDetail();
+              <Menu
+                id={`announcement-menu-${item.id}`}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                slotProps={{
+                  paper: { className: "announcement-menu__button" },
                 }}
+                disableScrollLock
+                disableAutoFocusItem
+                disableEnforceFocus
               >
-                <Eye size={16} />
-                <Typography variant="body1">View Details</Typography>
-              </MenuItem>
-              <MenuItem
-                className="announcement-menu__button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleOpenEdit();
-                }}
-              >
-                <SquarePen size={16} />
-                <Typography variant="body1">Edit</Typography>
-              </MenuItem>
-              <MenuItem
-                className="announcement-menu__button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePinClick();
-                }}
-              >
-                {item.pinned ? <PinOff size={16} /> : <Pin size={16} />}
-                <Typography variant="body1">
-                  {item.pinned ? "Unpin" : "Pin"}
-                </Typography>
-              </MenuItem>
-              <MenuItem
-                className="announcement-menu__button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteClick();
-                }}
-              >
-                <Trash2
-                  size={16}
-                  color="red"
-                />
-                <Typography
-                  variant="body1"
-                  color="error"
+                <MenuItem
+                  className="announcement-menu__button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenDetail();
+                  }}
                 >
-                  Delete
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </div>}
+                  <Eye size={16} />
+                  <Typography variant="body1">View Details</Typography>
+                </MenuItem>
+                <MenuItem
+                  className="announcement-menu__button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenEdit();
+                  }}
+                >
+                  <SquarePen size={16} />
+                  <Typography variant="body1">Edit</Typography>
+                </MenuItem>
+                <MenuItem
+                  className="announcement-menu__button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePinClick();
+                  }}
+                >
+                  {item.pinned ? <PinOff size={16} /> : <Pin size={16} />}
+                  <Typography variant="body1">
+                    {item.pinned ? "Unpin" : "Pin"}
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  className="announcement-menu__button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteClick();
+                  }}
+                >
+                  <Trash2
+                    size={16}
+                    color="red"
+                  />
+                  <Typography
+                    variant="body1"
+                    color="error"
+                  >
+                    Delete
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </div>
+          )}
         </CardContent>
       </Card>
 
