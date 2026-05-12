@@ -154,12 +154,36 @@ export const useCalendarEventViewModel = () => {
   //  Derived maps
 
   // Month grid: "YYYY-MM-DD" → CalendarEvent[]
+  // const eventsByDate = useMemo(() => {
+  //   const map: Record<string, CalendarEvent[]> = {};
+  //   monthEvents.forEach((e) => {
+  //     if (!map[e.date]) map[e.date] = [];
+  //     map[e.date].push(e);
+  //   });
+  //   return map;
+  // }, [monthEvents]);
+
   const eventsByDate = useMemo(() => {
     const map: Record<string, CalendarEvent[]> = {};
+
     monthEvents.forEach((e) => {
-      if (!map[e.date]) map[e.date] = [];
+      if (!map[e.date]) {
+        map[e.date] = [];
+      }
+
       map[e.date].push(e);
     });
+
+    // Sort events by start time for each date
+    Object.keys(map).forEach((date) => {
+      map[date].sort((a, b) => {
+        const timeA = dayjs(`2000-01-01 ${a.startTime}`);
+        const timeB = dayjs(`2000-01-01 ${b.startTime}`);
+
+        return timeA.valueOf() - timeB.valueOf();
+      });
+    });
+
     return map;
   }, [monthEvents]);
 

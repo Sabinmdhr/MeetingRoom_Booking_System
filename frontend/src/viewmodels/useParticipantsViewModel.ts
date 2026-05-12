@@ -5,9 +5,14 @@ import type {
   ParticipantsRequest,
   fetchUsersType,
 } from "../models/participants.model";
-import { DemoColumns, getAllUser } from "../services/participants.service";
+import {
+  deleteUser,
+  DemoColumns,
+  getAllUser,
+} from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import { setParticipants } from "../redux/ParticipantsSlice";
+import { toast } from "react-toastify";
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
@@ -121,6 +126,15 @@ export const useparticipantsViewModel = () => {
     setExternalName("");
     setExternalEmail("");
   };
+  const handleDeleteUser = async (id: number) => {
+    try {
+      const res = await deleteUser(id);
+      toast.success("Participant Successfully Deleted");
+      fetchUsers(fetchUserReqData);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
 
   return {
     handleChangePage,
@@ -134,6 +148,7 @@ export const useparticipantsViewModel = () => {
     setParticipants,
     fetchUsers,
     isEditOpen,
+    handleDeleteUser,
     // handleClose,
     // handleEdit,
     columns,

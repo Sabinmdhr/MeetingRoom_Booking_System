@@ -4,6 +4,7 @@ import {
   EditBookedRoomById,
   EditBookedRoomByRecurrenceId,
   getBookedDataByRoomId,
+  updateBookedRoomById,
 } from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,25 +24,26 @@ import { getCalendarByDay } from "../services/calendar.service";
 import type { CalendarByDay } from "../models/calendar.model";
 import { useAuth } from "../hooks/useAuth";
 import { getAllMeetingType } from "../services/report.service";
+import { toast } from "react-toastify";
 
 type BookingTimeAndDatePeops = {
   startTime: string;
   endTime: string;
   startDate: string;
-}
+};
 
 export const useBookingRoomViewModel = () => {
   const [bookedSlots, setBookedSlots] = useState<
-    { start: string; end: string; color: string; title:string ,id:number }[]
+    { start: string; end: string; color: string; title: string; id: number }[]
   >([]);
-   const [slot, setSlot] = useState({
-     startTime: "00:00",
-     endTime: "00:00",
-     startDate: "",
-   });
-   const PastimeColor = "#fff3cd";
-   const bookedColor = "rgba(196, 38, 38, 0.72)";
-   const selectedColor = " rgba(36, 9, 135, 0.37)"
+  const [slot, setSlot] = useState({
+    startTime: "00:00",
+    endTime: "00:00",
+    startDate: "",
+  });
+  const PastimeColor = "#fff3cd";
+  const bookedColor = "rgba(196, 38, 38, 0.72)";
+  const selectedColor = " rgba(36, 9, 135, 0.37)";
   const [externalParticipant, setExternalParticipant] = useState<{
     name: string;
     email: string;
@@ -170,6 +172,16 @@ export const useBookingRoomViewModel = () => {
       console.log("Error fetching meeting types:", error);
     }
   };
+
+  const handleDeleteBookedMeeting = async (id: number | string) => {
+    try {
+      const res = await updateBookedRoomById(id);
+      toast.success("Meeting is Succcessfully Deleted");
+    } catch (error) {
+      toast.error("Cannot Delete the meeting");
+      console.log(error);
+    }
+  };
   useEffect(() => {
     fetchMeetingTypes();
   }, []);
@@ -196,5 +208,6 @@ export const useBookingRoomViewModel = () => {
     handleWeekDays,
     slot,
     setSlot,
+    handleDeleteBookedMeeting,
   };
 };

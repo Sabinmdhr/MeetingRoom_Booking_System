@@ -80,7 +80,7 @@ export const DemoColumns = (): Columns[] => {
 export const getAllUser = async (data: fetchUsersType) => {
   // const api = axiosInstance({});
 
-  const response = await api.post("/api/v1/users/get-all", data);
+  const response = await api.post("/api/v1/users/get-all-active", data);
 
   return response.data.data;
 };
@@ -93,4 +93,10 @@ export const addUser = async (data: ParticipantsRequest) => {
 export const editUser = async (id: number, data: ParticipantsRequest) => {
   const response = await api.put(`/api/v1/users/${id}/update`, data);
   return response.data;
+};
+
+export const deleteUser = async (id: number) => {
+  const body = { status: "INACTIVE" };
+  const res = await api.patch(`/api/v1/users/${id}/change-status`, body);
+  return res.data;
 };

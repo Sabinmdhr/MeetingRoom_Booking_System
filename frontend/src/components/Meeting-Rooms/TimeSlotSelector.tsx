@@ -389,25 +389,7 @@ export const TimeSlotSelector = ({
                   )
                 : ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
               ${formatDisplayTime(timeStringToMinutes(slot.end))}`}
-              {calendarView
-                ? !DialogView && (
-                    <div
-                      style={{
-                        display: "flex",
-                        // flexDirection: "column",
-                        justifyContent: "space-between",
-                        margin: "0px 12px",
-                      }}
-                    >
-                      <Typography>{slot.title}</Typography>
-                      <Typography>
-                        {formatDisplayTime(timeStringToMinutes(slot.start))} -
-                        {formatDisplayTime(timeStringToMinutes(slot.end))}
-                      </Typography>
-                    </div>
-                  )
-                : ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
-              ${formatDisplayTime(timeStringToMinutes(slot.end))}`}
+           
             </div>
           ))}
           {/* ---------------------prev past timeslot---------------- */}

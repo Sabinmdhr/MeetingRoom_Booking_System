@@ -36,6 +36,8 @@ import { setBookingRoomFormData } from "../../redux/bookRoomSlice";
 
 import { mapEventToBookingFormData } from "../../models/mapper/CalendarToBookRoomMapper";
 import { usePermissions } from "../../hooks/usePermissions";
+import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
+import { formatDisplayTime, timeStringToMinutes } from "../../utils/timeUtils";
 
 interface CalendarModalProps {
   open: boolean;
@@ -47,7 +49,6 @@ interface CalendarModalProps {
   eventDataLoading?: boolean;
 }
 
-
 export const CalendarModal = ({
   open,
   event,
@@ -55,20 +56,16 @@ export const CalendarModal = ({
   eventData,
   eventDataLoading,
 }: CalendarModalProps) => {
-  const perms = usePermissions()
+  const perms = usePermissions();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState("internal");
-
+  const { handleDeleteBookedMeeting } = useBookingRoomViewModel();
   const submitMode =
     eventData?.recurrenceType === "NONE" ? "editOnce" : "editAll";
 
-  const colorCode = eventData?.meetingType?.colorCode;
-
-
   const internalParticipants = eventData?.internalParticipant ?? [];
   const externalParticipants = eventData?.externalParticipant ?? [];
-
 
   const booker = eventData?.roomBooker;
   const bookerName = booker
@@ -82,7 +79,6 @@ export const CalendarModal = ({
   const formattedDate = event?.date
     ? dayjs(event.date).format("ddd, MMMM D, YYYY")
     : "—";
-
 
   return (
     <Dialog
@@ -150,7 +146,8 @@ export const CalendarModal = ({
                   variant="h4"
                   className="calendar-modal__row__secondary"
                 >
-                  {startTime} – {endTime}
+                  {formatDisplayTime(timeStringToMinutes(startTime))} –{" "}
+                  {formatDisplayTime(timeStringToMinutes(endTime))}
                 </Typography>
               </div>
             </div>
@@ -349,11 +346,17 @@ export const CalendarModal = ({
       {perms.canManageRooms && (
         <DialogActions className="calendar-modal__actions">
           <MyButton
-            variant="outlined"
-            customVariant="ghost"
-            onClick={onClose}
-            text="Close"
+            variant="text"
+            customVariant="danger"
+            color="error"
+            onClick={() => {
+              const id = eventData?.id ?? eventData?.recurrenceId;
+              if (id) handleDeleteBookedMeeting(id);
+              onClose();
+            }}
+            text="Delete"
           />
+
           {submitMode === "editOnce" && (
             <MyButton
               variant="contained"
@@ -421,6 +424,4 @@ export const CalendarModal = ({
   );
 };
 
-
 export default CalendarModal;
-
