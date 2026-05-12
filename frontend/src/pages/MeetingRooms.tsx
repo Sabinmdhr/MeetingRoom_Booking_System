@@ -38,7 +38,7 @@ const MeetingRooms = () => {
   // const {isEditOpen} = useAppSelector((state) => state.meetingRoom)
   // return (
   //   <>
-  //     <div className="meeting-table__main">
+  //     <div className="meeting-room__main">
   //       <div className="titleDesc">
   //         <Typography variant="h1">Meeting Rooms</Typography>
   //         <Typography variant="subtitle1">Book available rooms</Typography>
@@ -62,9 +62,9 @@ const MeetingRooms = () => {
   //   </>
   // );
   return (
-    <div className="meeting-table">
-      <div className="meeting-table__title-wrapper">
-        <div className="meeting-table__title">
+    <div className="meeting-room">
+      <div className="meeting-room__title-wrapper">
+        <div className="meeting-room__title">
           <Typography variant="h1">Meeting Rooms</Typography>
           <Typography variant="subtitle1">Book available rooms</Typography>
         </div>
@@ -79,7 +79,7 @@ const MeetingRooms = () => {
         </div>
       </div>
 
-      <div className="meeting-table__content__card">
+      <div className="meeting-room__content__card">
         {/* <Grid container> */}
         <Meeting_roomCard
           roomFormState={roomFormState}

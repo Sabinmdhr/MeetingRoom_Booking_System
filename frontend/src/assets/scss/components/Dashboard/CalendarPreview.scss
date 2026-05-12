@@ -137,9 +137,9 @@
   }
 
   &__list {
-    max-height: 350px;
-    overflow-y: auto;
-    padding-right: 4px;
+    // max-height: 350px;
+    // overflow-y: auto;
+    // padding-right: 4px;
   }
 
   &__card {
@@ -150,11 +150,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    &:hover {
-      border: 2px solid rgb(201, 171, 201);
-      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1) !important;
-    }
+    border: 1px solid rgb(201, 171, 201);
   }
 
   &__subcard {
@@ -163,14 +159,15 @@
   }
 
   &__title {
-    font-weight: 600 !important;
-    font-size: 18px !important;
+    text-transform: capitalize;
+    font-weight: 500 !important;
+    font-size: 17px !important;
     margin-bottom: 6px !important;
   }
 
   &__chip {
     height: 22px !important;
-    border: 1px solid !important;
+    // border: 1px solid !important;
     border-radius: 8px !important;
   }
 
@@ -188,6 +185,9 @@
 
   &__roomname {
     font-size: 14px !important;
+    display: flex;
+    gap: 5px;
+    align-items: flex-start;
   }
 }
 

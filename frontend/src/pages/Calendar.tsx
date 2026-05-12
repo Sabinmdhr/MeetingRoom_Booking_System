@@ -7,14 +7,12 @@ import {
   TextField,
   MenuItem,
   Popover,
-  alpha,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { useCalendarEventViewModel } from "../viewmodels/useCalendarEventViewModel";
 import CalendarModal from "../components/Calendar/CalendarModal";
-import EditCalendarModal from "../components/Calendar/EditCalendarModal";
 import MyButton from "../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -45,8 +43,7 @@ export const Calendar = () => {
   const navigate = useNavigate();
   const perms = usePermissions();
   const { meetingTypes } = useSettingsViewModel();
-  const { updateBookingTimeAndDate, setSlot, slot, PastimeColor, bookedColor } =
-    useBookingRoomViewModel();
+  const { updateBookingTimeAndDate, setSlot, slot } = useBookingRoomViewModel();
 
   const {
     view,
@@ -54,8 +51,6 @@ export const Calendar = () => {
     currentMonth,
     setCurrentMonth,
     eventsByDate,
-    eventsByDateHour,
-    hours,
     openEvent,
     goToNext,
     goToPrev,
@@ -96,6 +91,8 @@ export const Calendar = () => {
       dispatch(updateBookingRoomFormData({ roomId: rooms[0].id }));
     }
   }, [rooms]);
+  const isPastDate = (date: dayjs.Dayjs) =>
+    date.startOf("day").isBefore(dayjs().startOf("day"));
 
   useEffect(() => {
     if (view !== "month") return;
@@ -161,15 +158,6 @@ export const Calendar = () => {
     currentMonth.date(i + 1),
   );
 
-  const dayViewEvents = (() => {
-    const all = eventsByDateHour[currentMonth.format("YYYY-MM-DD")] ?? {};
-    if (!selectedRoom) return all;
-    const out: typeof all = {};
-    for (const h in all)
-      out[h] = all[h].filter((e) => e.location === selectedRoom);
-    return out;
-  })();
-
   //  Handlers
   const handleRoomCellClick = (date: dayjs.Dayjs, roomName: string) => {
     setSelectedRoom(roomName);
@@ -202,38 +190,48 @@ export const Calendar = () => {
       <CardContent className="calendar__topbar">
         <div className="cal-bar">
           <div className="cal-bar__left">
-            <div className="cal-nav">
-              <MyButton
-                onClick={goToPrev}
-                text=""
-                color="secondary"
-                startIcon={<ChevronLeft size={18} />}
-              />
-
-              <button
-                className="cal-nav__date-btn"
-                onClick={(e) => setDatePickerAnchor(e.currentTarget)}
-              >
-                <CalendarIcon size={15} />
-                <span>{currentMonth.format("MMMM YYYY")}</span>
-              </button>
-
-              <MyButton
-                onClick={goToNext}
-                text=""
-                color="secondary"
-                startIcon={<ChevronRight size={18} />}
-              />
-
-              {isMonthView && (
+            {isMonthView && (
+              <div className="cal-nav">
                 <MyButton
-                  onClick={handleTodayClick}
-                  variant="outlined"
+                  onClick={goToPrev}
+                  text=""
                   customVariant="ghost"
-                  text="Today"
+                  color="secondary"
+                  startIcon={<ChevronLeft size={19} />}
+                  size="large"
                 />
-              )}
-            </div>
+                {/* <button
+                  className="cal-nav__date-btn"
+                  onClick={(e) => setDatePickerAnchor(e.currentTarget)}
+                >
+                  <CalendarIcon size={15} />
+                  <span>{currentMonth.format("MMMM YYYY")}</span>
+                </button> */}
+                <MyButton
+                  startIcon={<CalendarIcon size={20} />}
+                  text={<span>{currentMonth.format("MMMM YYYY")}</span>}
+                  customVariant="ghost"
+                  size="medium"
+                  className="cal-nav__date-btn"
+                  onClick={() => {}}
+                  // onClick={(e) => setDatePickerAnchor(e.currentTarget)}
+                ></MyButton>
+                <MyButton
+                  customVariant="ghost"
+                  onClick={goToNext}
+                  text={<ChevronRight size={19} />}
+                  color="secondary"
+                />
+                <div style={{ marginLeft: "25px" }}>
+                  <MyButton
+                    onClick={handleTodayClick}
+                    variant="outlined"
+                    customVariant="ghost"
+                    text="Today"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="cal-filters">
               <Tabs
@@ -244,8 +242,14 @@ export const Calendar = () => {
                 }}
                 className="cal-tabs"
               >
-                <Tab label="Day" value="day" />
-                <Tab label="Month" value="month" />
+                <Tab
+                  label="Day"
+                  value="day"
+                />
+                <Tab
+                  label="Month"
+                  value="month"
+                />
               </Tabs>
 
               {perms.canManageRooms && isDayView && (
@@ -357,7 +361,10 @@ export const Calendar = () => {
           <div className="room-grid">
             <div className="room-grid__header">
               <div className="room-grid__corner">Rooms</div>
-              <div className="room-grid__date-strip" ref={headerScrollRef}>
+              <div
+                className="room-grid__date-strip"
+                ref={headerScrollRef}
+              >
                 {gridDates.map((date) => {
                   const key = date.format("YYYY-MM-DD");
                   return (
@@ -380,19 +387,28 @@ export const Calendar = () => {
             <div className="room-grid__body">
               <div className="room-grid__labels">
                 {rooms.map((rm) => (
-                  <div key={rm.id} className="room-grid__label">
+                  <div
+                    key={rm.id}
+                    className="room-grid__label"
+                  >
                     <span>{rm.roomName}</span>
                   </div>
                 ))}
               </div>
 
               {/* THE only scrollable element */}
-              <div className="room-grid__scroll" ref={bodyScrollRef}>
+              <div
+                className="room-grid__scroll"
+                ref={bodyScrollRef}
+              >
                 {/* Loading skeleton — shown while rooms or events are fetching */}
                 {loading ? (
                   <div className="room-grid__skeleton">
                     {Array.from({ length: 3 }).map((_, ri) => (
-                      <div key={ri} className="room-grid__row">
+                      <div
+                        key={ri}
+                        className="room-grid__row"
+                      >
                         {Array.from({ length: 7 }).map((_, ci) => (
                           <div
                             key={ci}
@@ -404,7 +420,10 @@ export const Calendar = () => {
                   </div>
                 ) : (
                   rooms.map((rm) => (
-                    <div key={rm.id} className="room-grid__row">
+                    <div
+                      key={rm.id}
+                      className="room-grid__row"
+                    >
                       {gridDates.map((date) => {
                         const key = date.format("YYYY-MM-DD");
                         const cellEvents = (eventsByDate[key] ?? []).filter(
@@ -421,10 +440,15 @@ export const Calendar = () => {
                         return (
                           <div
                             key={cellId}
-                            className={`room-grid__cell${key === todayStr ? " room-grid__cell--today" : ""}`}
+                            className={`room-grid__cell
+                              ${key === todayStr ? " room-grid__cell--today" : ""}
+                              ${isPastDate(date) ? " room-grid__cell--past" : ""}
+                              `}
                             onMouseEnter={() => setHoveredCell(cellId)}
                             onMouseLeave={() => setHoveredCell(null)}
                             onClick={() => {
+                              if (isPastDate(date)) return;
+
                               handleRoomCellClick(date, rm.roomName);
                               dispatch(
                                 updateBookingRoomFormData({ roomId: rm.id }),
@@ -453,7 +477,7 @@ export const Calendar = () => {
                               );
                             })}
 
-                            {isHovered && cellId != todayStr && (
+                            {isHovered && !isPastDate(date) && (
                               <div
                                 className="room-grid__book-strip"
                                 onClick={(e) => {
@@ -466,7 +490,10 @@ export const Calendar = () => {
                                   );
                                 }}
                               >
-                                <Plus size={12} strokeWidth={2.5} />
+                                <Plus
+                                  size={12}
+                                  strokeWidth={2.5}
+                                />
                                 <span>Book</span>
                               </div>
                             )}
@@ -506,7 +533,7 @@ export const Calendar = () => {
         transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <StaticDatePicker
+          {/* <StaticDatePicker
             value={currentMonth}
             // onAccept fires when the user clicks a day (no OK button needed)
             onAccept={(d) => {
@@ -519,6 +546,21 @@ export const Calendar = () => {
             // Remove the action bar (OK / Cancel buttons) entirely
             slotProps={{
               actionBar: { actions: [] },
+            }}
+          /> */}
+          <StaticDatePicker
+            value={currentMonth}
+            onChange={(d) => {
+              if (!d) return;
+
+              setCurrentMonth(d);
+              setSelectedDates(d);
+              setDatePickerAnchor(null);
+            }}
+            slotProps={{
+              actionBar: {
+                actions: [],
+              },
             }}
           />
         </LocalizationProvider>
@@ -544,8 +586,6 @@ export const Calendar = () => {
       >
         <div className="overflow-list">
           {overflowEvents.map((event) => {
-            const raw = event.meetingType?.colorCode;
-
             return (
               <div
                 key={event.id}
@@ -584,15 +624,6 @@ export const Calendar = () => {
           setModalAnchor(null);
         }}
         onEdit={() => setMode("edit")}
-      />
-      <EditCalendarModal
-        openEdit={mode === "edit"}
-        event={selectedEvent}
-        onCloseAll={() => {
-          setMode(null);
-          closeModal();
-        }}
-        onBack={() => setMode("view")}
       />
     </Card>
   );

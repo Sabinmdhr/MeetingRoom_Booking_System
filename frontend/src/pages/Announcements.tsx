@@ -50,6 +50,7 @@ const Announcement = () => {
     loading,
     fetchScheduledAnnouncement,
     scheduledAnnouncements,
+    fetchAllAnnouncementList,
   } = useAnnouncementCardViewModel();
 
   //  Mark read (optimistic in both lists)
@@ -74,6 +75,7 @@ const Announcement = () => {
       setPinnedData((prev) => prev.filter((x) => x.id !== id));
       setUnpinnedData((prev) => prev.filter((x) => x.id !== id));
       fetchUnpinnedAnnouncements();
+      fetchScheduledAnnouncement();
       setClick(false);
     } catch (error) {
       console.error("Delete failed", error);
@@ -132,11 +134,12 @@ const Announcement = () => {
     try {
       await updatePinStatus(id);
       toast.success("Pin status updated");
+      fetchUnpinnedAnnouncements();
+      fetchScheduledAnnouncement();
     } catch (error) {
       console.error("Failed to update pin status", error);
       toast.error("Failed to update pin status");
       // Rollback: re-fetch both lists to restore correct server state
-      fetchUnpinnedAnnouncements();
     }
   };
 
@@ -145,6 +148,12 @@ const Announcement = () => {
     if (confirmAction === "deleteBulk") handleBulkDelete(selectedIds);
     setOpenConfirm(false);
     setConfirmAction(null);
+  };
+
+  const refreshAllAnnouncements = async () => {
+    await fetchUnpinnedAnnouncements();
+    await fetchScheduledAnnouncement();
+    await fetchAllAnnouncementList();
   };
 
   const sharedCardProps = {
@@ -323,7 +332,7 @@ const Announcement = () => {
 
             {/* SHOW MORE */}
 
-            {hasMore && !filterClick && (
+            {hasMore  && (
               <div className="announcement__bottom">
                 <MyButton
                   variant="outlined"
@@ -342,7 +351,7 @@ const Announcement = () => {
         <AnnouncementModal
           open={open}
           handleClose={handleClose}
-          refreshAnnouncements={fetchUnpinnedAnnouncements}
+          refreshAnnouncements={refreshAllAnnouncements}
         />
       )}
 

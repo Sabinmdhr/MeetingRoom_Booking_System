@@ -352,6 +352,13 @@ export const TimeSlotSelector = ({
                     fontSize: 10,
                     // alignItems: "normal",
                   }),
+                ...(calendarView &&
+                  !DialogView && {
+                    backgroundColor: `rgb${slot.color}`,
+                    border: `1px solid rgb${slot.color}`,
+                    fontSize: 10,
+                    // alignItems: "normal",
+                  }),
                 justifyContent: "center",
                 ...(!calendarView && {
                   alignItems: "center",
@@ -363,6 +370,25 @@ export const TimeSlotSelector = ({
                 cursor: "not-allowed",
               }}
             >
+              {calendarView
+                ? !DialogView && (
+                    <div
+                      style={{
+                        display: "flex",
+                        // flexDirection: "column",
+                        justifyContent: "space-between",
+                        margin: "0px 12px",
+                      }}
+                    >
+                      <Typography>{slot.title}</Typography>
+                      <Typography>
+                        {formatDisplayTime(timeStringToMinutes(slot.start))} -
+                        {formatDisplayTime(timeStringToMinutes(slot.end))}
+                      </Typography>
+                    </div>
+                  )
+                : ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
+              ${formatDisplayTime(timeStringToMinutes(slot.end))}`}
               {calendarView
                 ? !DialogView && (
                     <div
@@ -421,7 +447,7 @@ export const TimeSlotSelector = ({
                 height: Math.max((endTime - startTime) * MINUTE_HEIGHT, 10),
                 display: "flex",
                 zIndex: 999999,
-                background : `${selectedColor}`,
+                background: `${selectedColor}`,
                 // opacity: startTime ===0 ? 0: 1
                 justifyContent: "center",
                 alignItems: "center",
