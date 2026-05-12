@@ -11,15 +11,16 @@ import {
   fetchRooms,
   getAllMeetingType,
 } from "../services/report.service";
+import { formatDisplayTime, timeStringToMinutes } from "../utils/timeUtils";
 
 export const COLUMNS: Column[] = [
-  { id: "date",        label: "Date" },
-  { id: "roomName",    label: "Room" },
-  { id: "meetingTitle",label: "Title" },
-  { id: "startTime",   label: "Start Time" },
-  { id: "EndTime",     label: "End Time" },
+  { id: "date", label: "Date" },
+  { id: "roomName", label: "Room" },
+  { id: "meetingTitle", label: "Title" },
+  { id: "startTime", label: "Start Time" },
+  { id: "EndTime", label: "End Time" },
   { id: "meetingType", label: "Meeting Type" },
-  { id: "createdBy",   label: "Created By" },
+  { id: "createdBy", label: "Created By" },
 ];
 
 const DEFAULT_PAYLOAD: ReportPayload = {
@@ -74,7 +75,15 @@ export function useMeetingReportViewModel() {
     try {
       setLoading(true);
       const data = await fetchReportData(payload);
-      setRows(data?.content ?? []);
+      const formattedData =
+        data?.content?.map((meeting: any) => ({
+          ...meeting,
+          startTime: formatDisplayTime(timeStringToMinutes(meeting.startTime)),
+          EndTime: formatDisplayTime(timeStringToMinutes(meeting.EndTime)),
+        })) ?? [];
+
+      setRows(formattedData);
+
       setTotalRows(data?.totalElements ?? 0);
     } catch (err) {
       console.error("Failed to load reports:", err);
@@ -121,7 +130,10 @@ export function useMeetingReportViewModel() {
       });
 
       const csv = buildCsv(data?.content ?? []);
-      downloadCsv(csv, `meeting-report-${new Date().toISOString().slice(0, 10)}.csv`);
+      downloadCsv(
+        csv,
+        `meeting-report-${new Date().toISOString().slice(0, 10)}.csv`,
+      );
     } catch (err) {
       console.error("Export failed:", err);
     }
