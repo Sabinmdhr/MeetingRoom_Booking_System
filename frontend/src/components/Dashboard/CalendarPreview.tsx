@@ -80,7 +80,7 @@ const CalendarPreview: React.FC = () => {
           <CalendarIcon size={18} /> Calendar Preview
         </Typography>
 
-        {meetings.length !== 0 && (
+        {dateRange.end != null && (
           <MyButton
             className="clearselection-btn"
             startIcon={<X size={16} />}
@@ -95,7 +95,10 @@ const CalendarPreview: React.FC = () => {
 
       <Box className="calendar-box">
         <Box className="calendar-nav">
-          <IconButton className="nav-btn left" onClick={() => changeMonth(-1)}>
+          <IconButton
+            className="nav-btn left"
+            onClick={() => changeMonth(-1)}
+          >
             <ChevronLeft size={18} />
           </IconButton>
 
@@ -103,14 +106,20 @@ const CalendarPreview: React.FC = () => {
             {currentDate.format("MMMM YYYY")}
           </Typography>
 
-          <IconButton className="nav-btn right" onClick={() => changeMonth(1)}>
+          <IconButton
+            className="nav-btn right"
+            onClick={() => changeMonth(1)}
+          >
             <ChevronRight size={18} />
           </IconButton>
         </Box>
 
         <Box className="calendar-grid">
           {daysOfWeek.map((day) => (
-            <Typography key={day} className="day-label">
+            <Typography
+              key={day}
+              className="day-label"
+            >
               {day}
             </Typography>
           ))}
@@ -134,7 +143,10 @@ const CalendarPreview: React.FC = () => {
 
       {meetings.length === 0 ? (
         <Box className="today-meetings__empty">
-          <CalendarIcon size={30} className="empty-icon" />
+          <CalendarIcon
+            size={30}
+            className="empty-icon"
+          />
           <Typography className="empty-text">No meetings scheduled</Typography>
         </Box>
       ) : (
@@ -142,7 +154,7 @@ const CalendarPreview: React.FC = () => {
           <div>
             <Typography
               className="today-meetings__header"
-              sx={{ fontWeight: 600, fontSize: 18 }}
+              sx={{ fontWeight: 600, fontSize: 19 }}
             >
               {dateRange.start && dateRange.end
                 ? `Meetings from ${dateRange.start.format("MMM D")} - ${dateRange.end.format("MMM D")}`
@@ -153,14 +165,17 @@ const CalendarPreview: React.FC = () => {
           </div>
           <div className="today-meetings__list">
             {meetings.map((m) => (
-              <Box className="today-meetings__card" key={m.meetingId}>
+              <Box
+                className="today-meetings__card"
+                key={m.meetingId}
+              >
                 <Box className="today-meetings__subcard">
                   <Typography className="today-meetings__title">
                     {m.meetingTitle}
                   </Typography>
                   <Chip
                     style={{
-                      background: alpha(`rgba${m.meetingType.colorCode}`, 0.8),
+                      background: `rgba(${m.meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
                       color: "#fff",
                     }}
                     label={m.meetingType.name}
@@ -180,7 +195,10 @@ const CalendarPreview: React.FC = () => {
                 <hr />
                 <div className="today-meetings__location">
                   <Typography className="today-meetings__roomname">
-                    <MapPin size={14} />
+                    <MapPin
+                      size={14}
+                      style={{ marginTop: "2px" }}
+                    />
                     {m.roomName}
                   </Typography>
                 </div>

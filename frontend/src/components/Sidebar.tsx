@@ -20,7 +20,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Badge, Chip, Divider, IconButton, Typography } from "@mui/material";
+import { Badge, Chip, Divider, Typography } from "@mui/material";
 import { useLogoutViewModel } from "../viewmodels/useLogoutViewModel";
 import Logout from "./Auth/Logout";
 import { useAuth } from "../hooks/useAuth";
@@ -43,7 +43,6 @@ export default function Sidebar() {
     handleLogoutConfirm,
   } = useLogoutViewModel();
   const { unreadData } = useAnnouncementCardViewModel();
-  console.log("unreadData", unreadData);
   const menuItems = [
     {
       text: "Dashboard",

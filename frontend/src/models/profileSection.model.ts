@@ -5,8 +5,8 @@ export interface UserProfileInfo {
   firstname: string;
   lastname: string;
   email: string;
-phoneNo: string;
-  department: string;
+  phoneNo: string;
+  department?: string;
   departmentId: number;
   role: string;
   roleId?: number;

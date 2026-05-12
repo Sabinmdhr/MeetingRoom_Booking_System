@@ -167,28 +167,19 @@ $cat-external-border: #22c55e;
 .cat-legend {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px !important;
   font-size: 12px;
   color: $text-secondary;
   justify-content: flex-end;
 }
-
+//
 .cat-dot {
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
-
-  &--internal {
-    background: $cat-internal-border;
-  }
-  &--client {
-    background: $cat-client-border;
-  }
-  &--executive {
-    background: $cat-executive-border;
-  }
+  margin-right: 4px;
 }
 // MAIN AREA
 .calendar__main {
@@ -646,4 +637,15 @@ $cat-external-border: #22c55e;
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.room-grid__cell--past {
+  cursor: not-allowed;
+  background: #f8fafc;
+  border: none;
+
+  &:hover {
+    background: #f8fafc;
+    box-shadow: none;
+  }
 }

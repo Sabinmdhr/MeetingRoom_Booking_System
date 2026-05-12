@@ -41,9 +41,9 @@
   }
 
   .field-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .field-label {
@@ -274,7 +274,7 @@
   }
 }
 
-.customDays{
+.customDays {
   display: flex;
   gap: 8px;
   margin-top: 8px;
@@ -284,5 +284,17 @@
     padding: 4px 8px;
     background-color: #f3f3f5;
     color: #2f2f2f;
+  }
+}
+
+
+.selected-participants{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+
+  .selected-chips{
+    display: flex;
   }
 }

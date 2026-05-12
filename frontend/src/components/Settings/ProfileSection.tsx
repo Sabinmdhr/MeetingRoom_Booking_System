@@ -4,42 +4,34 @@ import { toast } from "react-toastify";
 import MyButton from "../ui/Button";
 import { DepartmentList } from "../Participants/DepartmentList";
 import { RoleDropdown } from "../Participants/RoleDropdown";
-import { useAuth } from "../../hooks/useAuth";
-import { useUserProfileViewModel } from "../../viewmodels/useUserProfileViewModel";
-
+import type { UserProfileInfo } from "../../models/profileSection.model";
 interface ProfileProps {
-  // profile: UserProfileInfo;
-  // onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  // onSave: () => Promise<boolean>;
-  onCancel: () => void;
-  // errors: Record<string, string>;
+  profile: UserProfileInfo;
+  errors: Record<string, string>;
 
-  // handleDepartmentChange: (id: number) => void;
-  // handleRoleChange: (id: number) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  saveProfile: () => Promise<boolean>;
+
+  handleDepartmentChange: (id: number) => void;
+  handleRoleChange: (id: number) => void;
+
+  onCancel: () => void;
 }
 
 const ProfileSection = ({
-  // onChange,
-  // onSave,
-  // errors,
+  profile,
+  errors,
+  handleChange,
+  saveProfile,
+  handleDepartmentChange,
+  handleRoleChange,
   onCancel,
-  // handleDepartmentChange,
-  // handleRoleChange,
 }: ProfileProps) => {
   const ErrorText = ({ error }: { error?: string }) =>
     error ? (
       <Typography className="profile-section__error">{error}</Typography>
     ) : null;
 
-  const { role } = useAuth();
-  const {
-    profile,
-    handleDepartmentChange,
-    handleRoleChange,
-    errors,
-    handleChange,
-    saveProfile,
-  } = useUserProfileViewModel();
   return (
     <div className="profile-section">
       <Typography
@@ -85,6 +77,7 @@ const ProfileSection = ({
               onChange={handleChange}
               error={!!errors.email}
               disabled
+              inputProps={{ readOnly: true }}
             />
             <ErrorText error={errors.email} />
           </div>
@@ -144,6 +137,9 @@ const ProfileSection = ({
             onClick={async () => {
               console.log("CLICKED SAVE");
               const success = await saveProfile();
+              if (success) {
+                onCancel();
+              }
               console.log("RESULT:", success);
 
               if (success) toast.success("Changes saved successfully");

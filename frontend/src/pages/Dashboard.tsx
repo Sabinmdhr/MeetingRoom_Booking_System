@@ -7,8 +7,6 @@ import useDashboardViewModel from "../viewmodels/useDashboardViewModel";
 import { Spinner } from "../components/ui/Spinner";
 import DashboardUpMeetings from "../components/Dashboard/DashboardUpMeetings";
 import "../assets/scss/pages/Dashboard.scss";
-import { useAuth } from "../hooks/useAuth";
-import { permissions } from "../utils/permissions";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {

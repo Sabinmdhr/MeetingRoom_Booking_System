@@ -3,7 +3,6 @@
   border-radius: 12px !important;
   border: 0.5px solid #e5e5e5;
   box-shadow: none !important;
-  gap: 10px;
 }
 .room-Card--Container {
   // padding: 10px;
@@ -23,7 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 4px 0;
   border-bottom: 0.8px solid #dde5fd;
 }
 .TimeCapacity {
@@ -45,13 +44,13 @@
 .Features-Tabs {
   display: flex;
   gap: 4px;
-  margin-top: 8px;
-  align-items: center;
-  justify-content: start;
+  margin-top: 8px !important;
+  // align-items: center;
+  // justify-content: start;
 }
 .Meeitng_room-Feature {
   display: flex;
-  background-color: #f3f4f6;
+  background-color: #3972e3;
   border-radius: 4px;
   padding: 2px 4px;
   gap: 4px;

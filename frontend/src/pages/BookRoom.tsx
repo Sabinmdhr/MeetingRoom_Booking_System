@@ -133,7 +133,7 @@ const BookRoom = () => {
                   name="meetingTitle"
                   value={bookinRoomFormData.meetingTitle}
                   onChange={handleChange}
-                  // error={!!errors.meetingTitle} // !! converts a value into a boolean. We do this bcuz material UI textfield expects error: boolean. So we convert the error message to true/false. !!"Meeting title required" → true. !!undefined → false
+                  // error={!!errors.meetingTitle} //  converts a value into a boolean. We do this bcuz material UI textfield expects error: boolean. So we convert the error message to true/false. !!"Meeting title required" → true. !!undefined → false
                   // helperText={errors.meetingTitle}
                   fullWidth
                 />
@@ -258,7 +258,7 @@ const BookRoom = () => {
                     renderValue: (selected) => {
                       if (!selected) {
                         return (
-                          <span style={{  fontSize: "14px" }}>
+                          <span style={{ fontSize: "14px" }}>
                             Select meeting type
                           </span>
                         );
@@ -284,8 +284,7 @@ const BookRoom = () => {
                   size="small"
                   value={bookinRoomFormData.recurrenceType}
                 >
-                  {
-                  recurrenceOptions.map((option) => (
+                  {recurrenceOptions.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -367,11 +366,13 @@ const BookRoom = () => {
                     handleBookRoom();
                   }
                 }}
-               text={submitMode === "editOnce"
-                  ? "Edit This Meeting"
-                  : submitMode === "editAll"
-                    ? "Edit All Meeting"
-                    : "Book Now"}
+                text={
+                  submitMode === "editOnce"
+                    ? "Edit This Meeting"
+                    : submitMode === "editAll"
+                      ? "Edit All Meeting"
+                      : "Book Now"
+                }
               />
             </div>
             <div>
@@ -397,57 +398,63 @@ const BookRoom = () => {
                 )} */}
                 {bookinRoomFormData.internalParticipantIds.length > 0 &&
                   openCard != "internal" && (
-                    <div className="selected-participants">
-                      <Typography variant="subtitle2">
-                        Internal Participants:
-                      </Typography>
-                      {bookinRoomFormData.internalParticipantIds.map((id) => {
-                        const participant = users.find((p) => p.id === id);
-                        return participant ? (
-                          <Chip
-                            label={`${participant.firstname} ${participant.lastname}`}
-                            key={id}
-                            icon={
-                              <X
-                                size={18}
-                                onClick={() => {
-                                  dispatch(toggleParticipantsSelection(id));
-                                }}
-                              />
-                            }
-                            className="selected-participant"
-                          />
-                        ) : null;
-                      })}
+                    <div>
+                        <Typography variant="subtitle2">
+                          Internal Participants:
+                        </Typography>
+                      <div className="selected-participants">
+                        {bookinRoomFormData.internalParticipantIds.map((id) => {
+                          const participant = users.find((p) => p.id === id);
+                          return participant ? (
+                            <Chip
+                              label={`${participant.firstname} ${participant.lastname}`}
+                              key={id}
+                              icon={
+                                <X
+                                  size={18}
+                                  onClick={() => {
+                                    dispatch(toggleParticipantsSelection(id));
+                                  }}
+                                />
+                              }
+                              className="selected-participant"
+                            />
+                          ) : null;
+                        })}
+                      </div>
                     </div>
                   )}
                 {bookinRoomFormData.externalParticipants.length > 0 && (
-                  <div className="selected-participants">
-                    <Typography variant="subtitle2">
-                      External Participants:
-                    </Typography>
-                    {bookinRoomFormData.externalParticipants.map(
-                      (participant) => (
-                        <Chip
-                          label={`${participant.name} `}
-                          key={participant.email}
-                          icon={
-                            <X
-                              size={18}
-                              onClick={() => {
-                                dispatch(
-                                  toggleExternalParticipantsSelection(
-                                    participant,
-                                  ),
-                                );
-                              }}
+                  <>
+                    <div className="selected-participants">
+                      <Typography variant="subtitle2">
+                        External Participants:
+                      </Typography>
+                      <div className="selected-chips">
+                        {bookinRoomFormData.externalParticipants.map(
+                          (participant) => (
+                            <Chip
+                              label={`${participant.name} `}
+                              key={participant.email}
+                              icon={
+                                <X
+                                  size={18}
+                                  onClick={() => {
+                                    dispatch(
+                                      toggleExternalParticipantsSelection(
+                                        participant,
+                                      ),
+                                    );
+                                  }}
+                                />
+                              }
+                              className="selected-participant"
                             />
-                          }
-                          className="selected-participant"
-                        />
-                      ),
-                    )}
-                  </div>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  </>
                 )}
 
                 <Stack className="stack-container">

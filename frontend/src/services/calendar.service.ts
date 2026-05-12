@@ -34,16 +34,14 @@ export const getCalendarByDay = async (
   role: string,
 ): Promise<CalendarByDay[]> => {
   try {
-    console.log("sending Date", date);
-    const endpoint =
-      role === "MANAGER"
-        ? `/api/v1/get-self-booked-room`
-        : `/api/v1/calender/day`;
+    const res = await api.post<{ data: CalendarByDay[] }>(
+      "api/v1/calender/day",
+      {
+        date,
+      },
+    );
 
-    const res = await api.post<{ data: CalendarByDay[] }>(endpoint, {
-      date: date,
-    });
-    // console.log(res);
+  
 
     return res.data.data ?? [];
   } catch (error) {

@@ -59,7 +59,6 @@ export const AddParticipantsForm = ({
   //   (state) => state.participants,
   // );
 
-
   useEffect(() => {
     if (
       participantsFormState.mode === "edit" &&
@@ -96,7 +95,13 @@ export const AddParticipantsForm = ({
           <Typography variant="h3">Add Paraticipant</Typography>
         </DialogTitle>
         <DialogContent className="form-Content">
-          <label htmlFor="First Name">First Name </label>
+          <div></div>
+          <label
+            className="announcementModal__label"
+            htmlFor="First Name"
+          >
+            First Name{" "}
+          </label>
           <TextField
             id="First Name"
             name="firstname"
@@ -109,7 +114,12 @@ export const AddParticipantsForm = ({
             helperText={errors.firstname}
             required
           ></TextField>
-          <label htmlFor="Last Name">Last Name </label>
+          <label
+            className="announcementModal__label"
+            htmlFor="Last Name"
+          >
+            Last Name{" "}
+          </label>
           <TextField
             id="Last Name"
             name="lastname"
@@ -132,7 +142,12 @@ export const AddParticipantsForm = ({
             value={participantFormData.roleId}
           />
 
-          <label htmlFor="Position">Position</label>
+          <label
+            className="announcementModal__label"
+            htmlFor="Position"
+          >
+            Position
+          </label>
           <TextField
             fullWidth
             name="position"
@@ -142,9 +157,13 @@ export const AddParticipantsForm = ({
             value={participantFormData.position}
             onChange={handleChange}
             className="customTextField"
-         >
-          </TextField>
-          <label htmlFor="Phone">Phone Number</label>
+          ></TextField>
+          <label
+            className="announcementModal__label"
+            htmlFor="Phone"
+          >
+            Phone Number
+          </label>
           <TextField
             id="Phone"
             name="phoneNo"
@@ -157,7 +176,12 @@ export const AddParticipantsForm = ({
             value={participantFormData.phoneNo}
             onChange={handleChange}
           ></TextField>
-          <label htmlFor="Email">Email</label>
+          <label
+            className="announcementModal__label"
+            htmlFor="Email"
+          >
+            Email
+          </label>
           <TextField
             id="Email"
             name="email"
@@ -172,7 +196,12 @@ export const AddParticipantsForm = ({
           ></TextField>
           {participantsFormState.mode === "add" && (
             <>
-              <label htmlFor="Password">Password</label>
+              <label
+                className="announcementModal__label"
+                htmlFor="Password"
+              >
+                Password
+              </label>
               <TextField
                 id="Password"
                 name="password"
