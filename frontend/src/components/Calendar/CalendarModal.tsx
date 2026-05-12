@@ -47,7 +47,6 @@ interface CalendarModalProps {
   eventDataLoading?: boolean;
 }
 
-
 export const CalendarModal = ({
   open,
   event,
@@ -55,7 +54,7 @@ export const CalendarModal = ({
   eventData,
   eventDataLoading,
 }: CalendarModalProps) => {
-  const perms = usePermissions()
+  const perms = usePermissions();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState("internal");
@@ -65,10 +64,8 @@ export const CalendarModal = ({
 
   const colorCode = eventData?.meetingType?.colorCode;
 
-
   const internalParticipants = eventData?.internalParticipant ?? [];
   const externalParticipants = eventData?.externalParticipant ?? [];
-
 
   const booker = eventData?.roomBooker;
   const bookerName = booker
@@ -82,7 +79,6 @@ export const CalendarModal = ({
   const formattedDate = event?.date
     ? dayjs(event.date).format("ddd, MMMM D, YYYY")
     : "—";
-
 
   return (
     <Dialog
@@ -134,7 +130,10 @@ export const CalendarModal = ({
                 className="calendar-modal__icon-wrap"
                 style={{ backgroundColor: "#eff6ff" }}
               >
-                <Clock size={16} color="#2b7fff" />
+                <Clock
+                  size={16}
+                  color="#2b7fff"
+                />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -161,7 +160,10 @@ export const CalendarModal = ({
                 className="calendar-modal__icon-wrap"
                 style={{ backgroundColor: "#faf5ff" }}
               >
-                <MapPin size={16} color="#9333ea" />
+                <MapPin
+                  size={16}
+                  color="#9333ea"
+                />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -182,7 +184,10 @@ export const CalendarModal = ({
                 className="calendar-modal__icon-wrap"
                 style={{ backgroundColor: "#eff6ff" }}
               >
-                <CircleUser size={16} color="#2b7fff" />
+                <CircleUser
+                  size={16}
+                  color="#2b7fff"
+                />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -202,7 +207,10 @@ export const CalendarModal = ({
                 className="calendar-modal__icon-wrap"
                 // style={{ backgroundColor: "#f8fafc" }}
               >
-                <AlignLeft size={16} color="#64748b" />
+                <AlignLeft
+                  size={16}
+                  color="#64748b"
+                />
               </div>
               <div className="calendar-modal__row__content">
                 <Typography className="calendar-modal__row__label">
@@ -232,7 +240,10 @@ export const CalendarModal = ({
                     className="calendar-modal__icon-wrap"
                     style={{ backgroundColor: "#f0fdf4" }}
                   >
-                    <Users size={16} color="#16a34a" />
+                    <Users
+                      size={16}
+                      color="#16a34a"
+                    />
                   </div>
                   <div className="calendar-modal__row__content">
                     <Typography className="calendar-modal__row__label">
@@ -349,6 +360,13 @@ export const CalendarModal = ({
       {perms.canManageRooms && (
         <DialogActions className="calendar-modal__actions">
           <MyButton
+            variant="text"
+            customVariant="danger"
+            color="error"
+            onClick={onClose}
+            text="Delete"
+          />
+          <MyButton
             variant="outlined"
             customVariant="ghost"
             onClick={onClose}
@@ -421,6 +439,4 @@ export const CalendarModal = ({
   );
 };
 
-
 export default CalendarModal;
-
