@@ -160,7 +160,7 @@ const AnnouncementModal = ({
             {/* Pin checkbox — only shown when adding, not editing.
               Pin status on existing announcements is managed via the
               pin icon / menu, not the edit form. */}
-            {!isEditing && (
+            {
               <div className="announcementModal__checkbox">
                 <FormControlLabel
                   control={
@@ -189,7 +189,7 @@ const AnnouncementModal = ({
                   }
                 />
               </div>
-            )}
+            }
           </DialogContent>
 
           <Divider className="announcementModal__divider" />

@@ -102,7 +102,6 @@ const useAnnouncementCardViewModel = () => {
       console.log(result);
 
       setScheduledAnnouncements(result);
-      // setHasMore(!result.data.last);
 
       console.log(result);
     } catch (error) {

@@ -31,6 +31,7 @@ import { useAppSelector } from "../redux/store";
 import { usePermissions } from "../hooks/usePermissions";
 import { useBookingRoomViewModel } from "../viewmodels/useBookingRoomViewModel";
 import { useSettingsViewModel } from "../viewmodels/useSettingsViewModel";
+import { formatDisplayTime, timeStringToMinutes } from "../utils/timeUtils";
 
 // Must stay in sync with $col-width and $col-gap in Calendar.scss
 const COL_WIDTH = 180;
@@ -327,15 +328,14 @@ export const Calendar = () => {
                 meetingTypes.map((m) => (
                   <div className="cat-legend">
                     <div>
-                        <i
-                      className="cat-dot "
-                      style={{
-                        background: `rgba(${m.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
-                      }}
-                    />
-                    <span>{m.name}</span>
+                      <i
+                        className="cat-dot "
+                        style={{
+                          background: `rgba(${m.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
+                        }}
+                      />
+                      <span>{m.name}</span>
                     </div>
-
                   </div>
                 ))}
             </div>
@@ -468,7 +468,14 @@ export const Calendar = () => {
                                   onClick={(e) => handleEventClick(e, event)}
                                 >
                                   <span className="room-grid__event__time">
-                                    {event.startTime} – {event.endTime}
+                                    {formatDisplayTime(
+                                      timeStringToMinutes(event.startTime),
+                                    )}{" "}
+                                    –{" "}
+                                    {formatDisplayTime(
+                                      timeStringToMinutes(event.endTime),
+                                    )}
+                                    {/* {event.endTime} */}
                                   </span>
                                   <span className="room-grid__event__title">
                                     {event.meetingTitle}
@@ -596,7 +603,7 @@ export const Calendar = () => {
                 }}
                 style={{
                   borderLeft: `5px solid rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`,
-                  background: ``,
+                  backgroundColor: `rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.3)`,
                 }}
               >
                 <span className="room-grid__event__time">
