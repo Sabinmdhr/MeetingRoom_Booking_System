@@ -38,6 +38,7 @@ import { mapEventToBookingFormData } from "../../models/mapper/CalendarToBookRoo
 import { usePermissions } from "../../hooks/usePermissions";
 import { useBookingRoomViewModel } from "../../viewmodels/useBookingRoomViewModel";
 import { formatDisplayTime, timeStringToMinutes } from "../../utils/timeUtils";
+import { useCalendarEventViewModel } from "../../viewmodels/useCalendarEventViewModel";
 
 interface CalendarModalProps {
   open: boolean;
@@ -60,9 +61,14 @@ export const CalendarModal = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState("internal");
-  const { handleDeleteBookedMeeting } = useBookingRoomViewModel();
+  const {
+    handleDeleteBookedMeetingById,
+    handleDeleteBookedMeetingByRecurrenceId,
+  } = useCalendarEventViewModel();
   const submitMode =
     eventData?.recurrenceType === "NONE" ? "editOnce" : "editAll";
+  const deleteMode =
+    eventData?.recurrenceType === "NONE" ? "deleteOnce" : "deleteAll";
 
   const internalParticipants = eventData?.internalParticipant ?? [];
   const externalParticipants = eventData?.externalParticipant ?? [];
@@ -345,17 +351,45 @@ export const CalendarModal = ({
       {/* Actions */}
       {perms.canManageRooms && (
         <DialogActions className="calendar-modal__actions">
-          <MyButton
-            variant="text"
-            customVariant="danger"
-            color="error"
-            onClick={() => {
-              const id = eventData?.id ?? eventData?.recurrenceId;
-              if (id) handleDeleteBookedMeeting(id);
-              onClose();
-            }}
-            text="Delete"
-          />
+          {deleteMode === "deleteOnce" && (
+            <MyButton
+              variant="text"
+              customVariant="danger"
+              color="error"
+              onClick={() => {
+                const id = eventData?.id;
+                if (id) handleDeleteBookedMeetingById(id);
+                onClose();
+              }}
+              text="Delete"
+            />
+          )}
+          {deleteMode === "deleteAll" && (
+            <>
+              <MyButton
+                variant="text"
+                customVariant="danger"
+                color="error"
+                onClick={() => {
+                  const id = eventData?.recurrenceId;
+                  if (id) handleDeleteBookedMeetingByRecurrenceId(id);
+                  onClose();
+                }}
+                text="Delete All"
+              />
+              <MyButton
+                variant="text"
+                customVariant="danger"
+                color="error"
+                onClick={() => {
+                  const id = eventData?.id;
+                  if (id) handleDeleteBookedMeetingById(id);
+                  onClose();
+                }}
+                text="Delete This Meeting"
+              />
+            </>
+          )}
 
           {submitMode === "editOnce" && (
             <MyButton
