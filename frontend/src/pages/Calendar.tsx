@@ -210,6 +210,7 @@ export const Calendar = () => {
                   customVariant="ghost"
                   size="medium"
                   className="cal-nav__date-btn"
+
                   onClick={(e) => setDatePickerAnchor(e.currentTarget)}
                 ></MyButton>
                 <MyButton

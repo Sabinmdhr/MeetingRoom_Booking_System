@@ -72,7 +72,7 @@ export default function Dashboard() {
         {
           id: 4,
           title: "Peak Hours",
-          number: "2-4 PM",
+          number: "9-12 PM",
           icon: (
             <ChartColumn
               color="#AD46FF"
