@@ -226,7 +226,7 @@ const ParticipantsCard = ({
                           >
                             <div className="teams-list__header">
                               <input
-                                size={25}
+                                size={30}
                                 type="checkbox"
                                 className="check"
                                 checked={users

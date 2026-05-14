@@ -91,10 +91,11 @@ export const useDepartmentListViewModel = () => {
       toast.error("Failed to update department");
     }
   };
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number, status: string) => {
     try {
-      await deleteDepartment(id);
-      toast.success("Department is successfully Deleted");
+      await deleteDepartment(id, status);
+      toast.success("Status Successfully Changed ");
+    await  fetchDepartments()
     } catch (error) {
       console.log(error);
     }

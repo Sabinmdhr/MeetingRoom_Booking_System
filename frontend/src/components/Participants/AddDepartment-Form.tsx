@@ -11,6 +11,7 @@ import {
 import { useEffect } from "react";
 import "../../assets/scss/components/Department/AddDepartment-Form.scss";
 import type { departmentList } from "../../models/departmentList.model";
+import { toast } from "react-toastify";
 type props = {
   departmentFormState: {
     open: boolean;
@@ -116,6 +117,11 @@ export const AddDepartmentForm = ({
             className=""
             customVariant="dark"
             onClick={() => {
+              if (
+                departmentFormData.departmentName === "" &&
+                departmentFormData.description === ""
+              )
+                return toast.error("Please Fill up the Form")
               submitDepartment(departmentFormData);
               handleDepartmentFormClose();
             }}
