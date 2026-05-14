@@ -19,7 +19,7 @@ export const useparticipantsViewModel = () => {
   const [loading, setLoading] = useState(true);
   const [fetchUserReqData, setFetchUSerReqData] = useState<fetchUsersType>({
     pageNo: 0,
-    pageSize: 10,
+    pageSize: 20,
   });
   const [totalElements, setTotalElements] = useState<number>(0);
   const handleChangePage = (

@@ -8,4 +8,5 @@ export const ProfileUpdateSchema = z.object({
     .string()
     .regex(/^(98|97)\d{8}$/, "Phone must start with 97 or 98 and be 10 digits"),
   position: z.string().min(1, "Position is required"),
+  departmentId: z.number(),
 });

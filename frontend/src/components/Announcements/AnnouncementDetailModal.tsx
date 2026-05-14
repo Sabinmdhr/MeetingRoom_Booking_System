@@ -22,7 +22,7 @@ const AnnouncementDetailModal = ({
   onDelete,
 }: any) => {
   const [openConfirm, setOpenConfirm] = useState(false);
-const perms = usePermissions()
+  const perms = usePermissions();
 
   if (!item) return null;
 
@@ -98,23 +98,25 @@ const perms = usePermissions()
       </DialogContent>
 
       {/* ACTIONS */}
-     {perms.canMannageAnnouncements && <DialogActions className="announcementDetailModal__actions">
-        <MyButton
-          variant="outlined"
-          customVariant="ghost"
-          startIcon={<Trash2 size={16} />}
-          onClick={() => setOpenConfirm(true)}
-          text="Delete"
-        />
+      {perms.canMannageAnnouncements && (
+        <DialogActions className="announcementDetailModal__actions">
+          <MyButton
+            variant="outlined"
+            customVariant="ghost"
+            startIcon={<Trash2 size={16} />}
+            onClick={() => setOpenConfirm(true)}
+            text="Delete"
+          />
 
-        <MyButton
-          variant="contained"
-          customVariant="dark"
-          startIcon={<SquarePen size={16} />}
-          onClick={onEdit}
-          text="Edit"
-        />
-      </DialogActions>}
+          <MyButton
+            variant="contained"
+            customVariant="dark"
+            startIcon={<SquarePen size={16} />}
+            onClick={onEdit}
+            text="Edit"
+          />
+        </DialogActions>
+      )}
 
       <ConfirmDialog
         open={openConfirm}

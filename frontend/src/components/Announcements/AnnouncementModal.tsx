@@ -15,6 +15,15 @@ import "../../assets/scss/components/Announcement/AnnouncementModal.scss";
 import useAnnouncementViewModel from "../../viewmodels/useAnnouncementViewModel";
 import MyButton from "../ui/Button";
 import { usePermissions } from "../../hooks/usePermissions";
+import type { Announcement } from "../../models/announcements.model";
+
+interface AnnouncementModalProps {
+  open: boolean;
+  handleClose: () => void;
+  refreshAnnouncements?: () => void;
+  initialData?: Announcement & { id?: number };
+  onUpdate?: (updated: Announcement & { id: number }) => void;
+}
 
 const AnnouncementModal = ({
   open,
@@ -22,194 +31,137 @@ const AnnouncementModal = ({
   refreshAnnouncements,
   initialData,
   onUpdate,
-}: any) => {
+}: AnnouncementModalProps) => {
   const perms = usePermissions();
 
-  const {
-    handleSubmit,
-    handleChange,
-    announcementFormData,
-    setAnnouncementFormData,
-    closeAnnouncementForm,
-    isEditing,
-  } = useAnnouncementViewModel(
-    handleClose,
-    refreshAnnouncements,
-    initialData,
-    onUpdate,
-  );
+  const { handleSubmit, handleChange, formData, setFormData, closeForm, isEditing } =
+    useAnnouncementViewModel(handleClose, refreshAnnouncements, initialData, onUpdate);
 
-  // Restrict to string-only fields so `.length` is always valid.
-  // "pinned" (boolean) is intentionally excluded — it has its own checkbox below.
-  type StringFields = "title" | "message" | "startDate" | "endDate";
-
-  const fields: {
-    label: string;
-    name: StringFields;
-    placeholder: string;
-    type: string;
-    rows?: number;
-    maxLength: number;
-  }[] = [
-    {
-      label: "Announcement Title",
-      name: "title",
-      placeholder: "Enter announcement title",
-      type: "text",
-      maxLength: 100,
-    },
-    {
-      label: "Message",
-      name: "message",
-      placeholder: "Enter announcement message",
-      type: "multiline",
-      rows: 4,
-      maxLength: 500,
-    },
-  ];
+  // Don't render anything if the user doesn't have permission
+  if (!perms.canMannageAnnouncements) return null;
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={closeForm}
       fullWidth
       maxWidth="sm"
       slotProps={{ paper: { className: "announcement__modal__main" } }}
     >
-      {perms.canMannageAnnouncements && (
-        <div className="announcementModal">
-          <DialogTitle className="announcementModal__header">
-            <div className="announcementModal__header__main">
-              <Megaphone size={20} />
-              <span>
-                {isEditing ? "Edit Announcement" : "Add New Announcement"}
-              </span>
-            </div>
-            <X
-              className="announcementModal__header__close"
-              onClick={closeAnnouncementForm}
-            />
-          </DialogTitle>
+      <div className="announcementModal">
+        <DialogTitle className="announcementModal__header">
+          <div className="announcementModal__header__main">
+            <Megaphone size={20} />
+            <span>{isEditing ? "Edit Announcement" : "Add New Announcement"}</span>
+          </div>
+          <X className="announcementModal__header__close" onClick={closeForm} />
+        </DialogTitle>
 
-          <DialogContent>
-            {fields.map((field) => (
-              <div
-                className="announcementModal__inputGroup"
-                key={field.name}
-              >
-                <label
-                  htmlFor={field.name}
-                  className="announcementModal__label"
-                >
-                  {field.label}
-                </label>
-                <TextField
-                  id={field.name}
-                  name={field.name}
-                  value={announcementFormData[field.name]}
-                  onChange={handleChange}
-                  fullWidth
-                  multiline={field.type === "multiline"}
-                  rows={field.rows ?? 1}
-                  placeholder={field.placeholder}
-                  inputProps={{ maxLength: field.maxLength }}
+        <DialogContent>
+          {/* Title field */}
+          <div className="announcementModal__inputGroup">
+            <label htmlFor="title" className="announcementModal__label">
+              Announcement Title
+            </label>
+            <TextField
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              fullWidth
+              placeholder="Enter announcement title"
+              inputProps={{ maxLength: 100 }}
+            />
+            <span className="announcementModal__counter">{formData.title.length}/100</span>
+          </div>
+
+          {/* Message field */}
+          <div className="announcementModal__inputGroup">
+            <label htmlFor="message" className="announcementModal__label">
+              Message
+            </label>
+            <TextField
+              id="message"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              fullWidth
+              multiline
+              rows={4}
+              placeholder="Enter announcement message"
+              inputProps={{ maxLength: 500 }}
+            />
+            <span className="announcementModal__counter">{formData.message.length}/500</span>
+          </div>
+
+          {/* Date range */}
+          <div className="announcementModal__row">
+            <div className="announcementModal__inputGroup">
+              <label className="announcementModal__label">
+                <Calendar size={15} /> Start Date
+              </label>
+              <TextField
+                type="date"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                fullWidth
+                inputProps={{ min: dayjs().format("YYYY-MM-DD") }}
+                onKeyDown={(e) => e.preventDefault()}
+              />
+            </div>
+            <div className="announcementModal__inputGroup">
+              <label className="announcementModal__label">
+                <Calendar size={15} /> End Date
+              </label>
+              <TextField
+                type="date"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+                fullWidth
+                inputProps={{ min: formData.startDate || dayjs().format("YYYY-MM-DD") }}
+                onKeyDown={(e) => e.preventDefault()}
+              />
+            </div>
+          </div>
+
+          {/* Pin checkbox — in edit mode, pin changes go through a separate API call */}
+          <div className="announcementModal__checkbox">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="primary"
+                  checked={formData.pinned}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, pinned: e.target.checked }))
+                  }
                 />
-                {/* .length is safe because field.name is always a string key */}
-                <span className="announcementModal__counter">
-                  {announcementFormData[field.name].length}/{field.maxLength}
+              }
+              label={
+                <span className="announcementModal__checkbox-style">
+                  <Pin fill="#8646C3" size={18} color="#8646C3" />
+                  <Typography className="announcementModal__label">
+                    Pin this announcement to the top
+                  </Typography>
                 </span>
-              </div>
-            ))}
-
-            <div className="announcementModal__row">
-              <div className="announcementModal__inputGroup">
-                <label className="announcementModal__label">
-                  <Calendar size={15} /> Start Date
-                </label>
-                <TextField
-                  type="date"
-                  name="startDate"
-                  value={announcementFormData.startDate}
-                  onChange={handleChange}
-                  fullWidth
-                  inputProps={{ min: dayjs().format("YYYY-MM-DD") }}
-                  onKeyDown={(e) => e.preventDefault()}
-                />
-              </div>
-
-              <div className="announcementModal__inputGroup">
-                <label className="announcementModal__label">
-                  <Calendar size={15} /> End Date
-                </label>
-                <TextField
-                  type="date"
-                  name="endDate"
-                  value={announcementFormData.endDate}
-                  onChange={handleChange}
-                  fullWidth
-                  inputProps={{
-                    min:
-                      announcementFormData.startDate ||
-                      dayjs().format("YYYY-MM-DD"),
-                  }}
-                  onKeyDown={(e) => e.preventDefault()}
-                />
-              </div>
-            </div>
-
-            {/* Pin checkbox — only shown when adding, not editing.
-              Pin status on existing announcements is managed via the
-              pin icon / menu, not the edit form. */}
-            {
-              <div className="announcementModal__checkbox">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      color="primary"
-                      checked={announcementFormData.pinned}
-                      onChange={(e) =>
-                        setAnnouncementFormData((prev) => ({
-                          ...prev,
-                          pinned: e.target.checked,
-                        }))
-                      }
-                    />
-                  }
-                  label={
-                    <span className="announcementModal__checkbox-style">
-                      <Pin
-                        fill="#8646C3"
-                        size={18}
-                        color="#8646C3"
-                      />
-                      <Typography className="announcementModal__label">
-                        Pin this announcement to the top
-                      </Typography>
-                    </span>
-                  }
-                />
-              </div>
-            }
-          </DialogContent>
-
-          <Divider className="announcementModal__divider" />
-
-          <DialogActions className="announcementModal__actions">
-            <MyButton
-              variant="outlined"
-              customVariant="ghost"
-              onClick={closeAnnouncementForm}
-              text="Cancel"
+              }
             />
-            <MyButton
-              variant="contained"
-              text={isEditing ? "Save" : "Publish"}
-              onClick={handleSubmit}
-              customVariant="dark"
-            />
-          </DialogActions>
-        </div>
-      )}
+          </div>
+        </DialogContent>
+
+        <Divider className="announcementModal__divider" />
+
+        <DialogActions className="announcementModal__actions">
+          <MyButton variant="outlined" customVariant="ghost" onClick={closeForm} text="Cancel" />
+          <MyButton
+            variant="contained"
+            text={isEditing ? "Save" : "Publish"}
+            onClick={handleSubmit}
+            customVariant="dark"
+          />
+        </DialogActions>
+      </div>
     </Dialog>
   );
 };

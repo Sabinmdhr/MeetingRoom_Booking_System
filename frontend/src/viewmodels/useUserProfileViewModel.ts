@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  fetchCurrentUser,
-  updateProfile,
-} from "../services/UserProfile.service";
+import { fetchCurrentUser, updateProfile } from "../services/UserProfile.service";
 import type { UserProfileInfo } from "../models/profileSection.model";
 import { ProfileUpdateSchema } from "../models/scehma/profileUpdate.schema";
 
@@ -14,10 +11,9 @@ export const useUserProfileViewModel = () => {
   const loadUser = async () => {
     try {
       const data = await fetchCurrentUser();
-
       setProfile(data?.data);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load user profile", err);
     } finally {
       setLoading(false);
     }
@@ -31,59 +27,34 @@ export const useUserProfileViewModel = () => {
     if (!profile) return;
 
     const { name, value } = e.target;
-
     const updated = { ...profile, [name]: value };
 
+    // Validate the changed field on every keystroke so errors show in real time
     const result = ProfileUpdateSchema.safeParse(updated);
+    const fieldError = result.success
+      ? ""
+      : (result.error.issues.find((err) => err.path[0] === name)?.message ?? "");
 
-    if (!result.success) {
-      const fieldError = result.error.issues.find(
-        (err) => err.path[0] === name,
-      );
-
-      setErrors((prev) => ({
-        ...prev,
-        [name]: fieldError ? fieldError.message : "",
-      }));
-    } else {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-
+    setErrors((prev) => ({ ...prev, [name]: fieldError }));
     setProfile(updated);
   };
 
-  const handleDepartmentChange = (id: number) => {
+  // Receives both the id and the display name so the read-only view
+  // updates immediately without waiting for a page reload
+  const handleDepartmentChange = (id: number, name: string) => {
     if (!profile) return;
-
     setProfile((prev) =>
-      prev
-        ? {
-            ...prev,
-            departmentId: id,
-          }
-        : prev,
+      prev ? { ...prev, departmentId: id, department: name } : prev,
     );
   };
 
   const handleRoleChange = (id: number) => {
     if (!profile) return;
-
-    setProfile((prev) =>
-      prev
-        ? {
-            ...prev,
-            roleId: id,
-          }
-        : prev,
-    );
+    setProfile((prev) => (prev ? { ...prev, roleId: id } : prev));
   };
 
   const saveProfile = async (): Promise<boolean> => {
     if (!profile) return false;
-    if (!profile.id) {
-      console.error("Cannot save: profile.id is missing", profile);
-      return false;
-    }
 
     const result = ProfileUpdateSchema.safeParse({
       firstname: profile.firstname,
@@ -91,6 +62,7 @@ export const useUserProfileViewModel = () => {
       email: profile.email,
       position: profile.position,
       phoneNo: profile.phoneNo,
+      departmentId: profile.departmentId,
     });
 
     if (!result.success) {
@@ -110,20 +82,14 @@ export const useUserProfileViewModel = () => {
         email: profile.email,
         position: profile.position,
         phoneNo: profile.phoneNo,
-        // roleId: profile.roleId,
         departmentId: profile.departmentId,
       };
-      console.log("PROFILE ID:", profile.id);
-      const res = await updateProfile(payload);
 
-      setProfile((prev) =>
-        prev
-          ? {
-              ...prev,
-              ...payload,
-            }
-          : prev,
-      );
+      await updateProfile(payload);
+
+      // Merge the saved payload back so the read-only view reflects the changes.
+      // department name is already in state from handleDepartmentChange.
+      setProfile((prev) => (prev ? { ...prev, ...payload } : prev));
       return true;
     } catch (err) {
       console.error("Update failed", err);

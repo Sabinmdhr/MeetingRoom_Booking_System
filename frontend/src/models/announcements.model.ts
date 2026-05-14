@@ -1,4 +1,5 @@
-export interface Announcements {
+// Shape of a single announcement returned from the API
+export interface Announcement {
   id?: number;
   title: string;
   message: string;
@@ -10,6 +11,7 @@ export interface Announcements {
   read?: boolean;
 }
 
+// Params we send when fetching a paginated list of announcements
 export interface AnnouncementListRequest {
   pageNo?: number;
   pageSize?: number;

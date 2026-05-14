@@ -13,10 +13,10 @@ export const exportReports = async (payload: ReportPayload): Promise<Blob> => {
   return res.data;
 };
 
-export const fetchUsers = async () => {
-  const res = await api.get("/api/v1/user/get-all");
-  return res.data;
-};
+// export const fetchUsers = async (data: ReportPayload) => {
+//   const res = await api.post("/api/v1/users/get-all-active", data);
+//   return res.data;
+// };
 
 export const fetchRooms = async () => {
   const res = await api.get("/api/v1/room/list");

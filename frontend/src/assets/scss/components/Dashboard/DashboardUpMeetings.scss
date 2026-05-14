@@ -1,7 +1,15 @@
 .dashboard-upmeetings {
-  padding: 10px 32px;
+  padding: 20px 32px;
   border-radius: 8px !important;
   background: white;
+
+  &__top {
+    // padding: 10px 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+  }
   &__header {
     display: flex;
     padding: 10px 0;
