@@ -162,10 +162,10 @@ export const useparticipantsViewModel = () => {
     setExternalName("");
     setExternalEmail("");
   };
-  const handleDeleteUser = async (id: number) => {
+  const handleChangeStatusUser = async (id: number, status: string) => {
     try {
-      const res = await deleteUser(id);
-      toast.success("Participant Successfully Deleted");
+      const res = await deleteUser(id, status);
+      toast.success("Status Successfully Changed ");
       fetchUsers(fetchUserReqData);
     } catch (error) {
       toast.error(`${error}`);
@@ -184,8 +184,8 @@ export const useparticipantsViewModel = () => {
     setParticipants,
     fetchUsers,
     isEditOpen,
-    handleDeleteUser,
     allActiveUser,
+    handleChangeStatusUser,
     searchedUser,
     // handleClose,
     // handleEdit,

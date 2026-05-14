@@ -89,10 +89,7 @@ export const getPaginatedUser = async (data: fetchUsersType) => {
   return response.data.data;
 };
 export const getSearchUser = async (searchText: string | null) => {
-  const response = await api.get(
-    `/api/v1/user/search?email=${searchText}`,
-
-  );
+  const response = await api.get(`/api/v1/user/search?email=${searchText}`);
   return response.data.data;
 };
 
@@ -106,8 +103,7 @@ export const editUser = async (id: number, data: ParticipantsRequest) => {
   return response.data;
 };
 
-export const deleteUser = async (id: number) => {
-  const body = { status: "INACTIVE" };
-  const res = await api.patch(`/api/v1/users/${id}/change-status`, body);
+export const deleteUser = async (id: number, status: string) => {
+  const res = await api.patch(`/api/v1/users/${id}/change-status`, { "status": status });
   return res.data;
 };

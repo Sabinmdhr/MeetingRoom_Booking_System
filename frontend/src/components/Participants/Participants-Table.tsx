@@ -70,7 +70,7 @@ export const ParticipantsTable = ({
     handleChangeRowsPerPage,
     totalElements,
     users,
-    handleDeleteUser,
+    handleChangeStatusUser,
     setFilter,
     filter,
     search,
@@ -105,7 +105,7 @@ export const ParticipantsTable = ({
       participant: null,
     });
   };
-const filteredUsers = !search ? users : searchedUser;
+  const filteredUsers = !search ? users : searchedUser;
   // const filteredUsers = users.filter((u) =>{
   //   if(!search) return true;
   //   else
@@ -122,7 +122,7 @@ const filteredUsers = !search ? users : searchedUser;
 
         <TextField
           style={{ width: "50%" }}
-          placeholder="Search by name or email..."
+          placeholder="Search by email..."
           value={search}
           className="customTextField"
           onChange={(e) => setSearch(e.target.value)}
@@ -314,15 +314,37 @@ const filteredUsers = !search ? users : searchedUser;
                                   className="menu-btn"
                                   onClick={() => {
                                     if (menuState.participant) {
-                                      handleDeleteUser(
+                                      const status =
+                                        menuState.participant.status ===
+                                        "ACTIVE"
+                                          ? "INACTIVE"
+                                          : "ACTIVE";
+                                      handleChangeStatusUser(
                                         menuState.participant.id,
+                                        status,
                                       );
                                     }
                                     handleMenuClose();
                                   }}
                                 >
-                                  <Trash2 size={18} />
-                                  <Typography color="red"> Delete</Typography>
+                                  {menuState.participant ? (
+                                    menuState.participant.status ===
+                                    "INACTIVE" ? (
+                                      <i
+                                        className="cat-dot"
+                                        style={{ background: "green" }}
+                                      />
+                                    ) : (
+                                      <ShieldX size={16} />
+                                    )
+                                  ) : (
+                                    ""
+                                  )}
+                                  {menuState.participant
+                                    ? menuState.participant.status === "ACTIVE"
+                                      ? "Inactive"
+                                      : "Active"
+                                    : ""}
                                 </MenuItem>
                               </Menu>
                             </TableCell>

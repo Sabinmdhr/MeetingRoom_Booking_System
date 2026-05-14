@@ -16,6 +16,7 @@ import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListVi
 import { useState } from "react";
 import type { departmentList } from "../../models/departmentList.model";
 import { EllipsisVertical, Pen, ShieldX, Trash2 } from "lucide-react";
+import { deleteDepartment } from "../../services/departmentList.service";
 type props = {
   departmentFormState: {
     open: boolean;
@@ -140,7 +141,11 @@ export const DepartmentTable = ({
                     className="menu-btn"
                     onClick={() => {
                       if (menuState.department) {
-                        handleDelete(menuState.department.id);
+                        const status =
+                          menuState.department.status === "ACTIVE"
+                            ? "INACTIVE"
+                            : "ACTIVE";
+                        deleteDepartment(menuState.department.id, status);
                       }
                       handleMenuClose();
                     }}

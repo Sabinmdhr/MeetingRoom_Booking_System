@@ -21,10 +21,10 @@ export const handleEditDepartment = async (id: number, data: addDepartment) => {
     throw error;
   }
 };
-export const deleteDepartment = async (id: number) => {
+export const deleteDepartment = async (id: number, status:string) => {
   try {
     const res = await api.patch(`/api/v1/department/${id}`, {
-      status: "INACTIVE",
+      "status": status ,
     });
     return res.data;
   } catch (error) {
