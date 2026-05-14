@@ -331,7 +331,6 @@ const Announcement = () => {
             )}
 
             {/* SHOW MORE */}
-
             {hasMore  && (
               <div className="announcement__bottom">
                 <MyButton

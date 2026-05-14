@@ -97,7 +97,7 @@ export const AddGroupForm = ({
             id="description"
             value={groupFormData.description}
             onChange={handleChange}
-            placeholder="Write group name"
+            placeholder="Add description"
           ></TextField>
           <ParticipantsCard
             participants={groupFormData.member}

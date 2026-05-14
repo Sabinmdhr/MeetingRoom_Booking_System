@@ -109,9 +109,7 @@
   margin-bottom: 8px;
 }
 
-/* 
-   LIST
- */
+/* LIST */
 
 .announcement__list {
   display: flex;
@@ -122,15 +120,15 @@
   padding: 0 !important;
 }
 
-/* 
-   SHOW MORE
- */
-
+/* SHOW MORE*/
 .announcement__bottom {
   display: flex;
   justify-content: center;
-
   padding: 12px 0 4px;
+
+  &:hover{
+    opacity: 0.9;
+  }
 }
 
 /* 

@@ -61,13 +61,17 @@
   display: flex !important;
   align-items: center;
 
+  &:hover {
+      background: #eff6ff;
+    }
+
   input {
     transform: scale(1.5);
-    // margin-top: 4px;
   }
 
   &.selected {
     background-color: #eff6ff;
+    color: black;
   }
 }
 
@@ -156,6 +160,15 @@
   flex-direction: column;
   border-radius: 10px !important;
   margin-bottom: 10px;
+  &:hover {
+      background: #eff6ff;
+    }
+}
+
+    .all-list{
+      &:hover {
+      background: #eff6ff;
+    }
 
   &__header {
     display: flex !important;

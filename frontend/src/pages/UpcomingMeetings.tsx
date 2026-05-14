@@ -7,18 +7,17 @@ import {
   CardContent,
   CardHeader,
   Chip,
-  alpha,
 } from "@mui/material";
 import "../assets/scss/pages/UpcomingMeetings.scss";
-import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
 import { useMeetingCardViewModel } from "../viewmodels/useMeeting_roomCardViewModel";
 import { formatDisplayTime, timeStringToMinutes } from "../utils/timeUtils";
 import dayjs from "dayjs";
+import MyButton from "../components/ui/Button";
 
 const UpcomingMeeting = () => {
-  const { allUpcomingMeeting, historyMode, setHistoryMode } =
+  const { allUpcomingMeeting, historyMode, setHistoryMode, loadingUpcoming } =
     useMeetingCardViewModel();
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
@@ -29,7 +28,10 @@ const UpcomingMeeting = () => {
     <div className="upmeetings__main">
       <div className="upmeetings__title-wrapper">
         <div className="upmeetings__title">
-          <Typography variant="h1">Upcoming Meetings</Typography>
+          <Typography variant="h1">
+            {" "}
+            {historyMode ? "Meeting History" : "Upcoming Meetings"}
+          </Typography>
           <Typography variant="subtitle1" className="upmeetings__subtitle">
             View your upcoming meetings and stay on schedule.
           </Typography>
@@ -39,7 +41,7 @@ const UpcomingMeeting = () => {
         {perms.canMannageAnnouncements && (
           <div className="upmeetings__dropdown">
             <Typography variant="h6">
-              {historyMode ? "Self Meetings" : "All Upcoming Meetings"}
+              {historyMode ? "Meeting History" : "All Upcoming Meetings"}
             </Typography>
 
             <FormControl size="small" sx={{ minWidth: 125 }}>
@@ -58,7 +60,7 @@ const UpcomingMeeting = () => {
                 }}
               >
                 <MenuItem value="All">All</MenuItem>
-                <MenuItem value="Self">Self</MenuItem>
+                <MenuItem value="Self">History</MenuItem>
               </Select>
             </FormControl>
           </div>
