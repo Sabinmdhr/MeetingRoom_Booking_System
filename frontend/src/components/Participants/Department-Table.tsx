@@ -150,8 +150,23 @@ export const DepartmentTable = ({
                       handleMenuClose();
                     }}
                   >
-                    <Trash2 size={18} />
-                    <Typography color="red"> Delete</Typography>
+                    {menuState.department ? (
+                      menuState.department.status === "INACTIVE" ? (
+                        <i
+                          className="cat-dot"
+                          style={{ background: "green" }}
+                        />
+                      ) : (
+                        <ShieldX size={16} />
+                      )
+                    ) : (
+                      ""
+                    )}
+                    {menuState.department
+                      ? menuState.department.status === "ACTIVE"
+                        ? "Inactive"
+                        : "Active"
+                      : ""}
                   </MenuItem>
                 </Menu>
               </TableCell>
