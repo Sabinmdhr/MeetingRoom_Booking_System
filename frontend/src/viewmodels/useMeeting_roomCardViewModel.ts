@@ -55,7 +55,7 @@ export const useMeetingCardViewModel = () => {
   const [addRoomFormData, setAddRoomFormData] = useState<AddRoomModal>({
     //  id: "",
     roomName: "",
-    capacity: 0,
+    capacity: 1,
     resourcesIds: [],
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

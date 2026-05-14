@@ -81,7 +81,7 @@ export const AddMeetingRoomForm = ({
       setAddRoomFormData({
         // id: "",
         roomName: "",
-        capacity: 0,
+        capacity: 1,
         resourcesIds: [],
       });
     }
@@ -130,7 +130,6 @@ export const AddMeetingRoomForm = ({
               fullWidth
               id="capacity"
               name="capacity"
-              // type="number"
               placeholder="Number of People"
               className="customTextField"
               value={addRoomFormData.capacity}
