@@ -105,8 +105,7 @@ export const useGroupCardViewModel = () => {
         toast.success("Group created successfully!");
       }
         await fetchData();
-
-
+        
       setGroupFormData(initialGroupFormData);
     } catch (error) {
       console.error(error);

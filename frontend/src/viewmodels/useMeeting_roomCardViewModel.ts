@@ -25,7 +25,6 @@ export const useMeetingCardViewModel = () => {
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
   const [loading, setLoading] = useState(false);
   const [historyMode, setHistoryMode] = useState<boolean>(false);
-  const [loadingUpcoming, setLoadingUpcoming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [addResourceMode, setAddResourceMode] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
@@ -34,6 +33,7 @@ export const useMeetingCardViewModel = () => {
   const [allUpcomingMeeting, setAllUpcomingMeeting] = useState<RoomBookings[]>(
     [],
   );
+  const [loadingUpcoming,setLoadingUpcoming] = useState(true)
   const perms = usePermissions();
   const initialAddMeetingFormData = {
     roomName: "",
@@ -182,6 +182,24 @@ export const useMeetingCardViewModel = () => {
     await fetchMeeting();
   };
 
+  // const fetchAllUpcomingMeetings = async (page=1, reset= false) => {
+  //   try {
+  //     setLoadingUpcoming(true);
+
+  //     const res = await (historyMode ? selfBookedRoom(page, 3) : getUpcomingMeeting(page, 3));
+  //     console.log("PAGE:", page);
+  //   console.log("API DATA:", res.data);
+  //     const normalized = normalizeBookings(res.data);
+  //     setAllUpcomingMeeting((prev)=>
+  //     reset ? normalized : [...prev, ...normalized]);
+  //     setHasMore(!res.last);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoadingUpcoming(false);
+  //   }
+  // };
+
   const fetchAllUpcomingMeetings = async () => {
     try {
       setLoadingUpcoming(true);
@@ -226,6 +244,16 @@ export const useMeetingCardViewModel = () => {
     fetchAllUpcomingMeetings();
   }, [historyMode]);
 
+  // const handleShowMore= async()=>{
+  //   const nextPage= currentPage + 1;
+  //   setCurrentPage(nextPage);
+  //   await fetchAllUpcomingMeetings(nextPage);
+  // }
+//   const handleShowMore = async () => {
+//   const nextPage = currentPage + 1;
+//   setCurrentPage(nextPage);
+//   await fetchAllUpcomingMeetings(nextPage);
+// };
   return {
     meeting,
     fetchMeeting,
@@ -257,5 +285,7 @@ export const useMeetingCardViewModel = () => {
     roomResources,
     addResourceMode,
     setAddResourceMode,
+    // handleShowMore,
+    loadingUpcoming,
   };
 };
