@@ -122,7 +122,7 @@ export const useCalendarEventViewModel = () => {
   const fetchEventDetail = useCallback(async (meetingId: number) => {
     try {
       setEventDataLoading(true);
-      const res = await getBookedDataByMeetingId(meetingId);
+      const res  = await getBookedDataByMeetingId(meetingId);
 
       setEventData(res?.data);
     } catch (e) {
@@ -145,7 +145,8 @@ export const useCalendarEventViewModel = () => {
   const handleDeleteBookedMeetingById = async (id: number | string) => {
     try {
       const res = await updateBookedRoomById(id);
-      toast.success("Meeting is Succcessfully Deleted");
+
+      toast.success(`${res.message}`);
       setRefresh((prev) => !prev);
     } catch (error) {
       toast.error("Cannot Delete the meeting");
@@ -157,7 +158,9 @@ export const useCalendarEventViewModel = () => {
   ) => {
     try {
       const res = await updateBookedRoomByRecurrenceId(id);
-      toast.success("Meeting is Succcessfully Deleted");
+      console.log(res);
+
+      toast.success(`${res.message}`);
       setRefresh((prev) => !prev);
     } catch (error) {
       toast.error("Cannot Delete the meeting");

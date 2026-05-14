@@ -13,6 +13,7 @@ import { useAuth } from "../hooks/useAuth";
 import { permissions } from "../utils/permissions";
 import { AddDepartmentForm } from "../components/Participants/AddDepartment-Form";
 import { DepartmentTable } from "../components/Participants/Department-Table";
+import { useDepartmentListViewModel } from "../viewmodels/useDepartmentListViewModel";
 const Participants = () => {
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
@@ -25,6 +26,11 @@ const Participants = () => {
 
   const { groupFormState, handleGroupFormOpen, handleGroupFormClose } =
     useGroupCardViewModel();
+  const {
+    departmentFormState,
+    handleDepartmentFormOpen,
+    handleDepartmentFormClose,
+  } = useDepartmentListViewModel();
   // console.log("thisis ",users);
 
   // const { open } = useAddParticipantsViewModel();
@@ -32,7 +38,7 @@ const Participants = () => {
   const [activeTab, setActiveTab] = useState<"Tab1" | "Tab2" | "Tab3">("Tab1");
   return (
     <div>
-      <div style={{display:"flex", justifyContent:"space-between"}}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div className="titleDesc">
           {/* <span className="title">Participants Management</span>
            */}
@@ -43,7 +49,7 @@ const Participants = () => {
         </div>
         <div>
           {perms?.canAddUsers && (
-            <div >
+            <div>
               {activeTab == "Tab1" ? (
                 <AddParticipantsForm
                   participantsFormState={participantsFormState}
@@ -57,7 +63,11 @@ const Participants = () => {
                   groupFormState={groupFormState}
                 />
               ) : (
-                <AddDepartmentForm />
+                <AddDepartmentForm
+                  handleDepartmentFormClose={handleDepartmentFormClose}
+                  handleDepartmentFormOpen={handleDepartmentFormOpen}
+                  departmentFormState={departmentFormState}
+                />
               )}
             </div>
           )}
@@ -109,7 +119,11 @@ const Participants = () => {
         </div>
       ) : (
         <div>
-          <DepartmentTable />
+          <DepartmentTable
+            handleDepartmentFormClose={handleDepartmentFormClose}
+            handleDepartmentFormOpen={handleDepartmentFormOpen}
+            departmentFormState={departmentFormState}
+          />
         </div>
       )}
     </div>

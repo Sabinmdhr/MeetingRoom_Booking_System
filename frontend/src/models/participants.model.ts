@@ -28,4 +28,5 @@ export interface Columns {
 export interface fetchUsersType  {
   pageNo: number;
   pageSize: number;
+  status?: "ACTIVE" | "INACTIVE" | "";
 };

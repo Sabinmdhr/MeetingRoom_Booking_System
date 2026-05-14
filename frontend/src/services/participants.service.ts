@@ -88,8 +88,11 @@ export const getPaginatedUser = async (data: fetchUsersType) => {
   const response = await api.post("/api/v1/users/get-all", data);
   return response.data.data;
 };
-export const getSearchUser = async (searchText: string) => {
-  const response = await api.get(`/api/v1/users/search?email=${searchText}`);
+export const getSearchUser = async (searchText: string | null) => {
+  const response = await api.get(
+    `/api/v1/user/search?email=${searchText}`,
+
+  );
   return response.data.data;
 };
 

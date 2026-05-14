@@ -5,6 +5,7 @@ import {
   getAnnouncement,
   getScheduledAnnouncement,
 } from "../services/announcements.service";
+import { usePermissions } from "../hooks/usePermissions";
 
 const useAnnouncementCardViewModel = () => {
   const [pinnedData, setPinnedData] = useState<Announcements[]>([]);
@@ -15,7 +16,7 @@ const useAnnouncementCardViewModel = () => {
   >([]);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const perms = usePermissions();
   // keeps track of which page to fetch next (for "Show More")
   const nextPageRef = useRef(1);
 
@@ -92,6 +93,7 @@ const useAnnouncementCardViewModel = () => {
     [pinnedData.length],
   );
   const fetchScheduledAnnouncement = async () => {
+    if (!perms.canMannageAnnouncements) return;
     try {
       const result = await getScheduledAnnouncement({
         pageNo: 0,

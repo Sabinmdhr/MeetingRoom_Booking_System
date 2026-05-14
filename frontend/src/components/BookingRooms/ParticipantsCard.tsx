@@ -54,7 +54,7 @@ const ParticipantsCard = ({
   // );
 
   const filteredParticipants = allActiveUser.filter((p) => {
-    if (!search) return;
+    if (!search) return true;
     return (
       p.firstname.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase())

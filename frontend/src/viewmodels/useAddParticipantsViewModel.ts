@@ -20,6 +20,11 @@ import type {
   ParticipantResponse,
   ParticipantsRequest,
 } from "../models/participants.model";
+/**
+ * ViewModel for managing the add/edit participant form state and logic.
+ * Handles form validation, submission, and state updates.
+ * @returns Object containing form state, handlers, and validation errors.
+ */
 export const useAddParticipantsViewModel = () => {
   // const { selectedParticipant } = useAppSelector((state) => state.participants);
   const dispatch = useDispatch();
@@ -36,10 +41,14 @@ export const useAddParticipantsViewModel = () => {
   };
 
   // const {isEditOpen , selectedParticipant} = useAppSelector((state) => state.participants)
+  // State to hold validation errors for each form field
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // State to hold the current form data for a participant
   const [participantFormData, setParticipantFormData] =
     useState<ParticipantsRequest>(initialFormData);
 
+  // State to track if the form has been submitted
   const [isSubmitted, setIsSubmitted] = useState(false);
   // const openAddParticipantForm = (participant: Participants) => {
   //   dispatch(openEditForm(participant));
@@ -47,14 +56,24 @@ export const useAddParticipantsViewModel = () => {
   // };
     // useState<ParticipantsRequest>(initialFormData);
 
+  // State for the selected department ID
   const [departmentId, setDepartmentId] = useState<number>(1);
+
+  // State for the selected role ID
   const [roleId, setRoleId] = useState<number>(1);
 
+  /**
+   * Closes the add/edit participant form and resets the form data.
+   */
   const closeAddParticipantForm = () => {
     dispatch(closeEditForm());
     setParticipantFormData(initialFormData);
   };
 
+  /**
+   * Handles input changes in the participant form and validates individual fields.
+   * @param e - The input change event
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -87,6 +106,11 @@ export const useAddParticipantsViewModel = () => {
     });
   };
 
+  /**
+   * Validates the entire form based on the current mode (add or edit).
+   * @param mode - The mode of the form ("add" or "edit")
+   * @returns A boolean indicating whether the form is valid
+   */
   const validate = (mode: "add" | "edit") => {
     const schema = mode === "edit" ? EditParticipantSchema : ParticipantSchema;
 
@@ -108,6 +132,10 @@ export const useAddParticipantsViewModel = () => {
     return true;
   };
 
+  /**
+   * Handles changes to the selected department.
+   * @param id - The ID of the selected department
+   */
   const handleDepartmentChange = (id: number) => {
     setDepartmentId(id);
     setParticipantFormData((prev) => ({
@@ -116,6 +144,10 @@ export const useAddParticipantsViewModel = () => {
     }));
   };
 
+  /**
+   * Handles changes to the selected role.
+   * @param id - The ID of the selected role
+   */
   const handleRoleChange = (id: number) => {
     setRoleId(id);
     setParticipantFormData((prev) => ({
@@ -124,6 +156,12 @@ export const useAddParticipantsViewModel = () => {
     }));
   };
 
+  /**
+   * Handles form submission, validating data and calling the appropriate API.
+   * @param mode - Whether to add or edit a user
+   * @param id - The ID of the user (if editing)
+   * @returns A boolean indicating whether submission was successful
+   */
   const handleSubmit = async (mode: "add" | "edit", id?: number) => {
     setIsSubmitted(true);
 
@@ -131,17 +169,17 @@ export const useAddParticipantsViewModel = () => {
     console.log("IS VALID:", isValid);
 
     if (!isValid) {
-      console.log("ERRORS:", errors); 
+      console.log("ERRORS:", errors);
       return false;
     }
 
     try {
       if (mode === "edit" && id) {
-        console.log("EDITING USER"); 
+        console.log("EDITING USER");
         await editUser(id, participantFormData);
         toast.success("Participant updated successfully");
       } else {
-        console.log("ADDING USER"); 
+        console.log("ADDING USER");
         await addUser(participantFormData);
         toast.success("Participant added successfully");
       }
@@ -149,11 +187,14 @@ export const useAddParticipantsViewModel = () => {
       return true;
     } catch (error) {
       console.error("Error:", error);
-      toast.error("An error occurred");
+      toast.error(`${error}`);
       return false;
     }
   };
 
+  /**
+   * Resets the form data to its initial state, clears errors, and resets submission status.
+   */
   const resetForm = () => {
     setParticipantFormData(initialFormData);
     setErrors({});

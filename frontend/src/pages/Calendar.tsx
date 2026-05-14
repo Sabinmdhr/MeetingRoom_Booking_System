@@ -324,7 +324,7 @@ export const Calendar = () => {
                 // justifyContent: "space-between",
               }}
             >
-              {isDayView &&
+              {
                 meetingTypes.map((m) => (
                   <div className="cat-legend">
                     <div>

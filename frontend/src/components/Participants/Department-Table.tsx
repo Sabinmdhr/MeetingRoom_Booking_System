@@ -1,4 +1,5 @@
 import {
+  Chip,
   IconButton,
   Menu,
   MenuItem,
@@ -14,10 +15,25 @@ import {
 import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
 import { useState } from "react";
 import type { departmentList } from "../../models/departmentList.model";
-import { EllipsisVertical, Pen, Trash2 } from "lucide-react";
-
-export const DepartmentTable = () => {
-  const { departmentList } = useDepartmentListViewModel();
+import { EllipsisVertical, Pen, ShieldX, Trash2 } from "lucide-react";
+type props = {
+  departmentFormState: {
+    open: boolean;
+    mode: "add" | "edit";
+    department: departmentList | null;
+  };
+  handleDepartmentFormOpen: (
+    mode: "add" | "edit",
+    department?: departmentList,
+  ) => void;
+  handleDepartmentFormClose: () => void;
+};
+export const DepartmentTable = ({
+  handleDepartmentFormOpen,
+  handleDepartmentFormClose,
+  departmentFormState,
+}: props) => {
+  const { departmentList, handleDelete } = useDepartmentListViewModel();
 
   const [menuState, setMenuState] = useState<{
     anchorEl: HTMLElement | null;
@@ -48,10 +64,11 @@ export const DepartmentTable = () => {
       <Table>
         <TableHead className="TableHead">
           <TableRow>
-            <TableCell width="10%">S.N</TableCell>
-            <TableCell width="45%">Department Name</TableCell>
-            <TableCell width="45%">Description</TableCell>
-            <TableCell width="45%">Action</TableCell>
+            <TableCell>S.N</TableCell>
+            <TableCell>Department Name</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -60,6 +77,32 @@ export const DepartmentTable = () => {
               <TableCell>{index + 1}.</TableCell>
               <TableCell>{department.departmentName}</TableCell>
               <TableCell>{department.description}</TableCell>
+              <TableCell>
+                <Chip
+                  className={`status-chip ${department.status === "INACTIVE" ? "inactive" : ""}`}
+                  label={
+                    <span
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                      }}
+                    >
+                      {department.status === "ACTIVE" ? (
+                        <i
+                          className="cat-dot"
+                          style={{ background: "green" }}
+                        />
+                      ) : (
+                        <ShieldX size={16} />
+                      )}
+
+                      {department.status.charAt(0).toUpperCase() +
+                        department.status.slice(1).toLowerCase()}
+                    </span>
+                  }
+                />
+              </TableCell>
               <TableCell>
                 {" "}
                 <IconButton
@@ -84,14 +127,21 @@ export const DepartmentTable = () => {
                 >
                   <MenuItem
                     className="menu-btn"
-                    onClick={() => {}}
+                    onClick={() => {
+                      if (menuState.department) {
+                        handleDepartmentFormOpen("edit", menuState.department);
+                      }
+                      handleMenuClose();
+                    }}
                   >
                     <Pen size={18} /> Edit
                   </MenuItem>
                   <MenuItem
                     className="menu-btn"
                     onClick={() => {
-                      // handleDelete(participant);
+                      if (menuState.department) {
+                        handleDelete(menuState.department.id);
+                      }
                       handleMenuClose();
                     }}
                   >

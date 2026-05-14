@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { getUpcomingMeeting } from "../services/Meetinf_room.service";
 import dayjs from "dayjs";
 import { useAuth } from "../hooks/useAuth";
+import { usePermissions } from "../hooks/usePermissions";
 
 export const useMeetingCardViewModel = () => {
   const { role } = useAuth();
@@ -33,7 +34,7 @@ export const useMeetingCardViewModel = () => {
   const [allUpcomingMeeting, setAllUpcomingMeeting] = useState<RoomBookings[]>(
     [],
   );
-
+  const perms = usePermissions();
   const initialAddMeetingFormData = {
     roomName: "",
     capacity: 0,
@@ -88,21 +89,21 @@ export const useMeetingCardViewModel = () => {
       const data = await getMeetingRooms();
       // console.log(data);
       setMeeting(data.data.content);
-
     } catch (err: any) {
       setError(err.message || "Failed to load meeting room");
     } finally {
       setLoading(false);
     }
   };
-const fetchMeetingRoomResources = async() =>{
-  try {
-const resources = await getMeetingRoomResources();
-setRoomResources(resources.data);
-  } catch (error) {
-    toast.error(`${error}`)
-  }
-}
+  const fetchMeetingRoomResources = async () => {
+    if (!perms.canManageRooms) return;
+    try {
+      const resources = await getMeetingRoomResources();
+      setRoomResources(resources.data);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
   const submitAddRomForm = async () => {
     try {
       const data = {
@@ -219,12 +220,11 @@ setRoomResources(resources.data);
   useEffect(() => {
     fetchMeeting();
     fetchUpcomingMeetings();
-    fetchMeetingRoomResources()
+    fetchMeetingRoomResources();
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     fetchAllUpcomingMeetings();
-
-  },[historyMode])
+  }, [historyMode]);
 
   return {
     meeting,

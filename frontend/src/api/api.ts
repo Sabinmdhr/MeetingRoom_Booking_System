@@ -6,6 +6,10 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // export const axiosInstance = ({ baseUrl }: { baseUrl?: string }) => {
 // console.log("BASE_URL", baseUrl, BASE_URL);
+/**
+ * Creates an Axios instance with base configuration.
+ * This instance is used for all API calls to ensure consistent headers and base URL.
+ */
 const instance = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -13,6 +17,9 @@ const instance = axios.create({
   },
 });
 
+/**
+ * Request interceptor to automatically attach the authorization token to outgoing requests.
+ */
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -26,6 +33,11 @@ instance.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+/**
+ * Response interceptor to handle global errors and automatic token refreshing.
+ * If a 401 (Unauthorized) error is encountered, it attempts to refresh the access token
+ * using the refresh token, and then retries the original request.
+ */
 instance.interceptors.response.use(
   (response) => response,
 

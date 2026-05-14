@@ -165,3 +165,60 @@
     }
   }
 }
+
+/* Responsive Styles for Mobile, Tablet, and Desktop */
+
+/* Mobile devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .participants-card {
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .participants-list {
+    max-height: 200px;
+  }
+  .participant-item {
+    padding: 8px !important;
+    gap: 6px;
+  }
+  .participant-info {
+    .name {
+      font-size: 13px;
+    }
+    .email {
+      font-size: 12px;
+    }
+    .participant-Subinfo {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+  }
+  .external-buttons {
+    flex-direction: column;
+    gap: 6px;
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/* Tablet devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+  .participants-card {
+    padding: 14px;
+  }
+  .participants-list {
+    max-height: 220px;
+  }
+}
+
+/* Desktop devices (laptops and desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .participants-card {
+    padding: 16px;
+  }
+  .participants-list {
+    max-height: 300px;
+  }
+}
