@@ -18,13 +18,13 @@ import { toast } from "react-toastify";
 import { getUpcomingMeeting } from "../services/Meetinf_room.service";
 import dayjs from "dayjs";
 import { useAuth } from "../hooks/useAuth";
+import { usePermissions } from "../hooks/usePermissions";
 
 export const useMeetingCardViewModel = () => {
   const { role } = useAuth();
   const [meeting, setMeeting] = useState<meeting_rooms[]>([]);
   const [loading, setLoading] = useState(false);
   const [historyMode, setHistoryMode] = useState<boolean>(false);
-  const [loadingUpcoming, setLoadingUpcoming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [addResourceMode, setAddResourceMode] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<meeting_rooms | null>(null);
@@ -33,7 +33,8 @@ export const useMeetingCardViewModel = () => {
   const [allUpcomingMeeting, setAllUpcomingMeeting] = useState<RoomBookings[]>(
     [],
   );
-
+  const [loadingUpcoming,setLoadingUpcoming] = useState(true)
+  const perms = usePermissions();
   const initialAddMeetingFormData = {
     roomName: "",
     capacity: 0,
@@ -88,21 +89,21 @@ export const useMeetingCardViewModel = () => {
       const data = await getMeetingRooms();
       // console.log(data);
       setMeeting(data.data.content);
-
     } catch (err: any) {
       setError(err.message || "Failed to load meeting room");
     } finally {
       setLoading(false);
     }
   };
-const fetchMeetingRoomResources = async() =>{
-  try {
-const resources = await getMeetingRoomResources();
-setRoomResources(resources.data);
-  } catch (error) {
-    toast.error(`${error}`)
-  }
-}
+  const fetchMeetingRoomResources = async () => {
+    if (!perms.canManageRooms) return;
+    try {
+      const resources = await getMeetingRoomResources();
+      setRoomResources(resources.data);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
   const submitAddRomForm = async () => {
     try {
       const data = {
@@ -181,6 +182,24 @@ setRoomResources(resources.data);
     await fetchMeeting();
   };
 
+  // const fetchAllUpcomingMeetings = async (page=1, reset= false) => {
+  //   try {
+  //     setLoadingUpcoming(true);
+
+  //     const res = await (historyMode ? selfBookedRoom(page, 3) : getUpcomingMeeting(page, 3));
+  //     console.log("PAGE:", page);
+  //   console.log("API DATA:", res.data);
+  //     const normalized = normalizeBookings(res.data);
+  //     setAllUpcomingMeeting((prev)=>
+  //     reset ? normalized : [...prev, ...normalized]);
+  //     setHasMore(!res.last);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoadingUpcoming(false);
+  //   }
+  // };
+
   const fetchAllUpcomingMeetings = async () => {
     try {
       setLoadingUpcoming(true);
@@ -219,13 +238,22 @@ setRoomResources(resources.data);
   useEffect(() => {
     fetchMeeting();
     fetchUpcomingMeetings();
-    fetchMeetingRoomResources()
+    fetchMeetingRoomResources();
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     fetchAllUpcomingMeetings();
+  }, [historyMode]);
 
-  },[historyMode])
-
+  // const handleShowMore= async()=>{
+  //   const nextPage= currentPage + 1;
+  //   setCurrentPage(nextPage);
+  //   await fetchAllUpcomingMeetings(nextPage);
+  // }
+//   const handleShowMore = async () => {
+//   const nextPage = currentPage + 1;
+//   setCurrentPage(nextPage);
+//   await fetchAllUpcomingMeetings(nextPage);
+// };
   return {
     meeting,
     fetchMeeting,
@@ -257,5 +285,7 @@ setRoomResources(resources.data);
     roomResources,
     addResourceMode,
     setAddResourceMode,
+    // handleShowMore,
+    loadingUpcoming,
   };
 };

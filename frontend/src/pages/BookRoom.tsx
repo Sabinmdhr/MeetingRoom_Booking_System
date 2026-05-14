@@ -124,7 +124,10 @@ const BookRoom = () => {
           <div className="bookroom-body">
             <div className="bookroom-left">
               <div className="field">
-                <label className="field-label" htmlFor="meeting-title">
+                <label
+                  className="field-label"
+                  htmlFor="meeting-title"
+                >
                   Meeting Title *
                 </label>
                 <TextField
@@ -143,7 +146,7 @@ const BookRoom = () => {
               )} */}
 
               <div className="field">
-                <label className="field-label">Date *</label>
+                <label className="field-label"> Start Date *</label>
                 <TextField
                   name="date"
                   value={bookinRoomFormData.startDate}
@@ -268,7 +271,16 @@ const BookRoom = () => {
                   }}
                 >
                   {meetingTypes.map((meetingType) => (
-                    <MenuItem key={meetingType.id} value={meetingType.id}>
+                    <MenuItem
+                      key={meetingType.id}
+                      value={meetingType.id}
+                    >
+                      <i
+                        className="cat-dot "
+                        style={{
+                          background: `rgba(${meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
+                        }}
+                      />
                       {meetingType.name}
                     </MenuItem>
                   ))}
@@ -285,7 +297,10 @@ const BookRoom = () => {
                   value={bookinRoomFormData.recurrenceType}
                 >
                   {recurrenceOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem
+                      key={option.value}
+                      value={option.value}
+                    >
                       {option.label}
                     </MenuItem>
                   ))}
@@ -324,7 +339,10 @@ const BookRoom = () => {
                 )}
                 {bookinRoomFormData.recurrenceType !== "NONE" && (
                   <div className="field">
-                    <label className="field-label" htmlFor="recurrenceEndDate">
+                    <label
+                      className="field-label"
+                      htmlFor="recurrenceEndDate"
+                    >
                       Enter Recurrence End Date
                     </label>
                     <TextField
@@ -339,7 +357,10 @@ const BookRoom = () => {
               </div>
 
               <div className="field">
-                <label className="field-label" htmlFor="desc">
+                <label
+                  className="field-label"
+                  htmlFor="desc"
+                >
                   Description
                 </label>
                 <TextField
@@ -400,9 +421,9 @@ const BookRoom = () => {
                 {bookinRoomFormData.internalParticipantIds.length > 0 &&
                   openCard != "internal" && (
                     <div>
-                        <Typography variant="subtitle2">
-                          Internal Participants:
-                        </Typography>
+                      <Typography variant="subtitle2">
+                        Internal Participants:
+                      </Typography>
                       <div className="selected-participants">
                         {bookinRoomFormData.internalParticipantIds.map((id) => {
                           const participant = users.find((p) => p.id === id);

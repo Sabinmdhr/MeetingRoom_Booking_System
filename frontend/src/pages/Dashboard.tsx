@@ -21,7 +21,10 @@ export default function Dashboard() {
 
   if (loading) return <Spinner />;
   if (error) return <div>{error}</div>;
-  const avg = Math.round(dashboardData?.avgDurationOfMeetings ?? 0);
+  const avg = Number.isFinite(dashboardData?.avgDurationOfMeetings)
+    ? Math.round(dashboardData?.avgDurationOfMeetings ?? 0)
+    : 0;
+
   const cards = dashboardData
     ? [
         {

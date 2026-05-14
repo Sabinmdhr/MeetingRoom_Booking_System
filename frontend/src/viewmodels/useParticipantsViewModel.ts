@@ -18,18 +18,19 @@ import { toast } from "react-toastify";
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
+  const [searchedUser, setSearchUser] = useState<ParticipantResponse[]>([]);
   const [search, setSearch] = useState<string | null>(null);
   const [allActiveUser, setAllActiveUser] = useState<ParticipantResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"All" | "Active" | "Inactive">("All");
-  const filteredUsers = users.filter((user) => {
-    if (filter === "Active") {
-      return user.status === "ACTIVE";
-    } else if (filter === "Inactive") {
-      return user.status === "INACTIVE";
-    }
-    return true;
-  });
+  // const filteredUsers = users.filter((user) => {
+  //   if (filter === "Active") {
+  //     return user.status === "ACTIVE";
+  //   } else if (filter === "Inactive") {
+  //     return user.status === "INACTIVE";
+  //   }
+  //   return true;
+  // });
   const [fetchUserReqData, setFetchUSerReqData] = useState<fetchUsersType>({
     pageNo: 0,
     pageSize: 20,
@@ -57,9 +58,21 @@ export const useparticipantsViewModel = () => {
       setAllActiveUser(res.content ?? []);
     } catch (error) {}
   };
-  useEffect(()=>{
-    fetchActiveUsers()
-  },[])
+  useEffect(() => {
+    fetchActiveUsers();
+  }, []);
+  const fetchSearchedUser = async (searchText: string | null) => {
+    setLoading(true);
+    try {
+      const res = await getSearchUser(searchText);
+      setSearchUser(res.content ?? []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchSearchedUser(search);
+  }, [search]);
   const fetchUsers = async (data: fetchUsersType) => {
     setLoading(true);
 
@@ -79,11 +92,7 @@ export const useparticipantsViewModel = () => {
   };
   useEffect(() => {
     fetchUsers(fetchUserReqData);
-  }, [search]);
-
-  useEffect(() => {
-    fetchUsers(fetchUserReqData);
-  }, [fetchUserReqData.pageNo, fetchUserReqData.pageSize]);
+  }, [fetchUserReqData, search]);
 
   const [participantsFormState, setParticipantsFormState] = useState({
     open: false,
@@ -177,6 +186,7 @@ export const useparticipantsViewModel = () => {
     isEditOpen,
     handleDeleteUser,
     allActiveUser,
+    searchedUser,
     // handleClose,
     // handleEdit,
     columns,
@@ -202,7 +212,7 @@ export const useparticipantsViewModel = () => {
     handleParticipantsFormClose,
     setFilter,
     filter,
-    filteredUsers,
+    // filteredUsers,
     loading,
 
     fetchUserReqData,

@@ -3,26 +3,17 @@ import {
   BookRoom,
   EditBookedRoomById,
   EditBookedRoomByRecurrenceId,
-  getBookedDataByRoomId,
-  updateBookedRoomById,
-  updateBookedRoomByRecurrenceId,
 } from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   clearBookingRoomFormData,
   toggleWeekDay,
   updateBookingRoomFormData,
 } from "../redux/bookRoomSlice";
-import { clamp, snapToInterval } from "../utils/timeUtils";
 import { useNavigate } from "react-router-dom";
-import type {
-  GetBookedRoomDataResponse,
-  MeetingTypeInfo,
-  WeekDays,
-} from "../models/bookRoom.model";
+import type { MeetingTypeInfo, WeekDays } from "../models/bookRoom.model";
 import { getCalendarByDay } from "../services/calendar.service";
-import type { CalendarByDay } from "../models/calendar.model";
 import { useAuth } from "../hooks/useAuth";
 import { getAllMeetingType } from "../services/report.service";
 import { toast } from "react-toastify";
@@ -98,7 +89,8 @@ export const useBookingRoomViewModel = () => {
     try {
       const res = await EditBookedRoomById(bookingRoomFormData, bookingId);
       dispatch(clearBookingRoomFormData());
-      navigate("/meeting-rooms");
+      toast.success("Booked Meeting is Successfully Edited");
+      navigate(-1);
       return res;
     } catch (error) {
       console.error("Error editing booked room:", error);
@@ -113,7 +105,8 @@ export const useBookingRoomViewModel = () => {
         recurrenceId,
       );
       dispatch(clearBookingRoomFormData());
-      navigate("/meeting-rooms");
+      toast.success("Booked Meeting is Successfully Edited");
+      navigate(-1);
       return res;
     } catch (error) {
       console.error("Error editing booked room:", error);
@@ -173,7 +166,6 @@ export const useBookingRoomViewModel = () => {
       console.log("Error fetching meeting types:", error);
     }
   };
-
 
   useEffect(() => {
     fetchMeetingTypes();

@@ -10,15 +10,28 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import "../../assets/scss/components/Department/AddDepartment-Form.scss";
-
-export const AddDepartmentForm = () => {
+import type { departmentList } from "../../models/departmentList.model";
+type props = {
+  departmentFormState: {
+    open: boolean;
+    mode: "add" | "edit";
+    department: departmentList | null;
+  };
+  handleDepartmentFormOpen: (
+    mode: "add" | "edit",
+    department?: departmentList,
+  ) => void;
+  handleDepartmentFormClose: () => void;
+};
+export const AddDepartmentForm = ({
+  handleDepartmentFormOpen,
+  handleDepartmentFormClose,
+  departmentFormState,
+}: props) => {
   const {
-    departmentFormState,
-    handleDepartmentFormOpen,
     departmentFormData,
     setDepartmentFormData,
     handleChange,
-    handleDepartmentFormClose,
     submitDepartment,
   } = useDepartmentListViewModel();
 
@@ -56,10 +69,7 @@ export const AddDepartmentForm = () => {
         PaperProps={{ className: "department-modal" }}
       >
         <div className="department-modal__header">
-          <Typography
-            className="department-modal__header__title"
-            variant="h3"
-          >
+          <Typography className="department-modal__header__title" variant="h3">
             Add Department
           </Typography>
         </div>

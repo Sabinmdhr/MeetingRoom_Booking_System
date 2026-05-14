@@ -61,13 +61,17 @@
   display: flex !important;
   align-items: center;
 
+  &:hover {
+      background: #eff6ff;
+    }
+
   input {
     transform: scale(1.5);
-    // margin-top: 4px;
   }
 
   &.selected {
     background-color: #eff6ff;
+    color: black;
   }
 }
 
@@ -156,6 +160,15 @@
   flex-direction: column;
   border-radius: 10px !important;
   margin-bottom: 10px;
+  &:hover {
+      background: #eff6ff;
+    }
+}
+
+    .all-list{
+      &:hover {
+      background: #eff6ff;
+    }
 
   &__header {
     display: flex !important;
@@ -163,5 +176,62 @@
     .check {
       accent-color: black;
     }
+  }
+}
+
+/* Responsive Styles for Mobile, Tablet, and Desktop */
+
+/* Mobile devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .participants-card {
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .participants-list {
+    max-height: 200px;
+  }
+  .participant-item {
+    padding: 8px !important;
+    gap: 6px;
+  }
+  .participant-info {
+    .name {
+      font-size: 13px;
+    }
+    .email {
+      font-size: 12px;
+    }
+    .participant-Subinfo {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+  }
+  .external-buttons {
+    flex-direction: column;
+    gap: 6px;
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/* Tablet devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+  .participants-card {
+    padding: 14px;
+  }
+  .participants-list {
+    max-height: 220px;
+  }
+}
+
+/* Desktop devices (laptops and desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .participants-card {
+    padding: 16px;
+  }
+  .participants-list {
+    max-height: 300px;
   }
 }

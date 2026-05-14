@@ -2,6 +2,7 @@ import {
   Chip,
   FormControl,
   IconButton,
+  InputAdornment,
   Menu,
   MenuItem,
   Paper,
@@ -13,12 +14,21 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import "../../assets/scss/components/Participants-Table.scss";
 import "../../assets/scss/global.scss";
-import { EllipsisVertical, Mail, Pen, Phone, Trash2 } from "lucide-react";
+import {
+  EllipsisVertical,
+  Mail,
+  Pen,
+  Phone,
+  Search,
+  ShieldX,
+  Trash2,
+} from "lucide-react";
 import type {
   ParticipantResponse,
   ParticipantsRequest,
@@ -54,6 +64,7 @@ export const ParticipantsTable = ({
     columns,
     loading,
     fetchUserReqData,
+    setFetchUSerReqData,
     handleChangePage,
     fetchUsers,
     handleChangeRowsPerPage,
@@ -62,7 +73,10 @@ export const ParticipantsTable = ({
     handleDeleteUser,
     setFilter,
     filter,
-    filteredUsers,
+    search,
+    setSearch,
+    searchedUser,
+    // filteredUsers,
   } = useparticipantsViewModel();
   const { role } = useAuth();
   const perms = permissions[role as keyof typeof permissions];
@@ -91,20 +105,36 @@ export const ParticipantsTable = ({
       participant: null,
     });
   };
-  useEffect(() => {
-    fetchUsers(fetchUserReqData);
-  }, []);
+const filteredUsers = !search ? users : searchedUser;
+  // const filteredUsers = users.filter((u) =>{
+  //   if(!search) return true;
+  //   else
+  // })
+  // useEffect(() => {
+  //   fetchUsers(fetchUserReqData);
+  // }, [filter, fetchUserReqData]);
 
   // const {open,handleOpen} = useAddParticipantsViewModel()
   return (
     <div>
       <div className="participants-dropdown">
         <Typography variant="h6">{filter} Users</Typography>
-        <FormControl
-          size="small"
-          className=""
-          sx={{ minWidth: 125 }}
-        >
+
+        <TextField
+          style={{ width: "50%" }}
+          placeholder="Search by name or email..."
+          value={search}
+          className="customTextField"
+          onChange={(e) => setSearch(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search size={18} color="gray" />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <FormControl size="small" className="" sx={{ minWidth: 125 }}>
           {/* <InputLabel>Filter</InputLabel> */}
 
           <Select
@@ -113,14 +143,18 @@ export const ParticipantsTable = ({
             onChange={(e) => {
               const value = e.target.value;
 
-              if (value === "Inactive") {
-                setFilter("Inactive");
-              } else if (value === "Active") {
-                setFilter("Active");
-              } else setFilter("All");
+              setFetchUSerReqData((prev) => ({
+                ...prev,
+                status:
+                  value === "Active"
+                    ? "ACTIVE"
+                    : value === "Inactive"
+                      ? "INACTIVE"
+                      : undefined, // for "All"
+                pageNo: 0,
+              }));
             }}
             className="customTextField"
-
           >
             <MenuItem value="All">All</MenuItem>
 
@@ -143,148 +177,178 @@ export const ParticipantsTable = ({
           {loading && <Spinner />}
 
           <TableBody>
-            {filteredUsers.map(
-              (participant: ParticipantResponse, index: number) => (
-                <TableRow key={participant.id} hover>
-                  <TableCell width="5%">{index + 1}.</TableCell>
+            {filteredUsers.length === 0 && !loading ? (
+              <TableRow
+                style={{ textAlign: "center", padding: "8px !important" }}
+              >
+                No {filter} user
+              </TableRow>
+            ) : (
+              filteredUsers.map(
+                (participant: ParticipantResponse, index: number) => (
+                  <TableRow key={participant.id} hover>
+                    <TableCell width="5%">{index + 1}.</TableCell>
 
-                  {columns.map((col) => {
-                    switch (col.id) {
-                      case "Name":
-                        return (
-                          <TableCell key={col.id}>
-                            <div className="name-Col">
-                              <Typography className="fullname">
-                                {participant.firstname} {participant.lastname}
-                              </Typography>
-                              <Typography className="role">
-                                {participant.position}
-                              </Typography>
-                            </div>
-                          </TableCell>
-                        );
+                    {columns.map((col) => {
+                      switch (col.id) {
+                        case "Name":
+                          return (
+                            <TableCell key={col.id}>
+                              <div className="name-Col">
+                                <Typography className="fullname">
+                                  {participant.firstname} {participant.lastname}
+                                </Typography>
+                                <Typography className="role">
+                                  {participant.position}
+                                </Typography>
+                              </div>
+                            </TableCell>
+                          );
 
-                      case "department":
-                        return (
-                          <TableCell key={col.id}>
-                            <Chip
-                              className="department-chip"
-                              label={participant.department}
-                            />
-                          </TableCell>
-                        );
+                        case "department":
+                          return (
+                            <TableCell key={col.id}>
+                              <Chip
+                                className="department-chip"
+                                label={participant.department}
+                              />
+                            </TableCell>
+                          );
 
-                      case "contact":
-                        return (
-                          <TableCell key={col.id}>
-                            <div className="Contact">
-                              <Typography className="email">
-                                <Mail size={12} /> {participant.email}
-                              </Typography>
-                              <Typography
-                                className="number"
-                                variant="body2"
-                                color="text.secondary"
+                        case "contact":
+                          return (
+                            <TableCell key={col.id}>
+                              <div className="Contact">
+                                <Typography className="email">
+                                  <Mail size={12} /> {participant.email}
+                                </Typography>
+                                <Typography
+                                  className="number"
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  <Phone size={12} /> {participant.phoneNo}
+                                </Typography>
+                              </div>
+                            </TableCell>
+                          );
+                        case "status":
+                          return (
+                            <TableCell key={col.id}>
+                              <Chip
+                                className={`status-chip ${participant.status === "INACTIVE" ? "inactive" : ""}`}
+                                label={
+                                  <span
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 6,
+                                    }}
+                                  >
+                                    {participant.status === "ACTIVE" ? (
+                                      <i
+                                        className="cat-dot"
+                                        style={{ background: "green" }}
+                                      />
+                                    ) : (
+                                      <ShieldX size={16} />
+                                    )}
+
+                                    {participant.status
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                      participant.status.slice(1).toLowerCase()}
+                                  </span>
+                                }
+                              />
+                            </TableCell>
+                          );
+
+                        case "actions":
+                          return perms?.canManageUsers ? (
+                            <TableCell key={col.id}>
+                              <IconButton
+                                onClick={(e) => {
+                                  handleMenuOpen(e, participant);
+                                }}
                               >
-                                <Phone size={12} /> {participant.phoneNo}
-                              </Typography>
-                            </div>
-                          </TableCell>
-                        );
-                      case "status":
-                        return (
-                          <TableCell key={col.id}>
-                            <Chip
-                              className={`status-chip ${participant.status === "INACTIVE" ? "inactive" : ""}`}
-                              label={
-                                participant.status.charAt(0).toUpperCase() +
-                                participant.status.slice(1).toLowerCase()
-                              }
-                            />
-                          </TableCell>
-                        );
-
-                      case "actions":
-                        return perms?.canManageUsers ? (
-                          <TableCell key={col.id}>
-                            <IconButton
-                              onClick={(e) => {
-                                handleMenuOpen(e, participant);
-                              }}
-                            >
-                              <EllipsisVertical size={16} />
-                            </IconButton>
-                            <Menu
-                              anchorEl={menuState.anchorEl}
-                              open={Boolean(menuState.anchorEl)}
-                              onClose={handleMenuClose}
-                              disableScrollLock
-
-                              anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "right",
-                              }}
-                              transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                              }}
-                              slotProps={{
-                                paper: {
-                                  sx: {
-                                    width: 180,
-                                    // boxShadow: "none !important",
+                                <EllipsisVertical size={16} />
+                              </IconButton>
+                              <Menu
+                                anchorEl={menuState.anchorEl}
+                                open={Boolean(menuState.anchorEl)}
+                                onClose={handleMenuClose}
+                                disableScrollLock
+                                anchorOrigin={{
+                                  vertical: "bottom",
+                                  horizontal: "right",
+                                }}
+                                transformOrigin={{
+                                  vertical: "top",
+                                  horizontal: "right",
+                                }}
+                                slotProps={{
+                                  paper: {
+                                    sx: {
+                                      width: 180,
+                                      // boxShadow: "none !important",
+                                    },
                                   },
-                                },
-                              }}
-                            >
-                              <MenuItem
-                                className="menu-btn"
-                                onClick={() => {
-                                  if (menuState.participant) {
-                                    handleParticipantFormOpen(
-                                      "edit",
-                                      menuState.participant,
-                                    );
-                                  }
-                                  handleMenuClose();
                                 }}
                               >
-                                <Pen size={18} /> Edit
-                              </MenuItem>
-                              <MenuItem
-                                className="menu-btn"
-                                onClick={() => {
-                                  if (menuState.participant) {
-                                    handleDeleteUser(menuState.participant.id);
-                                  }
-                                  handleMenuClose();
-                                }}
-                              >
-                                <Trash2 size={18} />
-                                <Typography color="red"> Delete</Typography>
-                              </MenuItem>
-                            </Menu>
-                          </TableCell>
-                        ) : null;
+                                <MenuItem
+                                  className="menu-btn"
+                                  onClick={() => {
+                                    if (menuState.participant) {
+                                      handleParticipantFormOpen(
+                                        "edit",
+                                        menuState.participant,
+                                      );
+                                    }
+                                    handleMenuClose();
+                                  }}
+                                >
+                                  <Pen size={18} /> Edit
+                                </MenuItem>
+                                <MenuItem
+                                  className="menu-btn"
+                                  onClick={() => {
+                                    if (menuState.participant) {
+                                      handleDeleteUser(
+                                        menuState.participant.id,
+                                      );
+                                    }
+                                    handleMenuClose();
+                                  }}
+                                >
+                                  <Trash2 size={18} />
+                                  <Typography color="red"> Delete</Typography>
+                                </MenuItem>
+                              </Menu>
+                            </TableCell>
+                          ) : null;
 
-                      default:
-                        return <TableCell key={col.id}>-</TableCell>;
-                    }
-                  })}
-                </TableRow>
-              ),
+                        default:
+                          return <TableCell key={col.id}>-</TableCell>;
+                      }
+                    })}
+                  </TableRow>
+                ),
+              )
             )}
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        component={Paper}
-        count={totalElements}
-        page={fetchUserReqData.pageNo}
-        onPageChange={handleChangePage}
-        rowsPerPage={fetchUserReqData.pageSize}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      ></TablePagination>
+      {users.length !== 0 && (
+        <TablePagination
+          component={Paper}
+          count={totalElements}
+          page={fetchUserReqData.pageNo}
+          onPageChange={handleChangePage}
+          rowsPerPage={fetchUserReqData.pageSize}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        ></TablePagination>
+      )}
     </div>
   );
 };

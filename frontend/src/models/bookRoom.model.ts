@@ -99,6 +99,7 @@ export interface BookedRoomDataResponse {
 
   dates?: dates[];
   roomBooker: RoomBooker;
+  message?: string;
 }
 
 export interface BookingRoomData {

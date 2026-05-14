@@ -13,6 +13,7 @@ import {
 
 const PINNED_LIMIT = 5;
 const PAGE_SIZE = 10;
+// import { usePermissions } from "../hooks/usePermissions";
 
 const useAnnouncementCardViewModel = () => {
   const [pinnedData, setPinnedData] = useState<Announcement[]>([]);
@@ -28,6 +29,9 @@ const useAnnouncementCardViewModel = () => {
   // Using refs for page numbers so incrementing them doesn't cause re-renders
   const unpinnedPageRef = useRef(1);
   const scheduledPageRef = useRef(1);
+  // const perms = usePermissions();
+  // keeps track of which page to fetch next (for "Show More")
+  // const nextPageRef = useRef(1);
 
   // Busy flags prevent duplicate fetches if the user clicks "Show More" quickly
   const unpinnedBusyRef = useRef(false);
@@ -165,6 +169,24 @@ const useAnnouncementCardViewModel = () => {
     },
     [],
   );
+  // const fetchScheduledAnnouncement = async () => {
+  //   if (!perms.canMannageAnnouncements) return;
+  //   try {
+  //     const result = await getScheduledAnnouncement({
+  //       pageNo: 0,
+  //       pageSize: 15,
+  //       sortBy: "modifiedAt",
+  //       sortDir: "desc",
+  //     });
+  //     console.log(result);
+
+  //     setScheduledAnnouncements(result);
+
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.error("Error fetching scheduled announcements", error);
+  //   }
+  // };
 
   const fetchAllAnnouncementList = async () => {
     const res = await getAllAnnouncements({

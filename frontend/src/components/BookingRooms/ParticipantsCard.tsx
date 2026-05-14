@@ -54,7 +54,7 @@ const ParticipantsCard = ({
   // );
 
   const filteredParticipants = allActiveUser.filter((p) => {
-    if (!search) return;
+    if (!search) return true;
     return (
       p.firstname.toLowerCase().includes(search.toLowerCase()) ||
       p.email.toLowerCase().includes(search.toLowerCase())
@@ -175,7 +175,6 @@ const ParticipantsCard = ({
                         onClick={() => p.id && toggleParticipantSelection(p.id)}
                       >
                         <input
-                          // color="red"
                           className="check"
                           type="checkbox"
                           checked={
@@ -286,6 +285,7 @@ const ParticipantsCard = ({
                     return (
                       <>
                         <Accordion
+                          className="all-list"
                           expanded={expandedGroup === g.groupName}
                           onChange={() => {
                             setExpandedGroup(
@@ -319,7 +319,7 @@ const ParticipantsCard = ({
                               {g.members.map((p) => (
                                 <div
                                   key={p.memberId}
-                                  className={`participant-item   `}
+                                  className={`participant-item`}
                                 >
                                   <div className="participant-info">
                                     <Typography
