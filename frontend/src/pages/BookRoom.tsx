@@ -31,6 +31,7 @@ import { TimeSlotSelector } from "../components/Meeting-Rooms/TimeSlotSelector";
 import { useLocation } from "react-router-dom";
 import type { WeekDays } from "../models/bookRoom.model";
 import MyButton from "../components/ui/Button";
+import { toast } from "react-toastify";
 
 const BookRoom = () => {
   const location = useLocation();
@@ -364,6 +365,10 @@ const BookRoom = () => {
                 variant="contained"
                 customVariant="dark"
                 onClick={() => {
+                  if (bookinRoomFormData.meetingTitle === "")
+                    return toast.error("Meeting TItle is Required");
+                  if (bookinRoomFormData.description === "")
+                    return toast.error("Meeting Description is Required");
                   if (submitMode === "editOnce") {
                     // Handle edit logic here
                     handleEditBookRoomById(bookingId);

@@ -77,6 +77,7 @@ export const useBookingRoomViewModel = () => {
       console.log("success", bookingRoomFormData);
       const response = await BookRoom(bookingRoomFormData);
       dispatch(clearBookingRoomFormData());
+      toast.success("Meeting is Booked Successfully");
       navigate("/meeting-rooms");
       return response;
     } catch (error: any) {
