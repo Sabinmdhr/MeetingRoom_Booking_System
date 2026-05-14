@@ -11,10 +11,26 @@
     font-size: var(--labelSmallSize) !important;
   }
 }
-
+.participants-dropdown{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
+}
 .department-chip{
   background-color: transparent !important;
   border: 0.1px solid #E5E5E5 !important;
+// justify-content: flex-start !important;
+}
+
+.status-chip{
+  // background-color: transparent !important;
+  border: 0.1px solid #E5E5E5 !important;
+
+  &.inactive{
+    background-color: transparent !important;
+  }
+// justify-content: flex-start !important;
 }
 
 .Contact{
@@ -38,6 +54,6 @@
   justify-content: start !important;
   gap: 12px;
   margin: 0 2px !important;
-  border-radius: 10px !important;
+  // border-radius: 10px !important;
   font-weight:  lighter !important;
 }

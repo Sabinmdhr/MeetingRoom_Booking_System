@@ -66,3 +66,14 @@ export const updateBookedRoomById = async (
   );
   return res.data;
 };
+
+export const updateBookedRoomByRecurrenceId = async (
+  recurrenceId: number | string,
+): Promise<BookedRoomDataResponse> => {
+  const body = { status: "INACTIVE" };
+  const res = await api.patch(
+    `/api/v1/booked-room/${recurrenceId}/change-bulk-status`,
+    body,
+  );
+  return res.data;
+};

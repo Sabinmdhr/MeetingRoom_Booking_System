@@ -9,10 +9,15 @@ import {
   getCalendarByMonth,
   getCalenderByDay,
 } from "../services/calendar.service";
-import { getBookedDataByMeetingId } from "../services/bookRoom.service";
+import {
+  getBookedDataByMeetingId,
+  updateBookedRoomById,
+  updateBookedRoomByRecurrenceId,
+} from "../services/bookRoom.service";
 import type { BookedRoomDataResponse } from "../models/bookRoom.model";
 import { getMeetingRooms } from "../services/Meetinf_room.service";
 import type { meeting_rooms } from "../models/meeting_room.model";
+import { toast } from "react-toastify";
 
 export type CalendarView = "day" | "month";
 
@@ -136,6 +141,32 @@ export const useCalendarEventViewModel = () => {
     fetchMonthEvents(currentMonth);
   }, [currentMonth.month(), currentMonth.year()]);
 
+  const [refresh, setRefresh] = useState(false);
+  const handleDeleteBookedMeetingById = async (id: number | string) => {
+    try {
+      const res = await updateBookedRoomById(id);
+      toast.success("Meeting is Succcessfully Deleted");
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      toast.error("Cannot Delete the meeting");
+      console.log(error);
+    }
+  };
+  const handleDeleteBookedMeetingByRecurrenceId = async (
+    id: number | string,
+  ) => {
+    try {
+      const res = await updateBookedRoomByRecurrenceId(id);
+      toast.success("Meeting is Succcessfully Deleted");
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      toast.error("Cannot Delete the meeting");
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchMonthEvents(currentMonth);
+  }, [refresh, currentMonth]);
   // Re-fetch when the CalendarPreview mini-calendar moves to a different month
   useEffect(() => {
     if (
@@ -144,7 +175,7 @@ export const useCalendarEventViewModel = () => {
     ) {
       fetchMonthEvents(currentDate);
     }
-  }, [currentDate.month(), currentDate.year()]);
+  }, [currentDate.month(), currentDate.year]);
 
   // Re-fetch day events whenever the selected day changes
   useEffect(() => {
@@ -296,5 +327,8 @@ export const useCalendarEventViewModel = () => {
     dateRange,
     setDateRange,
     clearSelection,
+
+    handleDeleteBookedMeetingById,
+    handleDeleteBookedMeetingByRecurrenceId,
   };
 };

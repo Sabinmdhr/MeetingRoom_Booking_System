@@ -8,7 +8,9 @@ import type {
 import {
   deleteUser,
   DemoColumns,
-  getAllUser,
+  getActiveUser,
+  getPaginatedUser,
+  getSearchUser,
 } from "../services/participants.service";
 import { useSelector, useDispatch } from "react-redux";
 import { setParticipants } from "../redux/ParticipantsSlice";
@@ -16,7 +18,18 @@ import { toast } from "react-toastify";
 
 export const useparticipantsViewModel = () => {
   const [users, setUsers] = useState<ParticipantResponse[]>([]);
+  const [search, setSearch] = useState<string | null>(null);
+  const [allActiveUser, setAllActiveUser] = useState<ParticipantResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<"All" | "Active" | "Inactive">("All");
+  const filteredUsers = users.filter((user) => {
+    if (filter === "Active") {
+      return user.status === "ACTIVE";
+    } else if (filter === "Inactive") {
+      return user.status === "INACTIVE";
+    }
+    return true;
+  });
   const [fetchUserReqData, setFetchUSerReqData] = useState<fetchUsersType>({
     pageNo: 0,
     pageSize: 10,
@@ -38,19 +51,40 @@ export const useparticipantsViewModel = () => {
       pageSize: parseInt(event.target.value, 10),
     }));
   };
+  const fetchActiveUsers = async () => {
+    try {
+      const res = await getActiveUser(fetchUserReqData);
+      setAllActiveUser(res.content ?? []);
+    } catch (error) {}
+  };
+  useEffect(()=>{
+    fetchActiveUsers()
+  },[])
   const fetchUsers = async (data: fetchUsersType) => {
-    const res = await getAllUser(data);
-    setUsers(res.content);
-    setTotalElements(res.totalElements);
-    setLoading(false);
+    setLoading(true);
+
+    try {
+      let res;
+      if (!search) {
+        res = await getPaginatedUser(data);
+      } else {
+        res = await getSearchUser(search);
+      }
+      setUsers(res.content ?? []);
+      setTotalElements(res.totalElements);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
-    console.log("Updated Req:", fetchUserReqData);
-  }, [fetchUserReqData]);
+    fetchUsers(fetchUserReqData);
+  }, [search]);
 
   useEffect(() => {
     fetchUsers(fetchUserReqData);
   }, [fetchUserReqData.pageNo, fetchUserReqData.pageSize]);
+
   const [participantsFormState, setParticipantsFormState] = useState({
     open: false,
     mode: "edit" as "edit" | "add",
@@ -91,7 +125,6 @@ export const useparticipantsViewModel = () => {
   const { participants, isEditOpen } = useSelector(
     (state: any) => state.participants,
   );
-  const [search, setSearch] = useState("");
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
 
@@ -108,12 +141,6 @@ export const useparticipantsViewModel = () => {
       prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
     );
   };
-
-  const filteredParticipants = participants.filter(
-    (p: ParticipantResponse) =>
-      p.firstname.toLowerCase().includes(search.toLowerCase()) ||
-      p.email.toLowerCase().includes(search.toLowerCase()),
-  );
 
   const handleAddExternal = () => {
     if (!externalName || !externalEmail) return;
@@ -149,6 +176,7 @@ export const useparticipantsViewModel = () => {
     fetchUsers,
     isEditOpen,
     handleDeleteUser,
+    allActiveUser,
     // handleClose,
     // handleEdit,
     columns,
@@ -162,7 +190,6 @@ export const useparticipantsViewModel = () => {
     handleSelectParticipant,
     search,
     setSearch,
-    filteredParticipants,
     externalName,
     setExternalName,
     externalEmail,
@@ -173,7 +200,9 @@ export const useparticipantsViewModel = () => {
     setParticipantsFormState,
     handleParticipantFormOpen,
     handleParticipantsFormClose,
-
+    setFilter,
+    filter,
+    filteredUsers,
     loading,
 
     fetchUserReqData,

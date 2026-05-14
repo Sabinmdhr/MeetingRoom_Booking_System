@@ -389,7 +389,6 @@ export const TimeSlotSelector = ({
                   )
                 : ` ${formatDisplayTime(timeStringToMinutes(slot.start))} -
               ${formatDisplayTime(timeStringToMinutes(slot.end))}`}
-           
             </div>
           ))}
           {/* ---------------------prev past timeslot---------------- */}

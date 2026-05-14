@@ -67,7 +67,7 @@ export const useGroupCardViewModel = () => {
       setGroup([]); // fallback empty array
     }
   };
- 
+
 
   const handleSubmitGroup = async (mode: "add" | "edit", id?: number) => {
     try {
@@ -81,7 +81,8 @@ export const useGroupCardViewModel = () => {
         toast.success("Group created successfully!");
       }
         await fetchData();
-        setGroupFormData(initialGroupFormData);
+        
+      setGroupFormData(initialGroupFormData);
     } catch (error) {
       console.error(error);
       toast.error(
@@ -101,7 +102,7 @@ export const useGroupCardViewModel = () => {
 
   useEffect(() => {
     fetchData();
-  }, [group]);
+  }, []);
 
   return {
     group,
