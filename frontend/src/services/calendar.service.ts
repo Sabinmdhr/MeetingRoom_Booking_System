@@ -1,3 +1,5 @@
+//
+
 import api from "../api/api";
 import type { CalendarByDay } from "../models/calendar.model";
 import type { CalenderDay, CalenderMonth } from "../models/calendar.model";
@@ -40,8 +42,6 @@ export const getCalendarByDay = async (
         date,
       },
     );
-
-  
 
     return res.data.data ?? [];
   } catch (error) {

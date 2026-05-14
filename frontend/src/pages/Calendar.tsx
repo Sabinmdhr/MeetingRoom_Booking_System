@@ -1,3 +1,5 @@
+//
+
 import "../assets/scss/pages/Calendar.scss";
 import {
   Tab,
@@ -201,21 +203,14 @@ export const Calendar = () => {
                   startIcon={<ChevronLeft size={19} />}
                   size="large"
                 />
-                {/* <button
-                  className="cal-nav__date-btn"
-                  onClick={(e) => setDatePickerAnchor(e.currentTarget)}
-                >
-                  <CalendarIcon size={15} />
-                  <span>{currentMonth.format("MMMM YYYY")}</span>
-                </button> */}
+
                 <MyButton
                   startIcon={<CalendarIcon size={20} />}
                   text={<span>{currentMonth.format("MMMM YYYY")}</span>}
                   customVariant="ghost"
                   size="medium"
                   className="cal-nav__date-btn"
-                  onClick={() => {}}
-                  // onClick={(e) => setDatePickerAnchor(e.currentTarget)}
+                  onClick={(e) => setDatePickerAnchor(e.currentTarget)}
                 ></MyButton>
                 <MyButton
                   customVariant="ghost"

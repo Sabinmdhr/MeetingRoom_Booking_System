@@ -1,5 +1,6 @@
 export type EventCategory = "internal" | "client" | "executive" | "external";
 
+// Shape used internally by the calendar grid and modal
 export type CalendarEvent = {
   id: number;
   meetingTitle: string;
@@ -12,46 +13,10 @@ export type CalendarEvent = {
   participants: string[];
   description: string;
   department: string;
-
-  meetingType: {
-    id: number | string;
-    name: string;
-    colorCode: string;
-    status: string;
-  };
+  meetingType: MeetingType;
 };
 
-export interface CalenderMonth {
-  date: string;
-  endTime: string;
-  meetingId: number;
-  meetingTitle: string;
-  meetingType: {
-    id: number | string;
-    name: string;
-    colorCode: string;
-    status: string;
-  };
-  roomId: number;
-  roomName: string;
-  startTime: string;
-}
-
-export interface CalenderDay {
-  date: string;
-  endTime: string;
-  meetingId: number;
-  meetingTitle: string;
-  meetingType: {
-    id: number | string;
-    name: string;
-    colorCode: string;
-    status: string;
-  };
-  roomId: number;
-  roomName: string;
-  startTime: string;
-}
+// Shared meeting type shape returned by all calendar API endpoints
 export interface MeetingType {
   id: number | string;
   name: string;
@@ -59,7 +24,8 @@ export interface MeetingType {
   status: string;
 }
 
-export interface CalendarByDay {
+// Shape returned by both /calender/month and /calender/day endpoints
+export interface CalendarItem {
   date: string;
   startTime: string;
   endTime: string;
@@ -69,3 +35,8 @@ export interface CalendarByDay {
   roomId: number;
   roomName: string;
 }
+
+// Kept for backward compatibility with CalendarPreview which uses CalenderDay
+export type CalenderDay = CalendarItem;
+export type CalenderMonth = CalendarItem;
+export type CalendarByDay = CalendarItem;

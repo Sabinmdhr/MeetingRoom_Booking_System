@@ -19,7 +19,7 @@ const DashboardUpMeetings = () => {
   const { upcomingMeeting } = useMeetingCardViewModel();
   return (
     <Card className="dashboard-upmeetings">
-      <div className="dashboard-announcements__top">
+      <div className="dashboard-upmeetings__top">
         <Typography variant="h3">Upcoming Meetings</Typography>
         <MyButton
           text="View All"
@@ -31,7 +31,11 @@ const DashboardUpMeetings = () => {
 
       <div className="dashboard-upmeetings__list">
         {upcomingMeeting.length === 0 ? (
-          <Typography variant="body2" color="text.secondary" sx={{ p: 1 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ p: 1 }}
+          >
             No Upcoming Meetings
           </Typography>
         ) : (

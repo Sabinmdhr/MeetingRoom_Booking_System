@@ -4,9 +4,11 @@ import verifyotpReducer from "./verifyOtpSlice";
 import createPasswordReducer from "./createPasswordSlice";
 import resendOtpReducer from "./resendOtpSlice";
 import participantsReducer from "./ParticipantsSlice";
-import meetingRoomReducer from "./MeetingRoomSlice"
-import bookingReducer from "./bookRoomSlice"
+import meetingRoomReducer from "./MeetingRoomSlice";
+import bookingReducer from "./bookRoomSlice";
 import authReducer from "./authSlice";
+import announcementReducer from "./announcementSlice";
+
 export const store = configureStore({
   reducer: {
     forgot: forgotReducer,
@@ -17,13 +19,14 @@ export const store = configureStore({
     meetingRoom: meetingRoomReducer,
     bookingRoom: bookingReducer,
     auth: authReducer,
+    announcement: announcementReducer,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-import {  useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

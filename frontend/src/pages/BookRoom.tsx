@@ -125,7 +125,10 @@ const BookRoom = () => {
           <div className="bookroom-body">
             <div className="bookroom-left">
               <div className="field">
-                <label className="field-label" htmlFor="meeting-title">
+                <label
+                  className="field-label"
+                  htmlFor="meeting-title"
+                >
                   Meeting Title *
                 </label>
                 <TextField
@@ -144,7 +147,7 @@ const BookRoom = () => {
               )} */}
 
               <div className="field">
-                <label className="field-label">Date *</label>
+                <label className="field-label"> Start Date *</label>
                 <TextField
                   name="date"
                   value={bookinRoomFormData.startDate}
@@ -269,7 +272,10 @@ const BookRoom = () => {
                   }}
                 >
                   {meetingTypes.map((meetingType) => (
-                    <MenuItem key={meetingType.id} value={meetingType.id}>
+                    <MenuItem
+                      key={meetingType.id}
+                      value={meetingType.id}
+                    >
                       <i
                         className="cat-dot "
                         style={{
@@ -292,7 +298,10 @@ const BookRoom = () => {
                   value={bookinRoomFormData.recurrenceType}
                 >
                   {recurrenceOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem
+                      key={option.value}
+                      value={option.value}
+                    >
                       {option.label}
                     </MenuItem>
                   ))}
@@ -331,7 +340,10 @@ const BookRoom = () => {
                 )}
                 {bookinRoomFormData.recurrenceType !== "NONE" && (
                   <div className="field">
-                    <label className="field-label" htmlFor="recurrenceEndDate">
+                    <label
+                      className="field-label"
+                      htmlFor="recurrenceEndDate"
+                    >
                       Enter Recurrence End Date
                     </label>
                     <TextField
@@ -346,7 +358,10 @@ const BookRoom = () => {
               </div>
 
               <div className="field">
-                <label className="field-label" htmlFor="desc">
+                <label
+                  className="field-label"
+                  htmlFor="desc"
+                >
                   Description
                 </label>
                 <TextField

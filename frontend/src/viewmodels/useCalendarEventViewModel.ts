@@ -122,8 +122,8 @@ export const useCalendarEventViewModel = () => {
   const fetchEventDetail = useCallback(async (meetingId: number) => {
     try {
       setEventDataLoading(true);
-      const res  = await getBookedDataByMeetingId(meetingId);
-
+      const res = await getBookedDataByMeetingId(meetingId);
+      // @ts-ignore
       setEventData(res?.data);
     } catch (e) {
       console.error("Error fetching event detail", e);

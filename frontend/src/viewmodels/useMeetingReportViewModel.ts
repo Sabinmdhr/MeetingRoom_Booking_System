@@ -7,7 +7,6 @@ import type {
 } from "../models/meetingReport.model";
 import {
   fetchReportData,
-  fetchUsers,
   fetchRooms,
   getAllMeetingType,
 } from "../services/report.service";
@@ -29,6 +28,7 @@ const DEFAULT_PAYLOAD: ReportPayload = {
   sortBy: "startDate",
   sortDir: "desc",
 };
+
 
 // Builds a CSV from JSON rows using COLUMNS as the schema.
 // Column order and labels always mirror the DataGrid table.
@@ -92,13 +92,34 @@ export function useMeetingReportViewModel() {
     }
   }, []);
 
+  // const fetchPage = useCallback(
+  //   (pageNo: number, pageSize: number) => {
+  //     loadPage({ ...activeFilters.current, pageNo, pageSize });
+  //   },
+  //   [loadPage],
+  // );
+
   const fetchPage = useCallback(
-    (pageNo: number, pageSize: number) => {
-      loadPage({ ...activeFilters.current, pageNo, pageSize });
+    (pageNo: number, pageSize: number, sortBy?: string, sortDir?: string) => {
+      activeFilters.current = {
+        ...activeFilters.current,
+        sortBy:
+          sortBy ?? activeFilters.current.sortBy ?? DEFAULT_PAYLOAD.sortBy,
+        sortDir:
+          sortDir ?? activeFilters.current.sortDir ?? DEFAULT_PAYLOAD.sortDir,
+      };
+      loadPage({
+        ...activeFilters.current,
+        pageNo,
+        pageSize,
+        sortBy:
+          sortBy ?? activeFilters.current.sortBy ?? DEFAULT_PAYLOAD.sortBy,
+        sortDir:
+          sortDir ?? activeFilters.current.sortDir ?? DEFAULT_PAYLOAD.sortDir,
+      });
     },
     [loadPage],
   );
-
   const applyFilters = useCallback(
     (payload: ReportPayload) => {
       const { pageNo: _p, pageSize: _s, ...filters } = payload;
@@ -142,8 +163,7 @@ export function useMeetingReportViewModel() {
   useEffect(() => {
     const init = async () => {
       try {
-        const [userRes, roomRes, typeRes] = await Promise.all([
-          fetchUsers(),
+        const [roomRes, typeRes] = await Promise.all([
           fetchRooms(),
           getAllMeetingType(),
           loadPage(DEFAULT_PAYLOAD),

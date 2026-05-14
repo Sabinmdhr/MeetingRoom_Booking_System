@@ -1,41 +1,34 @@
 import type {
+  Announcement,
   AnnouncementListRequest,
-  Announcements,
 } from "../models/announcements.model";
 import api from "../api/api";
 
+// Fetch pinned or unpinned announcements (paginated)
 export const getAnnouncement = async (data: AnnouncementListRequest) => {
   const res = await api.post("/api/v1/announcement/get", data);
   return res.data;
 };
 
-// export const getUnpinnedAnnouncement = async (
-//   data: AnnouncementListRequest,
-// ) => {
-//   const res = await api.post("/api/v1/announcement/get", data);
-//   return res.data;
-// };
-
+// Fetch scheduled announcements (paginated).
+// The backend wraps the page inside res.data.data, so we unwrap it here
+// so callers always get { content, totalElements } directly.
 export const getScheduledAnnouncement = async (
   data: AnnouncementListRequest,
 ) => {
   const res = await api.post("/api/v1/announcement/get-scheduled", data);
-
-  return res.data.data.content;
+  return res.data?.data ?? { content: [], totalElements: 0 };
 };
 
-// Used for admin/full-list views (not the announcements page)
-export const getAnnouncements = async (data: AnnouncementListRequest) => {
-  const res = await api.post("/api/v1/announcement/list", data);
-  return res.data;
-};
-
-export const addAnnouncement = async (data: Announcements) => {
+export const addAnnouncement = async (data: Omit<Announcement, "id">) => {
   const res = await api.post("/api/v1/announcement/add", data);
   return res.data;
 };
 
-export const updateAnnouncement = async (id: number, data: Announcements) => {
+export const updateAnnouncement = async (
+  id: number,
+  data: Partial<Announcement>,
+) => {
   const res = await api.put(`/api/v1/announcement/${id}/update`, data);
   return res.data;
 };
