@@ -5,6 +5,7 @@ import {
   EditBookedRoomByRecurrenceId,
   getBookedDataByRoomId,
   updateBookedRoomById,
+  updateBookedRoomByRecurrenceId,
 } from "../services/bookRoom.service";
 import { useAppSelector } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -173,15 +174,7 @@ export const useBookingRoomViewModel = () => {
     }
   };
 
-  const handleDeleteBookedMeeting = async (id: number | string) => {
-    try {
-      const res = await updateBookedRoomById(id);
-      toast.success("Meeting is Succcessfully Deleted");
-    } catch (error) {
-      toast.error("Cannot Delete the meeting");
-      console.log(error);
-    }
-  };
+
   useEffect(() => {
     fetchMeetingTypes();
   }, []);
@@ -208,6 +201,5 @@ export const useBookingRoomViewModel = () => {
     handleWeekDays,
     slot,
     setSlot,
-    handleDeleteBookedMeeting,
   };
 };

@@ -1,19 +1,35 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import type { CalendarEvent, CalendarItem } from "../models/calendar.model";
-import { getCalendarByMonth, getCalendarByDay } from "../services/calendar.service";
-import { getBookedDataByMeetingId } from "../services/bookRoom.service";
+import type {
+  CalendarEvent,
+  CalenderDay,
+  CalenderMonth,
+} from "../models/calendar.model";
+import {
+  getCalendarByMonth,
+  getCalenderByDay,
+} from "../services/calendar.service";
+import {
+  getBookedDataByMeetingId,
+  updateBookedRoomById,
+  updateBookedRoomByRecurrenceId,
+} from "../services/bookRoom.service";
 import type { BookedRoomDataResponse } from "../models/bookRoom.model";
 import { getMeetingRooms } from "../services/Meetinf_room.service";
 import type { meeting_rooms } from "../models/meeting_room.model";
+import { toast } from "react-toastify";
 
 export type CalendarView = "day" | "month";
 
-// Converts the raw API item into the CalendarEvent shape used by the grid and modal
-const mapToCalendarEvent = (item: CalendarItem): CalendarEvent => ({
+//  Mappers
+
+const mapToCalendarEvent = (
+  item: CalenderMonth | CalenderDay,
+): CalendarEvent => ({
   id: item.meetingId,
   meetingTitle: item.meetingTitle,
-  category: (item.meetingType?.name?.toLowerCase() ?? "internal") as CalendarEvent["category"],
+  category: (item.meetingType?.name?.toLowerCase() ??
+    "internal") as CalendarEvent["category"],
   date: item.date,
   startTime: item.startTime,
   endTime: item.endTime,
@@ -25,38 +41,53 @@ const mapToCalendarEvent = (item: CalendarItem): CalendarEvent => ({
   meetingType: item.meetingType,
 });
 
+//  Hook ─
+
 export const useCalendarEventViewModel = () => {
-  // View toggle and date navigation for the full Calendar page
+  //  View & date navigation
   const [view, setView] = useState<CalendarView>("month");
+  // currentMonth drives both the Calendar page header AND the month grid
   const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
+  // selectedDates drives which day the day-view API fetches
   const [selectedDates, setSelectedDates] = useState<Dayjs>(dayjs());
 
-  // Separate date state for the CalendarPreview (dashboard mini-calendar)
-  // so it can navigate months independently from the full calendar
+  //  CalendarPreview (dashboard mini-calendar) ─
+  // Separate date state so the preview navigates independently from the full calendar
   const [currentDate, setcurrentDate] = useState<Dayjs>(dayjs());
   const [bookedDates, setBookedDates] = useState<Set<string>>(new Set());
-  const [dateRange, setDateRange] = useState<{ start: Dayjs | null; end: Dayjs | null }>({
+  const [dateRange, setDateRange] = useState<{
+    start: Dayjs | null;
+    end: Dayjs | null;
+  }>({
     start: dayjs(),
     end: null,
   });
 
-  // API data
+  //  API data ─
   const [monthEvents, setMonthEvents] = useState<CalendarEvent[]>([]);
-  const [monthItems, setMonthItems] = useState<CalendarItem[]>([]);
+  const [dayEvents, setDayEvents] = useState<CalendarEvent[]>([]);
+  // Raw shape kept for CalendarPreview's meeting list (needs meetingType.colorCode etc.)
+  const [monthMeetings, setMonthMeetings] = useState<CalenderDay[]>([]);
   const [rooms, setRooms] = useState<meeting_rooms[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Event detail modal
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
-  const [eventData, setEventData] = useState<BookedRoomDataResponse | null>(null);
+  //  Event modal
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
+    null,
+  );
+  const [eventData, setEventData] = useState<BookedRoomDataResponse | null>(
+    null,
+  );
   const [eventDataLoading, setEventDataLoading] = useState(false);
+
+  //  Fetchers ─
 
   const fetchRooms = useCallback(async () => {
     try {
       const res = await getMeetingRooms();
       setRooms(res.data.content ?? res.data ?? []);
     } catch (e) {
-      console.error("Failed to fetch rooms", e);
+      console.error("Error fetching rooms", e);
     } finally {
       setLoading(false);
     }
@@ -65,40 +96,78 @@ export const useCalendarEventViewModel = () => {
   const fetchMonthEvents = useCallback(async (date: Dayjs) => {
     try {
       const res = await getCalendarByMonth(date.format("YYYY-MM-DD"));
-      const items: CalendarItem[] = res.data ?? [];
+      const items: CalenderMonth[] = res.data ?? [];
       setBookedDates(new Set(items.map((i) => i.date)));
-      setMonthItems(items);
+      setMonthMeetings(items as unknown as CalenderDay[]);
       setMonthEvents(items.map(mapToCalendarEvent));
     } catch (e) {
-      console.error("Failed to fetch month events", e);
+      console.error("Error fetching month events", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchDayEvents = useCallback(async (date: Dayjs) => {
+    try {
+      const res = await getCalenderByDay(date.format("YYYY-MM-DD"));
+      const items: CalenderDay[] = res.data ?? [];
+      setDayEvents(items.map(mapToCalendarEvent));
+    } catch (e) {
+      console.error("Error fetching day events", e);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const fetchEventDetail = useCallback(async (meetingId: number) => {
-    setEventDataLoading(true);
     try {
-      // The service return type is declared as BookedRoomDataResponse but the
-      // actual response is { data: BookedRoomDataResponse, success, message }
+      setEventDataLoading(true);
       const res = await getBookedDataByMeetingId(meetingId);
-      setEventData((res as any)?.data ?? res);
+      // @ts-ignore
+      setEventData(res?.data);
     } catch (e) {
-      console.error("Failed to fetch event detail", e);
+      console.error("Error fetching event detail", e);
     } finally {
       setEventDataLoading(false);
     }
   }, []);
 
-  // Load rooms once on mount
   useEffect(() => {
     fetchRooms();
   }, []);
 
-  // Re-fetch month events when the full calendar navigates to a new month
+  // Re-fetch when the Calendar page navigates to a new month
   useEffect(() => {
     fetchMonthEvents(currentMonth);
   }, [currentMonth.month(), currentMonth.year()]);
 
-  // Re-fetch month events when the dashboard mini-calendar moves to a different month
+  const [refresh, setRefresh] = useState(false);
+  const handleDeleteBookedMeetingById = async (id: number | string) => {
+    try {
+      const res = await updateBookedRoomById(id);
+      toast.success("Meeting is Succcessfully Deleted");
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      toast.error("Cannot Delete the meeting");
+      console.log(error);
+    }
+  };
+  const handleDeleteBookedMeetingByRecurrenceId = async (
+    id: number | string,
+  ) => {
+    try {
+      const res = await updateBookedRoomByRecurrenceId(id);
+      toast.success("Meeting is Succcessfully Deleted");
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      toast.error("Cannot Delete the meeting");
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchMonthEvents(currentMonth);
+  }, [refresh, currentMonth]);
+  // Re-fetch when the CalendarPreview mini-calendar moves to a different month
   useEffect(() => {
     if (
       currentDate.month() !== currentMonth.month() ||
@@ -106,29 +175,53 @@ export const useCalendarEventViewModel = () => {
     ) {
       fetchMonthEvents(currentDate);
     }
-  }, [currentDate.month(), currentDate.year()]);
+  }, [currentDate.month(), currentDate.year]);
 
-  // Month grid: groups events by date string for O(1) cell lookup
+  // Re-fetch day events whenever the selected day changes
+  useEffect(() => {
+    fetchDayEvents(selectedDates);
+  }, [selectedDates.format("YYYY-MM-DD")]);
+
+  //  Derived maps
+
+  // Month grid: "YYYY-MM-DD" → CalendarEvent[]
+  // const eventsByDate = useMemo(() => {
+  //   const map: Record<string, CalendarEvent[]> = {};
+  //   monthEvents.forEach((e) => {
+  //     if (!map[e.date]) map[e.date] = [];
+  //     map[e.date].push(e);
+  //   });
+  //   return map;
+  // }, [monthEvents]);
+
   const eventsByDate = useMemo(() => {
     const map: Record<string, CalendarEvent[]> = {};
+
     monthEvents.forEach((e) => {
-      if (!map[e.date]) map[e.date] = [];
+      if (!map[e.date]) {
+        map[e.date] = [];
+      }
+
       map[e.date].push(e);
     });
-    // Sort each day's events by start time so they appear in order
-    Object.values(map).forEach((events) =>
-      events.sort((a, b) =>
-        dayjs(`2000-01-01 ${a.startTime}`).valueOf() -
-        dayjs(`2000-01-01 ${b.startTime}`).valueOf(),
-      ),
-    );
+
+    // Sort events by start time for each date
+    Object.keys(map).forEach((date) => {
+      map[date].sort((a, b) => {
+        const timeA = dayjs(`2000-01-01 ${a.startTime}`);
+        const timeB = dayjs(`2000-01-01 ${b.startTime}`);
+
+        return timeA.valueOf() - timeB.valueOf();
+      });
+    });
+
     return map;
   }, [monthEvents]);
 
   // CalendarPreview: meetings within the selected date range
   const meetings = useMemo(() => {
     if (!dateRange.start) return [];
-    return monthItems.filter((m) => {
+    return monthMeetings.filter((m) => {
       const d = dayjs(m.date);
       if (!dateRange.end) return d.isSame(dateRange.start, "day");
       return (
@@ -137,22 +230,25 @@ export const useCalendarEventViewModel = () => {
         (d.isAfter(dateRange.start) && d.isBefore(dateRange.end))
       );
     });
-  }, [monthItems, dateRange]);
+  }, [monthMeetings, dateRange]);
 
-  // CalendarPreview: clicking a day starts or extends the date range selection
+  // Hours rendered in day view: 7 AM – 6 PM
+  const hours = Array.from({ length: 12 }, (_, i) => 7 + i);
+
+  //  CalendarPreview date-range helpers
+
   const handleDateClick = (day: Dayjs) => {
-    if (!dateRange.start || dateRange.end) {
-      // Start a new selection
+    if (!dateRange.start || (dateRange.start && dateRange.end)) {
       setDateRange({ start: day, end: null });
-    } else if (day.isBefore(dateRange.start)) {
-      // Clicked before the start — swap so start is always the earlier date
-      setDateRange({ start: day, end: dateRange.start });
     } else {
-      setDateRange({ start: dateRange.start, end: day });
+      if (day.isBefore(dateRange.start)) {
+        setDateRange({ start: day, end: dateRange.start });
+      } else {
+        setDateRange({ start: dateRange.start, end: day });
+      }
     }
   };
 
-  // Returns true if a day falls within the current date range selection
   const isInRange = (d: Dayjs | null) => {
     if (!d || !dateRange.start) return false;
     if (!dateRange.end) return d.isSame(dateRange.start, "day");
@@ -165,16 +261,27 @@ export const useCalendarEventViewModel = () => {
 
   const clearSelection = () => setDateRange({ start: dayjs(), end: null });
 
-  // Month view: go forward/back one month
-  const goToNext = () => setCurrentMonth((prev) => prev.add(1, "month"));
-  const goToPrev = () => setCurrentMonth((prev) => prev.subtract(1, "month"));
+  //  Navigation ─
 
-  // Jump to a specific date — used by the date picker and room cell click
+  // In month view: move one month. In day view: move one day.
+  const goToNext = () =>
+    setCurrentMonth((prev) =>
+      view === "day" ? prev.add(1, "day") : prev.add(1, "month"),
+    );
+
+  const goToPrev = () =>
+    setCurrentMonth((prev) =>
+      view === "day" ? prev.subtract(1, "day") : prev.subtract(1, "month"),
+    );
+
+  // Jump to a specific date (date picker, room cell click)
   const goToToday = (date?: Dayjs) => {
     const target = date ?? dayjs();
     setCurrentMonth(target);
     setSelectedDates(target);
   };
+
+  //  Modal actions
 
   const openEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
@@ -186,12 +293,15 @@ export const useCalendarEventViewModel = () => {
     setEventData(null);
   };
 
+  //  Return
+
   return {
-    // Full Calendar page
+    // Calendar page
     view,
     setView,
     currentMonth,
     setCurrentMonth,
+    hours,
     eventsByDate,
     selectedEvent,
     eventData,
@@ -207,7 +317,7 @@ export const useCalendarEventViewModel = () => {
     selectedDates,
     setSelectedDates,
 
-    // CalendarPreview (dashboard mini-calendar)
+    // CalendarPreview (dashboard)
     currentDate,
     setcurrentDate,
     bookedDates,
@@ -217,5 +327,8 @@ export const useCalendarEventViewModel = () => {
     dateRange,
     setDateRange,
     clearSelection,
+
+    handleDeleteBookedMeetingById,
+    handleDeleteBookedMeetingByRecurrenceId,
   };
 };

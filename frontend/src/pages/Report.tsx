@@ -34,7 +34,7 @@ export default function Report() {
 
   const SORT_FIELD_MAP: Record<string, string> = {
     date: "startDate",
-    roomName: "roomName",
+    // roomName: "roomName",
     meetingTitle: "meetingTitle",
     startTime: "startTime",
     EndTime: "EndTime",
@@ -56,11 +56,14 @@ export default function Report() {
     exportReport,
   } = useMeetingReportViewModel();
 
+  const disabledSortingColumns = ["roomName", "createdBy", "meetingType"];
+
   const gridColumns = columns.map((col) => ({
     field: col.id,
     headerName: col.label,
     flex: 1,
     minWidth: 130,
+    sortable: !disabledSortingColumns.includes(col.id),
   }));
 
   const gridRows = rows.map((row, i) => ({ id: i, ...row }));
@@ -148,6 +151,7 @@ export default function Report() {
             sortModel={sortModel}
             onPaginationModelChange={handlePaginationChange}
             onSortModelChange={(model) => {
+              // @ts-ignore
               setSortModel(model);
 
               const sortItem = model[0];

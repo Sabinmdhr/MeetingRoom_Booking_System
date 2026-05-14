@@ -71,17 +71,25 @@ export const DemoColumns = (): Columns[] => {
       label: "Contact",
     },
     {
+      id: "status",
+      label: "Status",
+    },
+    {
       id: "actions",
       label: "Actions",
     },
   ];
 };
-
-export const getAllUser = async (data: fetchUsersType) => {
-  // const api = axiosInstance({});
-
-  const response = await api.post("/api/v1/users/get-all-active", data);
-
+export const getActiveUser = async (data: fetchUsersType) => {
+  const res = await api.post("/api/v1/users/get-all-active", data);
+  return res.data.data;
+};
+export const getPaginatedUser = async (data: fetchUsersType) => {
+  const response = await api.post("/api/v1/users/get-all", data);
+  return response.data.data;
+};
+export const getSearchUser = async (searchText: string) => {
+  const response = await api.get(`/api/v1/users/search?email=${searchText}`);
   return response.data.data;
 };
 

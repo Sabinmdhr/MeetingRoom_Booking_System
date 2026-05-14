@@ -2,7 +2,6 @@ import {
   Typography,
   Tab,
   TextField,
-  Button,
   InputAdornment,
   AccordionSummary,
   AccordionDetails,
@@ -10,13 +9,14 @@ import {
 } from "@mui/material";
 import "../../assets/scss/components/ParticipantsCard.scss";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { UserPlus, Search, ChevronDown, X } from "lucide-react";
+import { Search, ChevronDown, X } from "lucide-react";
 import Accordion from "@mui/material/Accordion";
 import { useparticipantsViewModel } from "../../viewmodels/useParticipantsViewModel";
 import { useState } from "react";
 import { useGroupCardViewModel } from "../../viewmodels/useGroupCardViewModel";
 import type { groupCardRequest } from "../../models/groupCard.model";
 import { useDepartmentListViewModel } from "../../viewmodels/useDepartmentListViewModel";
+import type { ParticipantResponse } from "../../models/participants.model";
 
 interface ParticipantsCardProps {
   type: "internal" | "external" | "";
@@ -30,11 +30,11 @@ const ParticipantsCard = ({
   onChange,
 }: ParticipantsCardProps) => {
   const [tabValue, setTabValue] = useState("people");
-  const { users } = useparticipantsViewModel();
+  const { users, search, setSearch, allActiveUser } =
+    useparticipantsViewModel();
   const { group } = useGroupCardViewModel();
   // const [participants, setParticipants] = useState<participantsApi[]>([]);
   const { departmentList } = useDepartmentListViewModel();
-  const [search, setSearch] = useState("");
   const [externalName, setExternalName] = useState("");
   const [externalEmail, setExternalEmail] = useState("");
 
@@ -53,11 +53,13 @@ const ParticipantsCard = ({
   //   (state) => state.participants,
   // );
 
-  const filteredParticipants = users.filter(
-    (p) =>
+  const filteredParticipants = allActiveUser.filter((p) => {
+    if (!search) return;
+    return (
       p.firstname.toLowerCase().includes(search.toLowerCase()) ||
-      p.email.toLowerCase().includes(search.toLowerCase()),
-  );
+      p.email.toLowerCase().includes(search.toLowerCase())
+    );
+  });
 
   const selectedParticipants = participants ?? [];
 
@@ -106,9 +108,7 @@ const ParticipantsCard = ({
         </Typography> */}
         {selectedParticipants.length > 0 && (
           <div>
-              <Typography variant="subtitle2">
-                Selected Participants:
-              </Typography>
+            <Typography variant="subtitle2">Selected Participants:</Typography>
             <div className="selected-participants">
               {selectedParticipants.map((id) => {
                 const participant = users.find((p) => p.id === id);
@@ -142,24 +142,12 @@ const ParticipantsCard = ({
                   onChange={(_e, value) => setTabValue(value)}
                   className="participants-tabs"
                 >
-                  <Tab
-                    label="People"
-                    value="people"
-                  />
-                  <Tab
-                    label="Teams"
-                    value="teams"
-                  />
-                  <Tab
-                    label="All"
-                    value="all"
-                  />
+                  <Tab label="People" value="people" />
+                  <Tab label="Teams" value="teams" />
+                  <Tab label="All" value="all" />
                 </TabList>
 
-                <TabPanel
-                  value="people"
-                  className="tab-panel"
-                >
+                <TabPanel value="people" className="tab-panel">
                   <TextField
                     fullWidth
                     size="small"
@@ -169,10 +157,7 @@ const ParticipantsCard = ({
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Search
-                            size={18}
-                            color="gray"
-                          />
+                          <Search size={18} color="gray" />
                         </InputAdornment>
                       ),
                     }}
@@ -202,10 +187,7 @@ const ParticipantsCard = ({
                         />
 
                         <div className="participant-info">
-                          <Typography
-                            variant="subtitle2"
-                            className="name"
-                          >
+                          <Typography variant="subtitle2" className="name">
                             {p.firstname} {p.lastname}
                           </Typography>
                           <div className="participant-Subinfo">
@@ -245,7 +227,7 @@ const ParticipantsCard = ({
                           >
                             <div className="teams-list__header">
                               <input
-                              size={25}
+                                size={25}
                                 type="checkbox"
                                 className="check"
                                 checked={users

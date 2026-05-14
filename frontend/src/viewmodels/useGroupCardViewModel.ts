@@ -2,7 +2,11 @@ import type {
   groupCardRequest,
   groupCardResponse,
 } from "../models/groupCard.model";
-import { addGroupCard, fetchGroupCards } from "../services/groupCard.services";
+import {
+  addGroupCard,
+  EditGroupCard,
+  fetchGroupCards,
+} from "../services/groupCard.services";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -10,7 +14,6 @@ export const useGroupCardViewModel = () => {
   const [group, setGroup] = useState<groupCardResponse[]>([]);
   const numOfGroup = group.length;
 
-  const [openGroupForm, setOpenGroupForm] = useState(false);
   const [groupFormState, setGroupFormState] = useState({
     open: false,
     mode: "edit" as "edit" | "add",
@@ -20,6 +23,12 @@ export const useGroupCardViewModel = () => {
     mode: "edit" | "add",
     group?: groupCardResponse,
   ) => {
+    // if(mode === "edit" &7 group){
+    //   setGroupFormData({groupName:group?.groupName,
+    //     description: group?.description,
+    //   member: group
+    //   })
+    // }
     setGroupFormState({
       open: true,
       mode: mode,
@@ -33,7 +42,6 @@ export const useGroupCardViewModel = () => {
       open: false,
     }));
   };
-
 
   const initialGroupFormData: groupCardRequest = {
     groupName: "",
@@ -53,28 +61,34 @@ export const useGroupCardViewModel = () => {
         console.warn("No group data found", res);
         setGroup([]); // fallback empty array
       }
+
     } catch (error) {
       console.error("Failed to fetch group cards:", error);
       setGroup([]); // fallback empty array
     }
   };
-  const closeGroupForm = async () => {
-    setOpenGroupForm(false);
-    await fetchData(); // Reset form data when closing
-    setGroupFormData(initialGroupFormData);
-  };
 
-  const handleSubmitGroup = async () => {
+
+  const handleSubmitGroup = async (mode: "add" | "edit", id?: number) => {
     try {
-      await addGroupCard(groupFormData);
+      if (mode === "edit" && id) {
+        await EditGroupCard(id, groupFormData);
+        toast.success("Group updated successfully!");
+      } else {
+        await addGroupCard(groupFormData);
+        await fetchData();
+        setGroupFormData(initialGroupFormData);
+        toast.success("Group created successfully!");
+      }
+        await fetchData();
+
+
       setGroupFormData(initialGroupFormData);
-      await fetchData();
-      toast.success("Group created successfully!");
-      return true;
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create group");
-      return false;
+      toast.error(
+        mode === "edit" ? "Failed to update group" : "Failed to create group",
+      );
     }
   };
 
@@ -93,17 +107,15 @@ export const useGroupCardViewModel = () => {
 
   return {
     group,
-    openGroupForm,
     groupFormData,
     handleChange,
     setGroupFormData,
-    setOpenGroupForm,
     handleSubmitGroup,
     groupFormState,
-initialGroupFormData,
+    initialGroupFormData,
     handleGroupFormClose,
     handleGroupFormOpen,
-    closeGroupForm,
+    fetchData,
     setGroup,
     numOfGroup,
   };

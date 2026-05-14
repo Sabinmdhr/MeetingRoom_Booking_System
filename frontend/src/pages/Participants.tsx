@@ -32,14 +32,38 @@ const Participants = () => {
   const [activeTab, setActiveTab] = useState<"Tab1" | "Tab2" | "Tab3">("Tab1");
   return (
     <div>
-      <div className="titleDesc">
-        {/* <span className="title">Participants Management</span>
-         */}
-        <Typography variant="h1">Participants Management</Typography>
-        <Typography variant="subtitle1">
-          Manage participants and create custom groups for meetings
-        </Typography>
+      <div style={{display:"flex", justifyContent:"space-between"}}>
+        <div className="titleDesc">
+          {/* <span className="title">Participants Management</span>
+           */}
+          <Typography variant="h1">Participants Management</Typography>
+          <Typography variant="subtitle1">
+            Manage participants and create custom groups for meetings
+          </Typography>
+        </div>
+        <div>
+          {perms?.canAddUsers && (
+            <div >
+              {activeTab == "Tab1" ? (
+                <AddParticipantsForm
+                  participantsFormState={participantsFormState}
+                  handleParticipantFormOpen={handleParticipantFormOpen}
+                  handleParticipantsFormClose={handleParticipantsFormClose}
+                />
+              ) : activeTab == "Tab2" ? (
+                <AddGroupForm
+                  handleGroupFormOpen={handleGroupFormOpen}
+                  handleGroupFormClose={handleGroupFormClose}
+                  groupFormState={groupFormState}
+                />
+              ) : (
+                <AddDepartmentForm />
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
       <div className="tabs">
         <div
           className={`participants-tab ${activeTab == "Tab1" ? `active` : ``}`}
@@ -51,10 +75,7 @@ const Participants = () => {
           className={`participants-tab ${activeTab == "Tab2" ? `active` : ``}`}
           onClick={() => setActiveTab("Tab2")}
         >
-          <FolderPlus size={16} />{" "}
-          <span>
-            Custom Groups
-          </span>
+          <FolderPlus size={16} /> <span>Custom Groups</span>
         </div>
         <div
           className={`participants-tab ${activeTab == "Tab3" ? `active` : ``}`}
@@ -66,25 +87,6 @@ const Participants = () => {
       </div>
 
       {/* ------------------------Edit Mode Button------------ */}
-      {perms?.canAddUsers && (
-        <div style={{ textAlign: "right" }}>
-          {activeTab == "Tab1" ? (
-            <AddParticipantsForm
-              participantsFormState={participantsFormState}
-              handleParticipantFormOpen={handleParticipantFormOpen}
-              handleParticipantsFormClose={handleParticipantsFormClose}
-            />
-          ) : activeTab == "Tab2" ? (
-            <AddGroupForm
-              handleGroupFormOpen={handleGroupFormOpen}
-              handleGroupFormClose={handleGroupFormClose}
-              groupFormState={groupFormState}
-            />
-          ) : (
-            <AddDepartmentForm />
-          )}
-        </div>
-      )}
 
       {activeTab == "Tab1" ? (
         <div className="participants-container">

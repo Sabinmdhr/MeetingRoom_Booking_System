@@ -16,23 +16,28 @@ const useAnnouncementViewModel = (
   refreshAnnouncements?: () => void,
   initialData?: Announcement & { id?: number },
   onUpdate?: (updated: Announcement & { id: number }) => void,
+  open?: boolean,
 ) => {
   const [formData, setFormData] = useState(emptyForm);
 
-  // Populate the form when editing an existing announcement
+  // Re-populate the form every time the modal opens.
+  // Depending only on initialData?.id wasn't enough — if the same item is
+  // edited twice in a row the id doesn't change so the effect never re-ran.
   useEffect(() => {
-    if (initialData?.id) {
-      setFormData({
-        title: initialData.title ?? "",
-        message: initialData.message ?? "",
-        pinned: initialData.pinned ?? false,
-        startDate: initialData.startDate ?? "",
-        endDate: initialData.endDate ?? "",
-      });
-    } else {
-      setFormData(emptyForm);
+    if (open) {
+      if (initialData?.id) {
+        setFormData({
+          title: initialData.title ?? "",
+          message: initialData.message ?? "",
+          pinned: initialData.pinned ?? false,
+          startDate: initialData.startDate ?? "",
+          endDate: initialData.endDate ?? "",
+        });
+      } else {
+        setFormData(emptyForm);
+      }
     }
-  }, [initialData?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeForm = () => {
     setFormData(emptyForm);

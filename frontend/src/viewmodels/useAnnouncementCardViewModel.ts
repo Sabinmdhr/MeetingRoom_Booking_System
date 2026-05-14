@@ -8,6 +8,7 @@ import {
   deleteAnnouncement,
   deleteBulk,
   updatePinStatus,
+  getAllAnnouncements,
 } from "../services/announcements.service";
 
 const PINNED_LIMIT = 5;
@@ -16,10 +17,13 @@ const PAGE_SIZE = 10;
 const useAnnouncementCardViewModel = () => {
   const [pinnedData, setPinnedData] = useState<Announcement[]>([]);
   const [unpinnedData, setUnpinnedData] = useState<Announcement[]>([]);
-  const [scheduledAnnouncements, setScheduledAnnouncements] = useState<Announcement[]>([]);
+  const [scheduledAnnouncements, setScheduledAnnouncements] = useState<
+    Announcement[]
+  >([]);
   const [hasMoreUnpinned, setHasMoreUnpinned] = useState(false);
   const [hasMoreScheduled, setHasMoreScheduled] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [unreadData, setUnreadData] = useState<Announcement[]>([]);
 
   // Using refs for page numbers so incrementing them doesn't cause re-renders
   const unpinnedPageRef = useRef(1);
@@ -29,7 +33,7 @@ const useAnnouncementCardViewModel = () => {
   const unpinnedBusyRef = useRef(false);
   const scheduledBusyRef = useRef(false);
 
-  //  FETCH: PINNED 
+  //  FETCH: PINNED
   // Returns the number of pinned items loaded so the unpinned fetch can
   // adjust its page size to keep the combined first view at PAGE_SIZE items
   const fetchPinnedAnnouncements = useCallback(async (): Promise<number> => {
@@ -50,7 +54,7 @@ const useAnnouncementCardViewModel = () => {
     }
   }, []);
 
-  //  FETCH: UNPINNED 
+  // FETCH: UNPINNED
   // mode "reset" — reload from page 0 (initial load or after a refresh)
   // mode "more"  — append the next page (Show More button)
   const fetchUnpinnedAnnouncements = useCallback(
@@ -59,39 +63,57 @@ const useAnnouncementCardViewModel = () => {
       unpinnedBusyRef.current = true;
 
       try {
-        const pageNo = mode === "reset" ? 0 : unpinnedPageRef.current;
-
-        // On the first load we want pinned + unpinned to total PAGE_SIZE,
-        // so we shrink the unpinned page by however many pinned items loaded
-        const pageSize = mode === "reset"
-          ? Math.max(PAGE_SIZE - pinnedCount, 0)
-          : PAGE_SIZE;
-
-        const res = await getAnnouncement({
-          pageNo,
-          pageSize,
-          sortBy: "modifiedAt",
-          sortDir: "desc",
-          pinStatus: false,
-        });
-
-        const content: Announcement[] = res.data?.content ?? [];
-        const total: number = res.data?.totalElements ?? 0;
-
         if (mode === "reset") {
+          // On the first load we want pinned + unpinned to total PAGE_SIZE,
+          // so we shrink the unpinned page by however many pinned items loaded.
+          // We also store the actual page size used so "Show More" can calculate
+          // the correct offset — the backend uses pageNo * pageSize as the offset.
+          const pageSize = Math.max(PAGE_SIZE - pinnedCount, 0);
+
+          const res = await getAnnouncement({
+            pageNo: 0,
+            pageSize,
+            sortBy: "modifiedAt",
+            sortDir: "desc",
+            pinStatus: false,
+          });
+
+          const content: Announcement[] = res.data?.content ?? [];
+          const total: number = res.data?.totalElements ?? 0;
+
           setUnpinnedData(content);
-          unpinnedPageRef.current = 1;
+          // Store how many items were loaded on page 0 so the next fetch
+          // can skip exactly that many (not a fixed PAGE_SIZE worth)
+          unpinnedPageRef.current = content.length;
           setHasMoreUnpinned(content.length < total);
         } else {
+          // "more" mode: fetch the next PAGE_SIZE items starting after
+          // however many we already have (using skip/offset style via pageNo=0
+          // with a growing pageSize is simpler than tracking variable page sizes)
+          const alreadyLoaded = unpinnedPageRef.current;
+
+          const res = await getAnnouncement({
+            pageNo: 0,
+            pageSize: alreadyLoaded + PAGE_SIZE,
+            sortBy: "modifiedAt",
+            sortDir: "desc",
+            pinStatus: false,
+          });
+
+          const allContent: Announcement[] = res.data?.content ?? [];
+          const total: number = res.data?.totalElements ?? 0;
+
+          // Only keep the items we haven't shown yet
+          const fresh = allContent.slice(alreadyLoaded);
+
           setUnpinnedData((prev) => {
-            // Filter out duplicates in case the same item appears on two pages
             const existingIds = new Set(prev.map((x) => x.id));
-            const fresh = content.filter((x) => !existingIds.has(x.id));
-            const next = [...prev, ...fresh];
+            const newItems = fresh.filter((x) => !existingIds.has(x.id));
+            const next = [...prev, ...newItems];
+            unpinnedPageRef.current = next.length;
             setHasMoreUnpinned(next.length < total);
             return next;
           });
-          unpinnedPageRef.current += 1;
         }
       } catch (err) {
         console.error("Failed to fetch unpinned announcements", err);
@@ -102,7 +124,7 @@ const useAnnouncementCardViewModel = () => {
     [],
   );
 
-  //  FETCH: SCHEDULED 
+  //  FETCH: SCHEDULED
   const fetchScheduledAnnouncements = useCallback(
     async (mode: "reset" | "more" = "reset") => {
       if (scheduledBusyRef.current) return;
@@ -144,7 +166,22 @@ const useAnnouncementCardViewModel = () => {
     [],
   );
 
-  //  INITIAL LOAD 
+  const fetchAllAnnouncementList = async () => {
+    const res = await getAllAnnouncements({
+      pageNo: 0,
+      pageSize: 100,
+      sortBy: "modifiedAt",
+      sortDir: "desc",
+    });
+    console.log(res.data);
+
+    const unread = res.data.content.filter((item: any) => !item.read);
+
+    setUnreadData(unread);
+    console.log(unread);
+  };
+
+  //  INITIAL LOAD
   useEffect(() => {
     const init = async () => {
       setLoading(true);
@@ -153,13 +190,18 @@ const useAnnouncementCardViewModel = () => {
       await Promise.all([
         fetchUnpinnedAnnouncements("reset", pinnedCount),
         fetchScheduledAnnouncements("reset"),
+        await fetchAllAnnouncementList(),
       ]);
       setLoading(false);
     };
     init();
-  }, [fetchPinnedAnnouncements, fetchUnpinnedAnnouncements, fetchScheduledAnnouncements]);
+  }, [
+    fetchPinnedAnnouncements,
+    fetchUnpinnedAnnouncements,
+    fetchScheduledAnnouncements,
+  ]);
 
-  //  REFRESH HELPERS 
+  //  REFRESH HELPERS
 
   // Full refresh — reloads all three lists from page 0
   const refreshAll = useCallback(async () => {
@@ -171,7 +213,11 @@ const useAnnouncementCardViewModel = () => {
       fetchUnpinnedAnnouncements("reset", pinnedCount),
       fetchScheduledAnnouncements("reset"),
     ]);
-  }, [fetchPinnedAnnouncements, fetchUnpinnedAnnouncements, fetchScheduledAnnouncements]);
+  }, [
+    fetchPinnedAnnouncements,
+    fetchUnpinnedAnnouncements,
+    fetchScheduledAnnouncements,
+  ]);
 
   // Partial refresh — used when pin/unpin happens on the scheduled tab
   const refreshPinnedAndScheduled = useCallback(async () => {
@@ -181,9 +227,13 @@ const useAnnouncementCardViewModel = () => {
       fetchUnpinnedAnnouncements("reset", pinnedCount),
       fetchScheduledAnnouncements("reset"),
     ]);
-  }, [fetchPinnedAnnouncements, fetchUnpinnedAnnouncements, fetchScheduledAnnouncements]);
+  }, [
+    fetchPinnedAnnouncements,
+    fetchUnpinnedAnnouncements,
+    fetchScheduledAnnouncements,
+  ]);
 
-  //  ACTIONS 
+  //  ACTIONS
   // These used to live in the page — moved here so the View only handles UI
 
   const handleMarkRead = async (id: number) => {
@@ -226,7 +276,9 @@ const useAnnouncementCardViewModel = () => {
   // Merges the updated fields back into whichever list the item lives in
   const handleUpdate = (updatedItem: Announcement) => {
     const merge = (list: Announcement[]) =>
-      list.map((item) => (item.id === updatedItem.id ? { ...item, ...updatedItem } : item));
+      list.map((item) =>
+        item.id === updatedItem.id ? { ...item, ...updatedItem } : item,
+      );
     setPinnedData(merge);
     setUnpinnedData(merge);
     refreshAll();
@@ -291,6 +343,9 @@ const useAnnouncementCardViewModel = () => {
 
     // Needed by AnnouncementModal's refreshAnnouncements callback
     refreshAll,
+
+    unreadData,
+    fetchAllAnnouncementList,
   };
 };
 

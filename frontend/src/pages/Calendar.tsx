@@ -1,5 +1,15 @@
+//
+
 import "../assets/scss/pages/Calendar.scss";
-import { Tab, Tabs, Card, CardContent, TextField, MenuItem, Popover } from "@mui/material";
+import {
+  Tab,
+  Tabs,
+  Card,
+  CardContent,
+  TextField,
+  MenuItem,
+  Popover,
+} from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
@@ -9,7 +19,12 @@ import MyButton from "../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+} from "lucide-react";
 import type { CalendarEvent } from "../models/calendar.model";
 import { TimeSlotSelector } from "../components/Meeting-Rooms/TimeSlotSelector";
 import { useDispatch } from "react-redux";
@@ -24,20 +39,14 @@ import { formatDisplayTime, timeStringToMinutes } from "../utils/timeUtils";
 const COL_WIDTH = 180;
 const COL_GAP = 8;
 
-// Max events shown per cell before collapsing into "+N more"
+// Max events rendered per cell before collapsing into "+N more"
 const VISIBLE_EVENT_LIMIT = 4;
-
-// Extracts the r,g,b values from a colorCode like "rgb(255, 0, 0)"
-const extractRgb = (colorCode: string) =>
-  colorCode.match(/\((.*?)\)/)?.[1] ?? "0,0,0";
 
 export const Calendar = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const perms = usePermissions();
   const { meetingTypes } = useSettingsViewModel();
   const { updateBookingTimeAndDate, setSlot, slot } = useBookingRoomViewModel();
-  const { roomId } = useAppSelector((state) => state.bookingRoom);
 
   const {
     view,
@@ -59,33 +68,39 @@ export const Calendar = () => {
     loading,
   } = useCalendarEventViewModel();
 
-  const [mode, setMode] = useState<"view" | null>(null);
+  const [mode, setMode] = useState<"view" | "edit" | null>(null);
   const [modalAnchor, setModalAnchor] = useState<HTMLElement | null>(null);
-  const [datePickerAnchor, setDatePickerAnchor] = useState<HTMLElement | null>(null);
-  const [overflowAnchor, setOverflowAnchor] = useState<HTMLElement | null>(null);
+  const [datePickerAnchor, setDatePickerAnchor] = useState<HTMLElement | null>(
+    null,
+  );
+  const [overflowAnchor, setOverflowAnchor] = useState<HTMLElement | null>(
+    null,
+  );
   const [overflowEvents, setOverflowEvents] = useState<CalendarEvent[]>([]);
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
+  const { roomId } = useAppSelector((state) => state.bookingRoom);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
-
-  // Scroll sync: the body is the only scrollable element.
-  // The header mirrors it via JS so column headers stay aligned.
+  //  Scroll sync
+  // Body is the only user-scrollable element. Header mirrors it via JS.
+  // We use a setTimeout so the listener always attaches after React has painted
+  // the month-view DOM (fixes the intermittent "header doesn't scroll" bug).
   const headerScrollRef = useRef<HTMLDivElement>(null);
   const bodyScrollRef = useRef<HTMLDivElement>(null);
   const isSyncing = useRef(false);
 
-  // Set the first room as default once rooms load
   useEffect(() => {
     if (rooms.length > 0 && !selectedRoom) {
       setSelectedRoom(rooms[0].roomName);
       dispatch(updateBookingRoomFormData({ roomId: rooms[0].id }));
     }
   }, [rooms]);
+  const isPastDate = (date: dayjs.Dayjs) =>
+    date.startOf("day").isBefore(dayjs().startOf("day"));
 
-  // Attach scroll sync listener when in month view
   useEffect(() => {
     if (view !== "month") return;
 
-    // Defer to next paint so refs are guaranteed to be populated
+    // Defer to next paint — refs may be null if effect fires before DOM update
     const t = setTimeout(() => {
       const body = bodyScrollRef.current;
       const header = headerScrollRef.current;
@@ -99,52 +114,68 @@ export const Calendar = () => {
       };
 
       body.addEventListener("scroll", sync);
-      return () => body.removeEventListener("scroll", sync);
+      // Store cleanup on the element so we can remove it correctly
+      (body as any)._calSyncCleanup = () =>
+        body.removeEventListener("scroll", sync);
     }, 0);
 
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      const body = bodyScrollRef.current;
+      if (body && (body as any)._calSyncCleanup) {
+        (body as any)._calSyncCleanup();
+        delete (body as any)._calSyncCleanup;
+      }
+    };
   }, [view]);
 
+  //  Scroll to today
   const scrollToToday = useCallback(() => {
     const body = bodyScrollRef.current;
-    if (!body || !dayjs().isSame(currentMonth, "month")) return;
+    if (!body) return;
+    if (!dayjs().isSame(currentMonth, "month")) return;
+
     const dayIndex = dayjs().date() - 1;
-    const offset = dayIndex * (COL_WIDTH + COL_GAP) - body.clientWidth / 2 + COL_WIDTH / 2;
+    const offset =
+      dayIndex * (COL_WIDTH + COL_GAP) - body.clientWidth / 2 + COL_WIDTH / 2;
     body.scrollTo({ left: Math.max(0, offset), behavior: "smooth" });
   }, [currentMonth]);
 
-  // Auto-scroll to today when the view or month changes
+  // Auto-scroll on mount, view switch, and month navigation
   useEffect(() => {
     if (view !== "month") return;
-    requestAnimationFrame(() => requestAnimationFrame(scrollToToday));
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollToToday();
+      });
+    });
   }, [view, currentMonth.month(), currentMonth.year(), rooms.length]);
 
+  //  Derived
   const todayStr = dayjs().format("YYYY-MM-DD");
   const isDayView = view === "day";
   const isMonthView = view === "month";
-  const isPastDate = (date: dayjs.Dayjs) => date.startOf("day").isBefore(dayjs().startOf("day"));
 
   const gridDates = Array.from({ length: currentMonth.daysInMonth() }, (_, i) =>
     currentMonth.date(i + 1),
   );
 
-  const handleRoomCellClick = (date: dayjs.Dayjs, roomId: number) => {
+  //  Handlers
+  const handleRoomCellClick = (date: dayjs.Dayjs, roomName: string) => {
+    setSelectedRoom(roomName);
     goToToday(date);
+
     setSelectedDates(date);
     setView("day");
-    dispatch(updateBookingRoomFormData({ roomId }));
   };
 
+  const dispatch = useDispatch();
   const handleEventClick = (e: React.MouseEvent, event: CalendarEvent) => {
     e.stopPropagation();
     setModalAnchor(e.currentTarget as HTMLElement);
     openEvent(event);
     setMode("view");
-  };
-
-  const handleRoomSelect = (roomName: string, id: number) => {
-    setSelectedRoom(roomName);
-    dispatch(updateBookingRoomFormData({ roomId: id }));
   };
 
   const handleTodayClick = () => {
@@ -155,11 +186,10 @@ export const Calendar = () => {
     }
   };
 
-  const canProceedToBooking = slot.startTime !== "00:00" || slot.endTime !== "00:00";
-
+  //  Render
   return (
     <Card className="calendar">
-      {/* Top bar: navigation, view tabs, room selector, action buttons */}
+      {/* TOP BAR */}
       <CardContent className="calendar__topbar">
         <div className="cal-bar">
           <div className="cal-bar__left">
@@ -173,6 +203,7 @@ export const Calendar = () => {
                   startIcon={<ChevronLeft size={19} />}
                   size="large"
                 />
+
                 <MyButton
                   startIcon={<CalendarIcon size={20} />}
                   text={<span>{currentMonth.format("MMMM YYYY")}</span>}
@@ -180,7 +211,7 @@ export const Calendar = () => {
                   size="medium"
                   className="cal-nav__date-btn"
                   onClick={(e) => setDatePickerAnchor(e.currentTarget)}
-                />
+                ></MyButton>
                 <MyButton
                   customVariant="ghost"
                   onClick={goToNext}
@@ -207,8 +238,14 @@ export const Calendar = () => {
                 }}
                 className="cal-tabs"
               >
-                <Tab label="Day" value="day" />
-                <Tab label="Month" value="month" />
+                <Tab
+                  label="Day"
+                  value="day"
+                />
+                <Tab
+                  label="Month"
+                  value="month"
+                />
               </Tabs>
 
               {perms.canManageRooms && isDayView && (
@@ -217,14 +254,24 @@ export const Calendar = () => {
                     select
                     fullWidth
                     size="small"
-                    value={selectedRoom ?? ""}
+                    value={selectedRoom}
                     onChange={(e) => {
-                      const room = rooms.find((r) => r.roomName === e.target.value);
-                      if (room) handleRoomSelect(room.roomName, room.id);
+                      setSelectedRoom(e.target.value);
                     }}
                   >
+                    <MenuItem value="All Rooms">All Rooms</MenuItem>
                     {rooms.map((rm) => (
-                      <MenuItem key={rm.id} value={rm.roomName}>
+                      <MenuItem
+                        key={rm.id}
+                        value={rm.roomName}
+                        onClick={() => {
+                          dispatch(
+                            updateBookingRoomFormData({
+                              roomId: rm.id,
+                            }),
+                          );
+                        }}
+                      >
                         {rm.roomName}
                       </MenuItem>
                     ))}
@@ -245,46 +292,55 @@ export const Calendar = () => {
                   });
                   navigate("/book-room");
                 }}
-                disabled={!canProceedToBooking}
+                disabled={
+                  slot.startTime === "00:00" && slot.endTime === "00:00"
+                }
                 variant="contained"
-                customVariant={canProceedToBooking ? "dark" : ""}
+                customVariant={`${slot.startTime != "00:00" || slot.endTime != "00:00" ? `dark` : ""}`}
                 startIcon={<Plus size={17} />}
-                text="Proceed to booking"
+                text="Procced to booking"
               />
             )}
-
-            {perms.canManageRooms && isMonthView && (
+            {perms.canManageRooms && !isDayView && (
               <MyButton
-                onClick={() => navigate("/meeting-rooms")}
+                onClick={() => {
+                  navigate("/meeting-rooms");
+                }}
                 variant="contained"
                 customVariant="dark"
                 startIcon={<Plus size={17} />}
                 text="Add New Meeting"
               />
             )}
-
-            {/* Meeting type color legend shown in day view */}
-            {isDayView && (
-              <div style={{ display: "flex", gap: "12px" }}>
-                {meetingTypes.map((m) => (
-                  <div key={m.id} className="cat-legend">
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                // justifyContent: "space-between",
+              }}
+            >
+              {isDayView &&
+                meetingTypes.map((m) => (
+                  <div className="cat-legend">
                     <div>
                       <i
-                        className="cat-dot"
-                        style={{ background: `rgba(${extractRgb(m.colorCode)}, 0.8)` }}
+                        className="cat-dot "
+                        style={{
+                          background: `rgba(${m.colorCode.match(/\((.*?)\)/)?.[1]}, 0.8)`,
+                        }}
                       />
                       <span>{m.name}</span>
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </CardContent>
 
-      {/* Main content area */}
+      {/* MAIN */}
       <CardContent className="calendar__main">
+        {/* DAY VIEW */}
         {isDayView && (
           <TimeSlotSelector
             id={roomId}
@@ -295,12 +351,15 @@ export const Calendar = () => {
           />
         )}
 
+        {/* MONTH GRID */}
         {isMonthView && (
           <div className="room-grid">
-            {/* Sticky header row with room label corner + date strip */}
             <div className="room-grid__header">
               <div className="room-grid__corner">Rooms</div>
-              <div className="room-grid__date-strip" ref={headerScrollRef}>
+              <div
+                className="room-grid__date-strip"
+                ref={headerScrollRef}
+              >
                 {gridDates.map((date) => {
                   const key = date.format("YYYY-MM-DD");
                   return (
@@ -308,8 +367,12 @@ export const Calendar = () => {
                       key={key}
                       className={`room-grid__date-cell${key === todayStr ? " room-grid__date-cell--today" : ""}`}
                     >
-                      <span className="room-grid__date-cell__day">{date.format("ddd")}</span>
-                      <span className="room-grid__date-cell__num">{date.format("D")}</span>
+                      <span className="room-grid__date-cell__day">
+                        {date.format("ddd")}
+                      </span>
+                      <span className="room-grid__date-cell__num">
+                        {date.format("D")}
+                      </span>
                     </div>
                   );
                 })}
@@ -319,70 +382,95 @@ export const Calendar = () => {
             <div className="room-grid__body">
               <div className="room-grid__labels">
                 {rooms.map((rm) => (
-                  <div key={rm.id} className="room-grid__label">
+                  <div
+                    key={rm.id}
+                    className="room-grid__label"
+                  >
                     <span>{rm.roomName}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Scrollable grid — only this element scrolls horizontally */}
-              <div className="room-grid__scroll" ref={bodyScrollRef}>
+              {/* THE only scrollable element */}
+              <div
+                className="room-grid__scroll"
+                ref={bodyScrollRef}
+              >
+                {/* Loading skeleton — shown while rooms or events are fetching */}
                 {loading ? (
-                  // Skeleton rows while data loads
                   <div className="room-grid__skeleton">
                     {Array.from({ length: 3 }).map((_, ri) => (
-                      <div key={ri} className="room-grid__row">
+                      <div
+                        key={ri}
+                        className="room-grid__row"
+                      >
                         {Array.from({ length: 7 }).map((_, ci) => (
-                          <div key={ci} className="room-grid__cell room-grid__cell--skeleton" />
+                          <div
+                            key={ci}
+                            className="room-grid__cell room-grid__cell--skeleton"
+                          />
                         ))}
                       </div>
                     ))}
                   </div>
                 ) : (
                   rooms.map((rm) => (
-                    <div key={rm.id} className="room-grid__row">
+                    <div
+                      key={rm.id}
+                      className="room-grid__row"
+                    >
                       {gridDates.map((date) => {
                         const key = date.format("YYYY-MM-DD");
                         const cellEvents = (eventsByDate[key] ?? []).filter(
                           (e) => e.location === rm.roomName,
                         );
-                        const visible = cellEvents.slice(0, VISIBLE_EVENT_LIMIT);
+                        const visible = cellEvents.slice(
+                          0,
+                          VISIBLE_EVENT_LIMIT,
+                        );
                         const hiddenCount = cellEvents.length - visible.length;
                         const cellId = `${rm.id}-${key}`;
-                        const past = isPastDate(date);
+                        const isHovered = hoveredCell === cellId;
 
                         return (
                           <div
                             key={cellId}
-                            className={[
-                              "room-grid__cell",
-                              key === todayStr ? "room-grid__cell--today" : "",
-                              past ? "room-grid__cell--past" : "",
-                            ]
-                              .filter(Boolean)
-                              .join(" ")}
+                            className={`room-grid__cell
+                              ${key === todayStr ? " room-grid__cell--today" : ""}
+                              ${isPastDate(date) ? " room-grid__cell--past" : ""}
+                              `}
                             onMouseEnter={() => setHoveredCell(cellId)}
                             onMouseLeave={() => setHoveredCell(null)}
                             onClick={() => {
-                              if (past) return;
-                              handleRoomCellClick(date, rm.id);
+                              if (isPastDate(date)) return;
+
+                              handleRoomCellClick(date, rm.roomName);
+                              dispatch(
+                                updateBookingRoomFormData({ roomId: rm.id }),
+                              );
                             }}
                           >
                             {visible.map((event) => {
-                              const rgb = extractRgb(event.meetingType.colorCode);
                               return (
                                 <div
                                   key={event.id}
-                                  className="room-grid__event"
                                   style={{
-                                    borderLeft: `5px solid rgba(${rgb})`,
-                                    backgroundColor: `rgba(${rgb}, 0.3)`,
+                                    borderLeft: `5px solid rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`,
+                                    backgroundColor: `rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.3)`,
+                                    // opacity: 0.6,
                                   }}
+                                  className="room-grid__event"
                                   onClick={(e) => handleEventClick(e, event)}
                                 >
                                   <span className="room-grid__event__time">
-                                    {formatDisplayTime(timeStringToMinutes(event.startTime))} –{" "}
-                                    {formatDisplayTime(timeStringToMinutes(event.endTime))}
+                                    {formatDisplayTime(
+                                      timeStringToMinutes(event.startTime),
+                                    )}{" "}
+                                    –{" "}
+                                    {formatDisplayTime(
+                                      timeStringToMinutes(event.endTime),
+                                    )}
+                                    {/* {event.endTime} */}
                                   </span>
                                   <span className="room-grid__event__title">
                                     {event.meetingTitle}
@@ -391,16 +479,23 @@ export const Calendar = () => {
                               );
                             })}
 
-                            {/* Book strip shown on hover for future dates */}
-                            {hoveredCell === cellId && !past && (
+                            {isHovered && !isPastDate(date) && (
                               <div
                                 className="room-grid__book-strip"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleRoomCellClick(date, rm.id);
+                                  handleRoomCellClick(date, rm.roomName);
+                                  dispatch(
+                                    updateBookingRoomFormData({
+                                      roomId: rm.id,
+                                    }),
+                                  );
                                 }}
                               >
-                                <Plus size={12} strokeWidth={2.5} />
+                                <Plus
+                                  size={12}
+                                  strokeWidth={2.5}
+                                />
                                 <span>Book</span>
                               </div>
                             )}
@@ -429,7 +524,9 @@ export const Calendar = () => {
         )}
       </CardContent>
 
-      {/* Date picker popover — clicking a day jumps the calendar to that month */}
+      {/* DATE PICKER
+          - slotProps removes the OK/Cancel bar so clicking a day fires immediately
+          - onAccept is the correct event for "user confirmed a date"             */}
       <Popover
         open={Boolean(datePickerAnchor)}
         anchorEl={datePickerAnchor}
@@ -438,20 +535,40 @@ export const Calendar = () => {
         transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* <StaticDatePicker
+            value={currentMonth}
+            // onAccept fires when the user clicks a day (no OK button needed)
+            onAccept={(d) => {
+              if (d) {
+                setCurrentMonth(d);
+                setSelectedDates(d);
+              }
+              setDatePickerAnchor(null);
+            }}
+            // Remove the action bar (OK / Cancel buttons) entirely
+            slotProps={{
+              actionBar: { actions: [] },
+            }}
+          /> */}
           <StaticDatePicker
             value={currentMonth}
             onChange={(d) => {
               if (!d) return;
+
               setCurrentMonth(d);
               setSelectedDates(d);
               setDatePickerAnchor(null);
             }}
-            slotProps={{ actionBar: { actions: [] } }}
+            slotProps={{
+              actionBar: {
+                actions: [],
+              },
+            }}
           />
         </LocalizationProvider>
       </Popover>
 
-      {/* Overflow popover — shows all events when a cell has more than VISIBLE_EVENT_LIMIT */}
+      {/* OVERFLOW POPOVER */}
       <Popover
         open={Boolean(overflowAnchor)}
         anchorEl={overflowAnchor}
@@ -459,36 +576,44 @@ export const Calendar = () => {
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "left" }}
         slotProps={{
-          paper: { sx: { borderRadius: 2, width: 240, p: 1, boxShadow: "0 8px 30px rgba(0,0,0,0.14)" } },
+          paper: {
+            sx: {
+              borderRadius: 2,
+              width: 240,
+              p: 1,
+              boxShadow: "0 8px 30px rgba(0,0,0,0.14)",
+            },
+          },
         }}
       >
         <div className="overflow-list">
           {overflowEvents.map((event) => {
-            const rgb = extractRgb(event.meetingType.colorCode);
             return (
               <div
                 key={event.id}
-                className="room-grid__event"
-                style={{
-                  borderLeft: `5px solid rgba(${rgb})`,
-                  backgroundColor: `rgba(${rgb}, 0.3)`,
-                }}
+                className={`room-grid__event`}
                 onClick={(e) => {
                   setOverflowAnchor(null);
                   handleEventClick(e, event);
                 }}
+                style={{
+                  borderLeft: `5px solid rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]})`,
+                  backgroundColor: `rgba(${event.meetingType.colorCode.match(/\((.*?)\)/)?.[1]}, 0.3)`,
+                }}
               >
                 <span className="room-grid__event__time">
-                  {formatDisplayTime(timeStringToMinutes(event.startTime))} –{" "}
-                  {formatDisplayTime(timeStringToMinutes(event.endTime))}
+                  {event.startTime} – {event.endTime}
                 </span>
-                <span className="room-grid__event__title">{event.meetingTitle}</span>
+                <span className="room-grid__event__title">
+                  {event.meetingTitle}
+                </span>
               </div>
             );
           })}
         </div>
       </Popover>
 
+      {/* MODALS */}
       <CalendarModal
         open={mode === "view"}
         event={selectedEvent}
@@ -500,7 +625,7 @@ export const Calendar = () => {
           closeModal();
           setModalAnchor(null);
         }}
-        onEdit={() => setMode(null)}
+        onEdit={() => setMode("edit")}
       />
     </Card>
   );

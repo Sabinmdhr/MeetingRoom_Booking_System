@@ -34,8 +34,20 @@ const AnnouncementModal = ({
 }: AnnouncementModalProps) => {
   const perms = usePermissions();
 
-  const { handleSubmit, handleChange, formData, setFormData, closeForm, isEditing } =
-    useAnnouncementViewModel(handleClose, refreshAnnouncements, initialData, onUpdate);
+  const {
+    handleSubmit,
+    handleChange,
+    formData,
+    setFormData,
+    closeForm,
+    isEditing,
+  } = useAnnouncementViewModel(
+    handleClose,
+    refreshAnnouncements,
+    initialData,
+    onUpdate,
+    open,
+  );
 
   // Don't render anything if the user doesn't have permission
   if (!perms.canMannageAnnouncements) return null;
@@ -52,15 +64,23 @@ const AnnouncementModal = ({
         <DialogTitle className="announcementModal__header">
           <div className="announcementModal__header__main">
             <Megaphone size={20} />
-            <span>{isEditing ? "Edit Announcement" : "Add New Announcement"}</span>
+            <span>
+              {isEditing ? "Edit Announcement" : "Add New Announcement"}
+            </span>
           </div>
-          <X className="announcementModal__header__close" onClick={closeForm} />
+          <X
+            className="announcementModal__header__close"
+            onClick={closeForm}
+          />
         </DialogTitle>
 
         <DialogContent>
           {/* Title field */}
           <div className="announcementModal__inputGroup">
-            <label htmlFor="title" className="announcementModal__label">
+            <label
+              htmlFor="title"
+              className="announcementModal__label"
+            >
               Announcement Title
             </label>
             <TextField
@@ -72,12 +92,17 @@ const AnnouncementModal = ({
               placeholder="Enter announcement title"
               inputProps={{ maxLength: 100 }}
             />
-            <span className="announcementModal__counter">{formData.title.length}/100</span>
+            <span className="announcementModal__counter">
+              {formData.title.length}/100
+            </span>
           </div>
 
           {/* Message field */}
           <div className="announcementModal__inputGroup">
-            <label htmlFor="message" className="announcementModal__label">
+            <label
+              htmlFor="message"
+              className="announcementModal__label"
+            >
               Message
             </label>
             <TextField
@@ -91,7 +116,9 @@ const AnnouncementModal = ({
               placeholder="Enter announcement message"
               inputProps={{ maxLength: 500 }}
             />
-            <span className="announcementModal__counter">{formData.message.length}/500</span>
+            <span className="announcementModal__counter">
+              {formData.message.length}/500
+            </span>
           </div>
 
           {/* Date range */}
@@ -120,7 +147,9 @@ const AnnouncementModal = ({
                 value={formData.endDate}
                 onChange={handleChange}
                 fullWidth
-                inputProps={{ min: formData.startDate || dayjs().format("YYYY-MM-DD") }}
+                inputProps={{
+                  min: formData.startDate || dayjs().format("YYYY-MM-DD"),
+                }}
                 onKeyDown={(e) => e.preventDefault()}
               />
             </div>
@@ -134,13 +163,20 @@ const AnnouncementModal = ({
                   color="primary"
                   checked={formData.pinned}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, pinned: e.target.checked }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      pinned: e.target.checked,
+                    }))
                   }
                 />
               }
               label={
                 <span className="announcementModal__checkbox-style">
-                  <Pin fill="#8646C3" size={18} color="#8646C3" />
+                  <Pin
+                    fill="#8646C3"
+                    size={18}
+                    color="#8646C3"
+                  />
                   <Typography className="announcementModal__label">
                     Pin this announcement to the top
                   </Typography>
@@ -153,7 +189,12 @@ const AnnouncementModal = ({
         <Divider className="announcementModal__divider" />
 
         <DialogActions className="announcementModal__actions">
-          <MyButton variant="outlined" customVariant="ghost" onClick={closeForm} text="Cancel" />
+          <MyButton
+            variant="outlined"
+            customVariant="ghost"
+            onClick={closeForm}
+            text="Cancel"
+          />
           <MyButton
             variant="contained"
             text={isEditing ? "Save" : "Publish"}
